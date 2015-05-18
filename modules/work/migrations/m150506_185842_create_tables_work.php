@@ -14,22 +14,21 @@ class m150506_185842_create_tables_work extends Migration
          $this->createTable('{{%work}}', [
             'id' => Schema::TYPE_PK,
             'workid'=>Schema::TYPE_STRING.' NOT NULL',
-            'sanctionid'=>Schema::TYPE_STRING.' DEFAULT NULL',
             'name_hi'=>Schema::TYPE_STRING,
             'name_en'=>Schema::TYPE_STRING,
             'description'=>Schema::TYPE_TEXT,
             'agency_id'=>Schema::TYPE_INTEGER,
             'work_type_id'=>Schema::TYPE_INTEGER,
             'totvalue'=>Schema::TYPE_DOUBLE,
-            'fundingdept_id'=>Schema::TYPE_INTEGER,
             'scheme_id'=>Schema::TYPE_INTEGER,
-             'division_id'=>Schema::TYPE_INTEGER,
+             'district_id'=>Schema::TYPE_INTEGER,
              'address'=>Schema::TYPE_STRING,
              'gpslat'=>Schema::TYPE_DOUBLE,
              'gpslong'=>Schema::TYPE_DOUBLE,
              'work_admin'=>Schema::TYPE_INTEGER,
-             'substation_id'=>Schema::TYPE_INTEGER,
-             'feeder_id'=>Schema::TYPE_INTEGER.' DEFAULT NULL',
+             'block_id'=>Schema::TYPE_INTEGER,
+             'panchayat_id'=>Schema::TYPE_INTEGER.' DEFAULT NULL',
+             'village_id'=>Schema::TYPE_INTEGER,
             'status' => Schema::TYPE_SMALLINT . ' NOT NULL DEFAULT 0',
             'remarks'=>Schema::TYPE_TEXT,
             'created_at' => Schema::TYPE_INTEGER . ' NOT NULL',
@@ -48,35 +47,42 @@ class m150506_185842_create_tables_work extends Migration
             'name_en'=>Schema::TYPE_STRING,
             ],$tableOptions);
             //level classes 
-            $this->createTable('{{%substation}}', [
+            $this->createTable('{{%district}}', [
             'id'=>Schema::TYPE_PK,
             'code' => Schema::TYPE_STRING.'(5)',
             'name_hi'=>Schema::TYPE_STRING,
             'name_en'=>Schema::TYPE_STRING,
-            'substation_type'=>Schema::TYPE_SMALLINT,
-            'voltageratio'=>Schema::TYPE_STRING,
-            'mva'=>Schema::TYPE_STRING,
-            'mvarmax'=>Schema::TYPE_STRING,
-            'mvamax'=>Schema::TYPE_STRING,
-            'notrf'=>Schema::TYPE_STRING,
-            'capacity'=>Schema::TYPE_STRING,
-            'division_id'=>Schema::TYPE_STRING,
-            'remarks'=>Schema::TYPE_TEXT,
+            'census_code'=>Schema::TYPE_STRING.'(7)',
+            
             ],$tableOptions);
-            $this->createTable('{{%feeder}}', [
+            $this->createTable('{{%block}}', [
             'id'=>Schema::TYPE_PK,
+            'district_code'=>Schema::TYPE_STRING,
             'code' => Schema::TYPE_STRING.'(5)',
             'name_hi'=>Schema::TYPE_STRING,
             'name_en'=>Schema::TYPE_STRING,
-            'description'=>Schema::TYPE_STRING,
-            'substation_id'=>Schema::TYPE_INTEGER,
-            'pwtrfcty'=>Schema::TYPE_STRING,
-            'pwtrfid'=>Schema::TYPE_STRING,
-            'typeofconductor'=>Schema::TYPE_SMALLINT,
-            'peakdemand'=>Schema::TYPE_STRING,
-            'notrf'=>Schema::TYPE_STRING,
-            'capacity'=>Schema::TYPE_STRING,
-            'remarks'=>Schema::TYPE_TEXT,
+            'census_code'=>Schema::TYPE_STRING.'(7)',
+            
+            ],$tableOptions);
+            $this->createTable('{{%panchayat}}', [
+            'id'=>Schema::TYPE_PK,
+            'district_code'=>Schema::TYPE_STRING,
+            'block_code'=>Schema::TYPE_STRING,
+            'code' => Schema::TYPE_STRING.'(5)',
+            'name_hi'=>Schema::TYPE_STRING,
+            'name_en'=>Schema::TYPE_STRING,
+            'census_code'=>Schema::TYPE_STRING.'(7)',
+            
+            ],$tableOptions);
+            $this->createTable('{{%village}}', [
+            'id'=>Schema::TYPE_PK,
+            'district_code'=>Schema::TYPE_STRING,
+            'block_code'=>Schema::TYPE_STRING,
+            'code' => Schema::TYPE_STRING.'(5)',
+            'name_hi'=>Schema::TYPE_STRING,
+            'name_en'=>Schema::TYPE_STRING,
+            'census_code'=>Schema::TYPE_STRING.'(7)',
+            
             ],$tableOptions);
          
              $this->createTable('{{%scheme}}', [
@@ -91,66 +97,15 @@ class m150506_185842_create_tables_work extends Migration
             'totalcost'=>Schema::TYPE_DOUBLE,
             
             ],$tableOptions);
-             $this->createTable('{{%circle}}', [
-             'id'=>Schema::TYPE_PK,
-            'code' => Schema::TYPE_STRING.'(5)',
-            'name_hi'=>Schema::TYPE_STRING,
-            'name_en'=>Schema::TYPE_STRING,
-            ],$tableOptions);
-             $this->createTable('{{%division}}', [
-             'id'=>Schema::TYPE_PK,
-            'code' => Schema::TYPE_STRING.'(5)',
-            'name_hi'=>Schema::TYPE_STRING,
-            'name_en'=>Schema::TYPE_STRING,
-            'circle_id'=>Schema::TYPE_INTEGER,
-            ],$tableOptions);
-             $this->createTable('{{%ae_area}}', [
-             'id'=>Schema::TYPE_PK,
-            'code' => Schema::TYPE_STRING.'(5)',
-            'name_hi'=>Schema::TYPE_STRING,
-            'name_en'=>Schema::TYPE_STRING,
-            'division_id'=>Schema::TYPE_INTEGER,
-            ],$tableOptions);
-         $this->createTable('{{%je_area}}', [
-             'id'=>Schema::TYPE_PK,
-            'code' => Schema::TYPE_STRING.'(5)',
-            'name_hi'=>Schema::TYPE_STRING,
-            'name_en'=>Schema::TYPE_STRING,
-            'division_id'=>Schema::TYPE_INTEGER,
-            'ae_area_id'=>Schema::TYPE_INTEGER,
-            ],$tableOptions);
-         $this->createTable('{{%hq}}', [
-             'id'=>Schema::TYPE_PK,
-            'code' => Schema::TYPE_STRING.'(5)',
-            'name_hi'=>Schema::TYPE_STRING,
-            'name_en'=>Schema::TYPE_STRING,
-            ],$tableOptions);
-        $this->createTable('{{%material_type}}',[
-            'id'=>Schema::TYPE_PK,
-            'name_hi'=>Schema::TYPE_STRING,
-            'name_en'=>Schema::TYPE_STRING,
-            'unitcost_1314'=>Schema::TYPE_DOUBLE,
-            'unitcost_1415'=>Schema::TYPE_DOUBLE,
-            'unitcost_1516'=>Schema::TYPE_DOUBLE,
-            'unit_type'=>Schema::TYPE_STRING,
-           ],$tableOptions);
-        $this->createTable('{{%material_requirement}}',[
-            'id'=>Schema::TYPE_PK,
-            'work_id'=>Schema::TYPE_INTEGER,
-            'material_type'=>Schema::TYPE_INTEGER,
-            'qty'=>Schema::TYPE_DOUBLE,
-            'value'=>Schema::TYPE_DOUBLE,
-            
-           ],$tableOptions);
-           $authManager=Yii::$app->authManager;
+                    $authManager=Yii::$app->authManager;
          if ($authManager)
           {
            $workadminrole=$authManager->createRole('workadmin');
            $authManager->add($webadminrole);
            
            $permissions=['edit','delete','create','view','index','update'];
-            $tables=['work','work_progress','work_type','scheme','material_requirement','material_type',
-       'division','circle','feeder','substation'];
+            $tables=['work','work_progress','work_type','scheme',
+       'district','block','panchayat','village'];
      foreach($tables as $table)
             {
               foreach($permissions as $permission)
