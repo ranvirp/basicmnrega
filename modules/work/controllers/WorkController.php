@@ -6,12 +6,9 @@ use Yii;
 use app\common\Utility;
 use app\modules\work\models\Work;
 use app\modules\work\models\WorkSearch;
-use yii\web\Controller;
+use app\modules\work\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use \app\modules\work\models\MaterialRequirement;
-use yii\data\ActiveDataProvider;	
-use app\modules\work\models\WorkProgress;
 
 /**
  * WorkController implements the CRUD actions for Work model.
@@ -42,8 +39,7 @@ class WorkController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model'=>null,
-        ]);
+            'model'=>new \app\modules\work\models\Work        ]);
     }
 
     /**
@@ -74,7 +70,7 @@ class WorkController extends Controller
         {
            if (array_key_exists('app\modules\work\models\Work',Utility::rules()))
             foreach ($model->attributes as $attribute)
-            if (Utility::rules(Work) && array_key_exists($attribute,Utility::rules()['app\modules\work\models\Work']))
+            if (Utility::rules('app\modules\work\models\Work') && array_key_exists($attribute,Utility::rules()['app\modules\work\models\Work']))
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\work\models\Work'][$model->$attribute]['required'])
             );
@@ -89,8 +85,6 @@ class WorkController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
-            'x'=>[],
-            
             
         ]);
 
@@ -159,75 +153,4 @@ class WorkController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function actionAddwp($id=1)
-    {
-      $model = new WorkProgress();
-        $model->work_id=$id;
-        if ($model->load(Yii::$app->request->post()) && $model->save())
-        {
-           $work=Work::findOne($id);
-           if ($work->dateofprogress<$model->dateofprogress)
-              {
-                $work->dateofprogress=$model->dateofprogress;
-                $work->save();
-              }
-            $model = new WorkProgress();
-			$model->work_id=$id;//reset model
-        }
- 
-       
-        $dataProvider = new ActiveDataProvider(['query'=>WorkProgress::find()->where('work_id='.$id)->orderBy('dateofprogress desc')]);
- 
-        $data= $this->renderPartial('/workprogress/index', [
-            'searchModel' => new \app\models\WorkProgressSearch(),
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-        ]);
-         $searchModel = new WorkSearch();
-        $dataProvider1 = $searchModel->search(Yii::$app->request->queryParams);
- 
-        return $this->render('index_wp', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider1,
-            'data' => $data,
-            'x'=>[],
-            
-            
-        ]);
-    }
-    public function actionAddmq($id=0)
-	{
-	  if ($id>0) {//some entry from parameter
-	   $model = new MaterialRequirement();
-        $model->work_id=$id;
-        if ($model->load(Yii::$app->request->post()) && $model->save())
-        {
-            $model = new MaterialRequirement();
-			$model->work_id=$id;//reset model
-        }
- 
-       
-        $dataProvider = new ActiveDataProvider(['query'=>MaterialRequirement::find()->where('work_id='.$id)->orderBy('id desc')]);
- 
-        $data= $this->renderPartial('/materialrequirement/index_simple', [
-            //'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-        ]);
-        } else
-           $data='';
-         $searchModel = new WorkSearch();
-        $dataProvider1 = $searchModel->search(Yii::$app->request->queryParams);
- 
-        return $this->render('index_mq', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider1,
-            'data' => $data,
-            'x'=>[],
-            
-            
-        ]);
-
-	}
-    
 }

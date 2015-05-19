@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use app\modules\work\models\Work;
 
 /**
- * WorkSearch represents the model behind the search form about `app\models\Work`.
+ * WorkSearch represents the model behind the search form about `app\modules\work\models\Work`.
  */
 class WorkSearch extends Work
 {
@@ -18,8 +18,8 @@ class WorkSearch extends Work
     public function rules()
     {
         return [
-            [['id', 'agency', 'dept_id', 'work_type_id', 'status', 'scheme_id', 'work_admin', 'substation_id', 'division_id', 'phy', 'fin', 'feeder_id'], 'integer'],
-            [['name_hi', 'name_en', 'dateofsanction', 'dateoffundsreceipt', 'dateofstart', 'address', 'loc', 'fromloc', 'toloc', 'package_no', 'work_id', 'dateofprogress', 'remarks'], 'safe'],
+            [['id', 'agency_id', 'work_type_id', 'scheme_id', 'district_id', 'work_admin', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['workid', 'name_hi', 'name_en', 'description', 'address', 'block_code', 'panchayat_code', 'village_code', 'remarks'], 'safe'],
             [['totvalue', 'gpslat', 'gpslong'], 'number'],
         ];
     }
@@ -58,34 +58,27 @@ class WorkSearch extends Work
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'agency' => $this->agency,
-            'dateofsanction' => $this->dateofsanction,
-            'dateoffundsreceipt' => $this->dateoffundsreceipt,
-            'dateofstart' => $this->dateofstart,
-            'totvalue' => $this->totvalue,
-            'dept_id' => $this->dept_id,
+            'agency_id' => $this->agency_id,
             'work_type_id' => $this->work_type_id,
+            'totvalue' => $this->totvalue,
+            'scheme_id' => $this->scheme_id,
+            'district_id' => $this->district_id,
             'gpslat' => $this->gpslat,
             'gpslong' => $this->gpslong,
-            'status' => $this->status,
-            'scheme_id' => $this->scheme_id,
             'work_admin' => $this->work_admin,
-            'substation_id' => $this->substation_id,
-            'division_id' => $this->division_id,
-            'phy' => $this->phy,
-            'fin' => $this->fin,
-            'dateofprogress' => $this->dateofprogress,
-            'feeder_id' => $this->feeder_id,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'name_hi', $this->name_hi])
+        $query->andFilterWhere(['like', 'workid', $this->workid])
+            ->andFilterWhere(['like', 'name_hi', $this->name_hi])
             ->andFilterWhere(['like', 'name_en', $this->name_en])
+            ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'address', $this->address])
-            ->andFilterWhere(['like', 'loc', $this->loc])
-            ->andFilterWhere(['like', 'fromloc', $this->fromloc])
-            ->andFilterWhere(['like', 'toloc', $this->toloc])
-            ->andFilterWhere(['like', 'package_no', $this->package_no])
-            ->andFilterWhere(['like', 'work_id', $this->work_id])
+            ->andFilterWhere(['like', 'block_code', $this->block_code])
+            ->andFilterWhere(['like', 'panchayat_code', $this->panchayat_code])
+            ->andFilterWhere(['like', 'village_code', $this->village_code])
             ->andFilterWhere(['like', 'remarks', $this->remarks]);
 
         return $dataProvider;

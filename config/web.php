@@ -7,28 +7,32 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     //'homeUrl'=>'site',
-    'language'=>'en',
+   'language'=>'en',
     'components' => [
     'authManager' => [
 		  'class' => '\yii\rbac\DbManager',
-		  'ruleTable' => 'authrule', // Optional
-		  'itemTable' => 'authitem',  // Optional
-		  'itemChildTable' => 'authitemchild',  // Optional
-		  'assignmentTable' => 'authassignment',  // Optional
+		 'ruleTable' => '{{%authrule}}', // Optional
+		  'itemTable' => '{{%authitem}}',  // Optional
+		  'itemChildTable' => '{{%authitemchild}}',  // Optional
+		  'assignmentTable' => '{{%authassignment}}',  // Optional
 		  ],
     'urlManager' => [
 			'enablePrettyUrl' => true,
 			'rules' => [
 				['class' => 'yii\rest\UrlRule', 'controller' => 'api/photo'],
+				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			],
 			],
-        'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'test',
-        ],
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
-        ],
+                        'request' => [
+                        'parsers' => [
+                                'application/json' => 'yii\web\JsonParser',
+                        ],
+                        // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
+                        'cookieValidationKey' => 'Mm6heaay14ty6CILacC5z7C5T8CR4NuB',
+                ],
+                'cache' => [
+                        'class' => 'yii\caching\FileCache',
+                ],
         'user' => [
             'identityClass' => 'app\modules\users\models\User',
             'enableAutoLogin' => true,
@@ -54,8 +58,19 @@ $config = [
         ],
         'db' => require(__DIR__ . '/db.php'),
     ],
-    'modules'=>['users'=>['class'=>'app\modules\users\Module'],
-    'reply'=>['class'=>'app\modules\reply\Module']],
+    'modules'=>[
+    'users'=>['class'=>'app\modules\users\Module'],
+    'reply'=>['class'=>'app\modules\reply\Module'],
+    'work'=>['class'=>'app\modules\work\Module'],
+    'gridview'=>['class'=>'kartik\grid\Module'],
+    'api'=>['class'=>'app\modules\api\Module'],
+    'gpsphoto'=>['class'=>'app\modules\gpsphoto\Module'],
+     'rbac' => [
+        'class' => 'dektrium\rbac\Module',
+        'admins'=>['admin'],
+    ],
+    
+    ],
     'params' => $params,
 ];
 
@@ -66,6 +81,24 @@ if (YII_ENV_DEV) {
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = 'yii\gii\Module';
+    $config['modules']['gii'] = ['class' => 'yii\gii\Module',
+            'allowedIPs' => ['127.0.0.1', '::1', '192.168.0.*', '192.168.178.20'],
+            'generators' => [ //here
+                'crud' => [ // generator name
+                    'class' => 'yii\gii\generators\crud\Generator', // generator class
+                    'templates' => [ //setting for out templates
+                        'myCrud' => '@app/giitemplatesNew/crud/default', // template name => path to template
+                    ]
+                ],
+                'model' => [ // generator name
+                    'class' => '\app\giiTemplatesNew\model\Generator', // generator class
+                    'templates' => [ //setting for out templates
+                        'myModel' => '@app/giitemplatesNew/model/default', // template name => path to template
+                    ]
+                ],
+                
+            ],
+            ];
 }
 
 return $config;
