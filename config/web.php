@@ -65,6 +65,7 @@ $config = [
     'gridview'=>['class'=>'kartik\grid\Module'],
     'api'=>['class'=>'app\modules\api\Module'],
     'gpsphoto'=>['class'=>'app\modules\gpsphoto\Module'],
+    'mnrega'=>['class'=>'app\modules\mnrega\Module'],
      'rbac' => [
         'class' => 'dektrium\rbac\Module',
         'admins'=>['admin'],

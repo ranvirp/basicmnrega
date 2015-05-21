@@ -30,7 +30,7 @@ class FileWidget  extends \yii\base\Widget{
 	$y=[];
 	$z1='';	
 	
-	if ($model->$attribute !='')
+	if ($model instanceOf \yii\db\ActiveRecord && $model->$attribute !='')
 	{
 		foreach (explode(",",$model->$attribute) as $id)
 		{

@@ -13,6 +13,10 @@ class UtilityController extends Controller
     {
         return $this->render('index');
     }
+    public function actionGetdesignation($dt)
+    {
+    return json_encode(\yii\helpers\ArrayHelper::map(\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dt])->asArray()->all(),'id','name_'.Yii::$app->language));
+    }
 	public function actionIndex()
 	{
 		if (Yii::$app->request->get('at')) //at===action type

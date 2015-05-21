@@ -22,20 +22,52 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <style>
+    .bg-green
+    {
+      background-color:green;
+    }
+    .no-margin
+    {
+      margin:0;
+    }
+    .no-padding
+    {
+     padding:0;
+    }
+   .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;}
+.navbar {min-height:40px !important}
+    .navbar-green
+    {
+     background-color:#faf3e3
+    }
+    </style>
 </head>
-<body>
+<body class="">
 
 <?php $this->beginBody() ?>
     <div class="wrap">
         <?php
-            NavBar::begin([
-                'brandLabel' => 'KESCO',
-                'brandUrl' => Yii::$app->homeUrl,
+        NavBar::begin([
+                //'brandLabel' => 'KESCO',
+                //'brandUrl' => Yii::$app->homeUrl,
+                'innerContainerOptions'=>['class'=>'no-padding no-margin'],
                 'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
+                    'class' => 'navbar navbar-default no-margin',
+                ],
+            ]);
+            echo '<div class="col-md-2">&nbsp;</div>';
+            echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
+            NavBar::end();
+            NavBar::begin([
+                //'brandLabel' => 'KESCO',
+                //'brandUrl' => Yii::$app->homeUrl,
+                'options' => [
+                    'class' => 'navbar-green navbar-fixed',
                 ],
             ]);
             echo Nav::widget([
+            
     'items' => [
        ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/android/latest/GPSPhotoUploader.apk'],
         ['label' => 'Master Data', 'url' => ['/site/index'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
@@ -85,7 +117,7 @@ AppAsset::register($this);
             ['label'=>'Change Password','url'=>['/users/user/changepassword']],
             ['label'=>'Logout','url'=>['/users/user/logout'],'linkOptions' => ['data-method' => 'post']],
             ]
-            ],],'options'=>['class'=>'navbar-nav']
+            ],],'options'=>['class'=>'nav navbar-nav pull-right']
 ]);
 
             NavBar::end();

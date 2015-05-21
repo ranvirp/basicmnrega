@@ -3,7 +3,7 @@
 namespace app\modules\users\controllers;
 
 use Yii;
-use app\modules\users\common\Utility;
+use app\common\Utility;
 use app\modules\users\models\Designation;
 use app\modules\users\models\DesignationSearch;
 use app\modules\users\Controller;
@@ -118,10 +118,10 @@ class DesignationController extends Controller
     	if ($x) $model->id=$x->id;
         if ($model->load(Yii::$app->request->post()))
         {
-        if (array_key_exists('app\modules\masterdata\models\Designation',Utility::rules()))
+        if (array_key_exists('app\modules\users\models\Designation',Utility::rules()))
            
             foreach ($model->attributes as $attribute)
-            if (array_key_exists($attribute,Utility::rules()['app\modules\masterdata\models\Designation']))
+            if (array_key_exists($attribute,Utility::rules()['app\modules\users\models\Designation']))
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\masterdata\models\Designation'][$model->$attribute]['required'])
             );

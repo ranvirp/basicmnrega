@@ -193,7 +193,7 @@ class Designation extends \app\modules\users\MyActiveRecord
     public function createUserAndRole()
      {
         $role=$this->designationType->shortcode;
-        $username=$role.'_'.$this->level->name_en;
+        $username=$role.'_'.$this->level->code;
         $auth = Yii::$app->authManager;
         $username=preg_replace("/\s+/","",$username);
         $username=strtolower($username);
@@ -244,8 +244,8 @@ class Designation extends \app\modules\users\MyActiveRecord
      }
      public function beforeSave($insert)
      {
-       $this->name_en=$this->designationType->name_en.' '.$this->level->name_en;
-       $this->name_hi=$this->designationType->name_hi.' '.$this->level->name_hi;
+       $this->name_en=$this->designationType->name_en.','.$this->level->name_en;
+       $this->name_hi=$this->designationType->name_hi.','.$this->level->name_hi;
        return parent::beforeSave($insert);
        
      }

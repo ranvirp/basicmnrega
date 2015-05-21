@@ -25,7 +25,9 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
+    public $oldpassword='';
+    public $newpassword;
+    public $newpasswordrepeat;
     /**
      * @inheritdoc
      */
@@ -43,7 +45,15 @@ class User extends ActiveRecord implements IdentityInterface
             TimestampBehavior::className(),
         ];
     }
-
+public function scenarios()
+    {
+        return [
+            'passwordchange' => ['oldpassword', 'newpassword','newpasswordrepeat'],
+            'api'=>['auth_key'],
+            'login'=>['username','password_hash'],
+            
+        ];
+    }
     /**
      * @inheritdoc
      */
@@ -52,6 +62,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+           [ ['oldpassword','newpassword','newpasswordrepeat'],'required','on'=>'passwordchange'],
         ];
     }
 
@@ -66,12 +77,12 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-/*
+
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['auth_key' => $token, 'status' => self::STATUS_ACTIVE]);
     }
-*/
+
     /**
      * Finds user by username
      *
@@ -186,10 +197,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-     public static function findIdentityByAccessToken($token, $type = null)
-    {
-        return static::findOne(['auth_key' => $token]);
-    }
         /**
          * Generates new access  token
          */
@@ -199,5 +206,25 @@ class User extends ActiveRecord implements IdentityInterface
 
                 $this->save();
 
+        }
+        /*verify model on scenario changepassword*/
+        public function changePassword()
+        {
+          $this->scenario='passwordchange';
+          
+          if( $this->validate() && $this->validatePassword($this->oldpassword) && ($this->newpassword==$this->newpasswordrepeat))
+           
+              {
+              $this->setPassword($this->newpassword);
+              $this->save();
+              return true;
+              }
+              else 
+                {
+                  if (!$this->validatePassword($this->oldpassword)) $this->addError('oldpassword','Your password is invalid');
+                  if ($this->newpasswordrepeat!=$this->newpassword) $this->addError('newpasswordrepeat','New password  and repeat password are not same');
+                  return false;
+               }
+          
         }
 }
