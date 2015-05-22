@@ -18,6 +18,8 @@ use Yii;
  * @property string $filename
  * @property double $gpslat
  * @property double $gpslong
+ * @propery double $gpsalt
+ * @property double $gpsacc
  * @property string $loc
  * @property integer approved
  * @property imei
@@ -28,6 +30,7 @@ use Yii;
 class Photo extends \yii\db\ActiveRecord
 {
   public $nearby=50; //50 meters
+  public $created_time;
     /**
      * @inheritdoc
      */
@@ -44,9 +47,9 @@ class Photo extends \yii\db\ActiveRecord
         return [
             [[ 'height', 'width', 'size','created_by'], 'integer'],
             [['bwid','url', 'path', 'filename', 'title','imei','mobileno','devicesoftware'], 'string'],
-            [['gpslat', 'gpslong','approved'], 'number'],
+            [['gpslat', 'gpslong','approved','created_by','created_at','gpsalt','gpsacc','created_time'], 'number'],
             [['mime'], 'string', 'max' => 50],
-            [['title'],'safe'],
+            [['title','thumbnail'],'safe'],
         ];
     }
 
