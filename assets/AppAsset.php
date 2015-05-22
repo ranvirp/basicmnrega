@@ -26,6 +26,7 @@ class AppAsset extends AssetBundle
     'https://www.google.com/jsapi',
         'js/googletransliterate.js',
         'js/jquery.prettyPhoto.js',
+        'js/jquery.tablesorter.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

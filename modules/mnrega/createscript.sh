@@ -1,4 +1,4 @@
-model=('request' 'request_type' 'marking')
+model=('parameter-parse')
 for i in  "${!model[@]}"; do
    echo "generating for "${model[$i]}
    table=${model[$i]}

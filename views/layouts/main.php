@@ -88,6 +88,7 @@ AppAsset::register($this);
             ]],
         ['label' => 'Data Entry', 'url' => ['#'],'options'=>['class'=>'dropdown']
             ,'items'=>[ 
+            
                 ['label' => 'Work', 'url' => ['/work/work/create'],'options'=>['class'=>'dropdown']],
                 ['label' => 'Work Progress', 'url' => ['/work/work/addwp'],'options'=>['class'=>'dropdown']],
                 ['label' => 'Add Material Requirement', 'url' => ['/work/work/addmq'],'options'=>['class'=>'dropdown']]
@@ -95,16 +96,8 @@ AppAsset::register($this);
     ],
                 ['label' => 'Reports', 'url' => ['#'],'options'=>['class'=>'dropdown']
             ,'items'=>[ 
-                ['label' => 'List of Works Scheme wise', 'url' => ['/work/report?rt=r2'],'options'=>['class'=>'dropdown']],
-                ['label' => 'List of Schemes', 'url' => ['/work/report?rt=r1'],'options'=>['class'=>'dropdown']],
-                ['label' => 'Divisions', 'url' => ['/work/division/index'],'options'=>['class'=>'dropdown']],
-                ['label' => 'Material Requirements Scheme Wise', 'url' => ['/work/report?rt=r3'],'options'=>['class'=>'dropdown']],
-                ['label' => 'Material Requirements Work Wise', 'url' => ['/work/report?rt=r4'],'options'=>['class'=>'dropdown']],        
-                 ['label' => 'Latest Photos of Breakdown', 'url' => ['/gpsphoto/photo/latest?cat=br&title=Breakdown'],'options'=>['class'=>'dropdown']],        
-                ['label' => 'Latest Photos of Theft', 'url' => ['/gpsphoto/photo/latest?cat=t&title=Theft'],'options'=>['class'=>'dropdown']],        
-                ['label' => 'Latest Photos of Work', 'url' => ['/gpsphoto/photo/latest?cat=w&title=Work'],'options'=>['class'=>'dropdown']],        
-               
-                ['label' => 'Exception Reports', 'url' => ['/work/index'],'options'=>['class'=>'dropdown']],
+                ['label' => 'Mandays generated', 'url' => ['/mnrega/parameter/display?id=7'],'options'=>['class'=>'dropdown']],
+                
 
             ],
     ],
