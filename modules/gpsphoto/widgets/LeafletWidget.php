@@ -62,5 +62,6 @@ $leaflet->addLayer($marker)      // add the marker
 
 // finally render the widget
 echo \dosamigos\leaflet\widgets\Map::widget(['leafLet' => $leaflet]);
+echo '<p><b>Latitude:</b>'.$this->gpslat.',<b>Longitude</b>:'.$this->gpslong.'</p>';
 	}
 }

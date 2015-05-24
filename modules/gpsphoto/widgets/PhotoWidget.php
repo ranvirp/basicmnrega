@@ -13,20 +13,17 @@ use Yii;
  *
  * @author mac
  */
-class PhotoWidget  extends \yii\base\Widget{
+class GeneralPhotoWidget  extends \yii\base\Widget{
 	//put your code here
-	private $settings=['app\models\Work'=>'w'];
-	public $model;
+	public $photos;
 	public function run() {
 		parent::run();
 		$model=$this->model;
 		$lang=Yii::$app->language;
-		$bwid=$this->settings[get_class($model)].$model->id;
-        $photos =\app\modules\gpsphoto\models\Photo::find()->where(['bwid'=>$bwid])->all();
 		$items=[];
-		if (!$photos)
+		if (!$this->photos)
 		{
-			echo '<b>Photo Not Found! </b>';
+			echo '<b>Photo List Empty! </b>';
 		}
 		foreach ($photos as $photo)
 		{

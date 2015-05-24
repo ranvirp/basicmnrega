@@ -1,11 +1,11 @@
 <?php
 use yii\grid\GridView;
-$dataProvider=new yii\data\ActiveDataProvider(['query'=>\app\models\Photo::find()->where('approved = 0')->orderBy('created_at desc')]);
-$model=new app\models\Photo;
-  yii\widgets\Pjax::begin(['id' => 'new_work']);
+$dataProvider=new yii\data\ActiveDataProvider(['query'=>\app\modules\gpsphoto\models\Photo::find()->where('approved!=1')]);
+$model1=new app\modules\gpsphoto\models\Photo;
+  yii\widgets\Pjax::begin(['id' => 'Photos']);
 echo GridView::widget([
   'dataProvider'=>$dataProvider,
-   'filterModel'=>$model,
+   'filterModel'=>$model1,
    'columns'=>[
       ['class'=>'yii\grid\SerialColumn'],
       'created_by',

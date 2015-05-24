@@ -32,6 +32,13 @@ function populateHtml(url,id)
              $('#'+id).html(data); 
           });
 }
+function addMarker(gpslat,gpslong)
+{
+marker =new L.marker([gpslat,gpslong]);
+	  map.addLayer(marker);
+      map.panTo(new L.latLng(gpslat,gpslong)); 
+
+}
 /*
 function updateClock ( )
  	{

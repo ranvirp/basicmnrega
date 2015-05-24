@@ -17,7 +17,7 @@ use yii\helpers\Json;
 /**
  * ParameterController implements the CRUD actions for Parameter model.
  */
-class ParameterController extends Controller
+class ParameterController extends \yii\web\Controller
 {
     public function behaviors()
     {
@@ -183,7 +183,7 @@ class ParameterController extends Controller
         switch($model->shortcode)
         {
         case 'mandays':
-         $tableid='t1';
+         $tableid=4;
          $rowstoskip=4;
          $m=date('m');
          $y=date('Y');
@@ -226,6 +226,22 @@ class ParameterController extends Controller
          $level=0;
          $colwithvalues=[2,3];
         break;
+        case 'houses':
+         $tableid=1;
+         $rowstoskip=2;
+        
+         $colwithnames=1;
+         $level=0;
+         $colwithvalues=range(2,8);
+        break;
+        case 'empstatus':
+         $tableid=5;
+         $rowstoskip=6;
+        
+         $colwithnames=1;
+         $level=0;
+         $colwithvalues=range(2,18);
+        break;
         default:
         break;
         }
@@ -267,4 +283,25 @@ class ParameterController extends Controller
       
       }
     }
+    public function actionGenworkpage($cat,$level)
+     {
+       unset($this->layout);
+       $works=new \app\modules\mnrega\models\Works;
+       switch($cat)
+       {
+         case 'housing':
+           $page='B';
+           $rcode='B';
+           $rsubcode='4';
+           $rsec_code='W09';
+           $fin_year='2015-2016';
+           return $works->genWorkCategoriesPage($fin_year,$level);
+         break;
+         default:
+         break;
+       
+       }
+     
+     
+     }
 }
