@@ -4,7 +4,13 @@ $this->registerJs(
    '$("document").ready(function(){ 
         $(document).ready(function() 
     { 
-        $("#myTable").tablesorter(); 
+       // $("#myTable").tablesorter(); 
+       $("#myTable").DataTable( {aLengthMenu: [
+        [25, 50, 100, 200, -1],
+        [25, 50, 100, 200, "All"]
+    ],
+    iDisplayLength: -1
+    });
     } 
 ); 
     
@@ -27,11 +33,11 @@ if (!is_array($result))
 <div class="bordered-form parameter-form">
   <div class="form-title">
     <div class="form-title-span">
-        <span>District-wise Block-wise Achievement for Persondays</span>
+        <span>District-wise Block-wise Achievement for Persondays as on <?=date('d/m/Y',$model->update_time)?></span>
     </div>
 </div>
 <?php
-   print '<table class="table table-striped tablesorter" id="myTable" class="tablesorter"> 
+   print '<table class="table table-striped tablesorter display" id="myTable" class="tablesorter"> 
 <thead> 
 <tr> 
     <th>Name of District</th> 

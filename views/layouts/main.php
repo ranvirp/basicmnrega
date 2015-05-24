@@ -21,6 +21,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+     
     <?php $this->head() ?>
     <style>
     .bg-green
@@ -36,12 +37,13 @@ AppAsset::register($this);
      padding:0;
     }
    .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;}
-.navbar {min-height:40px !important}
+.navbar {min-height:30px !important;font-size:8px;}
     .navbar-green
     {
      background-color:#faf3e3
     }
     </style>
+   
 </head>
 <body class="">
 
@@ -69,31 +71,23 @@ AppAsset::register($this);
             echo Nav::widget([
             
     'items' => [
-       ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/android/latest/GPSPhotoUploader.apk'],
-        ['label' => 'Master Data', 'url' => ['/site/index'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
+       ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/GPSPhotoUploaderMNREGA.apk'],
+        Yii::$app->user->isGuest ?'':
+       ['label' => 'Master Data', 'url' => ['/site/index'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
              ['label' => 'Level', 'url' => ['/users/level/create'],'options'=>['class'=>'dropdown']],
              ['label' => 'Department', 'url' => ['/users/department/create'],'options'=>['class'=>'dropdown']],
             
              ['label' => 'Designation', 'url' => ['/users/designation/create'],'options'=>['class'=>'dropdown']],
              ['label' => 'DesignationType', 'url' => ['/users/designation-type/create'],'options'=>['class'=>'dropdown']],
-              ['label' => 'Division', 'url' => ['/work/division/create'],'options'=>['class'=>'dropdown']],
-             ['label' => 'Substation', 'url' => ['/work/substation/create'],'options'=>['class'=>'dropdown']],
-             ['label' => 'Circle', 'url' => ['/work/circle/create'],'options'=>['class'=>'dropdown']],
-             ['label' => 'Scheme', 'url' => ['/work/scheme/create'],'options'=>['class'=>'dropdown']],
-            ['label' => 'MaterialType', 'url' => ['/work/material-type/create'],'options'=>['class'=>'dropdown']],
+              ['label' => 'District', 'url' => ['/mnrega/district/index'],'options'=>['class'=>'dropdown']],
+             ['label' => 'Block', 'url' => ['/mnrega/block/index'],'options'=>['class'=>'dropdown']],
+             ['label' => 'Panchayat', 'url' => ['/mnrega/panchayat/index'],'options'=>['class'=>'dropdown']],
             
             
                 
             ]],
-        ['label' => 'Data Entry', 'url' => ['#'],'options'=>['class'=>'dropdown']
-            ,'items'=>[ 
-            
-                ['label' => 'Work', 'url' => ['/work/work/create'],'options'=>['class'=>'dropdown']],
-                ['label' => 'Work Progress', 'url' => ['/work/work/addwp'],'options'=>['class'=>'dropdown']],
-                ['label' => 'Add Material Requirement', 'url' => ['/work/work/addmq'],'options'=>['class'=>'dropdown']]
-            ],
-    ],
+       
                 ['label' => 'Reports', 'url' => ['#'],'options'=>['class'=>'dropdown']
             ,'items'=>[ 
                 ['label' => 'Mandays generated', 'url' => ['/mnrega/parameter/display?id=7'],'options'=>['class'=>'dropdown']],
@@ -115,8 +109,7 @@ AppAsset::register($this);
 
             NavBar::end();
         ?>
-
-        <div class="container">
+        <div class="container small">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
@@ -126,7 +119,7 @@ AppAsset::register($this);
 
     <footer class="footer">
         <div class="container">
-            <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+            <p class="pull-left">MNREGA Cell<?= date('Y') ?></p>
             <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>

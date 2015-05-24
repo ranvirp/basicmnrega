@@ -19,7 +19,10 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
-        'css/prettyPhoto.css'
+        'css/prettyPhoto.css',
+        'css/blue/style.css',
+        'css/jquery.dataTables.css',
+        
     ];
     public $js = [
     'js/common.js',
@@ -27,6 +30,7 @@ class AppAsset extends AssetBundle
         'js/googletransliterate.js',
         'js/jquery.prettyPhoto.js',
         'js/jquery.tablesorter.min.js',
+        'js/jquery.dataTables.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

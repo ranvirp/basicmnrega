@@ -17,7 +17,7 @@ use yii\helpers\Json;
 /**
  * ParameterController implements the CRUD actions for Parameter model.
  */
-class ParameterController extends Controller
+class ParameterController extends \yii\web\Controller
 {
     public function behaviors()
     {
@@ -159,16 +159,18 @@ class ParameterController extends Controller
     }
     public function actionPopulate($p,$l,$d=0)
     {
-       if (($l==2) && ($d==0)) 
+       
+       $dnew=$d;
+        if ($d!=0)
+         {
+           $district=\app\modules\mnrega\models\District::findOne($d);
+           if ($district) $dnew=$district->district_name;
+         }
+         if (($l==2) && ($dnew==0)) 
        {
          print "you must specify district_code as parameter d if level=2";
          return;
        }
-        if ($d!=0)
-         {
-           $district=\app\modules\mnrega\models\District::findOne($d);
-           if ($district) $d=$district->district_name;
-         }
         $model=Parameter::findOne($p);
         $link=$model->link;
         $data=file_get_contents($link);
@@ -181,7 +183,7 @@ class ParameterController extends Controller
         switch($model->shortcode)
         {
         case 'mandays':
-         $tableid='t1';
+         $tableid=4;
          $rowstoskip=4;
          $m=date('m');
          $y=date('Y');
@@ -191,17 +193,68 @@ class ParameterController extends Controller
          $level=0;
          $colwithvalues=[2*$m+$colwithnames,2*$m+$colwithnames-1];
         break;
+        case 'musteroll':
+         $tableid=3;
+         $rowstoskip=3;
+         $m=date('m');
+         $y=date('Y');
+         if ($y==2016) $m=$m+12;
+         $m=$m-3;
+         $colwithnames=1;
+         $level=0;
+         $colwithvalues=[2,3];
+        break;
+        case 'workcategory':
+         $tableid=2;
+         $rowstoskip=3;
+         $m=date('m');
+         $y=date('Y');
+         if ($y==2016) $m=$m+12;
+         $m=$m-3;
+         $colwithnames=1;
+         $level=0;
+         $colwithvalues=range(2,55);
+        break;
+        case 'test':
+         $tableid=3;
+         $rowstoskip=3;
+         $m=date('m');
+         $y=date('Y');
+         if ($y==2016) $m=$m+12;
+         $m=$m-3;
+         $colwithnames=1;
+         $level=0;
+         $colwithvalues=[2,3];
+        break;
+        case 'houses':
+         $tableid=1;
+         $rowstoskip=2;
+        
+         $colwithnames=1;
+         $level=0;
+         $colwithvalues=range(2,8);
+        break;
+        case 'empstatus':
+         $tableid=5;
+         $rowstoskip=6;
+        
+         $colwithnames=1;
+         $level=0;
+         $colwithvalues=range(2,18);
+        break;
         default:
         break;
         }
           $x=[];
           $utility=new \app\modules\mnrega\Utility;
-          $result=$utility->parseTable($link,$tableid,$rowstoskip,$colwithnames,$colwithvalues,$x,$l,$d);
-        $pp=ParameterParse::find()->where(['parameter_id'=>$p,'level'=>$level])->one();
+          $result=$utility->parseTable($link,$tableid,$rowstoskip,$colwithnames,$colwithvalues,$x,$l,$dnew);
+       var_dump($result);
+       $pp=ParameterParse::find()->where(['parameter_id'=>$p,'level'=>$l,'district_code'=>$d])->one();
  if (!$pp) $pp=new ParameterParse;
  $pp->update_time=time();
  $pp->json_value=json_encode($result);
  $pp->parameter_id=$p;
+ $pp->district_code=$d;
  //$pp->dld_data=$data;
  $pp->level=$l;
  if (!$pp->save())
@@ -210,93 +263,45 @@ class ParameterController extends Controller
   // $pp->updateTable();
         
     
-    }
-    public function action1Populate($p)
-    {
-       $model=Parameter::findOne($p);
-       $link=$model->link;
-       print $link;
-       //$link="http://164.100.129.6/netnrega/projected_VS_generated.aspx?file1=empprov&page1=s&lflag=eng&state_name=UTTAR+PRADESH&state_code=31&fin_year=2015-2016&Digest=CgyzEo8dpRYpwcFbitdqJg";
-      // $link="http://localhost/basicmnrega/web/images/page1.html";
-      
-       $data=file_get_contents($link);
-       if ($data==false)
-        {
-          print "Error fetching data...aborting\n";
-          return;
-        }
-       
-     print $model->shortcode;  
-    switch($model->shortcode)
-    {
-    case 'mandays':
-    print "processing for mandays";
-     $result=[];
-        try{
-       $dom = new domDocument;
-
-       @$dom->loadHTML($data);
-       $dom->preserveWhiteSpace = false;
-       $table = $dom->getElementById('t1');
-
-       $rows = $table->getElementsByTagName('tr');
-      $i=0;
-       $m=date('m');
-       $y=date('Y');
-       if ($y==2016) $m=$m+12;
-       $m=$m-3;
-       foreach ($rows as $row) {
-       if ($i<4) {$i++;continue;}
-        $col = $row->getElementsByTagName('td');
-        
-        
-        for ($j=1;$j<=$m;$j++)
-        {
-        
-          //AGRA april->achievement, percentage may achievement,percentage
-          if ($col[1] && $col[1+2*$j] && $col[2*$j])
-          {
-            $result[$col[1]->nodeValue][$j]['mandays']=$col[1+2*$j]->nodeValue;
-            $result[$col[1]->nodeValue][$j]['target']=$col[2*$j]->nodeValue;
-            $req=$col[2*$j]->nodeValue;
-              $per=0;
-         
-          if ($req!=0)
-          
-             $per=$col[1+2*$j]->nodeValue/$req*100;
-           $result[$col[1]->nodeValue][$j]['per']=$per;
-          }
-          }
-          
-    $i++;
-}
-}catch(Exception $e)
-{
- print_r($e);
- }
- //var_dump($result);
- $pp=ParameterParse::find()->where(['parameter_id'=>$p,'level'=>$level]);
- if (!$pp) $pp=new ParameterParse;
- $pp->update_time=time();
- $pp->json_value=json_encode($result);
- $pp->parameter_id=$p;
- $pp->dld_data=$data;
- if (!$pp->save())
-   print_r($pp->errors);
-else
-   $pp->updateTable();
- break;
- default:
- break;
- 
-}
+    
+   
     
     }
     public function actionDisplay($id)
     {
       $model=ParameterParse::findOne($id);
       //$model->updateTable();
-     // print "Value at ".date('d/m/Y i:H',$model->update_time);
-      return $this->render('_display',['result'=>Json::decode($model->json_value,true)]);
+      if (!$model)
+        print "Id wrong\n";
+        else {
+        
+        if ($model->parameter->shortcode=='mandays')
+        return $this->render('_display',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+        else
+         return $this->render('_displaygeneral',['model'=>$model,'result'=>Json::decode($model->json_value,true)]);
+      
+      }
     }
+    public function actionGenworkpage($cat,$level)
+     {
+       unset($this->layout);
+       $works=new \app\modules\mnrega\models\Works;
+       switch($cat)
+       {
+         case 'housing':
+           $page='B';
+           $rcode='B';
+           $rsubcode='4';
+           $rsec_code='W09';
+           $fin_year='2015-2016';
+           return $works->genWorkCategoriesPage($fin_year,$level);
+         break;
+         default:
+         break;
+       
+       }
+     
+     
+     }
 }

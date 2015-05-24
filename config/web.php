@@ -6,9 +6,10 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    //'homeUrl'=>'site',
+    'homeUrl'=>'mnrega/parameter/display?id=7',
    'language'=>'en',
     'components' => [
+    //'assetManager'=>['basePath'=>dirname(__DIR__).'/web'],
     'authManager' => [
 		  'class' => '\yii\rbac\DbManager',
 		 'ruleTable' => '{{%authrule}}', // Optional
