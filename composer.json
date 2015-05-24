@@ -15,10 +15,10 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "*",
+        "yiisoft/yii2": "2.0.4",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
-        "yiisoft/yii2-jui": "~2.0",
+        "yiisoft/yii2-jui": "*",
         "kartik-v/yii2-widget-fileinput": "*",
         "2amigos/yii2-leaflet-extension": "*",
         "arogachev/yii2-excel": "^0.1.0",
