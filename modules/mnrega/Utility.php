@@ -35,8 +35,14 @@ if ($level==0)
  {
  //print_r($matches);
  return "state_name=".rawurlencode($matches[1])."&";},$link);
- 
-
+ $link=preg_replace_callback("/district_name=([^\&]+)\&/",function($matches)
+ {
+ //print_r($matches);
+ return "district_name=".rawurlencode($matches[1])."&";},$link);
+$link=preg_replace_callback("/block_name=([^\&]+)\&/",function($matches)
+ {
+ //print_r($matches);
+ return "block_name=".rawurlencode($matches[1])."&";},$link);
 $referer = "http://164.100.129.6/netnrega/all_lvl_details_dashboard_new.aspx?fin_year=2015-2016&val=sec&Digest=fyEkTtQR5Hg3F
 %2fxEfIkpsA";
 $referer='http://localhost';
@@ -57,7 +63,8 @@ print_r($data);
 //if (!($data contains 'Total')) return;
  //if ($level<2)
  //exit;
-    
+ register_shutdown_function( "fatal_handler" );
+   
  try{
        $dom = new domDocument;
 
@@ -69,8 +76,12 @@ print_r($data);
        $table=$tables->item($tableid);
        else
        $table = $dom->getElementById($tableid);
-print_r($tables);
+       //print "tableid=$tableid";
+      // var_dump($table);
+       if ($table)
        $rows = $table->getElementsByTagName('tr');
+       else
+        return [];
       $i=0;
        $m=date('m');
        $y=date('Y');
@@ -232,6 +243,24 @@ function removeDotPathSegments($path) {
     }
 
     return implode($outputStack);
+}
+
+function fatal_handler() {
+  $errfile = "unknown file";
+  $errstr  = "shutdown";
+  $errno   = E_CORE_ERROR;
+  $errline = 0;
+
+  $error = error_get_last();
+
+  if( $error !== NULL) {
+    $errno   = $error["type"];
+    $errfile = $error["file"];
+    $errline = $error["line"];
+    $errstr  = $error["message"];
+
+    error_mail(format_error( $errno, $errstr, $errfile, $errline));
+  }
 }
 
 }

@@ -19,12 +19,18 @@ $config = [
 		  ],
     'urlManager' => [
 			'enablePrettyUrl' => true,
+		//	'enableStrictParsing' => true,
+    //'showScriptName' => false,
 			'rules' => [
 				['class' => 'yii\rest\UrlRule', 'controller' => 'api/photo'],
+				['class' => 'yii\rest\UrlRule', 'controller' => 'api/pp',
+				                    'extraPatterns' => [
+                        'GET remote' => 'remote',
+                    ],],
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			],
 			],
-                        'request' => [
+                    'request' => [
                         'parsers' => [
                                 'application/json' => 'yii\web\JsonParser',
                         ],
@@ -37,6 +43,7 @@ $config = [
         'user' => [
             'identityClass' => 'app\modules\users\models\User',
             'enableAutoLogin' => true,
+            'loginUrl'=>null,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

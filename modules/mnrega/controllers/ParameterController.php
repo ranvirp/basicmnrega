@@ -37,6 +37,8 @@ class ParameterController extends \yii\web\Controller
      */
     public function actionIndex()
     {
+     if (!Yii::$app->user->can('parameteradmin')) 
+        return;
         $searchModel = new ParameterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -53,6 +55,8 @@ class ParameterController extends \yii\web\Controller
      */
     public function actionView($id)
     {
+     if (!Yii::$app->user->can('parameteradmin')) 
+        return;
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -66,7 +70,8 @@ class ParameterController extends \yii\web\Controller
     
     public function actionCreate()
     {
-       
+        if (!Yii::$app->user->can('parameteradmin')) 
+        return;
        
         $model = new Parameter();
  
@@ -102,6 +107,8 @@ class ParameterController extends \yii\web\Controller
      */
         public function actionUpdate($id)
     {
+          if (!Yii::$app->user->can('parameteradmin')) 
+        return;
          $model = $this->findModel($id);
        
  
@@ -137,6 +144,8 @@ class ParameterController extends \yii\web\Controller
      */
     public function actionDelete($id)
     {
+     if (!Yii::$app->user->can('parameteradmin')) 
+        return;
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -159,7 +168,8 @@ class ParameterController extends \yii\web\Controller
     }
     public function actionPopulate($p,$l,$d=0)
     {
-       
+        if (!Yii::$app->user->can('parameteradmin')) 
+        return;
        $dnew=$d;
         if ($d!=0)
          {
@@ -173,12 +183,17 @@ class ParameterController extends \yii\web\Controller
        }
         $model=Parameter::findOne($p);
         $link=$model->link;
+        $pp=ParameterParse::find()->where(['parameter_id'=>$p,'level'=>$l,'district_code'=>$d])->one();
+ if (!$pp) $pp=new ParameterParse;
+       if (time()+$model->periodicity*24*3600<$pp->update_time )
+        return "Cannot update before periodicity\n";
         $data=file_get_contents($link);
-        if ($data==false)
+        
+        if ($data=='')
         {
           print "Error fetching data...aborting\n";
           return;
-        }
+       }
         
         switch($model->shortcode)
         {
@@ -249,8 +264,7 @@ class ParameterController extends \yii\web\Controller
           $utility=new \app\modules\mnrega\Utility;
           $result=$utility->parseTable($link,$tableid,$rowstoskip,$colwithnames,$colwithvalues,$x,$l,$dnew);
        var_dump($result);
-       $pp=ParameterParse::find()->where(['parameter_id'=>$p,'level'=>$l,'district_code'=>$d])->one();
- if (!$pp) $pp=new ParameterParse;
+       
  $pp->update_time=time();
  $pp->json_value=json_encode($result);
  $pp->parameter_id=$p;
@@ -259,7 +273,8 @@ class ParameterController extends \yii\web\Controller
  $pp->level=$l;
  if (!$pp->save())
    print_r($pp->errors);
-//else
+else
+  print $pp->id;
   // $pp->updateTable();
         
     
@@ -269,22 +284,49 @@ class ParameterController extends \yii\web\Controller
     }
     public function actionDisplay($id)
     {
+     //if($id!=7) return;
       $model=ParameterParse::findOne($id);
       //$model->updateTable();
       if (!$model)
         print "Id wrong\n";
         else {
-        
-        if ($model->parameter->shortcode=='mandays')
-        return $this->render('_display',['model'=>$model,'result'=>
+       switch($model->parameter->shortcode)
+       {
+       case 'mandays':
+       return $this->render('_display',['model'=>$model,'result'=>
         Json::decode($model->json_value,true)]);
-        else
-         return $this->render('_displaygeneral',['model'=>$model,'result'=>Json::decode($model->json_value,true)]);
+        break;
+         case 'empstatus':
+       return $this->render('_displayempstatus',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+        break;
+        default:
+        return $this->render('_displaygeneral',['model'=>$model,'result'=>Json::decode($model->json_value,true)]);
+        break;
+       }
+        
+         
       
       }
+      
     }
+    public function actionGetarray($id)
+      {
+       if (!Yii::$app->user->can('parameteradmin')) 
+        return;
+      $model=ParameterParse::findOne($id);
+      //$model->updateTable();
+      if (!$model)
+        print "Id wrong\n";
+        else {
+        print_r(Json::decode($model->json_value,true));
+     }  
+      
+      }
     public function actionGenworkpage($cat,$level)
      {
+      if (!Yii::$app->user->can('parameteradmin')) 
+        return;
        unset($this->layout);
        $works=new \app\modules\mnrega\models\Works;
        switch($cat)
@@ -303,5 +345,24 @@ class ParameterController extends \yii\web\Controller
        }
      
      
+     }
+     public function actionCp()
+      {
+         if (!Yii::$app->user->can('parameteradmin')) 
+        return;
+        return $this->render('_controlpanel');
+      }
+     public function actionDisplaywc()
+     {
+     $model=ParameterParse::findOne(15);
+      //$model->updateTable();
+      if (!$model)
+        print "Id wrong\n";
+        else {
+        
+       
+        return $this->render('_displaywcategoriesdistrictwise',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+     }
      }
 }

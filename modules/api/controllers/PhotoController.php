@@ -6,24 +6,25 @@ use yii\rest\ActiveController;
 //use yii\filters\auth\CompositeAuth;
 //use yii\filters\auth\HttpBasicAuth;
 //use yii\filters\auth\HttpBearerAuth;
-//use yii\filters\auth\QueryParamAuth;
+use yii\filters\auth\QueryParamAuth;
 use Yii;
 
 class PhotoController  extends ActiveController
 {
     public $modelClass = 'app\modules\gpsphoto\models\Photo';
-	/*
+	
 	public function behaviors()
 {
     $behaviors = parent::behaviors();
     $behaviors['authenticator'] = [
         'class' => 
             QueryParamAuth::className(),
+        'tokenParam'=>'access_token',
         
     ];
     return $behaviors;
 }
-*/
+/*
 	public function beforeAction($action)
 	{
 		if (parent::beforeAction($action)) {
@@ -41,6 +42,7 @@ class PhotoController  extends ActiveController
 		else
 			return false;
 	}
+	*/
 	 /**
      * @inheritdoc
      */

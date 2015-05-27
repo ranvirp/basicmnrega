@@ -24,6 +24,7 @@ class m150521_054805_create_tables_parameters extends Migration
             'description'=>Schema::TYPE_STRING,
             'weight'=>Schema::TYPE_INTEGER,
             'unit'=>Schema::TYPE_STRING,
+            'periodicity'=>Schema::TYPE_INTEGER.' default 1',
             
                     ], $tableOptions);
         $this->createTable('{{%parameter_value}}', [
@@ -41,6 +42,7 @@ class m150521_054805_create_tables_parameters extends Migration
             'dld_data'=>Schema::TYPE_TEXT,
             'district_code'=>Schema::TYPE_STRING.'(4)',
             'update_time'=>Schema::TYPE_INTEGER,
+            'upload_time'=>Schema::TYPE_INTEGER,
             
                     ], $tableOptions);
          $this->createTable('{{%parameter_target}}', [
