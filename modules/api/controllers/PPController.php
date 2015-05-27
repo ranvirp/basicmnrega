@@ -6,24 +6,25 @@ use yii\rest\ActiveController;
 //use yii\filters\auth\CompositeAuth;
 //use yii\filters\auth\HttpBasicAuth;
 //use yii\filters\auth\HttpBearerAuth;
-//use yii\filters\auth\QueryParamAuth;
+use yii\filters\auth\QueryParamAuth;
 use Yii;
 
 class PPController  extends ActiveController
 {
     public $modelClass = 'app\modules\mnrega\models\ParameterParse';
-	/*
+	
 	public function behaviors()
 {
     $behaviors = parent::behaviors();
     $behaviors['authenticator'] = [
         'class' => 
             QueryParamAuth::className(),
+            'tokenParam'=>'access_token',
         
     ];
     return $behaviors;
 }
-*/
+/*
 	public function beforeAction($action)
 	{
 		if (parent::beforeAction($action)) {
@@ -41,6 +42,7 @@ class PPController  extends ActiveController
 		else
 			return false;
 	}
+	*/
 	 /**
      * @inheritdoc
      */
@@ -58,7 +60,7 @@ class PPController  extends ActiveController
                 'checkAccess' => [$this, 'checkAccess'],
             ],
             'create' => [
-                'class' =>  'yii\rest\CreateAction',,
+                'class' =>  'yii\rest\CreateAction',
                 'modelClass' => $this->modelClass,
                 'checkAccess' => [$this, 'checkAccess'],
                 'scenario' => $this->createScenario,
@@ -73,6 +75,12 @@ class PPController  extends ActiveController
                 'class' => 'yii\rest\DeleteAction',
                 'modelClass' => $this->modelClass,
                 'checkAccess' => [$this, 'checkAccess'],
+            ],
+             'remote' => [
+                'class' => '\app\modules\api\PPRemoteAction',
+                'modelClass' => $this->modelClass,
+                'checkAccess' => [$this, 'checkAccess'],
+                'scenario' => $this->updateScenario,
             ],
             'options' => [
                 'class' => 'yii\rest\OptionsAction',

@@ -103,7 +103,7 @@ if (!$district) return null;
              .'<td></td>'.'<td></td>'.'<td></td>'.'<td></td>'.'<td></td>'.'<td></td>'.'</tr>';
            $i++;
            }
-           }
+           
            return $x;
      }
      if ($level==1)
@@ -115,8 +115,8 @@ if (!$district) return null;
              .'<td></td>'.'<td></td>'.'<td></td>'.'<td></td>'.'<td></td>'.'<td></td>'.'</tr>';
            $i++;
            }
-           }
+           
            return $x;
      }
-   
+   }
 }
