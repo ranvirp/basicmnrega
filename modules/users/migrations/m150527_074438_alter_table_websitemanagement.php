@@ -7,7 +7,7 @@ class m150527_074438_alter_table_websitemanagement extends Migration
 {
     public function up()
     {
-$this->addColumn('{{%designation}}','code',self::TYPE_STRING." default ''"; 
+$this->addColumn('{{%websitemanagement}}','code',self::TYPE_STRING." default 'webadmin'"); 
     }
 
     public function down()
