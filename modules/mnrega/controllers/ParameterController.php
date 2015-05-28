@@ -187,6 +187,9 @@ class ParameterController extends \yii\web\Controller
  if (!$pp) $pp=new ParameterParse;
        if (time()+$model->periodicity*24*3600<$pp->update_time )
         return "Cannot update before periodicity\n";
+        
+        print $link;
+        
         $data=file_get_contents($link);
         
         if ($data=='')

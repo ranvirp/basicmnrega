@@ -24,7 +24,7 @@ $config = [
 			'rules' => [
 				['class' => 'yii\rest\UrlRule', 'controller' => 'api/photo'],
 				['class' => 'yii\rest\UrlRule', 'controller' => 'api/pp',
-				                    'extraPatterns' => [
+				    'extraPatterns' => [
                         'GET remote' => 'remote',
                     ],],
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',

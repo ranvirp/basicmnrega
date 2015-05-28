@@ -42,9 +42,9 @@ class PPRemoteAction extends \yii\rest\Action
         }
 
        $modelclass=$this->modelClass;
-        $access_token=Yii::$app->params['remote_aaccess_token'];
+        $access_token=Yii::$app->params['remote_access_token'];
         if ($access_token=='')
-          $access_token=
+          throw new NotFoundHttpException('The requested page does not exist.');
         $mid=Yii::$app->request->get('mid');
 		$rmid=Yii::$app->request->get('rmid');
 		$host=Yii::$app->request->get('host');

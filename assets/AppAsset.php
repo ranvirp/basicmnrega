@@ -26,8 +26,8 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
     'js/common.js',
-    'https://www.google.com/jsapi',
-        'js/googletransliterate.js',
+   // 'https://www.google.com/jsapi',
+      //  'js/googletransliterate.js',
         'js/jquery.prettyPhoto.js',
         'js/jquery.tablesorter.min.js',
         'js/jquery.dataTables.min.js',
