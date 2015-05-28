@@ -356,12 +356,12 @@ else
         return;
         return $this->render('_controlpanel');
       }
-     public function actionDisplaywc()
+     public function actionDisplaywc($id)
      {
      
-     $model=ParameterParse::findOne(15);
+     $model=ParameterParse::findOne($id);
       //$model->updateTable();
-      if (!$model)
+      if ($model->parameter_id!=9)
         print "Id wrong\n";
         else {
         
