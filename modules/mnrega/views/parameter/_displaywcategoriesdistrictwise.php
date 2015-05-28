@@ -24,6 +24,7 @@ $this->registerJs(
 //console.log(columnss)
 // Toggle the visibility
 table.columns().visible(false)
+table.columns(".dist").visible(true)
 for (index=0;index<columnss.length;index++)
   {
    for (j=0;j<columnss[index].length;j++)
@@ -71,7 +72,8 @@ if (!is_array($result))
 					Toggle column: <a data-column="tw" class="toggle-vis">Total Works</a> - 
 					<a data-column="ow" class="toggle-vis">Ongoing Works</a> - 
 					<a data-column="cw" class="toggle-vis">Completed Works</a> - 
-					<a data-column="exp" class="toggle-vis">New Works</a> -
+					<a data-column="nw" class="toggle-vis">New Works</a> -
+					<a data-column="exp" class="toggle-vis">Expenditure</a> -
 					<a data-column="unit" class="toggle-vis">Unit</a> - 
 					<a data-column="estoutcome" class="toggle-vis">Estimated Outcome</a>-
 					<a data-column="estcost" class="toggle-vis">Estimated Cost(in Lakhs)</a>
@@ -80,7 +82,7 @@ if (!is_array($result))
    print '<table class="table table-striped tablesorter " id="myTable" class="tablesorter"> 
 <thead> 
 <tr> 
-    <th>Name of District</th>
+    <th class="dist">Name of District</th>
     <th class="af tw">Afforestation-Total Works</th>
     <th class="af ow">Afforestation-Ongoing Works</th> 
     <th class="af cw">Afforestation-Completed Works</th> 
