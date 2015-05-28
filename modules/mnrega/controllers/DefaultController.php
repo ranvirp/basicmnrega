@@ -10,7 +10,7 @@ class DefaultController extends Controller
     {
         return $this->render('index');
     }
-     public function actionGenparassss($cat,$level)
+     public function actionGenpage($cat,$level)
      {
       //if (!Yii::$app->user->can('parameteradmin')) 
         //return;

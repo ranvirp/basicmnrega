@@ -168,6 +168,7 @@ class ParameterController extends \yii\web\Controller
     }
     public function actionPopulate($p,$l,$d=0)
     {
+      
         if (!Yii::$app->user->can('parameteradmin')) 
         return;
        $dnew=$d;
@@ -185,8 +186,8 @@ class ParameterController extends \yii\web\Controller
         $link=$model->link;
         $pp=ParameterParse::find()->where(['parameter_id'=>$p,'level'=>$l,'district_code'=>$d])->one();
  if (!$pp) $pp=new ParameterParse;
-       if (time()+$model->periodicity*24*3600<$pp->update_time )
-        return "Cannot update before periodicity\n";
+      // if (time()<$model->periodicity*24*3600+$pp->update_time )
+        //return "Cannot update before periodicity\n";
         
         print $link;
         
@@ -250,7 +251,7 @@ class ParameterController extends \yii\web\Controller
         
          $colwithnames=1;
          $level=0;
-         $colwithvalues=range(2,8);
+         $colwithvalues=range(2,9);
         break;
         case 'empstatus':
          $tableid=5;
@@ -357,6 +358,7 @@ else
       }
      public function actionDisplaywc()
      {
+     
      $model=ParameterParse::findOne(15);
       //$model->updateTable();
       if (!$model)

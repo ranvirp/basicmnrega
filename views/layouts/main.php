@@ -92,7 +92,8 @@ AppAsset::register($this);
             ,'items'=>[ 
                 ['label' => 'Mandays generated', 'url' => ['/mnrega/parameter/display?id=7'],'options'=>['class'=>'dropdown']],
                 
-
+['label' => 'Categories Wise Work Analysis', 'url' => ['/mnrega/parameter/displaywc'],'options'=>['class'=>'dropdown']],
+                
             ],
     ],
         
