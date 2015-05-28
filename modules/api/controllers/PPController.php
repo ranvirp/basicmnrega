@@ -9,7 +9,7 @@ use yii\rest\ActiveController;
 use yii\filters\auth\QueryParamAuth;
 use Yii;
 
-class PPController  extends ActiveController
+class PpController  extends ActiveController
 {
     public $modelClass = 'app\modules\mnrega\models\ParameterParse';
 	
