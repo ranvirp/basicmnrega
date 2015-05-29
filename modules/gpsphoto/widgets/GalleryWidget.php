@@ -13,25 +13,39 @@ use Yii;
  *
  * @author mac
  */
-class PhotoWidget  extends \yii\base\Widget{
+class GalleryWidget  extends \yii\base\Widget{
 	//put your code here
 	public $photos;
 	public function run() {
 		parent::run();
-		$model=$this->model;
 		$lang=Yii::$app->language;
 		$items=[];
 		if (!$this->photos)
 		{
 			echo '<b>Photo List Empty! </b>';
 		}
-		foreach ($photos as $photo)
-		{
-		   
+		$photo=$this->photos[0];
 			$items[]=['url'=>$photo->url,'src'=>$photo->url,'options'=>['title'=>$photo->title,'gpslat'=>$photo->gpslat,'gpslong'=>$photo->gpslong]];
-		}
 		
-		echo \dosamigos\gallery\Carousel::widget([
+		echo '<style> a.gallery-item>img{
+		border: 1px solid grey;
+    display: block;
+    float: left;
+    height: 75px;
+    width:75px;}</style>';
+		echo '<div id="ho">';
+		foreach ($this->photos as $photo)
+		{
+		echo '<a class="gallery-item" href="'.$photo->url.'">';
+		if ($photo->thumbnail)
+		echo '<img id="'.$photo->id.'" src="data:image/x-icon;base64,'.$photo->thumbnail.'" width="75" height="75">';
+		else 
+		echo '<img src="'.$photo->url."' width='75' height='75'>";
+		echo '</a>';
+		}
+		echo "</div>";
+		
+		echo \dosamigos\gallery\Gallery::widget([
     'items' => $items,
 			'options'=>['id'=>'ho'],
     'clientEvents' => [
