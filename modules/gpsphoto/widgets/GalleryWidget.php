@@ -36,7 +36,7 @@ class GalleryWidget  extends \yii\base\Widget{
 		echo '<div id="ho">';
 		foreach ($this->photos as $photo)
 		{
-		echo '<a class="gallery-item" href="'.$photo->url.'">';
+		echo '<a class="gallery-item" href="'.$photo->url.'" gpslat="'.$photo->gpslat.'" gpslong="'.$photo->gpslong.'">';
 		if ($photo->thumbnail)
 		echo '<img id="'.$photo->id.'" src="data:image/x-icon;base64,'.$photo->thumbnail.'" width="75" height="75">';
 		else 

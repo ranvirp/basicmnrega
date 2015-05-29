@@ -38,6 +38,7 @@ markers=new L.featureGroup();
       $photos=\app\modules\gpsphoto\models\Photo::find()->orderBy('created_at desc')->limit(10)->all();
       echo \app\modules\gpsphoto\widgets\GalleryWidget::widget(['photos'=>$photos]);
      echo '<script>';
+     echo '$(document).ready(function(){';
      foreach ($photos as $photo)
      {
      echo "markers.addLayer(new L.marker(['".$photo->gpslat."','".$photo->gpslong."'],{title:'".$photo->title."'}));";
@@ -45,6 +46,12 @@ markers=new L.featureGroup();
      }
      echo 'markers.addTo(map);';
      echo "map.panTo(new L.latLng(['".$photo->gpslat."','".$photo->gpslong."']));";
+     echo '$("a.gallery-item").hover(function(){
+     var gpslat=$(this).attr("gpslat");
+	  var gpslong=$(this).attr("gpslong");
+	  map.panTo(new L.latLng([gpslat,gpslong]));
+	  });';
+	  echo '});';
      echo '</script>';
      ?>
 </div>
