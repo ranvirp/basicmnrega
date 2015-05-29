@@ -17,6 +17,7 @@ var markers;
 </div>
 <div class="row">
 <div class="col-md-8">
+<h2 class="well" id="maptitle"></h2>
 <div id="map">
  <?php
  // \app\modules\gpsphoto\widgets\LeafletWidget::widget(['gpslat'=>'26.846510800000000000','gpslong'=>'80.946683200000050000']);
@@ -38,6 +39,7 @@ markers=new L.featureGroup();
       $photos=\app\modules\gpsphoto\models\Photo::find()->orderBy('created_at desc')->limit(10)->all();
       echo \app\modules\gpsphoto\widgets\GalleryWidget::widget(['photos'=>$photos]);
      echo '<script>';
+     echo '$(document).ready(function(){';
      foreach ($photos as $photo)
      {
      echo "markers.addLayer(new L.marker(['".$photo->gpslat."','".$photo->gpslong."'],{title:'".$photo->title."'}));";
@@ -45,6 +47,15 @@ markers=new L.featureGroup();
      }
      echo 'markers.addTo(map);';
      echo "map.panTo(new L.latLng(['".$photo->gpslat."','".$photo->gpslong."']));";
+     echo '$("a.gallery-item").hover(function(){
+     var gpslat=$(this).attr("gpslat");
+	  var gpslong=$(this).attr("gpslong");
+	  var title=$(this).attr("title");
+	  var datetime=$(this).attr("datetime");
+	  map.panTo(new L.latLng([gpslat,gpslong]));
+	  $("#maptitle").html(title+" @"+datetime);
+	  });';
+	  echo '});';
      echo '</script>';
      ?>
 </div>
