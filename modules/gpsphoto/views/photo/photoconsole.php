@@ -1,6 +1,6 @@
 <?php
 use yii\grid\GridView;
-$dataProvider=new yii\data\ActiveDataProvider(['query'=>\app\modules\gpsphoto\models\Photo::find()->where('approved!=1')]);
+$dataProvider=new yii\data\ActiveDataProvider(['query'=>\app\modules\gpsphoto\models\Photo::find()]);
 $model1=new app\modules\gpsphoto\models\Photo;
   yii\widgets\Pjax::begin(['id' => 'Photos']);
 echo GridView::widget([
@@ -13,6 +13,7 @@ echo GridView::widget([
       'title',
       ['header'=>'Photo','format'=>'html','value'=>function($model,$key,$index,$column)
                                                      {
+                                                      //  <img alt="Embedded Image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIA..." />
                                                         return '<img src="'.$model->url.'">'.$model->title.'</img>';
                                                      }
       ],

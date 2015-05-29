@@ -48,7 +48,7 @@ AppAsset::register($this);
 <body class="">
 
 <?php $this->beginBody() ?>
-    <div class="wrap">
+<div class="wrap">
         <?php
         NavBar::begin([
                 //'brandLabel' => 'KESCO',
@@ -116,8 +116,8 @@ AppAsset::register($this);
             ]) ?>
             <?= $content ?>
         </div>
-    </div>
-
+    
+</div>
     <footer class="footer">
         <div class="container">
             <p class="pull-left">MNREGA Cell<?= date('Y') ?></p>
