@@ -17,6 +17,7 @@ var markers;
 </div>
 <div class="row">
 <div class="col-md-8">
+<h2 class="well" id="maptitle"></h2>
 <div id="map">
  <?php
  // \app\modules\gpsphoto\widgets\LeafletWidget::widget(['gpslat'=>'26.846510800000000000','gpslong'=>'80.946683200000050000']);
@@ -49,7 +50,10 @@ markers=new L.featureGroup();
      echo '$("a.gallery-item").hover(function(){
      var gpslat=$(this).attr("gpslat");
 	  var gpslong=$(this).attr("gpslong");
+	  var title=$(this).attr("title");
+	  var datetime=$(this).attr("datetime");
 	  map.panTo(new L.latLng([gpslat,gpslong]));
+	  $("#maptitle").html(title+" @"+datetime);
 	  });';
 	  echo '});';
      echo '</script>';
