@@ -51,11 +51,12 @@ if (!is_array($result))
         <span>District-wise Work Categories wise progress as on <?=date('d/m/Y',$model->update_time)?></span>
     </div>
 </div>
+<div class="help-block">Help:Click on columns to sort in descending/ascending order. Type district name in search.</div>
 <div>
 <a class="showall">Show All Columns</a>
 </div>
 <div>
-					Toggle column: <a data-column="af" class="toggle-vis">Afforestation</a> - 
+					Show only: <a data-column="af" class="toggle-vis">Afforestation</a> - 
 					<a data-column="irr" class="toggle-vis">Irrigation</a> - 
 					<a data-column="wc" class="toggle-vis">Water Conservation</a> - 
 					<a data-column="agri" class="toggle-vis">Agriculture</a> -
@@ -69,7 +70,7 @@ if (!is_array($result))
 					
 				</div>
 				<div>
-					Toggle column: <a data-column="tw" class="toggle-vis">Total Works</a> - 
+					Show only: <a data-column="tw" class="toggle-vis">Total Works</a> - 
 					<a data-column="ow" class="toggle-vis">Ongoing Works</a> - 
 					<a data-column="cw" class="toggle-vis">Completed Works</a> - 
 					<a data-column="nw" class="toggle-vis">New Works</a> -

@@ -1,0 +1,1 @@
+[30-May-2015 04:22:33 UTC] PHP Fatal error:  Class 'yii\console\Controller' not found in /home/nregaup0/basicmnrega/commands/HelloController.php on line 22

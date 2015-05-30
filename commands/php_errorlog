@@ -1,0 +1,9 @@
+[29-May-2015 23:25:37 America/Chicago] PHP Fatal error:  Class 'yii\console\Controller' not found in /home/nregaup0/basicmnrega/commands/HelloController.php on line 22
+[29-May-2015 23:28:36 America/Chicago] PHP Fatal error:  Class 'yii\console\Controller' not found in /home/nregaup0/basicmnrega/commands/HelloController.php on line 22
+[29-May-2015 23:41:48 America/Chicago] PHP Fatal error:  Class 'yii\base\Controller' not found in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/console/Controller.php on line 37
+[29-May-2015 23:42:21 America/Chicago] PHP Fatal error:  Class 'yii\base\Controller' not found in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/console/Controller.php on line 37
+[29-May-2015 23:52:32 CST6CDT] PHP Fatal error:  Class 'yii\console\Controller' not found in /home/nregaup0/basicmnrega/commands/HelloController.php on line 24
+[29-May-2015 23:52:55 CST6CDT] PHP Fatal error:  Class 'yii\base\Controller' not found in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/console/Controller.php on line 37
+[29-May-2015 23:53:58 CST6CDT] PHP Fatal error:  Class 'yii\base\Controller' not found in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/console/Controller.php on line 37
+[29-May-2015 23:54:16] PHP Parse error:  syntax error, unexpected T_STRING in /home/nregaup0/basicmnrega/commands/HelloController.php on line 8
+[29-May-2015 23:56:41 CST6CDT] PHP Fatal error:  Class 'yii\base\Controller' not found in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/console/Controller.php on line 37

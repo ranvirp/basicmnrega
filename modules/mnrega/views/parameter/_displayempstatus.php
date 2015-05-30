@@ -1,5 +1,6 @@
 
 <?php
+use yii\helpers\Html;
 $this->registerJs(
    '$("document").ready(function(){ 
         $(document).ready(function() 
@@ -35,9 +36,11 @@ if (!is_array($result))
 <div class="bordered-form parameter-form">
   <div class="form-title">
     <div class="form-title-span">
-        <span>District-wise Block-wise Achievement for Persondays as on <?=date('d/m/Y',$model->update_time)?></span>
+        <span>District-wise Block-wise Achievement on Women Participation etc. as on <?=date('d/m/Y',$model->update_time)?></span>
     </div>
 </div>
+<div class="help-block">Help:Click on columns to sort (ascending/descending both). Search for Total in search box for district wise data</div>
+ 
 <?php
    print '<table class="table table-striped tablesorter display" id="myTable" class="tablesorter"> 
 <thead> 
@@ -67,7 +70,7 @@ if (!is_array($result))
          {
            foreach ($resArr as $res1=>$res1Arr)
            {
-             
+                
              if ($res1!='link')
              { 
                if (is_array($res1Arr))
