@@ -27,8 +27,11 @@ class DefaultController extends Controller
 		
 		if ($user->validatePassword($password))
 		{
+		 if (strlen($user_auth_key)<10)
+		   {
 		    $user->auth_key=Yii::$app->security->generateRandomString();
 			$user->save();
+			}
 			//$user->generateAccessToken();
 			return $user->auth_key;
 		}

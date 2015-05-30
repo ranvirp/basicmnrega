@@ -37,11 +37,11 @@ class GalleryWidget  extends \yii\base\Widget{
 		echo '<div id="ho">';
 		foreach ($this->photos as $photo)
 		{
-		echo '<a class="gallery-item" href="'.$photo->url.'" gpslat="'.$photo->gpslat.'" gpslong="'.$photo->gpslong.'" title="'.$photo->title.'" datetime="'.date('d/m/Y H:i:s',$photo->created_at).'">';
+		echo '<a class="gallery-item" photo-id="'.$photo->bwid.'" href="'.$photo->url.'" gpslat="'.$photo->gpslat.'" gpslong="'.$photo->gpslong.'" title="'.$photo->title.'" datetime="'.date('d/m/Y H:i:s',$photo->created_at).'">';
 		if ($photo->thumbnail)
-		echo '<img id="'.$photo->id.'" src="data:image/x-icon;base64,'.$photo->thumbnail.'" width="75" height="75">';
+		echo '<img id="'.$photo->id.'" src="data:image/x-icon;base64,'.$photo->thumbnail.'">';
 		else 
-		echo '<img src="'.$photo->url."' width='75' height='75'>";
+		echo '<img src="'.$photo->url."'>";
 		echo '</a>';
 		}
 		echo "</div>";

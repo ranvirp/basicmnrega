@@ -57,7 +57,7 @@ if (!is_array($result))
          {
            foreach ($resArr as $res1=>$res1Arr)
            {
-             
+        
              if ($res1!='link')
              { 
                if (is_array($res1Arr))

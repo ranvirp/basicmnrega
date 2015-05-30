@@ -33,20 +33,21 @@ class HelloController extends Controller
       $photos=Photo::find()->all();
       foreach($photos as $photo)
       {
-        if (!base64_decode($photo->thumbnail))
-        {
+        //if (!base64_decode($photo->thumbnail))
+        //{
            print "processing ".$photo->id;
            $photo->thumbnail=$this->Thumbnail($photo->url);
            $photo->save();
-        }
+        //}
       }
     
     }
     function Thumbnail($url,  $width = 75, $height = 75) {
 
  // download and create gd image
- $image = ImageCreateFromString(file_get_contents($url));
-
+ $image = @ImageCreateFromString(file_get_contents($url));
+if ($image)
+{
  // calculate resized ratio
  // Note: if $height is set to TRUE then we automatically calculate the height based on the ratio
  $height = $height === true ? (ImageSY($image) * $width / ImageSX($image)) : $height;
@@ -54,7 +55,10 @@ class HelloController extends Controller
  // create image 
  $output = ImageCreateTrueColor($width, $height);
  ImageCopyResampled($output, $image, 0, 0, 0, 0, $width, $height, ImageSX($image), ImageSY($image));
-
+}else
+{
+$output = ImageCreateTrueColor($width, $height);
+}
  // save image
   ob_start (); 
 

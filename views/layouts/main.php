@@ -93,7 +93,8 @@ AppAsset::register($this);
                 ['label' => 'Mandays generated', 'url' => ['/mnrega/parameter/display?id=7'],'options'=>['class'=>'dropdown']],
                 
 ['label' => 'Categories Wise Work Analysis', 'url' => ['/mnrega/parameter/displaywc?id=2'],'options'=>['class'=>'dropdown']],
-                
+ ['label' => 'Analysis of Employment Parameters', 'url' => ['/mnrega/parameter/display?id=3'],'options'=>['class'=>'dropdown']],
+               
             ],
     ],
         
@@ -120,7 +121,7 @@ AppAsset::register($this);
 </div>
     <footer class="footer">
         <div class="container">
-            <p class="pull-left">MNREGA Cell<?= date('Y') ?></p>
+            <p class="pull-left">MNREGA Cell, Uttar Pradesh <?= date('Y') ?></p>
             <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
