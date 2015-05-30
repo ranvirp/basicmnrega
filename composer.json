@@ -24,7 +24,9 @@
         "arogachev/yii2-excel": "^0.1.0",
         "2amigos/yii2-multi-select-widget": "*",
         "kartik-v/yii2-widget-datepicker": "*",
-        "2amigos/yii2-gallery-widget": "~1.0"
+        "2amigos/yii2-gallery-widget": "~1.0",
+        "kartik-v/yii2-grid": "*",
+        "kartik-v/yii2-mpdf": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

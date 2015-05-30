@@ -8,8 +8,6 @@
 namespace app\commands;
 
 use yii\console\Controller;
-require ('/home/nregaup0/basicmnrega/vendor/yiisoft/yii2/console/Controller.php');
-require ('/home/nregaup0/basicmnrega/modules/gpsphoto/models/Photo.php');
 use app\modules\gpsphoto\models\Photo;
 
 /**
