@@ -20,8 +20,15 @@ if (!is_array($result))
    print "Invalid result array";
    
    else {
-   $targetkey=4;
-                  $achkey=5;
+   $m=date('m');
+         $y=date('Y');
+          if ($y==2016) $m=$m+12;
+         $m=$m-3;
+         $colwithnames=1;
+         $level=0;
+      
+   $targetkey=2*$m+$colwithnames-1;
+                  $achkey= 2*$m+$colwithnames;
                   $target=$result['Total'][$targetkey];
                   $ach=$result['Total'][$achkey];
                   $per=sprintf('%0.2f',$target!=0?$ach/$target*100:'0.0');
@@ -62,8 +69,15 @@ if (!is_array($result))
              { 
                if (is_array($res1Arr))
                 {
-                  $targetkey=4;
-                  $achkey=5;
+                  $m=date('m');
+         $y=date('Y');
+          if ($y==2016) $m=$m+12;
+         $m=$m-3;
+         $colwithnames=1;
+         $level=0;
+      
+   $targetkey=2*$m+$colwithnames-1;
+                  $achkey= 2*$m+$colwithnames;
                   $target=$res1Arr[$targetkey];
                   $ach=$res1Arr[$achkey];
                   $per=sprintf('%0.2f',$target!=0?$ach/$target*100:'0.0');
