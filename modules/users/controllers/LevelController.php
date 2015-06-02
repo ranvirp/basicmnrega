@@ -39,7 +39,7 @@ class LevelController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
+            'model'=>new \app\modules\users\models\Level        ]);
     }
 
     /**
@@ -74,6 +74,7 @@ class LevelController extends Controller
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\users\models\Level'][$model->$attribute]['required'])
             );
+            $model->updated_at=$model->created_at=time();
             if ($model->save())
             $model = new Level();; //reset model
         }
@@ -110,6 +111,7 @@ class LevelController extends Controller
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\users\models\Level'][$model->$attribute]['required'])
             );
+            $model->updated_at=time();
             if ($model->save())
             $model = new Level();; //reset model
         }

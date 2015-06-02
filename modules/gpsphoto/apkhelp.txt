@@ -1,0 +1,14 @@
+Download APK and install. To allow installation go to 
+Settings->Security and allow installation from other sources.
+After installation, go to options menu (by pressing button to the 
+left of home
+button) and go to settings and change login and password to that provided.
+Then again go to generate token and press. This is one time activity.
+Go to main screen. Start GPS of your phone. fill ID of the work (it may be
+MNREGA work ID). you need to only enter last characters like w/RC/9887766666)
+Fill title as whatever the image about like 'Gaon .. mein Naye Talab ki khudai ka karya'.
+Then check if the GPS coordinates showing in the end of screen shows
+sufficient accuracy. Then press image button and save image. 
+If you have data connection available, you can press upload immediately.
+Otherwise, you can select 'pager' from options menu and then upload 
+when data connection is available.

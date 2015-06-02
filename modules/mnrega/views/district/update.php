@@ -7,9 +7,9 @@ use yii\helpers\Html;
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
     'modelClass' => 'District',
-]) . ' ' . $model->district_code;
+]) . ' ' . $model->code;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Districts'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->district_code, 'url' => ['view', 'id' => $model->district_code]];
+$this->params['breadcrumbs'][] = ['label' => $model->code, 'url' => ['view', 'id' => $model->code]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="district-update">

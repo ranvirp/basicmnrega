@@ -39,7 +39,7 @@ class DistrictController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model'=>null       ]);
+            'model'=>new \app\modules\mnrega\models\District        ]);
     }
 
     /**
@@ -60,7 +60,7 @@ class DistrictController extends Controller
      * @return mixed
      */
     
-    public function action1Create()
+    public function actionCreate()
     {
        
        
@@ -96,7 +96,7 @@ class DistrictController extends Controller
      * @param string $id
      * @return mixed
      */
-        public function action1Update($id)
+        public function actionUpdate($id)
     {
          $model = $this->findModel($id);
        
@@ -131,7 +131,7 @@ class DistrictController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function action1Delete($id)
+    public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 

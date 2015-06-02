@@ -14,7 +14,7 @@ use Yii;
  *
  * @property Level[] $levels
  */
-class Department extends \app\modules\users\MyActiveRecord
+class Department extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -31,6 +31,7 @@ class Department extends \app\modules\users\MyActiveRecord
     {
         return [
             [['name_hi', 'name_en'], 'required'],
+            [['created_at', 'updated_at'], 'integer'],
             [['name_hi', 'name_en'], 'string', 'max' => 255]
         ];
     }
@@ -41,11 +42,11 @@ class Department extends \app\modules\users\MyActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'name_hi' => Yii::t('app', 'Name Hi'),
-            'name_en' => Yii::t('app', 'Name En'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
+            'id' => 'ID',
+            'name_hi' => 'Name Hi',
+            'name_en' => 'Name En',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
@@ -71,7 +72,7 @@ class Department extends \app\modules\users\MyActiveRecord
 			    break;
 									
 			case 'name_hi':
-			   return  $form->field($this,$attribute)->textInput(['class'=>'hindiinput form-control']);
+			   return  $form->field($this,$attribute)->textInput();
 			    
 			    break;
 									
@@ -114,10 +115,10 @@ class Department extends \app\modules\users\MyActiveRecord
 			   return $this->name_en;			    break;
 									
 			case 'created_at':
-			   return date('d/m/Y H:i:s',$this->created_at);			    break;
+			   return $this->created_at;			    break;
 									
 			case 'updated_at':
-			   return date('d/m/Y H:i:s',$this->updated_at);			    break;
+			   return $this->updated_at;			    break;
 			 
 			default:
 			break;

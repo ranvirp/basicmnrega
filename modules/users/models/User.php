@@ -50,7 +50,7 @@ public function scenarios()
         return [
             'passwordchange' => ['oldpassword', 'newpassword','newpasswordrepeat'],
             'api'=>['auth_key'],
-            'login'=>['username','password_hash'],
+            'login'=>['username','password_hash','auth_key'],
             
         ];
     }

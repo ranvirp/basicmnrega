@@ -22,12 +22,12 @@ class DefaultController extends Controller
 		
 		
 		$user= $userClass::find()->where(['username'=>$username])->one();
-		$user->scenario='login';
+		$user->scenario='api';
 		
 		
 		if ($user->validatePassword($password))
 		{
-		 if (strlen($user_auth_key)<10)
+		 if (!$user->auth_key)
 		   {
 		    $user->auth_key=Yii::$app->security->generateRandomString();
 			$user->save();
