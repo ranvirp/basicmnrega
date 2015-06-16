@@ -94,8 +94,8 @@ class DefaultController extends Controller
 		$model->create_time=time();
        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 		   
-			if (count(Yii::$app->request->post("Reply_attachments"))>0)
-			$model->attachments=implode(",",Yii::$app->request->post("Reply_attachments"));
+			if (count($model->attachments)>0)
+			$model->attachments=implode(",",$model->attachments);
 		    else
 				$model->attachments='';
 			$model->save();

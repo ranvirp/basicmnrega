@@ -24,6 +24,52 @@ class HelloController extends Controller
      * This command echoes what you have entered as the message.
      * @param string $message the message to be echoed.
      */
+     public function actionJson()
+     
+    {
+      $districts=\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\District::find()->orderBy('name_en asc')->asArray()->all(),'code','name_en');
+      file_put_contents('/Users/mac/htdocs/basicmnrega/web/jsons/district.json',json_encode($districts));
+      
+      foreach ($districts as $code=>$name)
+      {
+      $blocks=\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\Block::find()->where(['district_code'=>$code])->orderBy('name_en asc')->asArray()->all(),'code','name_en');
+       file_put_contents('/Users/mac/htdocs/basicmnrega/web/jsons/'.$code.'.json',json_encode($blocks));
+     
+      
+    }
+     
+     }
+     public function actionSingle()
+     {
+      $x=[];
+      $districts=\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\District::find()->orderBy('name_en asc')->asArray()->all(),'code','name_en');
+      $x['district']=$districts;
+      //file_put_contents('/Users/mac/jsons/district.json',json_encode($districts));
+      
+      foreach ($districts as $code=>$name)
+      {
+      $blocks=\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\Block::find()->where(['district_code'=>$code])->orderBy('name_en asc')->asArray()->all(),'code','name_en');
+      $x['blocks'][$code]=$blocks;
+      }
+     file_put_contents('/Users/mac/jsons/single.json',json_encode($x));
+     
+     }
+     public function actionPanchayat()
+     {
+      $x=[];
+      $blocks=\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\Block::find()->orderBy('name_en asc')->asArray()->all(),'code','name_en');
+      //file_put_contents('/Users/mac/jsons/district.json',json_encode($districts));
+      
+      foreach ($blocks as $code=>$name)
+      {
+      $panchayats=\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\Panchayat::find()->where(['block_code'=>$code])->orderBy('name_en asc')->asArray()->all(),'code','name_en');
+      $x=$panchayats;
+      file_put_contents('/Users/mac/jsons/'.$code.'.json',json_encode($x));
+      }
+     
+     
+     }
+     
     public function actionIndex($message = 'hello world')
     {
         echo $message . "\n";

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use app\common\Utility;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\taxonomy\models\Vocabulary */
@@ -27,6 +28,7 @@ $this->registerJs(
 </div>
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
+    'action'=>Url::to(['/taxonomy/vocabulary/create']),
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [

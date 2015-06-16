@@ -173,17 +173,19 @@ class FileController extends Controller
 				$fileModel=new \app\modules\reply\models\File;
 					
 				$fileModel->mime=\yii\helpers\FileHelper::getMimeType($file->tempName);
-				
-                $file->saveAs(Yii::getAlias("@app").'/uploads/' . $file->baseName . '.' . $file->extension);
+				$uniqid=uniqid();
+				mkdir(Yii::getAlias("@app").'/uploads/' .$uniqid,0777,false);
+                $file->saveAs(Yii::getAlias("@app").'/uploads/' .$uniqid.'/'. $file->baseName . '.' . $file->extension);
                 //print Yii::getAlias("@app").'/uploads/' . $file->baseName . '.' . $file->extension;
                 //exit;
 				$fileModel->filename=$file->name;
 				$fileModel->size=$file->size;
-				$fileModel->path='/uploads/'.$file->name;
+				$fileModel->path='/uploads/'.$uniqid.'/'.$file->name;
 				if ($title[$file_id]!='')
 				$fileModel->title=$title[$file_id];
 				else
 					 $fileModel->title=$file->name;
+				$fileModel->uniqid=$uniqid;
 				$fileModel->save();
 			    $fileModel->url=\yii\helpers\Url::to(['/reply/file?id='.$fileModel->id]);
 				$fileModel->uploaded_by = Yii::$app->user->getId();

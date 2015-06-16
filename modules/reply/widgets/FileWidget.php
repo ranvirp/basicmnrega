@@ -38,7 +38,7 @@ class FileWidget  extends \yii\base\Widget{
 			if ($file)
 			{
 				$z1 .= "<input type=hidden name='".
-			 $modelName.'_'.''.$attribute.'[]'."' value=\"".$file->id.'">'."\n";
+			 $modelName.'['.''.$attribute.'][]'."' value=\"".$file->id.'">'."\n";
 				//echo '<div>'.$z1.'</div>';
 				
 			if ($file->mime=='img/jpeg')
@@ -61,14 +61,14 @@ class FileWidget  extends \yii\base\Widget{
 		'dropZoneEnabled'=>false,
 		'showPreview'=>true,
 		//'showCaption' => false,
-        'showRemove' => false,
-        'showUpload' => false,
+        'showRemove' => true,
+        'showUpload' => true,
         //'browseClass' => 'btn btn-primary btn-block',
         //'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
         //'browseLabel' =>  'Select Photo',
 		'previewSettings'=>['image'=>['width'=>"150px",'height'=>'150px']],
 		 'initialPreview'=>$y,
-        'overwriteInitial'=>false,
+        'overwriteInitial'=>true,
 		'previewTemplates'=>[],
 		'layoutTemplates'=>[
 		  'footer'=>'<div class="file-thumbnail-footer">' .
@@ -97,7 +97,7 @@ class FileWidget  extends \yii\base\Widget{
                  {
                   //alert(data.response[ind]);
                   $('#".$modelName.'_'.$attribute.'_hi'."').append('<input type=hidden name=".
-			      $modelName.'_'.''.$attribute.'[]'." value=\"'+data.response[ind]+'\">');
+			      $modelName.'['.''.$attribute.'][]'." value=\"'+data.response[ind]+'\">');
                  }
 
                  }",

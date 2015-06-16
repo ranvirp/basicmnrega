@@ -30,7 +30,7 @@ class Tagging extends \yii\db\ActiveRecord
     {
         return [
             [['taggedtypepk', 'termcode'], 'required'],
-            [['taggedtype', 'taggedtypepk', 'termcode'], 'string', 'max' => 20]
+            [['taggedtype', 'taggedtypepk', 'termcode'], 'string', 'max' => 100]
         ];
     }
 

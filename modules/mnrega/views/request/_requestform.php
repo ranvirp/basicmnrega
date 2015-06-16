@@ -48,6 +48,8 @@ $this->registerJs(
     <?= $model->showForm($form,"attachments") ?>
     <?= $model->showForm($form,"marking_to") ?>
     <?= $model->showForm($form,"deadline") ?>
+    <?php echo \app\modules\taxonomy\widgets\TagWidget::widget(['vocabs'=>['finyear'],'prefix'=>'_requesttags']); ?>
+
 
    
    <div class="form-group">

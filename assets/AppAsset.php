@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
         'css/prettyPhoto.css',
         'css/blue/style.css',
         'css/jquery.dataTables.css',
-        "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css",
+      //  "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css",
 
     ];
     public $js = [
@@ -33,9 +33,9 @@ class AppAsset extends AssetBundle
         'js/jquery.prettyPhoto.js',
         'js/jquery.tablesorter.min.js',
         'js/jquery.dataTables.min.js',
-        "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js",
-        "http://maps.google.com/maps/api/js?v=3&sensor=false",
-        'js/Google.js'
+      //  "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js",
+       // "http://maps.google.com/maps/api/js?v=3&sensor=false",
+        //'js/Google.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

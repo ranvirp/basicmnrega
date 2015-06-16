@@ -12,6 +12,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Requests'), 'url' =>
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="request-create">
-<?=  $this->render('_form');
+<?=  $this->render('_requestform',['model'=>$model]);
 	   ?>
 </div>

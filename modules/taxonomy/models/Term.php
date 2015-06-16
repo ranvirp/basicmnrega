@@ -77,7 +77,7 @@ class Term extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'vocabcode':
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Vocabulary::find()->asArray()->all(),"vocabcode","name_".Yii::$app->language),["prompt"=>"None.."]);
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Vocabulary::find()->asArray()->all(),"vocabcode","vocabname"),["prompt"=>"None.."]);
 			    
 			    break;
 									
@@ -95,7 +95,7 @@ class Term extends \yii\db\ActiveRecord
 	*/
 	public function showValue($attribute)
 	{
-	    $name='name_'.Yii::$app->language;
+	    $name='vocabname';
 		switch ($attribute)
 		  {
 		   

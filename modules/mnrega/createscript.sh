@@ -1,4 +1,4 @@
-model=('block' 'district')
+model=('panchayat')
 for i in  "${!model[@]}"; do
    echo "generating for "${model[$i]}
    table=${model[$i]}

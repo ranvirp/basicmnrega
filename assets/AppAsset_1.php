@@ -34,8 +34,8 @@ class AppAsset_1 extends AssetBundle
         'solid/js/jquery.isotope.min.js',
 		//'bower/sbadmin2/metisMenu/dist/metisMenu.js'
 		
-		'https://www.google.com/jsapi',
-		'js/googletransliterate.js'
+		//'https://www.google.com/jsapi',
+		//'js/googletransliterate.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

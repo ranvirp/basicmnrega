@@ -32,7 +32,12 @@ class DefaultController extends Controller
          break;
        
        }
-     
+      
      
      }
+      public function actionJobdemand()
+       {
+         return $this->render('jobdemand');
+       }
+     
 }
