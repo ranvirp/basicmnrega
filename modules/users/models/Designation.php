@@ -20,6 +20,7 @@ use Yii;
  */
 class Designation extends \app\modules\users\MyActiveRecord
 {
+ public $resetpasswd=0;
     /**
      * @inheritdoc
      */
@@ -193,7 +194,7 @@ class Designation extends \app\modules\users\MyActiveRecord
     public function createUserAndRole()
      {
         $role=$this->designationType->shortcode;
-        $username=$role.'_'.$this->level->code;
+        $username=$role.'_'.strtolower($this->level->name_en);
         $auth = Yii::$app->authManager;
         $username=preg_replace("/\s+/","",$username);
         $username=strtolower($username);
@@ -212,17 +213,21 @@ class Designation extends \app\modules\users\MyActiveRecord
            // 'email' => $this->email,
               'username'=>$username,
         ]);
-		if ($usermodel) 
-		   return;//do nothing, user already exists
-		   //$usermodel->delete();
+        if ($usermodel && !$this->resetpasswd)
+        return;
+		if (!$usermodel) 
+		  {
+		  //$usermodel->delete();
 		     $usermodel=new \app\modules\users\models\User;
 		     $usermodel->username=$username;
+		  }
 		     //$usermodel->newPassword=$username;
 		     $usermodel->setPassword($username."$$$");
 		    // $usermodel->email=$username.'@test.com';
 		     //$usermodel->role_id=2;
 		     $usermodel->email=$this->officer_email;
 		     $usermodel->status=User::STATUS_ACTIVE;
+		     $usermodel->scenario='login';
 		     if (!$usermodel->save())
 		      {
 		        print_r($usermodel->errors);
@@ -244,9 +249,12 @@ class Designation extends \app\modules\users\MyActiveRecord
      }
      public function beforeSave($insert)
      {
-       $this->name_en=$this->designationType->name_en.','.$this->level->name_en;
-       $this->name_hi=$this->designationType->name_hi.','.$this->level->name_hi;
-       return parent::beforeSave($insert);
+     if ($insert)
+     {
+       $this->name_en=$this->designationType?$this->designationType->name_en:''.','.$this->level?$this->level->name_en:'';
+       $this->name_hi=$this->designationType?$this->designationType->name_hi:''.','.$this->level?$this->level->name_hi:'';
+      }
+      return parent::beforeSave($insert);
        
      }
 	

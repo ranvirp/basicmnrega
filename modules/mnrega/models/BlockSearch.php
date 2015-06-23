@@ -18,7 +18,7 @@ class BlockSearch extends Block
     public function rules()
     {
         return [
-            [['block_code', 'block_name', 'district_code'], 'safe'],
+            [['block_code', 'block_name', 'district_code', 'name_hi', 'name_en', 'code'], 'safe'],
         ];
     }
 
@@ -56,7 +56,10 @@ class BlockSearch extends Block
 
         $query->andFilterWhere(['like', 'block_code', $this->block_code])
             ->andFilterWhere(['like', 'block_name', $this->block_name])
-            ->andFilterWhere(['like', 'district_code', $this->district_code]);
+            ->andFilterWhere(['like', 'district_code', $this->district_code])
+            ->andFilterWhere(['like', 'name_hi', $this->name_hi])
+            ->andFilterWhere(['like', 'name_en', $this->name_en])
+            ->andFilterWhere(['like', 'code', $this->code]);
 
         return $dataProvider;
     }

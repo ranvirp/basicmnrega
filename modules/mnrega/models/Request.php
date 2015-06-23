@@ -48,11 +48,11 @@ class Request extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'request_type_id' => 'Request Type ID',
-            'request_subject' => 'Request Subject',
-            'content' => 'Content',
+            'request_type_id' => 'Category/Type of Request',
+            'request_subject' => 'Subject',
+            'content' => 'Description',
             'attachments' => 'Attachments',
-            'author_id' => 'Author ID',
+            'author_id' => 'Author',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
         ];
@@ -112,15 +112,7 @@ class Request extends \yii\db\ActiveRecord
 			    
 			    break;
 									
-			case 'create_time':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
-			case 'update_time':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
+			
 			 
 			default:
 			break;
@@ -131,7 +123,8 @@ class Request extends \yii\db\ActiveRecord
 	*/
 	public function showValue($attribute)
 	{
-	    $name='name_'.Yii::$app->language;
+	    $name='name';
+	    //.Yii::$app->language;
 		switch ($attribute)
 		  {
 		   

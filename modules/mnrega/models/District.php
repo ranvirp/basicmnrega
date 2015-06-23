@@ -8,6 +8,9 @@ use Yii;
  *
  * @property string $district_code
  * @property string $district_name
+ * @property string $name_hi
+ * @property string $name_en
+ * @property string $code
  */
 class District extends \yii\db\ActiveRecord
 {
@@ -25,9 +28,10 @@ class District extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['district_code'], 'required'],
+            [['district_code', 'code'], 'required'],
             [['district_code'], 'string', 'max' => 4],
-            [['district_name'], 'string', 'max' => 100]
+            [['district_name'], 'string', 'max' => 100],
+            [['name_hi', 'name_en', 'code'], 'string', 'max' => 255]
         ];
     }
 
@@ -39,6 +43,9 @@ class District extends \yii\db\ActiveRecord
         return [
             'district_code' => 'District Code',
             'district_name' => 'District Name',
+            'name_hi' => 'Name Hi',
+            'name_en' => 'Name En',
+            'code' => 'Code',
         ];
     }
 	/*
@@ -56,6 +63,21 @@ class District extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'district_name':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+									
+			case 'name_hi':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+									
+			case 'name_en':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+									
+			case 'code':
 			   return  $form->field($this,$attribute)->textInput();
 			    
 			    break;
@@ -79,6 +101,15 @@ class District extends \yii\db\ActiveRecord
 									
 			case 'district_name':
 			   return $this->district_name;			    break;
+									
+			case 'name_hi':
+			   return $this->name_hi;			    break;
+									
+			case 'name_en':
+			   return $this->name_en;			    break;
+									
+			case 'code':
+			   return $this->code;			    break;
 			 
 			default:
 			break;

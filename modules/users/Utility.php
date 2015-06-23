@@ -13,7 +13,7 @@ class Utility
 	  $lang=Yii::$app->language;
 	  $dt=  \app\modules\users\models\DesignationType::findOne($id);
 	  $classname= $dt->level->class_name;
-	  return ArrayHelper::map($classname::find()->asArray()->all(),'id','name_'.$lang);
+	  return ArrayHelper::map($classname::find()->orderBy('name_en asc')->asArray()->all(),'code','name_'.$lang);
 	  
   
 }

@@ -71,8 +71,9 @@ AppAsset::register($this);
             echo Nav::widget([
             
     'items' => [
-       ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/GPSPhotoUploaderMNREGA.apk'],
         Yii::$app->user->isGuest ?'':
+         ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/GPSPhotoUploaderMNREGA.apk','linkOptions'=>['data-toggle'=>'tooltip','data-placement'=>"left" ,'title'=>file_get_contents(Yii::getAlias('@app').'/modules/gpsphoto/apkhelp.txt')]],
+      
        ['label' => 'Master Data', 'url' => ['/site/index'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
              ['label' => 'Level', 'url' => ['/users/level/create'],'options'=>['class'=>'dropdown']],

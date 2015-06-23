@@ -46,6 +46,7 @@ $this->registerJs(
     <?= $model->showForm($form,"content") ?>
 
     <?= $model->showForm($form,"attachments") ?>
+    <?php echo \app\modules\taxonomy\widgets\TagWidget::widget(['vocabs'=>['finyear']]); ?>
 
    
 <?php

@@ -10,8 +10,11 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'Districts');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="col-md-12">
-<div class="district-index">
+<?php if ($model!=null):?><div class="col-md-6">
+<?=$this->render('_form',['model'=>$model]) ?></div>
+<div class="col-md-6">
+<?php else:?><div class="col-md-12">
+<?php endif;?><div class="district-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -21,9 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
          <span>List of District</span>
         </div>
     </div>
-    <?php 
-    $dataProvider->setSort(['attributes'=>['district_code','district_name']]);
-    ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -40,10 +40,25 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('district_name');
+},],['header'=>'name_hi',
+'attribute'=>'name_hi',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('name_hi');
+},],['header'=>'name_en',
+'attribute'=>'name_en',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('name_en');
+},],['header'=>'code',
+'attribute'=>'code',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('code');
 },],
             ['class' => 'yii\grid\ActionColumn'],
         ],
-        'tableOptions'=>['class'=>'small table table-striped'],
+        'tableOptions'=>['class'=>'small'],
         ]); ?>
 
 </div>

@@ -68,6 +68,7 @@ $this->registerJs($js);
 		
 				<div class='col-md-4'>
     <?= $form->field($model, 'officer_email')->textInput(['maxlength' => 50]) ?>
+    <?=$form->field($model,'resetpasswd')->checkBox()?>
 	</div>
 		</div>
 		

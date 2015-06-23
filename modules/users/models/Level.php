@@ -17,7 +17,7 @@ use Yii;
  * @property DesignationType[] $designationTypes
  * @property Department $dept
  */
-class Level extends \app\modules\users\MyActiveRecord
+class Level extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -33,7 +33,7 @@ class Level extends \app\modules\users\MyActiveRecord
     public function rules()
     {
         return [
-            [['dept_id', 'name_hi', 'name_en', 'class_name'], 'required'],
+            [['dept_id', 'name_hi', 'name_en', 'class_name', 'created_at', 'updated_at'], 'required'],
             [['dept_id'], 'integer'],
             [['name_hi', 'name_en'], 'string', 'max' => 255],
             [['class_name'], 'string', 'max' => 50]
@@ -46,13 +46,13 @@ class Level extends \app\modules\users\MyActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'dept_id' => Yii::t('app', 'Dept ID'),
-            'name_hi' => Yii::t('app', 'Name Hindi'),
-            'name_en' => Yii::t('app', 'Name English'),
-            'class_name' => Yii::t('app', 'Class Name'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
+            'id' => 'ID',
+            'dept_id' => 'Dept ID',
+            'name_hi' => 'Name Hi',
+            'name_en' => 'Name En',
+            'class_name' => 'Class Name',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
@@ -91,7 +91,7 @@ class Level extends \app\modules\users\MyActiveRecord
 			    break;
 									
 			case 'name_hi':
-			   return  $form->field($this,$attribute)->textInput(['class'=>'hindiinput form-control']);
+			   return  $form->field($this,$attribute)->textInput();
 			    
 			    break;
 									

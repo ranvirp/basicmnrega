@@ -9,6 +9,9 @@ use Yii;
  * @property string $block_code
  * @property string $block_name
  * @property string $district_code
+ * @property string $name_hi
+ * @property string $name_en
+ * @property string $code
  */
 class Block extends \yii\db\ActiveRecord
 {
@@ -26,10 +29,11 @@ class Block extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['block_code'], 'required'],
+            [['block_code', 'code'], 'required'],
             [['block_code'], 'string', 'max' => 7],
             [['block_name'], 'string', 'max' => 100],
-            [['district_code'], 'string', 'max' => 4]
+            [['district_code'], 'string', 'max' => 4],
+            [['name_hi', 'name_en', 'code'], 'string', 'max' => 255]
         ];
     }
 
@@ -42,6 +46,9 @@ class Block extends \yii\db\ActiveRecord
             'block_code' => 'Block Code',
             'block_name' => 'Block Name',
             'district_code' => 'District Code',
+            'name_hi' => 'Name Hi',
+            'name_en' => 'Name En',
+            'code' => 'Code',
         ];
     }
 	/*
@@ -64,6 +71,21 @@ class Block extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'district_code':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+									
+			case 'name_hi':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+									
+			case 'name_en':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+									
+			case 'code':
 			   return  $form->field($this,$attribute)->textInput();
 			    
 			    break;
@@ -90,6 +112,15 @@ class Block extends \yii\db\ActiveRecord
 									
 			case 'district_code':
 			   return $this->district_code;			    break;
+									
+			case 'name_hi':
+			   return $this->name_hi;			    break;
+									
+			case 'name_en':
+			   return $this->name_en;			    break;
+									
+			case 'code':
+			   return $this->code;			    break;
 			 
 			default:
 			break;

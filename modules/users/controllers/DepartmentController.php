@@ -39,7 +39,7 @@ class DepartmentController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
+            'model'=>new \app\modules\users\models\Department        ]);
     }
 
     /**
@@ -74,6 +74,8 @@ class DepartmentController extends Controller
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\users\models\Department'][$model->$attribute]['required'])
             );
+            $model->updated_at=$model->created_at=time();
+            
             if ($model->save())
             $model = new Department();; //reset model
         }
@@ -110,6 +112,7 @@ class DepartmentController extends Controller
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\users\models\Department'][$model->$attribute]['required'])
             );
+            $model->updated_at=time();
             if ($model->save())
             $model = new Department();; //reset model
         }

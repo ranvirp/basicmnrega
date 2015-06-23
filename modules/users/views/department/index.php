@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\users\models\DepartmentSearch */
@@ -10,10 +10,10 @@ use kartik\grid\GridView;
 $this->title = Yii::t('app', 'Departments');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php if ($model!=null):?><div class="col-lg-6">
+<?php if ($model!=null):?><div class="col-md-6">
 <?=$this->render('_form',['model'=>$model]) ?></div>
-<div class="col-lg-6">
-<?php else:?><div class="col-lg-12">
+<div class="col-md-6">
+<?php else:?><div class="col-md-12">
 <?php endif;?><div class="department-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn'],
 
 ['header'=>'id',
 'attribute'=>'id',

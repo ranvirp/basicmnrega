@@ -81,7 +81,7 @@ class RequestController extends Controller
         $searchModel = new RequestSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
  
-        return $this->render('index', [
+        return $this->render('create', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,

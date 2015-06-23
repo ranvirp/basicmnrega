@@ -125,6 +125,7 @@ class DesignationController extends Controller
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\masterdata\models\Designation'][$model->$attribute]['required'])
             );
+            
             if ($model->save())
             {
              $model->createUserAndRole();

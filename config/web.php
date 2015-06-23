@@ -74,6 +74,7 @@ $config = [
     'api'=>['class'=>'app\modules\api\Module'],
     'gpsphoto'=>['class'=>'app\modules\gpsphoto\Module'],
     'mnrega'=>['class'=>'app\modules\mnrega\Module'],
+    'taxonomy'=>['class'=>'app\modules\taxonomy\Module'],
      'rbac' => [
         'class' => 'dektrium\rbac\Module',
         'admins'=>['admin'],

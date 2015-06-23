@@ -18,7 +18,7 @@ class DistrictSearch extends District
     public function rules()
     {
         return [
-            [['district_code', 'district_name'], 'safe'],
+            [['district_code', 'district_name', 'name_hi', 'name_en', 'code'], 'safe'],
         ];
     }
 
@@ -55,7 +55,10 @@ class DistrictSearch extends District
         }
 
         $query->andFilterWhere(['like', 'district_code', $this->district_code])
-            ->andFilterWhere(['like', 'district_name', $this->district_name]);
+            ->andFilterWhere(['like', 'district_name', $this->district_name])
+            ->andFilterWhere(['like', 'name_hi', $this->name_hi])
+            ->andFilterWhere(['like', 'name_en', $this->name_en])
+            ->andFilterWhere(['like', 'code', $this->code]);
 
         return $dataProvider;
     }

@@ -45,7 +45,18 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('district_code');
-},],
+},],['header'=>'name_hi',
+'attribute'=>'name_hi',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('name_hi');
+},],['header'=>'name_en',
+'attribute'=>'name_en',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('name_en');
+},],            // 'code',
+
             ['class' => 'yii\grid\ActionColumn'],
         ],
         'tableOptions'=>['class'=>'small'],

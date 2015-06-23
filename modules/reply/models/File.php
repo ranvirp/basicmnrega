@@ -40,7 +40,7 @@ class File extends \yii\db\ActiveRecord
 			[['uploaded_by', 'uploaded_at'], 'integer'],
             [['url', 'path', 'filename'], 'string'],
             [['model_type', 'model_pk'], 'string', 'max' => 20],
-            [['mime'], 'string', 'max' => 50]
+            [['mime','uniqid'], 'string', 'max' => 1000]
         ];
     }
 

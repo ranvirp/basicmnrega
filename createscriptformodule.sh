@@ -1,4 +1,4 @@
-module=('taxonomy')
+module=('gis')
 for i in  "${!module[@]}"; do
    echo "generating for "${module[$i]}
    table=${module[$i]}

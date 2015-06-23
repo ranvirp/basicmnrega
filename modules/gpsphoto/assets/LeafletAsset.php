@@ -10,7 +10,7 @@ class LeafletAsset extends \yii\web\AssetBundle
         
     ];
     public $js = [
-   'js/Google.js',
+  // 'js/Google.js',
     ];
     
 

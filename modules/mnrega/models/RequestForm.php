@@ -11,11 +11,13 @@ class RequestForm extends Model
  public $attachments;
  public $marking_to;
  public $deadline;
+ public $_tags;
  public function rules()
  {
    return [
    [['request_type_id','request_content','attachments','marking_to'],'required'],
    ['request_type_id','integer'],
+   [['request_subject','deadline'],'safe'],
    ];
  }
  public function createRequest()
@@ -30,13 +32,15 @@ class RequestForm extends Model
      $request->author_id=Yii::$app->user->id;
      $request->create_time=time();
      $request->update_time=time();
+     $request->attachBehavior("tagging","\\app\\modules\\taxonomy\\behaviors\\TaggingBehavior");
+     $request->term_prefix='_requesttags';
      $request->save();
    
    $marking = new Marking;
-   $marking->sender=Yii::$app->user-id;
-   $marking->receiver=$marking_to;
+   $marking->sender=Yii::$app->user->id;
+   $marking->receiver=$this->marking_to;
    $marking->request_id=$request->id;
-   $marking->dateofmarking=time();
+   $marking->dateofmarking=date('Y-m-d');
    $marking->deadline=$this->deadline;
    $marking->create_time=time();
    $marking->update_time=time();

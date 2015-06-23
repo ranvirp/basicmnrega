@@ -45,6 +45,12 @@ $this->registerJs(
 
     <?= $model->showForm($form,"district_code") ?>
 
+    <?= $model->showForm($form,"name_hi") ?>
+
+    <?= $model->showForm($form,"name_en") ?>
+
+    <?= $model->showForm($form,"code") ?>
+
 <?php
 /*
 try {
