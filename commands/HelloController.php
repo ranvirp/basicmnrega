@@ -20,6 +20,14 @@ use app\modules\gpsphoto\models\Photo;
  */
 class HelloController extends Controller
 {
+ /* this command gets access_token of user
+ */
+ public function actionToken($username)
+ {
+  $user = \app\modules\users\models\User::find()->where(['username'=>$username])->one();
+  print $user->auth_key;
+ 
+ }
     /**
      * This command echoes what you have entered as the message.
      * @param string $message the message to be echoed.
