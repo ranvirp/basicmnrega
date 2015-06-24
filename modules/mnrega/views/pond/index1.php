@@ -12,25 +12,20 @@ $this->params['breadcrumbs'][] = $this->title;
  \app\assets\AppAssetGoogle::register($this);
        
 ?>
-<div class="col-md-12">
-<div class="pond-index">
+
+<?php if ($model!=null):?><div class="col-md-6">
+<?=$this->render('_form',['model'=>$model]) ?></div>
+<div class="col-md-6">
+<?php else:?><div class="col-md-12">
+<?php endif;?><div class="pond-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 
-    <div class="form-title">
-        <div class="form-title-span">
-         <span>List of Pond</span>
-         <span class="well"><?= Html::a('New entry',\yii\helpers\Url::to(['/mnrega/pond/create']))?></span>
-
-        </div>
-    </div>
-    <?php
-     $district=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->level->code;
-    ?>
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+       // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -44,24 +39,32 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('name_hi');
-},],
-['header'=>'Block',
-'attribute'=>'block_code',
-'filter'=>\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\Block::find()->where(['district_code'=>$district])->orderBy('name_en asc')->asArray()->all(),'code','name_en'),
-
+},],'district','block',
+'panchayat',
+            'village',
+            'gatasankhya',
+             'totarea',
+            'estcost',
+            'persondays',
+            //'gpslat',
+            // 'gpslong',
+            ['header'=>'Status',
+'attribute'=>'status',
 'value'=>function($model,$key,$index,$column)
 {
-                return $model->showValue('block_code');
-},], 
-'panchayat',
-'totarea',
-'estcost',
-'persondays',
+                return $model->showValue('status');
+},],
+            // 'remarks:ntext',
+            // 'created_at',
+            // 'updated_at',
+            // 'created_by',
+            // 'updated_by',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
         'tableOptions'=>['class'=>'small table table-striped'],
         ]); ?>
 
+</div>
 </div>
 </div>

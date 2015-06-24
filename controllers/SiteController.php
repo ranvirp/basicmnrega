@@ -49,8 +49,20 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        
-        return $this->render('index');
+     if (!\Yii::$app->user->isGuest) {
+        return $this->render('../../modules/mnrega/views/pond/mainpage');
+     } else 
+     {
+       $this->layout="//nologin";
+        $model = new \app\modules\users\models\LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
+     }
     }
 
     public function actionLogin()

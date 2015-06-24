@@ -6,7 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'homeUrl'=>'/mnrega/parameter/display?id=7',
+    'homeUrl'=>'index',
    'language'=>'en',
     'components' => [
     'assetManager'=>['linkAssets'=>true],
@@ -67,6 +67,7 @@ $config = [
         'db' => require(__DIR__ . '/db.php'),
     ],
     'modules'=>[
+    'complaint'=>['class'=>'app\modules\complaint\Module'],
     'users'=>['class'=>'app\modules\users\Module'],
     'reply'=>['class'=>'app\modules\reply\Module'],
     'work'=>['class'=>'app\modules\work\Module'],

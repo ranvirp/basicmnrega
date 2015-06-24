@@ -20,6 +20,23 @@ use app\modules\gpsphoto\models\Photo;
  */
 class HelloController extends Controller
 {
+public function actionCad($designationtype)//Create All Designations
+{
+  $dt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>$designationtype])->one();
+  $levelclass=$dt->level->class_name;
+  $levels=\yii\helpers\ArrayHelper::map($levelclass::find()->asArray()->all(),'code','name_en');
+  foreach ($levels as $code=>$name)
+  {
+   $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dt->id,'level_id'=>$code])->one();
+   if (!$designation)
+   $designation=new \app\modules\users\models\Designation;
+   $designation->designation_type_id=$dt->id;
+   $designation->level_id=$code;
+   $designation->name_en=$dt->name_en.",".$name;
+   $designation->createUserAndRole();
+  }
+
+}
  /* this command gets access_token of user
  */
  public function actionToken($username)

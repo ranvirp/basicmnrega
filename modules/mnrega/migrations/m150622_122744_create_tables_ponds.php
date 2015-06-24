@@ -14,11 +14,14 @@ class m150622_122744_create_tables_ponds extends Migration
             }
          $this->createTable('{{%pond}}', [
             'workid'=>Schema::TYPE_STRING.' PRIMARY KEY NOT NULL',
-            'name_hi'=>Schema::TYPE_STRING,
+            'name_hi'=>Schema::TYPE_STRING.'(5000)',
             'name_en'=>Schema::TYPE_STRING,
             'district_code'=>Schema::TYPE_STRING,
             'block_code'=>Schema::TYPE_STRING,
             'panchayat_code'=>Schema::TYPE_STRING.' DEFAULT NULL',
+            'district'=>Schema::TYPE_STRING,
+            'block'=>Schema::TYPE_STRING,
+            'panchayat'=>Schema::TYPE_STRING,
             'village'=>Schema::TYPE_STRING,
             'gatasankhya'=>Schema::TYPE_STRING,
             'totarea'=>Schema::TYPE_STRING,

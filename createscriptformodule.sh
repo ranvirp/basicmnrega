@@ -1,4 +1,4 @@
-module=('gis')
+module=('complaint')
 for i in  "${!module[@]}"; do
    echo "generating for "${module[$i]}
    table=${module[$i]}

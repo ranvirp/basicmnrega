@@ -14,37 +14,48 @@ div.required label:after {
     content: " *";
     color: red;
 }
+.complaint-title
+{
+background-color: #3c6800;
+    border-radius: 4px 4px 0 0;
+    color: rgb(230, 230, 230);
+    font-family: Arial,sans-serif;
+    font-weight: normal;
+    padding: 9px 3px 6px;
+    margin-top:20px;
+    }
+    .complaint-title-span
+    {
+    margin-left:12px;
+    font-size:20px;
+    text-align:center;
+    }
+    
 </style>
 <?php
  
  $changeattribute='';
 $this->registerJs(
    '$("document").ready(function(){ 
-        $("#new_pond").on("pjax:end", function() {
-            $.pjax.reload({container:"#ponds"});  //Reload GridView
-        });
-        $("#w1-btn").click(function(event){
+      $("#w1-btn").click(function(event){
         event.preventDefault();
         $("#block-name").val($("#pond-block_code option:selected").text());
         $("#panchayat-name").val($("#pond-panchayat option:selected").text());
         
-        $("#w1").submit()})
+        $("#w0").submit()})  
     });'
 );
 ?>
 <div class="bordered-form pond-form">
-  <div class="form-title">
-    <div class="form-title-span">
-        <span>मुख्यमंत्री जल बचाओ अभियान के तहत लिए गए तालाब </span>
+  <div class="complaint-title">
+    <div class="complaint-title-span">
+        <span>कार्य की मांग</span>
        
-<span class="well"><?= Html::a('View List',\yii\helpers\Url::to(['/mnrega/pond/index'])) ?></span>
-<?php echo $model->isNewRecord? '':"<span class=\"well\">".Html::a('New entry',\yii\helpers\Url::to(['/mnrega/pond/create']))."</span>";?>
 
     </div>
 </div>
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
-    //'action'=>Url::to(['/mnrega/pond/'.$model->isNewRecord?'create':'update?id='.$model->workid]),
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [
@@ -57,38 +68,44 @@ $this->registerJs(
     ],
 ]); ?>
 <div class="form-group col-md-12">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['id'=>'w1-btn','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Create'), ['id'=>'w1-btn','class' => 'btn btn-success']) ?>
     </div>
 <div class="col-md-6">
     
-
+ <?= $model->showForm($form,"district_code") ?>
+   
     <?= $model->showForm($form,"block_code") ?>
 
     <?= $model->showForm($form,"panchayat_code") ?>
 
     <?= $model->showForm($form,"village") ?>
-     <?= $model->showForm($form,"workid") ?>
+     <?= $model->showForm($form,"name") ?>
+     <?= $model->showForm($form,"fname") ?>
 
-    <?= $model->showForm($form,"name_hi") ?>
-    <?= $model->showForm($form,"district_code") ?>
+    <?= $model->showForm($form,"fname") ?>
      <?= $model->showForm($form,"district") ?>
       <?= $model->showForm($form,"block") ?>
        <?= $model->showForm($form,"panchayat") ?>
 </div>
 <div class="col-md-6">
 
-    <?= $model->showForm($form,"gatasankhya") ?>
+    <?= $model->showForm($form,"mobileno") ?>
+     <?= $model->showForm($form,"jobcardno") ?>
 
-    <?= $model->showForm($form,"totarea") ?>
+    <?= $model->showForm($form,"noofdays") ?>
 
-    <?= $model->showForm($form,"estcost") ?>
+    <?= $model->showForm($form,"datefrom")->widget(\yii\jui\DatePicker::classname(), [
+    'dateFormat' => 'dd-MM-yyyy',
+])  ?>
 
-    <?= $model->showForm($form,"persondays") ?>
+    <?= $model->showForm($form,"dateto")->widget(\yii\jui\DatePicker::classname(), [
+    'dateFormat' => 'dd-MM-yyyy',
+]) ?>
 
     
-    <?= $model->showForm($form,"status") ?>
+    <?= $model->showForm($form,"workchoice") ?>
 
-    <?= $model->showForm($form,"remarks") ?>
+   
 </div>
 <?php
 /*

@@ -71,6 +71,7 @@ AppAsset::register($this);
             echo Nav::widget([
             
     'items' => [
+      ['label'=>'Home','url'=>[Yii::$app->homeUrl]],
         Yii::$app->user->isGuest ?'':
          ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/GPSPhotoUploaderMNREGA.apk','linkOptions'=>['data-toggle'=>'tooltip','data-placement'=>"left" ,'title'=>file_get_contents(Yii::getAlias('@app').'/modules/gpsphoto/apkhelp.txt')]],
       
@@ -88,7 +89,14 @@ AppAsset::register($this);
             
                 
             ]],
-       
+          ['label' => 'Ponds', 'url' => ['#'],'options'=>['class'=>'dropdown']
+            ,'items'=>[ 
+                ['label' => 'Data Entru', 'url' => ['/mnrega/pond/create'],'options'=>['class'=>'dropdown']],
+                
+['label' => 'View List', 'url' => ['/mnrega/pond/index'],'options'=>['class'=>'dropdown']],
+               
+            ],
+    ],
                 ['label' => 'Reports', 'url' => ['#'],'options'=>['class'=>'dropdown']
             ,'items'=>[ 
                 ['label' => 'Mandays generated', 'url' => ['/mnrega/parameter/display?id=7'],'options'=>['class'=>'dropdown']],
