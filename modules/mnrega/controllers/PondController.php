@@ -35,7 +35,10 @@ class PondController extends Controller
     {
         $searchModel = new PondSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $designation=\app\modules\users\models\Designation::find()->
+        where(['officer_userid'=>Yii::$app->user->id])->one();
+         $dataProvider->query=$dataProvider->query->where(['district_code'=>$designation->level->code])->orderBy('created_at desc');
+       
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -74,14 +77,23 @@ class PondController extends Controller
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\mnrega\models\Pond'][$model->$attribute]['required'])
             );
+            $model->created_at=time();
+            $model->created_by=Yii::$app->user->id;
+            $model->updated_at=time();
+            $model->updated_by=Yii::$app->user->id;
+            
+            
             if ($model->save())
             $model = new Pond();; //reset model
         }
  
         $searchModel = new PondSearch();
+        $designation=\app\modules\users\models\Designation::find()->
+        where(['officer_userid'=>Yii::$app->user->id])->one();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
- 
-        return $this->render('index', [
+        $dataProvider->query=$dataProvider->query->where(['district_code'=>$designation->level->code])->orderBy('created_at desc');
+        $dataProvider->pagination->pageSize=1;
+        return $this->render('create', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
@@ -110,14 +122,18 @@ class PondController extends Controller
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\mnrega\models\Pond'][$model->$attribute]['required'])
             );
+            $model->updated_at=time();
+            $model->updated_by=Yii::$app->user->id;
             if ($model->save())
             $model = new Pond();; //reset model
         }
  
        $searchModel = new PondSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
- 
-        return $this->render('index', [
+  $dataProvider->query=$dataProvider->query->orderBy('updated_at desc');
+        $dataProvider->pagination->pageSize=1;
+       
+        return $this->render('update', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
@@ -152,5 +168,19 @@ class PondController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    public function actionPhotosbywork($workid)
+    {
+     $photos=\app\modules\gpsphoto\models\Photo::find()->where(['bwid'=>$workid])->orderBy('created_at desc')->limit(10)->all();
+     
+     return $this->render('photos',['photos'=>$photos]);
+    
+    }
+    public function actionPhotosbydist($d)
+    {
+     $photos=\app\modules\gpsphoto\models\Photo::find()->where(['district'=>strtoupper($d)])->orderBy('created_at desc')->limit(10)->all();
+     
+     return $this->render('photos',['photos'=>$photos]);
+    
     }
 }

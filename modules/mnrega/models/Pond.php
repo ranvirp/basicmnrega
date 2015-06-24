@@ -32,6 +32,11 @@ use Yii;
  */
 class Pond extends \yii\db\ActiveRecord
 {
+   public static function statuses()
+   {
+     return ['0'=>'Not Started','1'=>'Ongoing','2'=>'Completed'];
+   
+   }
     /**
      * @inheritdoc
      */
@@ -46,8 +51,8 @@ class Pond extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['workid', 'created_at', 'updated_at'], 'required'],
-            [['estcost', 'gpslat', 'gpslong', 'remarks'], 'string'],
+            [['workid','name_hi','estcost','persondays','block_code','panchayat_code','totarea','status'], 'required'],
+            [['estcost', 'gpslat', 'gpslong', 'remarks','district','panchayat','block'], 'string'],
             [['persondays', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['workid', 'name_hi', 'name_en', 'district_code', 'block_code', 'panchayat_code', 'village', 'gatasankhya', 'totarea'], 'string', 'max' => 255]
         ];
@@ -60,16 +65,16 @@ class Pond extends \yii\db\ActiveRecord
     {
         return [
             'workid' => 'Workid',
-            'name_hi' => 'Name Hi',
-            'name_en' => 'Name En',
+            'name_hi' => 'Name in Hindi',
+            'name_en' => 'Name in English',
             'district_code' => 'District Code',
-            'block_code' => 'Block Code',
-            'panchayat_code' => 'Panchayat Code',
+            'block_code' => 'Block',
+            'panchayat_code' => 'Panchayat',
             'village' => 'Village',
-            'gatasankhya' => 'Gatasankhya',
-            'totarea' => 'Totarea',
-            'estcost' => 'Estcost',
-            'persondays' => 'Persondays',
+            'gatasankhya' => 'गाटा संख्या',
+            'totarea' => 'Area',
+            'estcost' => 'Estimated Cost',
+            'persondays' => 'Expected Person Days',
             'gpslat' => 'Gpslat',
             'gpslong' => 'Gpslong',
             'status' => 'Status',
@@ -109,17 +114,24 @@ class Pond extends \yii\db\ActiveRecord
 	*/
 	public function showForm($form,$attribute)
 	{
+	   $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
+	   $district=$designation->level->code;
+	   $district_name=$designation->level->name_en;
 		switch ($attribute)
 		  {
 		   
 									
 			case 'workid':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  $form->field($this,$attribute)
+			   ->widget(\yii\widgets\MaskedInput::className(), [
+      'mask' => '9999999999/WC/999999999999999999',
+      'options'=>['id'=>'workid','class'=>'form-control required'],
+  ]);
 			    
 			    break;
 									
 			case 'name_hi':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  $form->field($this,$attribute)->textInput(['class'=>'form-control hindiinput']);
 			    
 			    break;
 									
@@ -129,17 +141,34 @@ class Pond extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'district_code':
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->asArray()->all(),"code","name_".Yii::$app->language),["prompt"=>"None.."]);
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>$district])->label(false);
+			    
+			    break;
+			    case 'district':
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>$district_name])->label(false);
+			    
+			    break;
+			    case 'block':
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>'','id'=>'block-name'])->label(false);
+			    
+			    break;
+			    case 'panchayat':
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>'','id'=>'panchayat-name'])->label(false);
 			    
 			    break;
 									
 			case 'block_code':
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->all(),"code","name_".Yii::$app->language),["prompt"=>"None.."]);
+			   $url="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
+			   $id='pond-panchayat';
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$district])->orderBy('name_en asc')->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
 			    
 			    break;
 									
 			case 'panchayat_code':
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->all(),"code","name_".Yii::$app->language),["prompt"=>"None.."]);
+			   return  
+			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'pond-panchayat',
+			   'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());$('#workid').val($(this).val()+'/')",'class'=>'form-control']);
 			    
 			    break;
 									
@@ -154,17 +183,17 @@ class Pond extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'totarea':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  $form->field($this,$attribute)->textInput(['class'=>'form-control'])->hint($this->getAttributeHint($attribute));
 			    
 			    break;
 									
 			case 'estcost':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  $form->field($this,$attribute)->textInput(['class'=>'form-control']);
 			    
 			    break;
 									
 			case 'persondays':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  $form->field($this,$attribute)->textInput(['class'=>'form-control']);
 			    
 			    break;
 									
@@ -179,13 +208,13 @@ class Pond extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'status':
-			   return  $form->field($this,$attribute)->textInput();
-			    
+			      return  $form->field($this,$attribute)->dropDownList(self::statuses());
+			 
 			    break;
 									
 			case 'remarks':
-			   return  $form->field($this,$attribute)->textInput();
-			    
+			    return  $form->field($this,$attribute)->textInput();
+			   
 			    break;
 									
 			case 'created_at':
@@ -262,7 +291,7 @@ class Pond extends \yii\db\ActiveRecord
 			   return $this->gpslong;			    break;
 									
 			case 'status':
-			   return $this->status;			    break;
+			   return self::statuses()[$this->status];			    break;
 									
 			case 'remarks':
 			   return $this->remarks;			    break;
@@ -283,5 +312,28 @@ class Pond extends \yii\db\ActiveRecord
 			break;
 		  }
     }
+    /**
+     * @inheritdoc
+     */
+    public function stickyAttributes()
+    {
+        return array_merge(parent::stickyAttributes(), ['block_code', 'panchayat_code']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeHints()
+    {
+        return array_merge(parent::attributeHints(), [
+            'estcost' => 'Estimated Cost in Rs. Lakhs',
+            'persondays' => 'Estimated Person Days',
+            'totarea' => 'Area in Ha.',
+            'workid'=>'Work ID as entered in MNREGA',
+            'name_hi'=>'Type Name in English, it shall be automatically converted to Hindi',
+          
+        ]);
+    }
+
 	
 }

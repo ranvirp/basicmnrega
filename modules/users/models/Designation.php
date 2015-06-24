@@ -198,13 +198,14 @@ class Designation extends \app\modules\users\MyActiveRecord
         $auth = Yii::$app->authManager;
         $username=preg_replace("/\s+/","",$username);
         $username=strtolower($username);
-        
-		if (!($rolecreated=$auth->getRole($role)))
+        $rolecreated=$auth->getRole($role);
+		if (!$rolecreated)
 		{
         // add "author" role and give this role the "createPost" permission
            $rolecreated= $auth->createRole($role);
 		   $auth->add($rolecreated);
 		}
+		
 		//$userclass=Yii::$app->getModule('user')->modelClasses['User'];
 		//$usermodel=$userclass::find()->where('username=:username',[':username'=>$username])->one();
 		//$usermodel=null;
@@ -213,8 +214,8 @@ class Designation extends \app\modules\users\MyActiveRecord
            // 'email' => $this->email,
               'username'=>$username,
         ]);
-        if ($usermodel && !$this->resetpasswd)
-        return;
+       // if ($usermodel && !$this->resetpasswd)
+        //return;
 		if (!$usermodel) 
 		  {
 		  //$usermodel->delete();
@@ -237,6 +238,7 @@ class Designation extends \app\modules\users\MyActiveRecord
 		      //$this=Designation::findOne($this->id);
 		     // $desig->officer_userid=$usermodel->id;
 		     $this->officer_userid=$usermodel->id;
+		     $auth->assign($rolecreated,$usermodel->id);
 		     // print_r($desig);
 		      //exit;
 		     if (! $this->save())

@@ -63,6 +63,21 @@ class RbacController extends Controller
 		 }
 		 $auth->assign($authRole,$userid);
 	}
+	public function actionAssignchild($parentrole,$childrole)
+	{
+		 $auth = Yii::$app->authManager;
+		 print "Assigning child role $childrole to $parentrole \n";
+		// print $username;
+		 //exit;
+		 $parentRole=$auth->getRole($parentrole);
+		 $childRole=$auth->getRole($childrole);
+		 if (!$childRole) 
+		 {
+		   $childRole= $auth->createRole($childrole);
+		   $auth->add($childRole);
+		 }
+		 $auth->addChild($parentRole,$childRole);
+	}
 	//public function actionAssigndesignation($username,$designation)
 	
 }

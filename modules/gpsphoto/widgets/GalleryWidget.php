@@ -24,9 +24,10 @@ class GalleryWidget  extends \yii\base\Widget{
 		{
 			echo '<b>Photo List Empty! </b>';
 		}
+		else {
 		$photo=$this->photos[0];
 			$items[]=['url'=>$photo->url,'src'=>$photo->url,'options'=>['title'=>$photo->title,'gpslat'=>$photo->gpslat,'gpslong'=>$photo->gpslong]];
-		
+		}
 		echo '<style> a.gallery-item>img{
 		border: 1px solid grey;
     display: block;

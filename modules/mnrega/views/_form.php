@@ -18,6 +18,8 @@ $this->registerJs(
         });
     });'
 );
+ \app\assets\AppAssetGoogle::register($this);
+       
 ?>
 <div class="bordered-form marking-form">
   <div class="form-title">

@@ -25,7 +25,7 @@ class PhotoWidget  extends \yii\base\Widget{
 		{
 			echo '<b>Photo List Empty! </b>';
 		}
-		foreach ($photos as $photo)
+		foreach ($this->photos as $photo)
 		{
 		   
 			$items[]=['url'=>$photo->url,'src'=>$photo->url,'options'=>['title'=>$photo->title,'gpslat'=>$photo->gpslat,'gpslong'=>$photo->gpslong]];
