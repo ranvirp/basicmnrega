@@ -254,8 +254,8 @@ class Designation extends \app\modules\users\MyActiveRecord
      {
      if ($insert)
      {
-       $this->name_en=$this->designationType?$this->designationType->name_en:''.','.$this->level?$this->level->name_en:'';
-       $this->name_hi=$this->designationType?$this->designationType->name_hi:''.','.$this->level?$this->level->name_hi:'';
+      // $this->name_en=$this->designationType?$this->designationType->name_en:''.','.$this->level?$this->level->name_en:'';
+       //$this->name_hi=$this->designationType?$this->designationType->name_hi:''.','.$this->level?$this->level->name_hi:'';
       }
       return parent::beforeSave($insert);
        
