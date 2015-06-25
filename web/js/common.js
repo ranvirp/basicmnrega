@@ -11,9 +11,8 @@ function populateDropdown(url,id)
       $.get(url,
           function(data)
           {
-          console.log(data);
+          if (typeof data !='object')
               data = $.parseJSON(data)
-            console.log(data);
                
                 var htmlToAppend='<option>None</option>';
               $.each(data,function(key,value)
