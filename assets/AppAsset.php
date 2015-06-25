@@ -27,7 +27,7 @@ class AppAsset extends AssetBundle
 
     ];
     public $js = [
-    'js/common.js',
+    
    // 'https://www.google.com/jsapi',
       //  'js/googletransliterate.js',
         'js/jquery.prettyPhoto.js',
@@ -43,4 +43,10 @@ class AppAsset extends AssetBundle
         'yii\bootstrap\BootstrapPluginAsset',
         'yii\jui\juiAsset',
     ];
+    public function init()
+    {
+    $this->js=['js/common.js?'.time(), 'js/jquery.prettyPhoto.js',
+        'js/jquery.tablesorter.min.js',
+        'js/jquery.dataTables.min.js'];
+    }
 }
