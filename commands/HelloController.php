@@ -33,6 +33,8 @@ public function actionCad($designationtype)//Create All Designations
    $designation->designation_type_id=$dt->id;
    $designation->level_id=$code;
    $designation->name_en=$dt->name_en.",".$name;
+    $designation->name_hi=$dt->name_hi.",".$name;
+  
    $designation->createUserAndRole();
   }
 
