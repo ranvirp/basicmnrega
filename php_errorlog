@@ -1,3 +1,9 @@
 [24-May-2015 13:16:24 CST6CDT] PHP Parse error:  syntax error, unexpected '[', expecting ')' in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/Yii.php on line 25
 [27-May-2015 02:50:10 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/nregaup0/basicmnrega/modules/users/migrations/m150527_074438_alter_table_websitemanagement.php on line 10
 [27-May-2015 02:51:28 CST6CDT] PHP Fatal error:  Undefined class constant 'TYPE_STRING' in /home/nregaup0/basicmnrega/modules/users/migrations/m150527_074438_alter_table_websitemanagement.php on line 10
+[24-Jun-2015 08:18:41 CST6CDT] PHP Fatal error:  Class name must be a valid object or a string in /home/nregaup0/basicmnrega/commands/HelloController.php on line 27
+[24-Jun-2015 08:21:05 CST6CDT] PHP Fatal error:  Class name must be a valid object or a string in /home/nregaup0/basicmnrega/commands/HelloController.php on line 27
+[24-Jun-2015 08:23:01 CST6CDT] PHP Parse error:  syntax error, unexpected '[', expecting ')' in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/Yii.php on line 25
+[24-Jun-2015 08:23:40 CST6CDT] PHP Fatal error:  Class name must be a valid object or a string in /home/nregaup0/basicmnrega/commands/HelloController.php on line 27
+[24-Jun-2015 23:22:55 CST6CDT] PHP Fatal error:  Class name must be a valid object or a string in /home/nregaup0/basicmnrega/commands/HelloController.php on line 27
+[24-Jun-2015 23:24:06 CST6CDT] PHP Fatal error:  Class name must be a valid object or a string in /home/nregaup0/basicmnrega/commands/HelloController.php on line 28

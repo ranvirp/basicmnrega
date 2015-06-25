@@ -238,6 +238,7 @@ class Designation extends \app\modules\users\MyActiveRecord
 		      //$this=Designation::findOne($this->id);
 		     // $desig->officer_userid=$usermodel->id;
 		     $this->officer_userid=$usermodel->id;
+		     if (!$auth->checkAccess($usermodel->id,$role))
 		     $auth->assign($rolecreated,$usermodel->id);
 		     // print_r($desig);
 		      //exit;
