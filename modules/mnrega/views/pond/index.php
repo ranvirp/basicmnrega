@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 'attribute'=>'workid',
 'value'=>function($model,$key,$index,$column)
 {
-                return $model->showValue('workid');
+                return Html::a($model->showValue('workid'),\yii\helpers\Url::to(['/mnrega/pond/photosbywork?workid='.$model->workid]);
 },],['header'=>'Name',
 'attribute'=>'name_hi',
 'value'=>function($model,$key,$index,$column)
