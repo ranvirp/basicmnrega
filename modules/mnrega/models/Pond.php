@@ -158,7 +158,7 @@ class Pond extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'block_code':
-			   $url="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
+			   $url="'"."/basicmnrega/web/jsons/'+$(this).val()+'.json'";
 			   $id='pond-panchayat';
 			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$district])->orderBy('name_en asc')->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
 			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
