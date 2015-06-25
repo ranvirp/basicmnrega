@@ -24,7 +24,7 @@ public function actionCad($designationtype)//Create All Designations
 {
   $dt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>$designationtype])->one();
   $levelclass=$dt->level->class_name;
-$levels=\yii\helpers\ArrayHelper::map($levelclass::find()->asArray()->all(),'code','name_en');
+  $levels=\yii\helpers\ArrayHelper::map($levelclass::find()->asArray()->all(),'code','name_en');
   foreach ($levels as $code=>$name)
   {
    $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dt->id,'level_id'=>$code])->one();
@@ -33,7 +33,8 @@ $levels=\yii\helpers\ArrayHelper::map($levelclass::find()->asArray()->all(),'cod
    $designation->designation_type_id=$dt->id;
    $designation->level_id=$code;
    $designation->name_en=$dt->name_en.",".$name;
-  $designation->name_hi=$dt->name_hi.",".$name;
+    $designation->name_hi=$dt->name_hi.",".$name;
+  
    $designation->createUserAndRole();
   }
 
@@ -105,21 +106,21 @@ $levels=\yii\helpers\ArrayHelper::map($levelclass::find()->asArray()->all(),'cod
       $photos=Photo::find()->all();
       foreach($photos as $photo)
       {
-        if (base64_decode($photo->thumbnail))
-        {
+        //if (!base64_decode($photo->thumbnail))
+        //{
            print "processing ".$photo->id;
            $photo->thumbnail=$this->Thumbnail($photo->url);
            $photo->save();
-        }
+        //}
       }
     
     }
     function Thumbnail($url,  $width = 75, $height = 75) {
 
  // download and create gd image
-// $image = ImageCreateFromString(file_get_contents($url));
-$image = ImageCreateFromJpeg($url);
-
+ $image = @ImageCreateFromString(file_get_contents($url));
+if ($image)
+{
  // calculate resized ratio
  // Note: if $height is set to TRUE then we automatically calculate the height based on the ratio
  $height = $height === true ? (ImageSY($image) * $width / ImageSX($image)) : $height;
@@ -127,7 +128,10 @@ $image = ImageCreateFromJpeg($url);
  // create image 
  $output = ImageCreateTrueColor($width, $height);
  ImageCopyResampled($output, $image, 0, 0, 0, 0, $width, $height, ImageSX($image), ImageSY($image));
-
+}else
+{
+$output = ImageCreateTrueColor($width, $height);
+}
  // save image
   ob_start (); 
 
