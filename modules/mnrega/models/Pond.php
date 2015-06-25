@@ -183,7 +183,7 @@ class Pond extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'totarea':
-			   return  $form->field($this,$attribute)->textInput(['class'=>'form-control'])->hint($this->getAttributeHint($attribute));
+			   return  $form->field($this,$attribute)->textInput(['class'=>'form-control']);
 			    
 			    break;
 									
