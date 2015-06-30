@@ -122,11 +122,11 @@ class Pond extends \yii\db\ActiveRecord
 		   
 									
 			case 'workid':
-			   return  $form->field($this,$attribute)
-			   ->widget(\yii\widgets\MaskedInput::className(), [
-      'mask' => '9999999999/WC/999999999999999999',
-      'options'=>['id'=>'workid','class'=>'form-control required'],
-  ]);
+			   return  $form->field($this,$attribute)->textInput(['id'=>'workid','class'=>'form-control required']);
+			 //  ->widget(\yii\widgets\MaskedInput::className(), [
+      //'mask' => '9999999999/WC/999999999999999999',
+      //'options'=>['id'=>'workid','class'=>'form-control required'],
+  //]);
 			    
 			    break;
 									
