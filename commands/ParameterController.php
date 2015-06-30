@@ -43,8 +43,8 @@ class ParameterController extends Controller
  if (!$pp) $pp=new ParameterParse;
        //if (time()+$model->periodicity*24*3600<$pp->update_time )
         //return "Cannot update before periodicity\n";
-        print $link;
-        exit;
+       // print $link;
+        //exit;
         $data=file_get_contents($link);
         
         if ($data=='')

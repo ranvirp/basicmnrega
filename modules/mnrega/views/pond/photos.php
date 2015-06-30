@@ -7,6 +7,7 @@ var markers;
 </script>
 <style>
 #map{height:400px;}
+
 </style>
 <div class="site-index">
 <div class="body-content">
@@ -58,7 +59,7 @@ markers=new L.featureGroup();
 	  var datetime=$(this).attr("datetime");
 	  var photoid=$(this).attr("photo-id");
 	  map.panTo(new L.latLng([gpslat,gpslong]));
-	  $("#maptitle").html(photoid+"-"+title+" @"+gpslat+","+gpslong);
+	  $("#maptitle").html(photoid+"-"+title+" <small>@"+gpslat+","+gpslong+"</small>");
 	  
 	  });';
 	  echo '});';
