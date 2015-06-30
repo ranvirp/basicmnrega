@@ -57,6 +57,12 @@ $this->params['breadcrumbs'][] = $this->title;
 'totarea',
 'estcost',
 'persondays',
+['header'=>'#photos',
+'value'=>function($model,$key,$index,$column)
+{
+  return \app\modules\gpsphoto\models\Photo::find()->where(['bwid'=>$model->workid])->count();
+}
+],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
