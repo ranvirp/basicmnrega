@@ -19,7 +19,7 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     public $css = [
-        'css/site.css',
+       'css/site.css',
         'css/prettyPhoto.css',
         'css/blue/style.css',
         'css/jquery.dataTables.css',

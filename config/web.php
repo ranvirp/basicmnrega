@@ -23,6 +23,8 @@ $config = [
     //'showScriptName' => false,
 			'rules' => [
 				['class' => 'yii\rest\UrlRule', 'controller' => 'api/photo'],
+				['class' => 'yii\rest\UrlRule', 'controller' => 'api/work'],
+				
 				['class' => 'yii\rest\UrlRule', 'controller' => 'api/pp',
 				    'extraPatterns' => [
                         'GET remote' => 'remote',
