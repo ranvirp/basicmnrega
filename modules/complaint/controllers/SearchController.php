@@ -51,7 +51,7 @@ $client = new ZendeskAPI($subdomain, $username);
 $client->setAuth('token', $token); // set either token or password
         
         }
-        return $this->render('index');
+        return $this->render('/default/index');
     }
     
     

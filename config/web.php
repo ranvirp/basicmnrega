@@ -6,7 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'homeUrl'=>'index',
+    'homeUrl'=>'/index.php/site/index',
    'language'=>'en',
     'components' => [
     'assetManager'=>['linkAssets'=>true],
@@ -88,10 +88,10 @@ $config = [
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = 'yii\debug\Module';
+    $config['modules']['debug'] = ['class'=> 'yii\debug\Module', 'allowedIPs' => ['*']];
 
     $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = 'yii\gii\Module';
+    $config['modules']['gii'] =['class'=> 'yii\gii\Module', 'allowedIPs' => ['']];
     $config['modules']['gii'] = ['class' => 'yii\gii\Module',
             'allowedIPs' => ['127.0.0.1', '::1', '192.168.0.*', '192.168.178.20'],
             'generators' => [ //here
