@@ -6,7 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'homeUrl'=>'index',
+    'homeUrl'=>'/basicmnrega/web/index.php',
    'language'=>'en',
     'components' => [
     'assetManager'=>['linkAssets'=>true],
@@ -23,6 +23,8 @@ $config = [
     //'showScriptName' => false,
 			'rules' => [
 				['class' => 'yii\rest\UrlRule', 'controller' => 'api/photo'],
+				['class' => 'yii\rest\UrlRule', 'controller' => 'api/work'],
+				
 				['class' => 'yii\rest\UrlRule', 'controller' => 'api/pp',
 				    'extraPatterns' => [
                         'GET remote' => 'remote',

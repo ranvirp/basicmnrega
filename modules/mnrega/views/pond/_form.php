@@ -41,7 +41,7 @@ $this->registerJs(
 <?php echo $model->isNewRecord? '':"<span class=\"well\">".Html::a('New entry',\yii\helpers\Url::to(['/mnrega/pond/create']))."</span>";?>
 
     </div>
-</div>
+  </div>
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
     //'action'=>Url::to(['/mnrega/pond/'.$model->isNewRecord?'create':'update?id='.$model->workid]),
@@ -57,8 +57,8 @@ $this->registerJs(
     ],
 ]); ?>
 <div class="form-group col-md-12">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['id'=>'w1-btn','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['id'=>'w1-btn','class' => $model->isNewRecord ? 'btn btn-success col-md-12' : 'btn btn-primary']) ?>
+</div>
 <div class="col-md-6">
     
 
@@ -113,5 +113,3 @@ $modelArray=Yii::$app->request->post("Pond");
 **/
 ?>    
     <?php ActiveForm::end(); ?>
-
-</div>

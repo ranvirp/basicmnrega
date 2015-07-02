@@ -127,14 +127,14 @@ AppAsset::register($this);
             <?= $content ?>
         </div>
     
-</div>
-    <footer class="footer">
-        <div class="container">
+<div class="clearfix"></div>
+    <div class="footer">
+       <div>
             <p class="pull-left">MNREGA Cell, Uttar Pradesh <?= date('Y') ?></p>
             <p class="pull-right"><?= Yii::powered() ?></p>
-        </div>
-    </footer>
-
+     </div>
+    </div>
+</div>
 <?php $this->endBody() ?>
 </body>
 </html>

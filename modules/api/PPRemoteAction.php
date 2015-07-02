@@ -51,7 +51,7 @@ class PPRemoteAction extends \yii\rest\Action
 		
 		
 
-        $url='http://'.$host.'/'.'index.php/api/pps/'.$rmid.'?access_token='.$access_token;
+        $url='https://'.$host.'/'.'index.php/api/pps/'.$rmid.'?access_token='.$access_token;
         print $url."\n";
 	  $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL,$url);
@@ -88,7 +88,7 @@ print  $server_output ;
     function returnRemoteToken()
      {
         $ch = curl_init();
-        $url='http://nregaup.in/index.php/api/default/gentoken';
+        $url='https://nregaup.in/index.php/api/default/gentoken';
         $vars=['username'=>'padmin','password'=>'padmin321'];
         curl_setopt($ch, CURLOPT_URL,$url);
         curl_setopt($ch, CURLOPT_POST, 1);
