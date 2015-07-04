@@ -41,10 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return Html::a($model->showValue('workid'),\yii\helpers\Url::to(['/mnrega/pond/photosbywork?workid='.$model->workid]));
 },'format'=>'html'],['header'=>'Name',
 'attribute'=>'name_hi',
-'value'=>function($model,$key,$index,$column)
-{
-                return $model->showValue('name_hi');
-},],
+],
 ['header'=>'Block',
 'attribute'=>'block_code',
 'filter'=>\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\Block::find()->where(['district_code'=>$district])->orderBy('name_en asc')->asArray()->all(),'code','name_en'),
@@ -60,13 +57,14 @@ $this->params['breadcrumbs'][] = $this->title;
 ['header'=>'#photos',
 'value'=>function($model,$key,$index,$column)
 {
-  return \app\modules\gpsphoto\models\Photo::find()->where(['bwid'=>$model->workid])->count();
-}
+  return Html::a(\app\modules\gpsphoto\models\Photo::find()->where(['bwid'=>$model->workid])->count(),\yii\helpers\Url::to(['/mnrega/pond/photosbywork?workid='.$model->workid]));
+},
+'format'=>'html'
 ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-        'tableOptions'=>['class'=>'small table table-striped'],
+        'tableOptions'=>['class'=>'table table-striped'],
         ]); ?>
 
 </div>

@@ -17,6 +17,11 @@ $config = [
 		  'itemChildTable' => '{{%authitemchild}}',  // Optional
 		  'assignmentTable' => '{{%authassignment}}',  // Optional
 		  ],
+	'cache'=>
+	    [
+	
+    'class' => 'yii\caching\FileCache',
+	    ],
     'urlManager' => [
 			'enablePrettyUrl' => true,
 		//	'enableStrictParsing' => true,
