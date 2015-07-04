@@ -62,6 +62,7 @@ class PondSearch extends Pond
             'gpslat' => $this->gpslat,
             'gpslong' => $this->gpslong,
             'status' => $this->status,
+            'block_code'=>$this->block_code,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
@@ -72,7 +73,6 @@ class PondSearch extends Pond
             ->andFilterWhere(['like', 'name_hi', $this->name_hi])
             ->andFilterWhere(['like', 'name_en', $this->name_en])
             ->andFilterWhere(['like', 'district_code', $this->district_code])
-            ->andFilterWhere(['like', 'block_code', $this->block_code])
             ->andFilterWhere(['like', 'panchayat_code', $this->panchayat_code])
             ->andFilterWhere(['like', 'village', $this->village])
             ->andFilterWhere(['like', 'gatasankhya', $this->gatasankhya])

@@ -37,7 +37,7 @@ class PondController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $designation=\app\modules\users\models\Designation::find()->
         where(['officer_userid'=>Yii::$app->user->id])->one();
-         $dataProvider->query=$dataProvider->query->where(['district_code'=>$designation->level->code])->orderBy('created_at desc');
+         $dataProvider->query=$dataProvider->query->andFilterWhere(['district_code'=>$designation->level->code])->orderBy('created_at desc');
        
         return $this->render('index', [
             'searchModel' => $searchModel,
