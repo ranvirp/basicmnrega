@@ -19,6 +19,8 @@ var markers;
 <div class="row">
 <div class="col-md-8">
 <h3 class="well" id="maptitle"></h3>
+<h4 class="well" id="mapdetails"></h4>
+
 <?php
 \app\assets\AppAssetLeaflet::register($this);
 ?>
@@ -28,11 +30,12 @@ var markers;
  ?>
 </div>
 <script type='text/javascript'>
-map = new L.Map('map', {center: new L.LatLng(53.9618, 58.4277), zoom: 13});
+map = new L.Map('map', {center: new L.LatLng(53.9618, 58.4277), zoom: 15});
 var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 var ggl = new L.Google();
 var ggl2 = new L.Google('TERRAIN');
 map.addLayer(ggl);
+map.addLayer(ggl2);
 map.addControl(new L.Control.Layers( {'OSM':osm, 'Google':ggl, 'Google Terrain':ggl2}, {}));
 markers=new L.featureGroup();
 </script>
@@ -59,7 +62,8 @@ markers=new L.featureGroup();
 	  var datetime=$(this).attr("datetime");
 	  var photoid=$(this).attr("photo-id");
 	  map.panTo(new L.latLng([gpslat,gpslong]));
-	  $("#maptitle").html(photoid+"-"+title+" <small>@"+gpslat+","+gpslong+"</small>");
+	  populateHtml("'.\yii\helpers\Url::to(['/mnrega/pond/title?workid=']).'"+$(this).attr("photo-id"),"maptitle")'.'
+	  $("#mapdetails").html(" <small>"+photoid+"@"+gpslat+","+gpslong+"</small>");
 	  
 	  });';
 	  echo '});';

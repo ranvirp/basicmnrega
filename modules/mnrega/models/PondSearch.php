@@ -12,13 +12,14 @@ use app\modules\mnrega\models\Pond;
  */
 class PondSearch extends Pond
 {
+public $noofphotos;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['workid', 'name_hi', 'name_en', 'district_code', 'block_code', 'panchayat_code', 'village', 'gatasankhya', 'totarea', 'remarks'], 'safe'],
+            [['workid', 'name_hi', 'name_en', 'district_code', 'block_code', 'panchayat_code', 'village', 'gatasankhya', 'totarea', 'remarks','noofphotos'], 'safe'],
             [['estcost', 'gpslat', 'gpslong'], 'number'],
             [['persondays', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
         ];
@@ -68,7 +69,12 @@ class PondSearch extends Pond
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
-
+        /*
+       $query->joinWith(['photosCount'=>function($q){
+       $q->select(['count(photo.id) as noofphotos']);
+        }]);
+        */
+     //  $query->andFilterWhere(['noofphotos'=>$this->noofphotos]);
         $query->andFilterWhere(['like', 'workid', $this->workid])
             ->andFilterWhere(['like', 'name_hi', $this->name_hi])
             ->andFilterWhere(['like', 'name_en', $this->name_en])

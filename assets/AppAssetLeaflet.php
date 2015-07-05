@@ -33,7 +33,7 @@ class AppAssetLeaflet extends AssetBundle
        
         "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js",
         "http://maps.google.com/maps/api/js?v=3&sensor=false",
-        'js/Google.js'
+        'js/Google1.js'
     ];
     public $depends = [
         

@@ -335,5 +335,8 @@ class Pond extends \yii\db\ActiveRecord
         ]);
     }
 
-	
+	public function getPhotos()
+	{
+	        return $this->hasMany(\app\modules\gpsphoto\models\Photo::className(), ['bwid' => 'workid'])	;
+	}
 }
