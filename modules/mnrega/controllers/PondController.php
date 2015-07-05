@@ -183,4 +183,10 @@ class PondController extends Controller
      return $this->render('photos',['photos'=>$photos]);
     
     }
+    public function actionTitle($workid)
+    {
+      $pond= Pond::findOne($workid);
+      if ($pond)
+        print $pond->name_hi.'<br><small><b>Panchayat </b>'.$pond->panchayat.'<b> Block </b>'.$pond->block.'<b> District </b>'.$pond->district;
+    }
 }

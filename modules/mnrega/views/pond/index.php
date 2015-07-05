@@ -12,6 +12,9 @@ $this->params['breadcrumbs'][] = $this->title;
  \app\assets\AppAssetGoogle::register($this);
        
 ?>
+<script>
+$(document).ready(function(){$("input[name='PondSearch[name_hi]']").addClass('hindiinput');});
+</script>
 <div class="col-md-12">
 <div class="pond-index">
 
