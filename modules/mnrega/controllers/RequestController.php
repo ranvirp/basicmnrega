@@ -4,6 +4,7 @@ namespace app\modules\mnrega\controllers;
 
 use Yii;
 use app\common\Utility;
+use app\modules\mnrega\models\Request;
 use app\modules\mnrega\models\RequestForm;
 use app\modules\mnrega\models\RequestSearch;
 use app\modules\mnrega\Controller;

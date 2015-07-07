@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -38,5 +39,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'update_time:datetime',
         ],
     ]) ?>
+<p>Marked To:</p>
+<hl>
+<table class="table table-hover">
+<tr>
+   <th>From</th>
+   <th>To</th>
+   <th>Date of Marking</th>
+   <th>Deadline</th>
+   <th>Status</th>
+</tr>
+<?php
+foreach ($model->markings as $marking)
+{
+  echo '<tr><td>'.$marking->sender1->name_en.'</td><td>'.$marking->receiver1->name_en.'</td><td>'.$marking->dateofmarking.'</td><td>'.$marking->deadline.'</td><td>'.$marking->status.'</td><td>'.Html::a('Reply',Url::to(['/reply/default/create?ct=marking&ctid=']).$marking->id).'</td></tr>';
 
+}
+
+?>
+</table>
 </div>

@@ -12,11 +12,18 @@ $this->title = Yii::t('app', 'Create {modelClass}', [
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Ponds'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+.pond-form
+{
+padding:15px;
+}
+</style>
 <div class="pond-index">
 <?= $this->render('index1',
 ['dataProvider'=>$dataProvider,'model'=>null,'searchModel'=>$searchModel])
 ?>
 </div>
+<div class="clearfix"></div>
 <div class="pond-create">
 <?=  $this->render('_form',['model'=>$model]);
 	   ?>

@@ -68,7 +68,7 @@ class FileWidget  extends \yii\base\Widget{
         //'browseLabel' =>  'Select Photo',
 		'previewSettings'=>['image'=>['width'=>"150px",'height'=>'150px']],
 		 'initialPreview'=>$y,
-        'overwriteInitial'=>true,
+        'overwriteInitial'=>false,
 		'previewTemplates'=>[],
 		'layoutTemplates'=>[
 		  'footer'=>'<div class="file-thumbnail-footer">' .
@@ -83,10 +83,23 @@ class FileWidget  extends \yii\base\Widget{
             "filepreupload" => "function(event, data, previewId, index) {
                var form = data.form, files = data.files, extra = data.extra,
                response = data.response, reader = data.reader;
-
+               var  flag=false;
                $('.activeInput').each(function() {
+               if ($(this).val()=='') {
+               alert('Title of file compulsory.');
+               $(this).focus();
+               flag=true;
+              
+               }
+               
                  data.form.append($(this).attr('name'),$(this).val());
                });
+               if (flag==true) 
+               {
+               
+               
+               return {message:'title compulsory',data:{}};
+               }
 
              }",
 			   "fileuploaded" => "function(event, data, previewId, index) {
@@ -101,6 +114,7 @@ class FileWidget  extends \yii\base\Widget{
                  }
 
                  }",
+                 'filecustomerror'=>"function(event,params){}",
     
     ],
 	  

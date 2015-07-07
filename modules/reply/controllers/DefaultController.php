@@ -86,16 +86,21 @@ class DefaultController extends Controller
 		if ($contentmodel!=null)
 		{
 			$name='name_'.Yii::$app->language;
-		$parentcontent=$ct.$ctid.":".$contentmodel->$name;
+		$parentcontent=$ct.$ctid.":".$contentmodel->getView();
         $model = new Reply();
 		$model->content_type=$ct;
 		$model->content_type_id=$ctid;
-		$model->author_id=Yii::$app->user->id;
+		$model->author_id=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
 		$model->create_time=time();
        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 		   
 			if (count($model->attachments)>0)
-			$model->attachments=implode(",",$model->attachments);
+			{
+			$x=[];
+			foreach ($model->attachments as $attachment)
+			  if($attachment!='') $x[]=$attachment; //remove blank fields
+			$model->attachments=implode(",",$x);
+			}
 		    else
 				$model->attachments='';
 			$model->save();
@@ -104,6 +109,7 @@ class DefaultController extends Controller
 				$fileids = explode(",",$model->attachments);
 				foreach ($fileids as $fileid)
 				{
+				   if (!is_numeric($fileid)) continue;
 					$file = \app\modules\reply\models\File::findOne($fileid);
 					if ($file)
 					{

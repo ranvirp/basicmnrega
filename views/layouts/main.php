@@ -23,7 +23,26 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
      
     <?php $this->head() ?>
+    </head>
+<body class="">
     <style>
+ .menubar
+    {
+     margin-bottom:15px;
+     margin-top:5px;
+     border:solid 1px;
+     background-color:#3c68b6;
+     display:table;
+     width:100%;
+    }
+    .nav >li >a, .nav>li>a:hover, .nav >li >a:focus
+    {
+      background-color:#3c68b0;
+    }
+    .nav>li>a
+    {
+    color:white;
+    }
     .bg-green
     {
       background-color:green;
@@ -36,6 +55,12 @@ AppAsset::register($this);
     {
      padding:0;
     }
+    .grad {
+  background: -webkit-linear-gradient(rgba(244,196,48,1),white, green); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(rgba(244,196,48,1),white, green); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(rgba(244,196,48,1),white, green); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(rgba(244,196,48,1),white, green); /* Standard syntax */
+} 
    .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;}
 .navbar {min-height:30px !important;font-size:8px;}
     .navbar-green
@@ -44,8 +69,7 @@ AppAsset::register($this);
     }
     </style>
    
-</head>
-<body class="">
+
 
 <?php $this->beginBody() ?>
 <div class="wrap">
@@ -58,9 +82,10 @@ AppAsset::register($this);
                     'class' => 'navbar navbar-default no-margin',
                 ],
             ]);
-            echo '<div class="col-md-2">&nbsp;</div>';
-            echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
+           // echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
+           echo '<div class="text-center"><h2>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h2></div>';
             NavBar::end();
+            /*
             NavBar::begin([
                 //'brandLabel' => 'KESCO',
                 //'brandUrl' => Yii::$app->homeUrl,
@@ -68,6 +93,8 @@ AppAsset::register($this);
                     'class' => 'navbar-green navbar-fixed',
                 ],
             ]);
+            */
+            echo '<div class="menubar">';
             echo Nav::widget([
             
     'items' => [
@@ -117,13 +144,15 @@ AppAsset::register($this);
             ]
             ],],'options'=>['class'=>'nav navbar-nav pull-right']
 ]);
-
-            NavBar::end();
+echo '</div>';
+           // NavBar::end();
         ?>
-        <div class="container small">
+        <div class="container-fluid">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
+            <div class="row-fluid">
+            </div>
             <?= $content ?>
         </div>
     
