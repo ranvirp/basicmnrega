@@ -37,10 +37,18 @@ class WorkFindAction extends \yii\rest\Action
         $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
 	   $district=$designation->level->code;
 	   $district_name=$designation->level->name_en;
-        $works=\app\modules\mnrega\models\Pond::find()->where(['district_code'=>$district])->asArray()->all();
-         
-        $response = Yii::$app->getResponse();
-        $response->setStatusCode(201);
-        return $works;
+	   $x=[];//array of works
+	   foreach (\app\modules\mnrega\models\Block::find()->where(['district_code'=>$district])->all() as $block)
+	   {
+	    
+        $works=\app\modules\mnrega\models\Pond::find()->where(['block_code'=>$block->code])->select('name_hi,workid,panchayat_code,block')->asArray()->all();
+        foreach ($works as $work)
+        {
+         $x[$work['block']][$work['panchayat_code']][]=$work;
+        }
+       }  
+       // $response = Yii::$app->getResponse();
+      //  $response->setStatusCode(201);
+        return $x;
     }
 }

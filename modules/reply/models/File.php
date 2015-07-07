@@ -70,12 +70,14 @@ class File extends \yii\db\ActiveRecord
 		   $str.='<table class="table">';
 		   foreach (explode(",",$model->$attribute) as $fileid)
 		   {
+		    if (!is_numeric($fileid)) continue;
+			
 			   $file=self::findOne($fileid);
 			   if ($file)
 			   {
 				   $str.='<tr><td>'.$file->title.
 					   '</td>';
-				   $str.='<td>'.\yii\helpers\Html::a($file->filename,\yii\helpers\Url::to(['/file?id='.$fileid])).
+				   $str.='<td>'.\yii\helpers\Html::a($file->filename,\yii\helpers\Url::to(['/reply/file?id='.$fileid])).
 					     '</td></tr>';
 			   }
 		   }
@@ -100,6 +102,7 @@ class File extends \yii\db\ActiveRecord
 		   $str.='<table class="table table-striped table-bordered small">';
 		   foreach (explode(",",$model->$attribute) as $fileid)
 		   {
+		    if (!is_numeric($fileid)) continue;
 			   $file=\app\models\File::findOne($fileid);
 			   if ($file)
 			   {

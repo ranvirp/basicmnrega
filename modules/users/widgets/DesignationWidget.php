@@ -29,7 +29,7 @@ class DesignationWidget  extends \yii\base\Widget{
 		echo '<div class="row"><div class="col-md-6">';
 		
 echo Html::dropDownList($this->attribute.'-designation-type-id','',
-\yii\helpers\ArrayHelper::map(\app\modules\users\models\DesignationType::find()->asArray()->all(),'id','name_'.$lang), ['prompt'=>'Select Circle','class'=>'form-control','label'=>'Circle','id'=>$attribute.'-designation-type-id',
+\yii\helpers\ArrayHelper::map(\app\modules\users\models\DesignationType::find()->asArray()->all(),'id','name_'.$lang), ['prompt'=>'Select Designation Type','class'=>'form-control','label'=>'Circle','id'=>$attribute.'-designation-type-id',
 'onChange'=>"js:populateDropdown('".$url."'+$(this).val(),'".$id."')"]);
 
 // Dependent Dropdown

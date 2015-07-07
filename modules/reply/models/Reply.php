@@ -22,7 +22,8 @@ class Reply extends \yii\db\ActiveRecord
 	/*
 	 * Shortcuts for classes to which reply shall be attached
 	 */
-	public static $classmap=['w'=>'app\models\Work','d'=>'\app\modules\users\models\Designation'];
+	public static $classmap=['w'=>'app\models\Work','d'=>'\app\modules\users\models\Designation'
+	,'marking'=>'\app\modules\mnrega\models\Marking'];
 	
 	/**
      * @inheritdoc

@@ -37,7 +37,8 @@ class RequestForm extends Model
      $request->save();
    
    $marking = new Marking;
-   $marking->sender=Yii::$app->user->id;
+   $marking->sender=\app\modules\users\models\Designation::find()
+   ->where(['officer_userid'=>Yii::$app->user->id])->one();
    $marking->receiver=$this->marking_to;
    $marking->request_id=$request->id;
    $marking->dateofmarking=date('Y-m-d');

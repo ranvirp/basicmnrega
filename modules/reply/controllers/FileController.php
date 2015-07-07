@@ -50,7 +50,7 @@ class FileController extends Controller
           {
             throw new NotFoundHttpException('The requested file does not exist.');
           }
-		$fullPath=Yii::getAlias('@app').'/../'.$model->path;
+		$fullPath=Yii::getAlias('@app').'/'.$model->path;
 		//echo $fullPath;
 		
      if (file_exists($fullPath)) {
@@ -60,7 +60,7 @@ class FileController extends Controller
          header('Content-Description: File Transfer');
         // header('Content-Type: ' . CFileHelper::getMimeType($model->fileWithPath()));
          header('Content-Type: ' .$mime );
-        // header('Content-Disposition: attachment; filename="'.$fullPath.'"');
+         header('Content-Disposition: attachment; filename="'.$model->filename.'"');
 		 header('Content-Transfer-Encoding:binary');
 		 header('Content-Length:'.$model->size);
 		 readFile($fullPath);

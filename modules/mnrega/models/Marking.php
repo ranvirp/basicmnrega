@@ -1,6 +1,6 @@
 <?php
 namespace app\modules\mnrega\models;
-
+use app\modules\users\models\Designation;
 use Yii;
 
 /**
@@ -65,6 +65,20 @@ class Marking extends \yii\db\ActiveRecord
     public function getRequest()
     {
         return $this->hasOne(Request::className(), ['id' => 'request_id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReceiver1()
+    {
+        return $this->hasOne(Designation::className(), ['id' => 'receiver']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSender1()
+    {
+        return $this->hasOne(Designation::className(), ['id' => 'sender']);
     }
 	/*
 	*@return form of individual elements
@@ -174,6 +188,10 @@ class Marking extends \yii\db\ActiveRecord
 			default:
 			break;
 		  }
+    }
+    public function getView()
+    {
+      return $this->id;
     }
 	
 }
