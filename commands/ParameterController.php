@@ -24,7 +24,7 @@ class ParameterController extends Controller
 
         
     }
-	public function actionPopulate($p,$l,$d=0)
+	public function actionPopulate($p,$l,$d=0,$debug=0)
 	{
 		$dnew=$d;
         if ($d!=0)
@@ -39,14 +39,15 @@ class ParameterController extends Controller
        }
         $model=Parameter::findOne($p);
         $link=$model->link;
-        $pp=ParameterParse::find()->where(['parameter_id'=>$p,'level'=>$l,'district_code'=>$d])->one();
- if (!$pp) $pp=new ParameterParse;
+       // $pp=ParameterParse::find()->where(['parameter_id'=>$p,'level'=>$l,'district_code'=>$d])->one();
+ //if (!$pp) 
+ $pp=new ParameterParse;
        //if (time()+$model->periodicity*24*3600<$pp->update_time )
         //return "Cannot update before periodicity\n";
        // print $link;
         //exit;
-        $data=file_get_contents($link);
-        
+     //   $data=file_get_contents($link);
+       $data="not checking"; 
         if ($data=='')
         {
           print "Error fetching data...aborting\n";
@@ -66,7 +67,7 @@ class ParameterController extends Controller
          $level=0;
          $colwithvalues=[2*$m+$colwithnames,2*$m+$colwithnames-1];
         break;
-        case 'musteroll':
+        case 'musterroll':
          $tableid=3;
          $rowstoskip=3;
          $m=date('m');
@@ -75,7 +76,7 @@ class ParameterController extends Controller
          $m=$m-3;
          $colwithnames=1;
          $level=0;
-         $colwithvalues=[2,3];
+         $colwithvalues=[2,3,4,5];
         break;
         case 'workcategory':
          $tableid=2;
@@ -115,13 +116,22 @@ class ParameterController extends Controller
          $level=0;
          $colwithvalues=range(2,18);
         break;
+         case 'unfilledmusterroll':
+        $tableid=3;
+        $rowstoskip=3;
+         $colwithnames=1;
+         $level=0;
+         $colwithvalues=range(16,22);
+        break;
+        
         default:
         break;
         }
+        if ($debug) print $link."\n";
           $x=[];
           $utility=new \app\modules\mnrega\Utility;
-          $result=$utility->parseTable($link,$tableid,$rowstoskip,$colwithnames,$colwithvalues,$x,$l,$dnew);
-       var_dump($result);
+          $result=$utility->parseTable($link,$tableid,$rowstoskip,$colwithnames,$colwithvalues,$x,$l,$dnew,$debug);
+      if ($debug) var_dump($result);
        
  $pp->update_time=time();
  $pp->json_value=json_encode($result);
@@ -130,7 +140,7 @@ class ParameterController extends Controller
  //$pp->dld_data=$data;
  $pp->level=$l;
  if (!$pp->save())
-   print_r($pp->errors);
+  file_put_contents('../runtime/logs/'.$p.'.log', print_r($pp->errors,true));
 else
   print $pp->id;
   // $pp->updateTable();
