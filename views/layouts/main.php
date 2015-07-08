@@ -126,11 +126,12 @@ AppAsset::register($this);
     ],
                 ['label' => 'Reports', 'url' => ['#'],'options'=>['class'=>'dropdown']
             ,'items'=>[ 
-                ['label' => 'Mandays generated', 'url' => ['/mnrega/parameter/display?id=7'],'options'=>['class'=>'dropdown']],
+                ['label' => 'Mandays generated', 'url' => ['/mnrega/parameter/show?t=mandays'],'options'=>['class'=>'dropdown']],
                 
 ['label' => 'Categories Wise Work Analysis', 'url' => ['/mnrega/parameter/displaywc?id=2'],'options'=>['class'=>'dropdown']],
- ['label' => 'Analysis of Employment Parameters', 'url' => ['/mnrega/parameter/display?id=3'],'options'=>['class'=>'dropdown']],
-               
+ ['label' => 'Analysis of Employment Parameters', 'url' => ['/mnrega/parameter/show?t=empstatus'],'options'=>['class'=>'dropdown']],
+   ['label' => 'Muster Roll Filled vs Issued', 'url' => ['/mnrega/parameter/show?t=musterroll'],'options'=>['class'=>'dropdown']],
+             
             ],
     ],
         

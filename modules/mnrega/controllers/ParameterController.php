@@ -212,16 +212,13 @@ class ParameterController extends \yii\web\Controller
          $level=0;
          $colwithvalues=[2*$m+$colwithnames,2*$m+$colwithnames-1];
         break;
-        case 'musteroll':
+        case 'musterroll':
          $tableid=3;
          $rowstoskip=3;
-         $m=date('m');
-         $y=date('Y');
-         if ($y==2016) $m=$m+12;
-         $m=$m-3;
+         
          $colwithnames=1;
          $level=0;
-         $colwithvalues=[2,3];
+         $colwithvalues=[2,3,4,5];
         break;
         case 'workcategory':
          $tableid=2;
@@ -261,6 +258,15 @@ class ParameterController extends \yii\web\Controller
          $level=0;
          $colwithvalues=range(2,18);
         break;
+        case 'unfilledmusterroll':
+        $tableid=3;
+        $rowstoskip=3;
+        
+         $colwithnames=1;
+         $level=0;
+         $colwithvalues=range(16,22);
+        break;
+        
         default:
         break;
         }
@@ -302,6 +308,47 @@ else
         break;
          case 'empstatus':
        return $this->render('_displayempstatus',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+        break;
+        default:
+        return $this->render('_displaygeneral',['model'=>$model,'result'=>Json::decode($model->json_value,true)]);
+        break;
+       }
+        
+         
+      
+      }
+      
+    }
+  public function actionShow($t)
+    {
+     //if($id!=7) return;
+      $parameter=Parameter::find()->where(['shortcode'=>$t])->one();
+      if (!$parameter)
+      {
+        print "wrong parameter\n";
+        return;
+        
+      }
+      else
+      $model=ParameterParse::find()->where(['parameter_id'=>$parameter->id])->orderBy('update_time desc')->one();
+      
+      //$model->updateTable();
+      if (!$model)
+        print "Id wrong\n";
+        else {
+       switch($t)
+       {
+       case 'mandays':
+       return $this->render('_display',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+        break;
+         case 'empstatus':
+       return $this->render('_displayempstatus',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+        break;
+          case 'musterroll':
+       return $this->render('_displaymusterroll',['model'=>$model,'result'=>
         Json::decode($model->json_value,true)]);
         break;
         default:

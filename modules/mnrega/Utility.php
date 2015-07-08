@@ -8,14 +8,16 @@ class Utility
 parse a table with a given id from the dom and sends result from the column in $colwithvalue
 
 **/
-public function parseTable($link,$tableid,$rowstoskip,$colwithnames,$colswithvalue,&$result,$level=0,$district=0)
+public function parseTable($link,$tableid,$rowstoskip,$colwithnames,$colswithvalue,&$result,$level=0,$district=0,$debug=0)
 {
 //Test
 //$link="http://localhost/basicmnrega/web/images/page1.html";
 error_reporting(0);
+ if ($debug) print 'parsing '.$link;
+ if ($level<0) return;
 if ($level==0)
 {
- print 'parsing '.$link;
+
  $result['link']=$link;
  }
 
@@ -59,7 +61,7 @@ $options = array(
 
 $context = stream_context_create($options);
 $data = file_get_contents($link,false,$context);
-print_r($data);
+//if ($debug) print_r($data);
 //if (!($data contains 'Total')) return;
  //if ($level<2)
  //exit;
@@ -77,11 +79,13 @@ print_r($data);
        else
        $table = $dom->getElementById($tableid);
        //print "tableid=$tableid";
-      // var_dump($table);
+      //var_dump($table);
        if ($table)
        $rows = $table->getElementsByTagName('tr');
+    
        else
         return [];
+      //  var_dump($rows);
       $i=0;
        $m=date('m');
        $y=date('Y');
