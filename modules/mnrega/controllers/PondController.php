@@ -26,7 +26,21 @@ class PondController extends Controller
             ],
         ];
     }
-
+/**
+     * Lists all Pond models.
+     * @return mixed
+     */
+    public function actionIndex1()
+    {
+        $searchModel = new PondSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+       
+        
+        return $this->render('index2', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model'=>new \app\modules\mnrega\models\Pond        ]);
+    }
     /**
      * Lists all Pond models.
      * @return mixed

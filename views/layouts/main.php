@@ -118,9 +118,10 @@ AppAsset::register($this);
             ]],
           ['label' => 'Ponds', 'url' => ['#'],'options'=>['class'=>'dropdown']
             ,'items'=>[ 
-                ['label' => 'Data Entru', 'url' => ['/mnrega/pond/create'],'options'=>['class'=>'dropdown']],
+                ['label' => 'Data Entry', 'url' => ['/mnrega/pond/create'],'options'=>['class'=>'dropdown']],
                 
 ['label' => 'View List', 'url' => ['/mnrega/pond/index'],'options'=>['class'=>'dropdown']],
+['label' => 'View Entire List', 'url' => ['/mnrega/pond/index1'],'options'=>['class'=>'dropdown']],
                
             ],
     ],
@@ -137,7 +138,7 @@ AppAsset::register($this);
         
         Yii::$app->user->isGuest ?
         ['label' => 'Login', 'url' => ['/users/user/login']] :
-        ['label' => \app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->name_en.' (' . Yii::$app->user->identity->username . ')',
+        ['label' => \app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()?\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->name_en:'missing'.' (' . Yii::$app->user->identity->username . ')',
             'url' => ['/users/user/logout'],
             'items'=>[
             ['label'=>'Change Password','url'=>['/users/user/changepassword']],
