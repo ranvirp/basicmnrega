@@ -250,15 +250,10 @@ class Designation extends \app\modules\users\MyActiveRecord
 		      }
 		   
      }
-     public function beforeSave($insert)
-     {
-     if ($insert)
-     {
-      // $this->name_en=$this->designationType?$this->designationType->name_en:''.','.$this->level?$this->level->name_en:'';
-       //$this->name_hi=$this->designationType?$this->designationType->name_hi:''.','.$this->level?$this->level->name_hi:'';
-      }
-      return parent::beforeSave($insert);
-       
-     }
+ public static function getDesignationByUser($userid)
+ {
+   return Designation::find()->where(['officer_userid'=>$userid])->one()->id;
+ }
+     
 	
 }

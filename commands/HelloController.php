@@ -96,6 +96,16 @@ public function actionCad($designationtype)//Create All Designations
      
      
      }
+     public function actionBlock()
+     {
+      $blocks=\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\Block::find()->orderBy('name_en asc')->asArray()->all(),'code','name_en');
+      //file_put_contents('/Users/mac/jsons/district.json',json_encode($districts));
+      
+      file_put_contents('/Users/mac/htdocs/basicmnrega/web/jsons/'.'block'.'.json',json_encode($blocks));
+      
+     
+     
+     }
      
     public function actionIndex($message = 'hello world')
     {

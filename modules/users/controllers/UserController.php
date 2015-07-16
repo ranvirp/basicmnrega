@@ -64,7 +64,7 @@ class UserController extends Controller
         return $this->render('index');
     }
 
-    public function actionLogin()
+    public function actionLogin($returnurl='')
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -72,6 +72,9 @@ class UserController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+         if ($returnurl!='')
+           return $this->redirect($returnurl);
+           else
             return $this->goHome();
         } else {
             return $this->render('login', [

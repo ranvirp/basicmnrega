@@ -40,6 +40,22 @@ marker =new L.marker([gpslat,gpslong]);
       map.panTo(new L.latLng(gpslat,gpslong)); 
 
 }
+
+
+    function hindiEnable(elem=$('.hindiinput')){
+             var options = {
+          sourceLanguage:
+              google.elements.transliteration.LanguageCode.ENGLISH,
+          destinationLanguage:
+              [google.elements.transliteration.LanguageCode.HINDI],
+          shortcutKey: 'ctrl+g',
+          transliterationEnabled: true
+      };
+            google_control =
+          new google.elements.transliteration.TransliterationControl(options);
+        google_control.makeTransliteratable(elem);
+    }
+       
 /*
 function updateClock ( )
  	{

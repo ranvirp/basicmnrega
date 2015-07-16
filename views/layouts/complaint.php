@@ -53,14 +53,50 @@ AppAsset::register($this);
         <div class="form-title-span" style="text-align:center">
          <h1>मनरेगा शिकायत प्रबंधन</h1>
         </div>
-    </div>  
-        <div class="container small">
+    </div> 
+    <?php
+      echo '<div class="menubar">';
+            echo Nav::widget([
+            
+    'items' => [
+      
+        Yii::$app->user->isGuest ?
+        ['label' => 'Login', 'url' => ['/users/user/login?returnurl='.Url::to(['/complaint'])] ]:
+        ['label' => \app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()?\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->name_en:'missing'.' (' . Yii::$app->user->identity->username . ')',
+            'url' => ['/users/user/logout'],
+            'items'=>[
+            ['label'=>'Change Password','url'=>['/users/user/changepassword']],
+            ['label'=>'Logout','url'=>['/users/user/logout'],'linkOptions' => ['data-method' => 'post']],
+            ]
+            ],],'options'=>['class'=>'nav navbar-nav pull-right']
+]);
+echo '</div>';
+?>
+    <div class="row">
+    <?php if (!Yii::$app->user->isGuest) {?>
+    <div class="col-md-3">
+                <section class="panel">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked">
+                       <li  class="active"> <a href='#'><span class="badge pull-right">25</span>Inbox</a></li>
+                        <li  class=""> <a href='#'><span class="badge pull-right">5</span>WorkDemand</a></li>
+                       <li  class=""> <a href='#'><span class="badge pull-right">10</span>Jobcarddemand</a></li>
+                       <li  class=""> <a href='#'><span class="badge pull-right">10</span>Other complaints</a></li>
+                       
+                    </ul>
+                </div>
+            </section>
+            </div>
+        <div class="col-md-9 small">
+        <?php } else { ?>
+        <div class="col-md-12 small">
+        <?php } ?>
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
             <?= $content ?>
         </div>
-    
+    </div>
 </div>
     <footer class="footer">
         <div class="container">

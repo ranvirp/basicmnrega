@@ -1,12 +1,15 @@
 <?php
 namespace app\modules\mnrega\models;
 use app\modules\users\models\Designation;
+use app\modules\complaint\models\Complaint;
+
 use Yii;
 
 /**
  * This is the model class for table "marking".
  *
  * @property integer $id
+ * @property integer $request_type
  * @property integer $request_id
  * @property integer $sender
  * @property integer $receiver
@@ -22,6 +25,15 @@ class Marking extends \yii\db\ActiveRecord
 {
    const STATUS_PENDING=0;
    const STATUS_DISPOSED=1;
+   public static function mapping()
+    {
+     return [
+               'jobdemand'=>'\app\modules\complaint\models\jobdemand',
+               'workdemand'=>'\app\modules\complaint\models\workdemand',
+               'complaint'=>'\app\modules\complaint\models\complaint',
+            ];
+                
+    }
     /**
      * @inheritdoc
      */
@@ -37,7 +49,7 @@ class Marking extends \yii\db\ActiveRecord
     {
         return [
             [['request_id', 'sender', 'receiver', 'create_time', 'update_time', 'read_time'], 'integer'],
-            [['dateofmarking', 'deadline'], 'safe']
+            [['dateofmarking', 'deadline','request_type'], 'safe']
         ];
     }
 
@@ -66,6 +78,11 @@ class Marking extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Request::className(), ['id' => 'request_id']);
     }
+    public function getComplaint()
+    {
+       if ($this->request_type=='complaint')
+       return Complaint::find()->where(['id'=>$this->request_id]);
+     }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -162,16 +179,28 @@ class Marking extends \yii\db\ActiveRecord
 			   return $this->id;			    break;
 									
 			case 'request_id':
-			   return Request::findOne($this->request_id)->$name;			    break;
+			   return $this->request_id;			    break;
 									
 			case 'sender':
-			   return $this->sender;			    break;
+			   $designation=Designation::findOne($this->sender);
+			   if ($designation)
+			     return $designation->name_en;
+			    else
+			      return $this->sender;
+			   break;
 									
 			case 'receiver':
-			   return $this->receiver;			    break;
+			   $designation=Designation::findOne($this->receiver);
+			   if ($designation)
+			     return $designation->name_en;
+			    else
+			      return $this->receiver;break;
 									
 			case 'dateofmarking':
 			   return $this->dateofmarking;			    break;
+			case 'status':
+			   return $this->status==0?'Pending':'Solved';
+			   break;
 									
 			case 'deadline':
 			   return $this->deadline;			    break;
@@ -193,5 +222,15 @@ class Marking extends \yii\db\ActiveRecord
     {
       return $this->id;
     }
+    /*
+    public function show($request_type,$request_id)
+    {
+      $marking=new MarkingSearch;
+      $marking->request_type=$request_type;
+      $marking->request_id=$request_id;
+      $dp =$marking->search([]);
+      return yii\base\Controller::renderPartial('index',['dataProvider'=>$dp,'searchModel'=>$marking]);
+    }
+    */
 	
 }

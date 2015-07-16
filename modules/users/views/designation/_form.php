@@ -70,6 +70,10 @@ $this->registerJs($js);
     <?= $form->field($model, 'officer_email')->textInput(['maxlength' => 50]) ?>
     <?=$form->field($model,'resetpasswd')->checkBox()?>
 	</div>
+				<div class='col-md-12'>
+    <b>User Name:</b><?=$model->officer_userid?\app\modules\users\models\User::findOne($model->officer_userid)->username:'undefined' ?>
+  	</div>
+	
 		</div>
 		
     <?php

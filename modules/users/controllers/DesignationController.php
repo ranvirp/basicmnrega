@@ -128,7 +128,7 @@ class DesignationController extends Controller
             
             if ($model->save())
             {
-             $model->createUserAndRole();
+            // $model->createUserAndRole();
       
             $model = new Designation();; //reset model
             
@@ -152,7 +152,7 @@ class DesignationController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete1($id)
     {
         $this->findModel($id)->delete();
 

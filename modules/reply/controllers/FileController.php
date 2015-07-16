@@ -43,9 +43,9 @@ class FileController extends Controller
      * Lists all File models.
      * @return mixed
      */
-    public function actionIndex($id)
+    public function actionIndex($uniqid)
     {
-        $model = File::findOne($id);
+        $model = File::find()->where(['uniqid'=>$uniqid])->one();
         if (!$model)
           {
             throw new NotFoundHttpException('The requested file does not exist.');
@@ -187,7 +187,7 @@ class FileController extends Controller
 					 $fileModel->title=$file->name;
 				$fileModel->uniqid=$uniqid;
 				$fileModel->save();
-			    $fileModel->url=\yii\helpers\Url::to(['/reply/file?id='.$fileModel->id]);
+			    $fileModel->url=\yii\helpers\Url::to(['/reply/file?uniqid='.$fileModel->uniqid]);
 				$fileModel->uploaded_by = Yii::$app->user->getId();
 				$fileModel->uploaded_at =time();
 				$fileModel->save();

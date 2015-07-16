@@ -21,6 +21,7 @@ if (!is_array($result))
    print "Invalid result array";
    
    else {
+   $blocks=json_decode(file_get_contents(__DIR__."/../../../../web/jsons/block.json"),true);
    /*
                   $targetkey=4;
                   $achkey=5;
@@ -88,7 +89,10 @@ if (!is_array($result))
                   $women=15;
                   $st=12;
                   $sc=11;
-                  if (is_numeric($res1))
+                //  if (strcmp(substr($res1,0,4),$dis->code)!=0)
+                // if (is_numeric($res1))
+                  if (!array_key_exists($res1,$blocks))
+              
                     {
                       $pda=$pda-1;
                       $cumhhd=$cumhhd-1;
@@ -115,12 +119,22 @@ if (!is_array($result))
                     
                     
                     print '<tr>'.'<td>'.$res.'</td>';
-                    if (is_numeric($res1))
+                     // if (strcmp(substr($res1,0,4),$dis->code)!=0)
+                if (!array_key_exists($res1,$blocks))
+                    
+                    //if (is_numeric($res1))
                     {
+                    //print '<td>'.substr($res1,0,4).'-'.$dis->code.'</td>';
                      print '<td>Total</td>';
                      }
                      else
+                     {
+                     if (array_key_exists($res1,$blocks))
+                    print '<td>'.$blocks[$res1].'</td>';
+                    else 
                     print '<td>'.$res1.'</td>';
+                    
+                    }
                     print '<td>'.$res1Arr[$cumhhd].'</td>'
                     .'<td>'.$res1Arr[$cumhhp].'</td>'
                     .'<td>'.$res1Arr[$hhmonth].'</td>'

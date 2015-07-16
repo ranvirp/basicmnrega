@@ -98,7 +98,7 @@ class DefaultController extends Controller
 			{
 			$x=[];
 			foreach ($model->attachments as $attachment)
-			  if($attachment!='') $x[]=$attachment; //remove blank fields
+			  if(is_numeric($attachment)) $x[]=$attachment; //remove blank fields
 			$model->attachments=implode(",",$x);
 			}
 		    else

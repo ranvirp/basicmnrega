@@ -10,11 +10,7 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'Markings');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php if ($model!=null):?><div class="col-md-6">
-<?=$this->render('_form',['model'=>$model]) ?></div>
-<div class="col-md-6">
-<?php else:?><div class="col-md-12">
-<?php endif;?><div class="marking-index">
+<div class="marking-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -30,12 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-['header'=>'id',
-'attribute'=>'id',
-'value'=>function($model,$key,$index,$column)
-{
-                return $model->showValue('id');
-},],['header'=>'request_id',
+'request_type',['header'=>'request_id',
 'attribute'=>'request_id',
 'value'=>function($model,$key,$index,$column)
 {
@@ -55,14 +46,20 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('dateofmarking');
-},],            // 'deadline',
+},],             'deadline',
+['header'=>'Status',
+'attribute'=>'status',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('status');
+},],
             // 'create_time:datetime',
             // 'update_time:datetime',
             // 'read_time:datetime',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-        'tableOptions'=>['class'=>'small'],
+        'tableOptions'=>['class'=>'table table-hover'],
         ]); ?>
 
 </div>

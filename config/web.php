@@ -7,7 +7,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'homeUrl'=>'/basicmnrega/web/index.php',
-   'language'=>'en',
+   'language'=>'hi',
     'components' => [
     'assetManager'=>['linkAssets'=>true],
     'authManager' => [

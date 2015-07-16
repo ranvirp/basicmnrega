@@ -23,7 +23,8 @@
         "arogachev/yii2-excel": "^0.1.0",
         "kartik-v/yii2-widget-datepicker": "*",
         "2amigos/yii2-gallery-widget": "~1.0",
-        "zendesk/zendesk_api_client_php": "dev-master"
+        "zendesk/zendesk_api_client_php": "dev-master",
+        "wbraganca/yii2-dynamicform": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

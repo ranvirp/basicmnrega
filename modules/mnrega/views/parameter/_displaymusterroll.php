@@ -21,7 +21,8 @@ if (!is_array($result))
    print "Invalid result array";
    
    else {
-  
+    $blocks=json_decode(file_get_contents(__DIR__."/../../../../web/jsons/block.json"),true);
+ 
 ?>
 <div class="bordered-form parameter-form">
   <div class="form-title">
@@ -74,12 +75,13 @@ if (!is_array($result))
                     
                     
                     print '<tr>'.'<td>'.$res.'</td>';
-                    if (is_numeric($res1))
+                    if (!array_key_exists($res1,$blocks))
+                   // if (is_numeric($res1))
                     {
                      print '<td>Total</td>';
                      }
                      else
-                    print '<td>'.$res1.'</td>';
+                    print '<td>'.$blocks[$res1].'</td>';
                     print '<td>'.$res1Arr[$mustroll].'</td>'
                     .'<td>'.$res1Arr[$mustrollfilled].'</td>'
                     .'<td>'.$res1Arr[$withoutpaymentdate].'</td>'

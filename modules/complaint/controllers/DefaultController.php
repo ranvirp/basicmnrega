@@ -18,5 +18,11 @@ class DefaultController extends Controller
        return $this->render('jobdemand',['model'=>$model]);
       
     }
+    public function actionComplaint()
+    {
+       $model=new \app\modules\complaint\models\JobDemand;
+       return $this->render('jobdemand',['model'=>$model]);
+      
+    }
     
 }

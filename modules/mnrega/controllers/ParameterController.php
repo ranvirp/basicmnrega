@@ -351,6 +351,10 @@ else
        return $this->render('_displaymusterroll',['model'=>$model,'result'=>
         Json::decode($model->json_value,true)]);
         break;
+        case 'overall':
+       return $this->render('_displayoverall',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+        break; 
         default:
         return $this->render('_displaygeneral',['model'=>$model,'result'=>Json::decode($model->json_value,true)]);
         break;
@@ -360,6 +364,11 @@ else
       
       }
       
+    }
+    public function actionRanking()
+    {
+      return $this->render('_displayoverall');
+       
     }
     public function actionGetarray($id)
       {

@@ -1,7 +1,9 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
+use app\assets\AppAssetGoogle;
 use app\modules\users\models\DesignationType;
 
 /* @var $this yii\web\View */
@@ -29,11 +31,13 @@ $(\"#toggleButton\").click(function () {
 });
 ";
 $this->registerJs($js);
+AppAssetGoogle::register($this);
 
 $this->title = Yii::t('app', 'Designations');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <button class="btn btn-success" id="toggleButton">Hide Grid</button>
+<a href="<?=Url::to(['/users/designation/create'])?>"><button class="btn btn-success" >Create Designation</button></a>
 
 <?php if ($model!=null):?><div class="col-lg-6" id="designation-form">
 <?=$this->render('_form',['model'=>$model]) ?></div>
@@ -66,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
 {
                 return $model->designationType->level?$model->designationType->level->name_en:'Not Found'
                 //.print_r($model->level,true);
-                //.':'.($model->level)?$model->level->name_en:'Not Found';
+                .':'.($model->level)?$model->level->name_en:'Not Found';
                 ;
 },],['header'=>'Officer Name in Hindi',
 'value'=>function($model,$key,$index,$column)
