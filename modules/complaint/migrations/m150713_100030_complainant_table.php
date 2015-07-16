@@ -38,7 +38,7 @@ class m150713_100030_complainant_table extends Migration
             'block_code'=>Schema::TYPE_STRING.'(7) NOT NULL',
             'panchayat_code'=>Schema::TYPE_STRING.'(12) NOT NULL',
             'panchayat'=>Schema::TYPE_STRING.'(100) NOT NULL',
-            'status'=>Schema::TYPE_INTEGER.'default 0',
+            'status'=>Schema::TYPE_INTEGER.' default 0',
             'attachments'=>Schema::TYPE_TEXT,
             'author'=>Schema::TYPE_INTEGER,
             'create_time'=>Schema::TYPE_INTEGER,
