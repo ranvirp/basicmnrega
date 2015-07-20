@@ -325,7 +325,7 @@ public $captcha;
         if (!array_key_exists('designation',$markings) )return;
                 foreach ($markings['designation'] as $x=>$designation_id)
                     {
-                        $this->markToDesignation($this->id,$designation,$deadline);
+                        $this->markToDesignation($this->id,$designation_id,$deadline);
                   
                     }
         
