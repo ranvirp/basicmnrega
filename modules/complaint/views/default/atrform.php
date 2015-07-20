@@ -29,6 +29,13 @@ div.required label:after {
 {
  padding:5px;
 }
+.text-heading
+{
+ font-size:170%;
+ background:#A3A4A3;
+ margin:5px;
+ text-align:center
+}
 </style>
 <script>
  function _count1($elem) {
@@ -39,11 +46,9 @@ div.required label:after {
 <?php AppAssetGoogle::register($this);?>
  <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 <div class="col-sm-12 well">
-<div class="row">
-<div class="col-lg-6"><p class="bg-primary">Complaint Details</p></div><div class="col-lg-6"><p class="bg-success">Enquiry Report Summary</p></div>
-   </div>
-   <div class="row">
-    <div class="col-lg-6">
+<div class="col-lg-5 text-heading" >शिकायत का विवरण</div>
+<div class="col-lg-5 text-heading">जांच आख्या</div>
+    <div class="col-lg-5" style="margin:5px">
     
    <?= DetailView::widget([
         'model' => $model,
@@ -69,55 +74,65 @@ div.required label:after {
       $enquiryreportsummary->complaint_id=$model->id;
       }
     ?>
-    <div class="col-lg-6">
+    <div class="col-lg-5" style="margin:5px">
     <div class="col-md-12">
-     <?= $form->field($enquiryreportsummary,"author")->widget(\app\modules\users\widgets\DesignationWidget::className())?>
-    </div>
+     <?= $enquiryreportsummary->showForm($form,"reportby")?>
+      </div>
+    <div class="col-md-12">
     
-    <div class="col-md-3">
-     <?= $form->field($enquiryreportsummary,"complainttrue")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')])?>
-    </div>
-    <div class="col-md-3">
-    
-    <?= $form->field($enquiryreportsummary,"firproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
-   </div>
-   <div class="col-md-3">
-    
-    <?= $form->field($enquiryreportsummary,"daproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
-    </div>
-    <div class="col-md-3">
-    
-    <?= $form->field($enquiryreportsummary,"amountinvolved")->textInput()?>
-    </div>
-     
-   
-   <div class="col-md-12">
-    
-      <?= $form->field($enquiryreportsummary,"description")->textArea(['class'=>'hindiinput'])?>
+      <?= $form->field($enquiryreportsummary,"description")->textArea(['class'=>'hindiinput form-control'])?>
    </div>
    <div class="col-md-12">
    
       <?= $form->field($enquiryreportsummary,"attachments")->widget(\app\modules\reply\widgets\FileWidget::className())?>
     </div>
+   
+    <div class="col-md-12">
+    <?php if (!isset($enquiryreportsummary->complainttrue)) $enquiryreportsummary->complainttrue='2';?>
+     <?= $form->field($enquiryreportsummary,"complainttrue")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')],['itemOptions'=>['onClick'=>'if ($(this).val()=="0") $("#complainttrue").hide(); else $("#complainttrue").show(); ' ]])?>
+    </div>
+    <div id="complainttrue">
+    <div class="col-md-12">
+    
+    <?= $form->field($enquiryreportsummary,"firproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
+   </div>
+   <div class="col-md-12">
+    
+    <?= $form->field($enquiryreportsummary,"daproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
+    </div>
+    <div class="col-md-12">
+    
+    <?= $form->field($enquiryreportsummary,"amountinvolved")->textInput()?>
+    </div>
+    
     
      </div>
+    </div>
       
     
 </div>
-</div>
 <div class="col-sm-12 ">
-<div class="row">
-<div class="col-lg-6 well">Complaint Points </div><div class="col-lg-6 well">Enquiry Report Point Wise</div>
-   </div>
+<div class="col-lg-5 text-heading" style="margin:5px">शिकायत के अन्य बिंदु</div>
+<div class="col-lg-5 text-heading" style="margin:5px">बिंदु वार जांच आख्या</div>
+
    
 <?php foreach ($model->complaintPoints as $cp) {?>
    <div class="row">
-    <div class="col-lg-6 well">
+    <div class="col-lg-5" style="margin:5px">
 
-    <?=$cp->showValue('id')?>
-    <?=$cp->showValue('complaint_type')?>
-    <?=$cp->showValue('complaint_subtype')?>
-    <?=$cp->showValue('description')?>
+     <?= DetailView::widget([
+        'model' => $cp,
+        'attributes' => [
+            'id',
+            ['attribute'=>'complaint_type',
+            'value'=>$cp->showValue('complaint_type'),
+            ],
+            ['attribute'=>'complaint_subtype',
+            'value'=>$cp->showValue('complaint_subtype')],
+            'description',
+
+        ],
+    ]) ?>
     <?=\app\modules\reply\models\File::showAttachmentsInline($cp,"attachments")?>
     </div>
     <?php 
@@ -129,9 +144,9 @@ div.required label:after {
          $enquiryreportpoint->complaint_point_id=$complaint_point_id;
       }
     ?>
-    <div class="col-lg-6 well">
+    <div class="col-lg-5" style="margin:5px">
     <div class="col-md-12">
-      <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]report")->textArea(['class'=>'hindiinput'])?>
+      <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]report")->textArea(['class'=>'hindiinput form-control'])?>
    
       <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]attachments")->widget(\app\modules\reply\widgets\FileWidget::className())?>
     </div>

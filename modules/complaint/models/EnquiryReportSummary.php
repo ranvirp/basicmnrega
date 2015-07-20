@@ -35,7 +35,7 @@ class EnquiryReportSummary extends \yii\db\ActiveRecord
     {
         return [
             [['complaint_id', 'complainttrue', 'firproposed', 'daproposed', 'author', 'create_time', 'update_time'], 'integer'],
-            [['description',  'amountinvolved'], 'string'],
+            [['description',  'amountinvolved','reportby'], 'string'],
              [['attachments'],'safe'],
         ];
     }
@@ -118,6 +118,10 @@ class EnquiryReportSummary extends \yii\db\ActiveRecord
 									
 			case 'daproposed':
 			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+			case 'reportby':
+			   return  $form->field($this,$attribute)->textArea();
 			    
 			    break;
 									

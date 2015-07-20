@@ -33,7 +33,9 @@ div.required label:after {
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
     <div class="row">
     <div class="col-md-5">    
-     <?=$modelComplaint->showForm($form,'source')?>  
+     <?=$modelComplaint->showForm($form,'source')?> 
+     <?= $form->field($modelComplaint, 'manualno')->textInput() ?>
+     
    <table class="table table-hover well">
    <caption>शिकायतकर्ता का विवरण</caption>
     <tr>
@@ -91,18 +93,25 @@ div.required label:after {
             <?= $modelComplaint->showForm($form,'block_code') ?>
        
             <?= $modelComplaint->showForm($form,'panchayat_code') ?>
+             <?= $modelComplaint->showForm($form,'panchayat') ?>
         </div>
          
       
 
         <div class="col-sm-4">
-        <p> Marked to </p><hl>
+       
+<?php if (Yii::$app->user->can('marktopo')) {?>
+ <p> Marked to </p><hl>
             <div class="checkbox">
   <label><input type="checkbox" name="maintype[]" value="po" checked>सम्बंधित खंड विकास अधिकारी</label>
+<?php };?>
+<?php if (Yii::$app->user->can('marktosqm')) {?>
 
   <label><input type="checkbox" name="maintype[]" value="sqm">सम्बंधित राज्य गुणवत्ता मॉनिटर</label>
-
+<?php };?>
+<?php if (Yii::$app->user->can('marktoothers')){ ?>
   <label><input type="checkbox" name="" onClick="$('#designation-select').toggle()" >Others</label>
+<?php } ?>
 </div>
 <div id="designation-select" style="display:none">
 <div id="form1">
@@ -196,7 +205,9 @@ div.required label:after {
         </div>
     </div><!-- .panel -->
     <?php DynamicFormWidget::end(); ?>
-
+   <div class="form-group">
+   <?= $form->field($modelComplaint, 'captcha')->widget(\yii\captcha\Captcha::classname(),['captchaAction' => '/site/captcha'])?>
+   </div>
     <div class="form-group">
         <?= Html::submitButton($modelComplaintPoint->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
     </div>

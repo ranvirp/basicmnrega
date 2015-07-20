@@ -83,12 +83,30 @@ $config = [
     'gpsphoto'=>['class'=>'app\modules\gpsphoto\Module'],
     'mnrega'=>['class'=>'app\modules\mnrega\Module'],
     'taxonomy'=>['class'=>'app\modules\taxonomy\Module'],
-     'rbac' => [
-        'class' => 'dektrium\rbac\Module',
-        'admins'=>['admin'],
-    ],
+     'admin' => [
+            'class' => 'mdm\admin\Module',
+            'layout' => 'left-menu',
+            'mainLayout' => '@app/views/layouts/main.php',
+            
+        ],
     
     ],
+    /*
+       'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        
+        'allowActions' => [
+            'site/*',
+            //'admin/*',
+            'complaint/*',
+            // The actions listed here will be allowed to everyone including guests.
+            // So, 'admin/*' should not appear here in the production, of course.
+            // But in the earlier stages of your development, you may probably want to
+            // add a lot of actions here until you finally completed setting up rbac,
+            // otherwise you may not even take a first step.
+        ]
+    ],
+    */
     'params' => $params,
 ];
 

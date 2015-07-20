@@ -28,7 +28,7 @@ class Marking extends \yii\db\ActiveRecord
    public static function mapping()
     {
      return [
-               'jobdemand'=>'\app\modules\complaint\models\jobdemand',
+               'jobcarddemand'=>'\app\modules\complaint\models\jobcarddemand',
                'workdemand'=>'\app\modules\complaint\models\workdemand',
                'complaint'=>'\app\modules\complaint\models\complaint',
             ];
@@ -60,11 +60,12 @@ class Marking extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'request_id' => 'Request ID',
-            'sender' => 'Sender',
-            'receiver' => 'Receiver',
-            'dateofmarking' => 'Dateofmarking',
-            'deadline' => 'Deadline',
+             'request_type' => Yii::t('app','request_type'),
+            'request_id' => Yii::t('app','ID'),
+            'sender' => Yii::t('app','Sender'),
+            'receiver' => Yii::t('app','Receiver'),
+            'dateofmarking' => Yii::t('app','Date of Marking'),
+            'deadline' => Yii::t('app','Deadline'),
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
             'read_time' => 'Read Time',
@@ -80,8 +81,10 @@ class Marking extends \yii\db\ActiveRecord
     }
     public function getComplaint()
     {
-       if ($this->request_type=='complaint')
-       return Complaint::find()->where(['id'=>$this->request_id]);
+       $classmapping=self::mapping();
+       $class=$classmapping[$this->request_type];
+       return $class::find()->where(['id'=>$this->request_id]);
+        
      }
     /**
      * @return \yii\db\ActiveQuery
@@ -221,6 +224,36 @@ class Marking extends \yii\db\ActiveRecord
     public function getView()
     {
       return $this->id;
+    }
+     public static function count1($t='c',$s=0)
+    {
+     $modelSearch= new MarkingSearch;
+         $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
+         $d=$designation->id;
+    if ($t=='c')
+      $modelSearch->request_type='complaint';
+    else
+      if ($t=='wd')
+      $modelSearch->request_type='workdemand';
+     if ($t=='jc')
+      $modelSearch->request_type='jobcarddemand';
+      
+       if (!Yii::$app->user->can('complaintviewall'))
+       $modelSearch->receiver=$d;
+       $modelSearch->status=$s;
+       $dp=$modelSearch->search([]);
+       return $dp->totalCount;
+       
+    }
+    public static function setStatus($request_type,$request_id,$status)
+    {
+       $marking=Marking::find()->where(['request_type'=>$request_type,'request_id'=>$request_id])->one();
+       if ($marking)
+         {
+           $marking->status=$status;
+           $marking->save();
+         }
+    
     }
     /*
     public function show($request_type,$request_id)

@@ -61,4 +61,5 @@ class Complaint_typeSearch extends Complaint_type
 
         return $dataProvider;
     }
-}
+    
+    }

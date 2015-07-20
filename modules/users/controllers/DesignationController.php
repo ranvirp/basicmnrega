@@ -6,6 +6,7 @@ use Yii;
 use app\common\Utility;
 use app\modules\users\models\Designation;
 use app\modules\users\models\DesignationSearch;
+use app\modules\users\models\DesignationType;
 use app\modules\users\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -71,13 +72,9 @@ class DesignationController extends Controller
         {
           if (!($searchmodel=Designation::findOne(['designation_type_id'=>$model->designation_type_id,'level_id'=>$model->level_id])))
            {
-             
-           if (array_key_exists('app\modules\users\models\Designation',Utility::rules()))
-            foreach ($model->attributes as $attribute)
-            if (Utility::rules('Designation') && array_key_exists($attribute,Utility::rules()['app\modules\users\models\Designation']))
-            $model->validators->append(
-               \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\users\models\Designation'][$model->$attribute]['required'])
-            );
+             $designation_type=DesignationType::findOne($model->designation_type_id);
+             $model->name_hi=$designation_type->name_hi.','.$designation_type->level->name_hi;
+             $model->name_en=$designation_type->name_en.','.$designation_type->level->name_en;   
             if ($model->validate())
             {
             $model->createUserAndRole();

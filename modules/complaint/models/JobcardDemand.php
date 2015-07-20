@@ -235,7 +235,7 @@ case 'name_hi':
          $d=$designation->id;
       $modelSearch->request_type='jobcarddemand';
       
-       if (Yii::$app->user->id!=1)
+       if (!Yii::$app->user->can('complaintviewall'))
        $modelSearch->receiver=$d;
        $modelSearch->status=0;
        $dp=$modelSearch->search([]);

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\assets\AppAssetGoogle;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Reply */
@@ -13,10 +14,10 @@ use yii\widgets\ActiveForm;
 		font-size:80%;
 		
 		width:90%;
-		padding:60px;
+		//padding:60px;
 	}
 	</style>
-	
+<?php AppAssetGoogle::register($this);?>	
 <div class="reply-form">
 	<h3><strong>Add Reply:</strong></h3>
 
@@ -29,7 +30,7 @@ use yii\widgets\ActiveForm;
 
     <?= Html::hiddenInput('ctid', $model->content_type_id) ?>
 
-    <?= $form->field($model, 'content')->textarea(['rows' => 3]) ?>
+    <?= $form->field($model, 'content')->textarea(['rows' => 3,'class'=>'hindiinput form-control','onClick'=>'js:hindiEnable()']) ?>
 
     <?= 
 		$form->field($model, 'attachments')->widget(\app\modules\reply\widgets\FileWidget::classname()) 

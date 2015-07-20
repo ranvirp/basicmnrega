@@ -28,6 +28,7 @@ use app\modules\mnrega\models\MarkingSearch;
 class Complaint extends \yii\db\ActiveRecord
 {
 public $marking;
+public $captcha;
     /**
      * @inheritdoc
      */
@@ -82,8 +83,11 @@ public $marking;
             [['jobcardno'], 'string', 'max' => 15],
             [['block_code'], 'string', 'max' => 7],
             [['panchayat_code'], 'string', 'max' => 12],
+             [['panchayat'], 'string', 'max' => 100],
+           
              [['attachments','marking'], 'safe'],
-             [['source'],'string'],
+             [['source','manualno'],'string'],
+             [['captcha'],'captcha'],
         ];
     }
 
@@ -197,10 +201,13 @@ public $marking;
 			case 'panchayat_code':
 			   return  
 			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'complaint-panchayat',
-			   'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());$('#workid').val($(this).val()+'/')",'class'=>'form-control']);
+			   'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());",'class'=>'form-control']);
 			    
 			    break;
-									
+			case 'panchayat':
+			   return  
+			   $form->field($this,$attribute)->hiddenInput(['id'=>'panchayat-name'])->label(false);
+			    break;						
 			case 'attachments':
 			   return  
 			
@@ -272,19 +279,55 @@ public $marking;
 			break;
 		  }
     }
-    public static function count1()
+   
+	public function getView()
     {
-     $modelSearch= new MarkingSearch;
-         $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
-         $d=$designation->id;
-      $modelSearch->request_type='complaint';
-      
-       if (Yii::$app->user->id!=1)
-       $modelSearch->receiver=$d;
-       $modelSearch->status=0;
-       $dp=$modelSearch->search([]);
-       return $dp->totalCount;
+      return $this->name_hi;
+    }
+    public function _createMarking()
+    {
+       if (!Yii::$app->user->can('complaintmarking'))
+	      return;
+	     //Now create markings
+	    $markings=$this->marking;
+	    //  print_r($markings);
+	     // exit;
+       
+        $maintype=Yii::$app->request->post('maintype');
+        $deadline=$markings['deadline'];
+        foreach ($maintype as $x)
+            {
+                switch ($x)
+                    {
+                       case 'po':
+                       if (!Yii::$app->user->can('marktopo'))
+                            break;
+                        //find block -
+                           $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$this->block_code])->one()->id;
+                           $this->markToDesignation($this->id,$designation,$deadline);
+                         break;
+                         case 'sqm':
+                          if (!Yii::$app->user->can('marktosqm'))
+                            break;
+                        //find block -
+                           $sqmdt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'sqm'])->one();
+                           if(!$sqmdt) break;
+                           $sqmdtid=$podt->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one()->id;
+                            $this->markToDesignation($this->id,$designation,$deadline);
+                         break;
+                         default: break;
+                        }
+            }
+        if(!Yii::$app->user->can('marktodesignation')) return;
+        if (!array_key_exists('designation',$markings) )return;
+                foreach ($markings['designation'] as $x=>$designation_id)
+                    {
+                        $this->markToDesignation($this->id,$designation,$deadline);
+                  
+                    }
+        
        
     }
-	
 }

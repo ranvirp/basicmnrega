@@ -63,7 +63,7 @@ return [
     'just now' => '',
     'the input value' => '',
     '{attribute} "{value}" has already been taken.' => '',
-    '{attribute} cannot be blank.' => '',
+    '{attribute} cannot be blank.' => '{attribute} अनिवार्य फील्ड है',
     '{attribute} is invalid.' => '',
     '{attribute} is not a valid URL.' => '',
     '{attribute} is not a valid email address.' => '',

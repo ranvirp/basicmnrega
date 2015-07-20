@@ -6,8 +6,12 @@ use Yii;
 use app\common\Utility;
 use app\modules\complaint\models\WorkDemand;
 use app\modules\complaint\models\WorkDemandSearch;
+use app\modules\complaint\models\WorkDemandReport;
+use app\modules\mnrega\models\Marking;
 
 
+
+use yii\db\Query;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -77,8 +81,21 @@ class WorkdemandController extends Controller
             $model->author=0;
             else
             $model->author=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-            if ($model->save())
+             if ($model->save())
             {
+                $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
+                $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$model->block_code])->one();
+                if ($designtion)
+                {
+                   $model->markToDesignation($designation->id);
+                   $transaction->commit();
+                   $this->redirect('view',['id'=>$model->id]);
+                }
+                else 
+                  {
+                    $transaction->rollBack();
+                  }
+            
             $model = new WorkDemand(); //reset model
             }
             else 
@@ -87,12 +104,7 @@ class WorkdemandController extends Controller
              }
         }
  
-        $searchModel = new WorkDemandSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
- 
         return $this->render('create', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
             'model' => $model,
             
         ]);
@@ -105,7 +117,7 @@ class WorkdemandController extends Controller
      * @param integer $id
      * @return mixed
      */
-        public function actionUpdate($id)
+        public function action1Update($id)
     {
          $model = $this->findModel($id);
        
@@ -134,8 +146,9 @@ class WorkdemandController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function action1Delete($id)
     {
+        
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -156,12 +169,85 @@ class WorkdemandController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function actionFilereport($id)
+    public function actionFilereport($id,$returnurl='')
      {
         if (($model = WorkDemand::findOne($id)) !== null) {
-            return $this->render('atr',['model'=>$model]);
-        } else {
+          $workdemandreport=WorkDemandReport::find()->where(['work_demand_id'=>$model->id])->one();
+           if (!$workdemandreport)
+           $workdemandreport=new WorkDemandReport;
+           $workdemandreport->work_demand_id=$model->id;
+           $workdemandreport->load(Yii::$app->request->post());
+           if ($workdemandreport->save())
+            {
+              Marking::setStatus('workdemand',$model->id,1);
+           
+              if ($returnurl!='')
+                  return $this->redirect($returnurl);
+              else 
+               
+                \Yii::$app->getSession()->setFlash('message', 'Report Submitted!!!');
+             }
+              else
+                      \Yii::$app->getSession()->setFlash('message', 'Error in submitting form');
+          
+            return $this->render('atr',['model'=>$model,'workdemandReport'=>$workdemandreport]);
+                }
+        else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+     }
+ public function actionMy1($t='c',$d=-1)
+    {
+       $modelSearch= new MarkingSearch;
+       if ($d==-1)
+       {
+         $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
+         $d=$designation->id;
+       }
+       if (!Yii::$app->user->can('complaintviewall'))
+       $modelSearch->receiver=$d;
+       $modelSearch->status=0;
+       if ($t=='c')
+       $modelSearch->request_type='complaint';
+       else if ($t=='wd') 
+         $modelSearch->request_type='workdemand';
+       else if ($t=='jc') 
+         $modelSearch->request_type='jobcarddemand';
+     
+     
+       $dp=$modelSearch->search([]);
+       return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
+    }
+      public function actionMy()
+     {
+        $query = new Query;
+	    $query  ->select('workdemand.id as id,workdemand.name_hi as cname,fname,mobileno,address,district.name_en as dname,block.name_en as bname,panchayat,
+	    ') 
+	        ->from('workdemand')
+	        ->join(  'RIGHT JOIN',
+	                'marking',
+	                'marking.request_id =workdemand.id and marking.request_type=\'workdemand\' and marking.status=0'
+	            )
+	           ->join(  'INNER JOIN',
+	                'district',
+	                'district.code =workdemand.district_code'
+	            ) 
+	             ->join(  'INNER JOIN',
+	                'block',
+	                'block.code =workdemand.block_code'
+	            );
+    $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+
+	if (!Yii::$app->user->can('complaintviewall'))
+       $query->where(['receiver'=>$d]);
+        $dp= new ActiveDataProvider([
+         'query' => $query,
+         'pagination' => [
+            'pageSize' => 20,
+          ],
+        ]);
+        return $this->render('index1',['dataProvider'=>$dp]);
+     
+     
      }
 }

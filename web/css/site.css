@@ -99,6 +99,9 @@ a.desc:after {
  .form-title
   {
     background-color: #3c68b9;
+     background:url('<?=Yii::getAlias('@web').'/web/images/middle_s.gif'?>');
+     background-size: 100%;
+    
     border-radius: 4px 4px 0 0;
     color: rgb(230, 230, 230);
     font-family: Arial,sans-serif;
@@ -115,4 +118,4 @@ a.desc:after {
     padding:20px;
     font-size:12px;
    }
-
+  

@@ -29,6 +29,13 @@ div.required label:after {
 {
  padding:5px;
 }
+.text-heading
+{
+ font-size:170%;
+ background:#A3A4A3;
+ margin:5px;
+ text-align:center
+}
 </style>
 <script>
  function _count1($elem) {
@@ -39,11 +46,9 @@ div.required label:after {
 <?php AppAssetGoogle::register($this);?>
  <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 <div class="col-sm-12 well">
-<div class="row">
-<div class="col-lg-6">Complaint Details</div><div class="col-lg-6">Enquiry Report Summary</div>
-   </div>
-   <div class="row">
-    <div class="col-lg-6">
+<div class="col-lg-5 text-heading" >जॉब कार्ड की मांग का विवरण</div>
+<div class="col-lg-5 text-heading">कार्यवाही का विवरण</div>
+    <div class="col-lg-5"  style="margin:5px">
     
      <?= DetailView::widget([
         'model' => $model,
@@ -64,30 +69,29 @@ div.required label:after {
 
     </div>
     <?php 
-      $jobcarddemandReport=JobcarddemandReport::find()->where(['jobcarddemand_id'=>$model->id])->one();
-      if (!$jobcarddemandReport) $jobcarddemandReport=new JobcarddemandReport;
+    //  $jobcarddemandReport=JobcarddemandReport::find()->where(['jobcarddemand_id'=>$model->id])->one();
+     // if (!$jobcarddemandReport) $jobcarddemandReport=new JobcarddemandReport;
     ?>
-    <div class="col-lg-6">
+    <div class="col-lg-5"  style="margin:5px">
     
     
     <div class="col-md-3">
      <?= $form->field($jobcarddemandReport,"complainttrue")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')])?>
     </div>
      
-   <div class="col-md-3">
-     <?= $form->field($jobcarddemandReport,"description")->textArea()?>
+   <div class="col-md-12">
+     <?= $form->field($jobcarddemandReport,"description")->textArea(['class'=>'hindiinput form-control'])?>
     </div>
    <div class="col-md-12">
     
       <?= $form->field($jobcarddemandReport,"jobcardno")->textInput()?>
    </div>
-   
-     </div>
+    <div class="form-group col-md-12">
+        <?= Html::submitButton($jobcarddemandReport->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
+    </div>
+
       
     
 </div>
 </div>
 
- <div class="form-group">
-        <?= Html::submitButton($jobcarddemandReport->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
-    </div>

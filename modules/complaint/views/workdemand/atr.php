@@ -29,6 +29,13 @@ div.required label:after {
 {
  padding:5px;
 }
+.text-heading
+{
+ font-size:170%;
+ background:#A3A4A3;
+ margin:5px;
+ text-align:center
+}
 </style>
 <script>
  function _count1($elem) {
@@ -39,11 +46,9 @@ div.required label:after {
 <?php AppAssetGoogle::register($this);?>
  <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 <div class="col-sm-12 well">
-<div class="row">
-<div class="col-lg-6">Complaint Details</div><div class="col-lg-6">Enquiry Report Summary</div>
-   </div>
-   <div class="row">
-    <div class="col-lg-6">
+<div class="col-lg-5 text-heading">कार्य की मांग का विवरण</div>
+<div class="col-lg-5 text-heading">कार्यवाही का विवरण</div>
+    <div class="col-lg-5 " style="margin:5px">
     
      <?= DetailView::widget([
         'model' => $model,
@@ -64,19 +69,20 @@ div.required label:after {
 
     </div>
     <?php 
-      $workdemandReport=WorkdemandReport::find()->where(['work_demand_id'=>$model->id])->one();
-      if (!$workdemandReport) $workdemandReport=new WorkdemandReport;
+   //   $workdemandReport=WorkdemandReport::find()->where(['work_demand_id'=>$model->id])->one();
+     // if (!$workdemandReport) $workdemandReport=new WorkdemandReport;
     ?>
-    <div class="col-lg-6">
+    <div class="col-lg-5" style="margin:5px">
     
     
     <div class="col-md-3">
      <?= $form->field($workdemandReport,"complainttrue")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')])?>
     </div>
      
-   <div class="col-md-3">
-     <?= $form->field($workdemandReport,"description")->textArea()?>
+   <div class="col-md-9">
+     <?= $form->field($workdemandReport,"description")->textArea(['class'=>'form-control hindiinput'])?>
     </div>
+    <p> कार्य देने का विवरण</p>
    <div class="col-md-12">
     
       <?= $form->field($workdemandReport,"work_id")->textInput()?>
@@ -85,13 +91,13 @@ div.required label:after {
     
       <?= $form->field($workdemandReport,"workname")->textInput()?>
    </div>
-   
+   <div class="form-group col-md-12">
+        <?= Html::submitButton($workdemandReport->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
+    </div>
+
      </div>
       
     
 </div>
-</div>
 
- <div class="form-group">
-        <?= Html::submitButton($workdemandReport->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
-    </div>
+ 

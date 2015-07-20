@@ -54,24 +54,24 @@ margin-left:150px;
     
     ?>
     </div>
-    <div class="centered"
+    
 <div class="row">
-<div class="tile tile-medium col-sm-3">
-<a href="<?=\yii\helpers\Url::to(['/complaint/workdemand/create'])?>">
-<h1>काम की मांग</h1>
-</a>
-</div>
-<div class="tile tile-medium col-sm-3">
-<a href="<?=\yii\helpers\Url::to(['/complaint/jobcarddemand/create'])?>">
-<h1>जॉबकार्ड की मांग</h1>
-</a>
-</div>
-<div class="tile tile-medium col-sm-3">
-<a href="<?=\yii\helpers\Url::to(['/complaint/complaint/create'])?>">
-<h1>अन्य शिकायत</h1>
-</a>
-</div>
-</div>
+   <div class="tile tile-medium col-sm-3">
+       <a href="<?=\yii\helpers\Url::to(['/complaint/workdemand/create'])?>">
+       <h1>काम की मांग</h1>
+       </a>
+   </div>
+   <div class="tile tile-medium col-sm-3">
+      <a href="<?=\yii\helpers\Url::to(['/complaint/jobcarddemand/create'])?>">
+      <h1>जॉबकार्ड की मांग</h1>
+       </a>
+    </div>
+    <div class="tile tile-medium col-sm-3">
+       <a href="<?=\yii\helpers\Url::to(['/complaint/complaint/create'])?>">
+       <h1>अन्य शिकायत</h1>
+        </a>
+      </div>
+  </div>
 </div>
 </div>
 </div>

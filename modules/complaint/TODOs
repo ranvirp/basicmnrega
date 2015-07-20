@@ -1,0 +1,6 @@
+1. Add column manual number to complaint Notdone
+2. Add a duplicate behavior for all kinds of models
+      - mark as duplicate of any other model of same kind
+      - duplicate table with columns -objecttype mainobjectid duplicateobjectid
+      -parameters objecttype 
+      -function markasduplicate($id)

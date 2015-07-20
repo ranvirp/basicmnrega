@@ -31,13 +31,15 @@ AppAsset::register($this);
      margin-bottom:15px;
      margin-top:5px;
      border:solid 1px;
-     background-color:#3c68b6;
+     //background-color:#3c68b6;
+     background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+     background-size: 100%;
      display:table;
      width:100%;
     }
     .nav >li >a, .nav>li>a:hover, .nav >li >a:focus
     {
-      background-color:#3c68b0;
+      //background-color:#3c68b0;
     }
     .nav>li>a
     {
@@ -98,7 +100,12 @@ AppAsset::register($this);
             echo Nav::widget([
             
     'items' => [
-      ['label'=>'Home','url'=>[Yii::$app->homeUrl]],
+      ['label'=>'Home','url'=>['/site/index']],
+       ['label'=>'Complaint','url'=>['/complaint']],
+        ['label'=>'Permissions','url'=>['/admin'],'linkOptions'=>[]
+
+        ],
+     
         Yii::$app->user->isGuest ?'':
          ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/android.apk','linkOptions'=>['data-toggle'=>'tooltip','data-placement'=>"left" ,'title'=>file_get_contents(Yii::getAlias('@app').'/modules/gpsphoto/apkhelp.txt')]],
       

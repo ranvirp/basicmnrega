@@ -10,12 +10,15 @@ use app\modules\complaint\models\EnquiryReportPoint;
 use app\modules\mnrega\models\MarkingSearch;
 
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 
 use app\modules\complaint\Utility;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use Yii;
 use yii\base\Model;
+use yii\db\Query;
+use yii\data\ActiveDataProvider;
 /**
  * ComplaintController implements the CRUD actions for Complaint model.
  */
@@ -33,6 +36,8 @@ public function actionIndex()
      */
     public function actionCreate()
     {
+        if (!Yii::$app->user->can('complaintcreate'))
+          throw new ForbiddenHttpException("Not allowed");
         $modelComplaint = new Complaint;
         $modelsComplaintPoint = [new ComplaintPoint];
         if ($modelComplaint->load(Yii::$app->request->post())) {
@@ -71,29 +76,7 @@ public function actionIndex()
                         }
                     }
                     if ($flag) {
-                    /*
-                      //Now create markings
-                      $markings=Yii::$app->request->post('complaint-marking');
-                      $deadline=Yii::$app->request->post('deadline');
-                      foreach ($markings['sender'] as $marking)
-                       {
-                         if ($marking=='po')
-                         {
-                           //find block -
-                           $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
-                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$modelComplaint->block_code]);
-                           $complaint_marking=new Complaint_marking;
-                           $complaint_marking->sender=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->id;
-                           $complaint_marking->receiver=$designation;
-                           $complaint_marking->complaint_id=$modelComplaint->id;
-                           $complaint_marking->deadline=$deadline;
-                            $complaint_marking->status=0;
-                            $complaint_marking->create_time=time();
-                            $comlpaint_marking->save();
-                         }
-                       
-                       }
-                       */
+                        $modelComplaint->_createMarking();
                         $transaction->commit();
                         return $this->redirect(['view', 'id' => $modelComplaint->id]);
                     }
@@ -161,7 +144,8 @@ public function actionIndex()
                         }
                     }
                     if ($flag) {
-                   
+                         $modelComplaint->_createMarking();
+                       
                         $transaction->commit();
                         return $this->redirect(['view', 'id' => $modelComplaint->id]);
                     }
@@ -207,22 +191,7 @@ public function actionIndex()
       $models=Complaint::find()->where(['mobileno'=>$mobileno])->asArray()->all(); 
       return json_encode($models);
     }
-    /*
-     Assigned to current designation
-    */
-    public function actionMy($d=-1)
-    {
-       $modelSearch= new MarkingSearch;
-       if ($d==-1)
-       {
-         $designation=\app\modules\users\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
-         $d=$designation->id;
-       }
-       $modelSearch->receiver=$d;
-       $modelSearch->status=0;
-       $dp=$modelSearch->search([]);
-       return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
-    }
+   
     /*
     File Report for a complaint 
     */
@@ -303,4 +272,77 @@ public function actionIndex()
             throw new NotFoundHttpException('The requested page does not exist.');
         }
           }
+  public function actionViewcomments($id)
+  {
+             return $this->render('comments',['model'=>$this->findModel($id)]); 
+  }
+  public function actionMark($id)
+  {
+    $model=$this->findModel($id);
+    if (Yii::$app->request->post())
+    {
+    if ($model)
+    {
+      $model->_createMarking();
+     }
+     }
+    return $this->renderPartial('marking',$model);
+    
+  }
+   /*
+     Assigned to current designation
+    */
+    public function actionMy1($t='c',$d=-1)
+    {
+       $modelSearch= new MarkingSearch;
+       if ($d==-1)
+       {
+         $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
+         $d=$designation->id;
+       }
+       if (!Yii::$app->user->can('complaintviewall'))
+       $modelSearch->receiver=$d;
+       $modelSearch->status=0;
+       if ($t=='c')
+       $modelSearch->request_type='complaint';
+       else if ($t=='wd') 
+         $modelSearch->request_type='workdemand';
+       else if ($t=='jc') 
+         $modelSearch->request_type='jobcarddemand';
+     
+     
+       $dp=$modelSearch->search([]);
+       return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
+    }
+    public function actionMy($d=-1)
+     {
+        $query = new Query;
+	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
+	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking') 
+	        ->from('complaint')
+	        ->join(  'RIGHT JOIN',
+	                'marking',
+	                'marking.request_id =complaint.id and marking.request_type=\'complaint\''
+	            )
+	           ->join(  'RIGHT JOIN',
+	                'complaint_type',
+	                'complaint.complaint_type =complaint_type.shortcode'
+	            ) 
+	             ->join(  'RIGHT JOIN',
+	                'complaint_subtype',
+	                'complaint.complaint_subtype =complaint_subtype.shortcode'
+	            );
+   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+	if (!Yii::$app->user->can('complaintviewall'))
+       $query->where(['receiver'=>$d]);
+        $dp= new ActiveDataProvider([
+         'query' => $query,
+         'pagination' => [
+            'pageSize' => 20,
+          ],
+        ]);
+        return $this->render('index1',['dataProvider'=>$dp]);
+     
+     
+     }
 }

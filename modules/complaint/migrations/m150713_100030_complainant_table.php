@@ -30,7 +30,7 @@ class m150713_100030_complainant_table extends Migration
             'mobileno' => Schema::TYPE_STRING.'(10) NOT NULL',
             'address'=>Schema::TYPE_TEXT,
             'jobcardno'=>Schema::TYPE_STRING.'(15)',
-
+             'source'=>Schema::TYPE_STRING.'(15)',
             'complaint_type' => Schema::TYPE_STRING.'(10) NOT NULL',
            'complaint_subtype' => Schema::TYPE_STRING.'(10) NOT NULL',
             'description'=>Schema::TYPE_TEXT,

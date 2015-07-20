@@ -34,7 +34,7 @@ class WorkdemandReport extends \yii\db\ActiveRecord
     {
         return [
             [['work_demand_id', 'author', 'create_time', 'update_time'], 'integer'],
-            [['work_id'], 'required'],
+            [['work_id','workname'], 'required'],
             [['datefrom'], 'safe'],
             [['description'], 'string'],
             [['work_id', 'workname'], 'string', 'max' => 255],
