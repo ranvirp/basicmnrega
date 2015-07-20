@@ -124,7 +124,7 @@ case 'name_hi':
 			  $url1="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
 			   $id1='complaint-block';
 			   
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->asArray()->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->asArray()->all(),"code","name_en"),["prompt"=>"None..",
 			   'onChange'=>'populateDropdown('.$url1.",'".$id1."')",'class'=>'form-control']);
 			    
 			    break;
