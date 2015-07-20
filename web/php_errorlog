@@ -3,3 +3,7 @@
 [17-Jul-2015 02:41:57 America/Chicago] PHP Fatal error:  Class 'app\modules\users\Designation' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/ComplaintController.php on line 218
 [17-Jul-2015 02:43:07 America/Chicago] PHP Fatal error:  Class 'app\modules\users\Designation' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/ComplaintController.php on line 218
 [20-Jul-2015 03:22:16 America/Chicago] PHP Fatal error:  Call to undefined method app\modules\complaint\models\Complaint::count1() in /home/nregaup0/testmnrega/modules/complaint/views/complaint/dashboard.php on line 24
+[20-Jul-2015 03:41:15 America/Chicago] PHP Fatal error:  Call to a member function rollBack() on a non-object in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 96
+[20-Jul-2015 03:41:26 America/Chicago] PHP Fatal error:  Call to a member function rollBack() on a non-object in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 96
+[20-Jul-2015 03:42:06 America/Chicago] PHP Fatal error:  Call to a member function rollBack() on a non-object in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 96
+[20-Jul-2015 03:45:40 America/Chicago] PHP Fatal error:  Call to a member function commit() on a non-object in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 93

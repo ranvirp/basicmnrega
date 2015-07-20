@@ -70,6 +70,7 @@ class WorkDemand extends \yii\db\ActiveRecord
             [['district_code'], 'string', 'max' => 4],
             [['block_code'], 'string', 'max' => 7],
             [['panchayat_code'], 'string', 'max' => 12],
+            [['panchayat'],'string','max'=>100],
              [['marking'], 'safe'],
         ];
     }
@@ -148,7 +149,7 @@ class WorkDemand extends \yii\db\ActiveRecord
 			$url1="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
 			   $id1='workdemand-block_code';
 			   
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->asArray()->all(),"code","name_en"),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->orderBy('name_en asc')->asArray()->all(),"code","name_en"),["prompt"=>"None..",
 			   'onChange'=>'populateDropdown('.$url1.",'".$id1."')",'class'=>'form-control']);
 			    
 			    break;
@@ -167,7 +168,7 @@ class WorkDemand extends \yii\db\ActiveRecord
 									
 			case 'block_code':
 			   $url="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
-			   $id='panchayat-name';
+			   $id='workdemand-panchayat';
 			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
 			   'onChange'=>'populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
 			    

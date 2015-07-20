@@ -81,19 +81,29 @@ class WorkdemandController extends Controller
             $model->author=0;
             else
             $model->author=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-             if ($model->save())
+             if ($model->validate())
+             
             {
+                // $transaction = \Yii::$app->db->beginTransaction();
+                 try{
+                if ( $model->save(false))
+                {
                 $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
                 $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$model->block_code])->one();
-                if ($designtion)
+                //print_r($designation);
+               // exit;
+                if ($designation)
                 {
                    $model->markToDesignation($designation->id);
-                   $transaction->commit();
+                  // $transaction->commit();
                    $this->redirect('view',['id'=>$model->id]);
                 }
-                else 
+                }
+                else {print_r($model->errors);exit;}
+                }
+                catch(Exception $e)
                   {
-                    $transaction->rollBack();
+                    //$transaction->rollBack();
                   }
             
             $model = new WorkDemand(); //reset model
