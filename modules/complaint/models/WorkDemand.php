@@ -167,7 +167,7 @@ class WorkDemand extends \yii\db\ActiveRecord
 									
 			case 'block_code':
 			   $url="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
-			   $id='workdemand-panchayat';
+			   $id='panchayat-name';
 			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
 			   'onChange'=>'populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
 			    
