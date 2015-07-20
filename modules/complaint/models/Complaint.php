@@ -41,7 +41,8 @@ public $captcha;
       return 
       [
        'cmoffice'=>'CM Office',
-       'shashan'=>'Government',
+       'shashan'=>'Shashan',
+       'ayukt'=>'Ayukt',
        'phone'=>'Phone',
        'web'=>'Web',
        'email'=>'Email',
@@ -169,7 +170,7 @@ public $captcha;
 			  $url1="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
 			   $id1='complaint-block';
 			   
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->asArray()->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->orderBy('name_en asc')->asArray()->all(),"code","name_en"),["prompt"=>"None..",
 			   'onChange'=>'populateDropdown('.$url1.",'".$id1."')",'class'=>'form-control']);
 			    
 			    break;
@@ -193,7 +194,7 @@ public $captcha;
 			case 'block_code':
 			   $url="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
 			   $id='complaint-panchayat';
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->all(),"code","name_en"),["prompt"=>"None..",
 			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control','id'=>'complaint-block']);
 			    
 			    break;

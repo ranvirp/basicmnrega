@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = 'Complaint';
  'model'=>$model,
  'attributes'=>[['attribute'=>'district_code','value'=>\app\modules\mnrega\models\District::findOne($model->district_code)->name_en],
                ['attribute'=>'block_code','value'=>\app\modules\mnrega\models\Block::findOne($model->block_code)->name_en],
- 'panchayat',['header'=>'Attachments','attribute'=>'attachments','value'=>\app\modules\reply\models\File::showAttachmentsInline($model,"attachments")]]
+ 'panchayat',['header'=>'Attachments','attribute'=>'attachments','value'=>\app\modules\reply\models\File::showAttachmentsInline($model,"attachments"),'format'=>'html']]
 ]
 )?>
 </div>
