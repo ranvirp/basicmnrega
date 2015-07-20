@@ -321,7 +321,7 @@ public $captcha;
                          default: break;
                         }
             }
-        if(!Yii::$app->user->can('marktodesignation')) return;
+        if(!Yii::$app->user->can('marktoothers')) return;
         if (!array_key_exists('designation',$markings) )return;
                 foreach ($markings['designation'] as $x=>$designation_id)
                     {

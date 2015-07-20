@@ -73,8 +73,6 @@ class DesignationController extends Controller
           if (!($searchmodel=Designation::findOne(['designation_type_id'=>$model->designation_type_id,'level_id'=>$model->level_id])))
            {
              $designation_type=DesignationType::findOne($model->designation_type_id);
-             $model->name_hi=$designation_type->name_hi.','.$designation_type->level->name_hi;
-             $model->name_en=$designation_type->name_en.','.$designation_type->level->name_en;   
             if ($model->validate())
             {
             $model->createUserAndRole();
@@ -125,7 +123,7 @@ class DesignationController extends Controller
             
             if ($model->save())
             {
-            // $model->createUserAndRole();
+             $model->createUserAndRole();
       
             $model = new Designation();; //reset model
             

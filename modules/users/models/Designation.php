@@ -194,6 +194,9 @@ class Designation extends \app\modules\users\MyActiveRecord
     }
     public function createUserAndRole()
      {
+         $this->name_hi=$designation_type->name_hi.','.$this->level->name_hi;
+         $this->name_en=$designation_type->name_en.','.$this->level->name_en;   
+            
         $role=$this->designationType->shortcode;
         $username=$role.'_'.strtolower($this->level->name_en);
         $auth = Yii::$app->authManager;
