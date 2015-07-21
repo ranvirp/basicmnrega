@@ -113,13 +113,14 @@ div.required label:after {
   <label><input type="checkbox" name="" onClick="$('#designation-select').toggle()" >Others</label>
 <?php } ?>
 </div>
+ <?= $form->field($modelComplaint,'marking[deadline]')->widget(\yii\jui\DatePicker::classname(), [
+    'dateFormat' => 'yyyy-MM-dd',
+])->label('Deadline')?>
 <div id="designation-select" style="display:none">
 <div id="form1">
 <?= $form->field($modelComplaint,'marking[designation][]')->widget(\app\modules\users\widgets\DesignationWidget::className())->label(false)?>
 </div>
-   <?= $form->field($modelComplaint,'marking[deadline]')->widget(\yii\jui\DatePicker::classname(), [
-    'dateFormat' => 'yyyy-MM-dd',
-])?>
+  
 </div>
         </div>
        

@@ -64,7 +64,8 @@ class Complaint_subtypeController extends Controller
     public function actionCreate()
     {
        
-       
+      if (!Yii::$app->user->can('complaintadmin')) 
+        throw new NotFoundHttpException('requested page does not exist');
         $model = new Complaint_subtype();
  
         if ($model->load(Yii::$app->request->post()))
@@ -99,6 +100,8 @@ class Complaint_subtypeController extends Controller
      */
         public function actionUpdate($id)
     {
+        if (!Yii::$app->user->can('complaintadmin')) 
+        throw new NotFoundHttpException('requested page does not exist');
          $model = $this->findModel($id);
        
  

@@ -73,6 +73,7 @@ $options = array(
 
 $context = stream_context_create($options);
 $data = file_get_contents($link,false,$context);
+print $link.'<br>';
 //if ($debug) print_r($data);
 //if (!($data contains 'Total')) return;
  //if ($level<2)
@@ -115,7 +116,7 @@ $data = file_get_contents($link,false,$context);
           //AGRA april->achievement, percentage may achievement,percentage
           if ($col[$colwithnames] && $col[$colswithvalue[0]])
           {
-            if ($level>=0)
+            if ($level>0)
             {
               $ael=$col[$colwithnames]->getElementsByTagName('a');
               if (! $ael->item(0)) 
@@ -165,6 +166,7 @@ $data = file_get_contents($link,false,$context);
                  
             }
             }
+         /*   
             else 
             {
              $link1=
@@ -196,6 +198,8 @@ $data = file_get_contents($link,false,$context);
               
               }
            }
+           */
+           
           }
          
           

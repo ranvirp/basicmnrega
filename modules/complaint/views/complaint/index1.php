@@ -2,6 +2,7 @@
  use yii\helpers\Html;
   use yii\helpers\Url;
 use yii\grid\GridView;
+use app\modules\complaint\models\Complaint;
  ?>
  <div class="form-title">
         <div class="form-title-span">
@@ -14,8 +15,8 @@ use yii\grid\GridView;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-['header'=>'name_hi',
-'attribute'=>'Name',
+['header'=>'Name',
+'attribute'=>'cname',
 'value'=>function($model,$key,$index,$column)
 {
         return $model['cname'];
@@ -24,7 +25,7 @@ use yii\grid\GridView;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model['fname'];
-},],['header'=>'Mobile No',
+},],['header'=>'Mobileno',
 'attribute'=>'mobileno',
 'value'=>function($model,$key,$index,$column)
 {
@@ -51,7 +52,7 @@ use yii\grid\GridView;
 },],
             ['class' => 'yii\grid\ActionColumn',
              'controller'=>'/complaint/complaint',
-              'template'=>'{filereport}',
+              'template'=>'{reqaction}',
               'urlCreator'=>function($action, $model, $key, $index)
               {
                 $params = is_array($model['id']) ? $model['id']: ['id' => (string) $model['id']];
@@ -59,9 +60,17 @@ use yii\grid\GridView;
                 return Url::toRoute($params);
               },
               'buttons'=>[
-                'filereport'=>function($url,$model,$key)
+                'reqaction'=>function($url,$model,$key)
                 {
-                  return Html::a('<button class="btn btn-success">'.'File Report'.'</button>',$url.'&returnurl='.urlencode(Url::to(['/complaint/jobcarddemand/my'])));
+                 if ($model['complaintstatus']==Complaint::PENDING_FOR_ENQUIRY)
+                  return Html::a('<button class="btn btn-success">'.'File Enquiry Report'.'</button>',$url.'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint/my'])));
+                  else  if ($model['complaintstatus']==Complaint::PENDING_FOR_ATR)
+                  return Html::a('<button class="btn btn-success">'.'File ATR'.'</button>',$url.'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint/my'])));
+                   else if ($model['complaintstatus']==Complaint::ATR_RECEIVED)
+                  return Html::a('<button class="btn btn-success">'.'Mark Disposed'.'</button>',$url.'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint/my'])));
+                    else if ($model['complaintstatus']==Complaint::REGISTERED)
+                  return Html::a('<button class="btn btn-success">'.'Mark to Officer'.'</button>',$url.'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint/my'])));
+                  
                 }
               ],
               ],

@@ -192,7 +192,8 @@ class ParameterController extends \yii\web\Controller
         print $link;
         
         $data=file_get_contents($link);
-        
+        print $data;
+        //exit;
         if ($data=='')
         {
           print "Error fetching data...aborting\n";

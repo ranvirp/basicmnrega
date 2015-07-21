@@ -225,24 +225,62 @@ class Marking extends \yii\db\ActiveRecord
     {
       return $this->id;
     }
-     public static function count1($t='c',$s=0)
-    {
-     $modelSearch= new MarkingSearch;
-         $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
-         $d=$designation->id;
-    if ($t=='c')
-      $modelSearch->request_type='complaint';
-    else
-      if ($t=='wd')
-      $modelSearch->request_type='workdemand';
-     if ($t=='jc')
-      $modelSearch->request_type='jobcarddemand';
-      
-       if (!Yii::$app->user->can('complaintviewall'))
-       $modelSearch->receiver=$d;
-       $modelSearch->status=$s;
+     public static function count1($t,$status,$d=-1)
+     
+      {
+        if(count($t)==0) return;//nothing to do
+         if(count($status)==0) 
+          {
+           $status=['0'];
+          }
+        $q=[];
+        foreach ($t as $tc)
+        {
+        // print_r($status);
+         //exit;
+         foreach ($status as $s1)
+          {
+          $x="SUM(CASE WHEN status=".$s1." and request_type='".$tc."'";
+          if ($d!=-1) $x.="and receiver=".$d;
+          $q[]=$x." THEN 1 ELSE 0 END) AS ".$tc."_count"."_".$s1;
+          }
+          $x="SUM(CASE WHEN request_type='".$tc."'";
+           if ($d!=-1) $x.="and receiver=".$d;
+
+          $q[]=$x." THEN 1 ELSE 0 END) AS ".$tc."_count";
+         
+        }
+        $query="SELECT ".implode(",",$q)." FROM marking";
+        $db=Yii::$app->db;
+        $counts= $db->createCommand($query)->queryAll();
+         
+        /*
+        $counts=$db->cache(function($db,$query)
+          {
+          $db->createCommand($query)->queryAll();
+            });
+            */
+        return $counts;
+          
+        /*
+        http://stackoverflow.com/questions/12693111/count-multiple-columns-with-group-by-in-one-query
+       SELECT 
+     SUM(CASE WHEN column1 IS NOT NULL THEN 1 ELSE 0 END) AS column1_count
+    ,SUM(CASE WHEN column2 IS NOT NULL THEN 1 ELSE 0 END) AS column2_count
+    ,SUM(CASE WHEN column3 IS NOT NULL THEN 1 ELSE 0 END) AS column3_count
+    FROM table
+    */
+      /*
+        $modelSearch= new MarkingSearch;
+         //$designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
+         //$d=$designation->id;
+        $modelSearch->request_type=$t;
+        if ($d==-1)
+          $modelSearch->receiver=$d;
+        $modelSearch->status=$s;
        $dp=$modelSearch->search([]);
        return $dp->totalCount;
+       */
        
     }
     public static function setStatus($request_type,$request_id,$status)

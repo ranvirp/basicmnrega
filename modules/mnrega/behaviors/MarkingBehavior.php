@@ -150,5 +150,16 @@ public function beforeSave($event)
                             
                             $rmarking->save();
      }
+     public function markStatus($markingid,$status)
+     {
+         $rmarking=Marking::findOne($markingid);
+         if( $rmarking)
+           {
+            $rmarking->status=1;
+            $rmarking->save();
+            }
+     
+     
+     }
 	
 }

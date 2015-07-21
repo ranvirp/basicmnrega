@@ -9,15 +9,10 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
-use app\modules\mnrega\models\District;
-use app\modules\mnrega\models\Block;
-
 use app\modules\complaint\models\EnquiryReportSummary;
 use app\modules\complaint\models\EnquiryReportPoint;
 
-use app\assets\AppAssetGoogle;
 ?>
 <style>
 div.required label:after {
@@ -40,17 +35,11 @@ div.required label:after {
  text-align:center
 }
 </style>
-<script>
- function _count1($elem) {
-        return $elem.closest('.dynamicform_wrapper').find('.item').length-1;
-    };
-</script>
-<div class="customer-form">
-<?php AppAssetGoogle::register($this);?>
- <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
+
 <div class="col-sm-12 well">
-<div class="col-lg-5 text-heading" >शिकायत का विवरण</div>
-<div class="col-lg-5 text-heading">जांच आख्या</div>
+<div class="col-lg-4 text-heading" >शिकायत का विवरण</div>
+<div class="col-lg-4 text-heading">जांच आख्या</div>
+<div class="col-lg-4 text-heading">जांच आख्या</div>
     <div class="col-lg-5" style="margin:5px">
     
    <?= DetailView::widget([
@@ -62,13 +51,9 @@ div.required label:after {
             'mobileno',
             'address:ntext',
             'gender',
-            
-            ['attribute'=>'district_code',
-            'value'=>District::findOne($model->district_code)->name_en,
-            ],
-            ['attribute'=>'block_code',
-            'value'=>Block::findOne($model->block_code)?Block::findOne($model->block_code)->name_en:'',
-            ],
+            'district_code',
+            'block_code',
+            'panchayat_code',
             
             'panchayat',
         ],
@@ -77,41 +62,45 @@ div.required label:after {
     </div>
     <?php 
       $enquiryreportsummary=EnquiryReportSummary::find()->where(['complaint_id'=>$model->id])->one();
-      if (!$enquiryreportsummary) {$enquiryreportsummary=new EnquiryReportSummary;
-      $enquiryreportsummary->complaint_id=$model->id;
+      $atrsummary=$model->atrSummary;
       }
     ?>
-    <div class="col-lg-5" style="margin:5px">
+    <div class="col-lg-4" style="margin:5px">
     <div class="col-md-12">
-     <?= $enquiryreportsummary->showForm($form,"reportby")?>
-      </div>
-    <div class="col-md-12">
-    
-      <?= $form->field($enquiryreportsummary,"description")->textArea(['class'=>'hindiinput form-control'])?>
-   </div>
-   <div class="col-md-12">
-   
-      <?= $form->field($enquiryreportsummary,"attachments")->widget(\app\modules\reply\widgets\FileWidget::className())?>
+     <?= DetailView::widget([
+        'model' => $enquiryreportsummary,
+        'attributes' => [
+            'id',
+            'reportby',
+            'description',
+            'complainttrue',
+            'firproposed',
+            'daproposed',
+            'amountinvolved',
+                   ],
+    ]) ?>
+    <?=\app\modules\reply\models\File::showAttachmentsInline($enquiryreportsummary,"attachments")?>
     </div>
-   
+     
+    
+     </div>
+         <div class="col-lg-4" style="margin:5px">
     <div class="col-md-12">
-    <?php if (!isset($enquiryreportsummary->complainttrue)) $enquiryreportsummary->complainttrue='2';?>
-     <?= $form->field($enquiryreportsummary,"complainttrue")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')],['itemOptions'=>['onClick'=>'if ($(this).val()=="0") $("#complainttrue").hide(); else $("#complainttrue").show(); ' ]])?>
+     <?= DetailView::widget([
+        'model' => $atrsummary,
+        'attributes' => [
+            'id',
+            'reportby',
+            'description',
+            'complainttrue',
+            'firproposed',
+            'daproposed',
+            'amountinvolved',
+                   ],
+    ]) ?>
+    <?=\app\modules\reply\models\File::showAttachmentsInline($enquiryreportsummary,"attachments")?>
     </div>
-    <div id="complainttrue">
-    <div class="col-md-12">
-    
-    <?= $form->field($enquiryreportsummary,"firproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
-   </div>
-   <div class="col-md-12">
-    
-    <?= $form->field($enquiryreportsummary,"daproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
-    </div>
-    <div class="col-md-12">
-    
-    <?= $form->field($enquiryreportsummary,"amountinvolved")->textInput()?>
-    </div>
-    
+     
     
      </div>
     </div>

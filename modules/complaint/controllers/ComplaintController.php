@@ -6,6 +6,8 @@ use app\modules\complaint\models\Complaint_type;
 use app\modules\complaint\models\Complaint_marking;
 use app\modules\complaint\models\EnquiryReportSummary;
 use app\modules\complaint\models\EnquiryReportPoint;
+use app\modules\complaint\models\AtrSummary;
+use app\modules\complaint\models\AtrPoint;
 
 use app\modules\mnrega\models\MarkingSearch;
 
@@ -77,6 +79,12 @@ public function actionIndex()
                     }
                     if ($flag) {
                         $modelComplaint->_createMarking();
+                        
+                          //Audit trail
+                       $modelComplaint->created_by=Yii::$app->user->id;
+                       $modelComplaint->created_at=time();
+                       $modelComplaint->flag=1;//requires Admin Attention
+                       //
                         $transaction->commit();
                         return $this->redirect(['view', 'id' => $modelComplaint->id]);
                     }
@@ -146,6 +154,11 @@ public function actionIndex()
                     if ($flag) {
                          $modelComplaint->_createMarking();
                        
+                       //Audit trail
+                       $modelComplaint->updated_by=Yii::$app->user->id;
+                       $modelComplaint->updated_at=time();
+                       $modelComplaint->flag=1;//requires Admin Attention
+                       //
                         $transaction->commit();
                         return $this->redirect(['view', 'id' => $modelComplaint->id]);
                     }
@@ -198,6 +211,7 @@ public function actionIndex()
     public function actionFilereport($id)
     {
         $modelComplaint = $this->findModel($id);
+                    
         $modelsComplaintPoint = $modelComplaint->complaintPoints;
         $enquiryReportSummary=$modelComplaint->enquiryReportSummary;
         if (!$enquiryReportSummary) 
@@ -256,7 +270,11 @@ public function actionIndex()
                         }
                     }
                     if ($flag) {
-                   
+                         $modelComplaint->status=1;//report received
+                         $markingid=Yii::$app->request->get('markingid');
+                         if ($markingid)
+                         $modelComplaint->markStatus($markingid,1);
+                         $modelComplaint->save(false);
                         $transaction->commit();
                         return $this->render('/default/atrform', ['model' => $modelComplaint]);
                     }
@@ -314,11 +332,11 @@ public function actionIndex()
        $dp=$modelSearch->search([]);
        return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
     }
-    public function actionMy($d=-1)
+    public function actionMy($ms=0,$d=-1)
      {
         $query = new Query;
 	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
-	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking') 
+	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,marking.id as markingid,marking.status as markingstatus') 
 	        ->from('complaint')
 	        ->join(  'RIGHT JOIN',
 	                'marking',
@@ -332,9 +350,18 @@ public function actionIndex()
 	                'complaint_subtype',
 	                'complaint.complaint_subtype =complaint_subtype.shortcode'
 	            );
-   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-	if (!Yii::$app->user->can('complaintviewall'))
+  // $query->where(['complaint.status'=>$s]);
+    $query->where(['marking.status'=>$ms]);
+
+	//if (!Yii::$app->user->can('complaintviewall'))
+	if (($d==-1) && (!Yii::$app->user->can('complaintadmin')))
+	  {
+	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+   
        $query->where(['receiver'=>$d]);
+       }
+       //print_r($query);
+       //exit;
         $dp= new ActiveDataProvider([
          'query' => $query,
          'pagination' => [
@@ -345,4 +372,89 @@ public function actionIndex()
      
      
      }
+      /*
+    File Report for a complaint 
+    */
+    public function actionFileatr($id)
+    {
+        $modelComplaint = $this->findModel($id);
+        $modelsEnquiryPoint = $modelComplaint->enquiryReportsPoint;
+        $atrSummary=$modelComplaint->atrSummary;
+        if (!$atrSummary) 
+        { 
+          $atrSummary=new AtrSummary;
+          $atrSummary->complaint_id=$modelComplaint->id;
+          }
+        $atrPoints=$modelComplaint->atrPoints;
+        if (!$atrPoints)
+        {
+          foreach ($modelsEnquiryPoint as $modelEnquiryPoint)
+              {
+                 $ap=new AtrPoint;
+                 $ap->complaint_point_id=$modelEnquiryPoint->complaint_point_id;
+                 $atrPoints[$modelEnquiryPoint->complaint_point_id]=$ap;
+                 
+              }
+        }
+        if ($atrSummary->load(Yii::$app->request->post())) {
+
+            Model::loadMultiple($atrPoints,Yii::$app->request->post());
+            // ajax validation
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ArrayHelper::merge(
+                    ActiveForm::validateMultiple($atrPoints),
+                    ActiveForm::validate($atrSummary)
+                );
+            }
+
+            // validate all models
+             //print_r($atrSummary);
+               //         exit;
+                       
+            $valid = $atrSummary->validate();
+            if (!$valid)
+              print_r($atrSummary->errors);
+            $valid = Model::validateMultiple($atrPoints) && $valid;
+            if (!$valid)
+             {
+              foreach ($atrPoints as $atrpoint)
+              print_r($atrpoint->errors);
+              }
+            if ($valid) {
+                $transaction = \Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $atrSummary->save(false)) {
+                        //print_r($atrSummary);
+                        //exit;
+                       
+                        foreach ($atrPoints as $atrPoint) {
+                           //  print_r($modelComplaintPoint);
+                            //exit;
+                           
+                            //$modelComplaintPoint->complaint_id = $modelComplaint->id;
+                            if (! ($flag = $atrPoint->save(false))) {
+                               print_r($atrPoint->errors());
+                                $transaction->rollBack();
+                                break;
+                            }
+                        }
+                    }
+                    if ($flag) {
+                        //print_r($atrPoint);
+                        $transaction->commit();
+                        return $this->render('/default/atrreportform', ['model' => $modelComplaint]);
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
+        }
+      if ($modelComplaint) {
+            return $this->render('/default/atrreportform',['model'=>$modelComplaint]);
+
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+          }
 }

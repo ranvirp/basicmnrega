@@ -29,6 +29,28 @@ class Complaint extends \yii\db\ActiveRecord
 {
 public $marking;
 public $captcha;
+const REGISTERED=0;
+const PENDING_FOR_ENQUIRY=1;
+const ENQUIRY_REPORT_RECEIVED=2;
+const PENDING_FOR_ATR=3;
+const ATR_RECEIVED=4;
+const DISPOSED=5;
+public static function statusNames()
+{
+ return 
+   [
+     self::REGISTERED=>Yii::t('app','Registered'),
+     self::PENDING_FOR_ENQUIRY=>Yii::t('app','Pending for enquiry'),
+     self::ENQUIRY_REPORT_RECEIVED=>Yii::t('app','Enquiry report recieved'),
+     self::PENDING_FOR_ATR=>Yii::t('app','Pending for atr'),
+     self::ATR_RECEIVED=>Yii::t('app','Atr received'),
+     self::DISPOSED=>Yii::t('app','disposed'),
+   ];
+ 
+
+}
+
+
     /**
      * @inheritdoc
      */
@@ -76,8 +98,8 @@ public $captcha;
     public function rules()
     {
         return [
-            [['name_hi', 'fname', 'mobileno', 'district_code', 'block_code', 'panchayat_code','complaint_type','complaint_subtype'], 'required'],
-            [['address', 'description'], 'string'],
+            [['name_hi',  'mobileno', 'district_code',  'complaint_type','complaint_subtype'], 'required'],
+            [['address', 'description','fname','block_code','panchayat_code'], 'string'],
             [['name_hi', 'fname'], 'string', 'max' => 255],
             [['mobileno'], 'string', 'max' => 10],
             [['district_code'], 'string', 'max' => 4],
@@ -88,7 +110,8 @@ public $captcha;
            
              [['attachments','marking'], 'safe'],
              [['source','manualno'],'string'],
-             [['captcha'],'captcha'],
+             [['flag','created_by','created_at','updated_by','updated_at'],'integer'],
+             [['captcha'],'captcha','on'=>'guestentry'],
         ];
     }
 
@@ -117,10 +140,18 @@ public $captcha;
      /**
      * @return \yii\db\ActiveQuery
      */
+    public function getAtrSummary()
+    {
+        return $this->hasOne(AtrSummary::className(), ['complaint_id' => 'id']);
+    }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getComplaintPoints()
     {
         return $this->hasMany(ComplaintPoint::className(), ['complaint_id' => 'id']);
     }
+    
          /**
      * @return \yii\db\ActiveQuery
      */
@@ -136,6 +167,15 @@ public $captcha;
         return $this->hasMany(EnquiryReportPoint::className(), ['complaint_point_id' => 'id'])
         ->via('complaintPoints');
    }
+          /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAtrPoints()
+    {
+        return $this->hasMany(AtrPoint::className(), ['complaint_point_id' => 'id'])
+        ->via('complaintPoints');
+   }
+
 
 	/*
 	*@return form of individual elements
@@ -330,5 +370,34 @@ public $captcha;
                     }
         
        
+    }
+    public function count1($s=0,$d=-1)
+    {
+       $query = new Query;
+	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
+	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as status,marking.id as markingid') 
+	        ->from('complaint')
+	        ->join(  'LEFT JOIN',
+	                'marking',
+	                'marking.request_id =complaint.id and marking.request_type=\'complaint\''
+	            )
+	           ->join(  'INNER JOIN',
+	                'complaint_type',
+	                'complaint.complaint_type =complaint_type.shortcode'
+	            ) 
+	             ->join(  'INNER JOIN',
+	                'complaint_subtype',
+	                'complaint.complaint_subtype =complaint_subtype.shortcode'
+	            );
+   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+   $query->where(['status'=>$s]);
+	if (!Yii::$app->user->can('complaintviewall'))
+       $query->where(['receiver'=>$d]);
+        $dp= new ActiveDataProvider([
+         'query' => $query,
+        
+        ]);
+        return $dp->totalCount;
+    
     }
 }

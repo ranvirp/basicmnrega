@@ -62,7 +62,8 @@ class Complaint_typeController extends Controller
     
     public function actionCreate()
     {
-       
+        if (!Yii::$app->user->can('complaintadmin')) 
+        throw new NotFoundHttpException('requested page does not exist');
        
         $model = new Complaint_type();
  
@@ -98,6 +99,8 @@ class Complaint_typeController extends Controller
      */
         public function actionUpdate($id)
     {
+          if (!Yii::$app->user->can('complaintadmin')) 
+        throw new NotFoundHttpException('requested page does not exist');
          $model = $this->findModel($id);
        
  
