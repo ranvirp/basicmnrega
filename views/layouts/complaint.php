@@ -7,8 +7,11 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\assets\AppAsset_1;
 use app\modules\mnrega\models\Marking;
-//use app\modules\complaint\models\JobcardDemand;
-//use app\modules\complaint\models\WorkDemand;
+use app\modules\complaint\models\JobcardDemand;
+use app\modules\complaint\models\WorkDemand;
+use app\modules\complaint\models\Complaint;
+use app\modules\users\models\Designation;
+
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -111,30 +114,82 @@ echo '</div>';
 
     </div>
     <?php
+     if(Yii::$app->user->can('complaintagent'))
+     {
+        $complaintcount_unmarked=Complaint::count1(-2);
+     $jobcarddemandcount_unmarked=JobcardDemand::count1(-2);
+     $workdemandcount_unmarked=WorkDemand::count1(-2);
+     ?>
+     <div class="col-md-offest-1 col-md-3">
+            <section class="panel">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked">
+                    <li  class="active">
+                    <a>
+                                <span class="badge pull-right">
+                           <?=$complaintcount_unmarked+$workdemandcount_unmarked+$jobcarddemandcount_unmarked?>
+                            </span>
+                             <?=Yii::t('app','Unmarked')?>
+                            </a>
+                      </li>
+                       <li  class="">
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms='.urlencode('-2')])?>'>
+                                <span class="badge pull-right">
+                           <?=$complaintcount_unmarked?>
+                            </span>
+                             <?=Yii::t('app','Complaints')?>
+                             </a>
+                      </li>
+                       <li  class="">
+                            <a href='<?=Url::to(['/complaint/workdemand/my?ms='.urlencode('-2')])?>'>
+                                <span class="badge pull-right">
+                           <?=$workdemandcount_unmarked?>
+                            </span>
+                             <?=Yii::t('app','Work Demand')?>
+                             </a>
+                      </li>
+                       <li  class="">
+                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?ms='.urlencode('-2')])?>'>
+                                <span class="badge pull-right">
+                           <?=$jobcarddemandcount_unmarked?>
+                            </span>
+                             <?=Yii::t('app','Jobcarddemand')?>
+                             </a>
+                      </li>
+                       
+                    </ul>
+                </div>
+                </section>
+                </div>
+    <?php };
+  
     if(Yii::$app->user->can('complaintadmin'))
        $d=-1;
     else
        $d=Designation::getDesignationByUser(Yii::$app->user->id);
-     $counts=Marking::count1(['complaint','workdemand','jobcarddemand'],[0,1,2]);
+     $counts=Marking::count1(['complaint','workdemand','jobcarddemand'],[0,1,2],$d);
       $complaintcount=$counts[0]['complaint_count'];
-     $jobcarddemandcount=$counts[0]['workdemand_count'];
-     $workdemandcount=$counts[0]['jobcarddemand_count'];
+     $workdemandcount=$counts[0]['workdemand_count'];
+     $jobcarddemandcount=$counts[0]['jobcarddemand_count'];
     
      $complaintcount0=$counts[0]['complaint_count_0'];
-     $jobcarddemandcount0=$counts[0]['workdemand_count_0'];
-     $workdemandcount0=$counts[0]['jobcarddemand_count_0'];
+     $workdemandcount0=$counts[0]['workdemand_count_0'];
+     $jobcarddemandcount0=$counts[0]['jobcarddemand_count_0'];
      
      $complaintcount1=$counts[0]['complaint_count_1'];
-     $jobcarddemandcount1=$counts[0]['workdemand_count_1'];
-     $workdemandcount1=$counts[0]['jobcarddemand_count_1'];
+     $workdemandcount1=$counts[0]['workdemand_count_1'];
+     $jobcarddemandcount1=$counts[0]['jobcarddemand_count_1'];
 
      $complaintcount2=$counts[0]['complaint_count_2'];
-     $jobcarddemandcount2=$counts[0]['workdemand_count_2'];
-     $workdemandcount2=$counts[0]['jobcarddemand_count_2'];
+     $workdemandcount2=$counts[0]['workdemand_count_2'];
+     $jobcarddemandcount2=$counts[0]['jobcarddemand_count_2'];
+    
 
     ?>
     <div class="col-md-offest-1 col-md-3">
-                <section class="panel">
+ <?php    if (!Yii::$app->user->can('complaintagent'))
+   {?>
+            <section class="panel">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
                     <li  class="active">
@@ -146,7 +201,7 @@ echo '</div>';
                             </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?ms=0'])?>'>
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms=0&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$complaintcount0?>
                             </span>
@@ -154,7 +209,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/workdemand/my?ms=0'])?>'>
+                            <a href='<?=Url::to(['/complaint/workdemand/my?ms=0&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$workdemandcount0?>
                             </span>
@@ -162,7 +217,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?ms=0'])?>'>
+                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?ms=0&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$jobcarddemandcount0?>
                             </span>
@@ -183,7 +238,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?ms=2'])?>'>
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms=2&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$complaintcount2?>
                             </span>
@@ -191,7 +246,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/workdemand/my?ms=2'])?>'>
+                            <a href='<?=Url::to(['/complaint/workdemand/my?ms=2&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$workdemandcount2?>
                             </span>
@@ -199,7 +254,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?ms=2'])?>'>
+                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?ms=2&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$jobcarddemandcount2?>
                             </span>
@@ -220,7 +275,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?ms=1'])?>'>
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms=1&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$complaintcount1?>
                             </span>
@@ -228,7 +283,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/workdemand/my?ms=1'])?>'>
+                            <a href='<?=Url::to(['/complaint/workdemand/my?ms=1&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$workdemandcount1?>
                             </span>
@@ -236,7 +291,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?ms=1'])?>'>
+                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?ms=1&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$jobcarddemandcount1?>
                             </span>
@@ -257,7 +312,7 @@ echo '</div>';
                     </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?ms=-1'])?>'>
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms=-1&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$complaintcount?>
                             </span>
@@ -265,7 +320,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/workdemand/my?ms=-1'])?>'>
+                            <a href='<?=Url::to(['/complaint/workdemand/my?ms=-1&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$workdemandcount?>
                             </span>
@@ -273,7 +328,7 @@ echo '</div>';
                              </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?ms=-1'])?>'>
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms=-1&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$jobcarddemandcount?>
                             </span>
@@ -283,9 +338,12 @@ echo '</div>';
                        
                     </ul>
                 </div>
+              
             </section>
+            <?php } ?>
+
             </div>
-        <div class="col-md-9">
+                    <div class="col-md-9">
         <?php } else { ?>
         <div class="col-md-12 small">
         <?php } ?>

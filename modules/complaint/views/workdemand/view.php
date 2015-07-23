@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
       $marking->request_id=$model->id;
       $dp =$marking->search([]);
       echo '<div class="col-sm-8">';
-      print $this->render('@app/modules/mnrega/views/marking/index',['searchModel'=>$marking,'dataProvider'=>$dp]);
+      print $this->render('@app/modules/mnrega/views/marking/index',['searchModel'=>$marking,'dataProvider'=>$dp,'markurl'=>null]);
        echo '</div>';
      
 ?>

@@ -72,7 +72,9 @@ class WorkdemandController extends Controller
        
        
         $model = new WorkDemand();
- 
+   if (Yii::$app->user->isGuest)
+            $model->scenario='guestentry';//captcha validation
+       
         if ($model->load(Yii::$app->request->post()))
         {
             $model->create_time=time();
@@ -127,24 +129,39 @@ class WorkdemandController extends Controller
      * @param integer $id
      * @return mixed
      */
-        public function action1Update($id)
+        public function actionUpdate($id)
     {
          $model = $this->findModel($id);
-       
- 
-        if ($model->load(Yii::$app->request->post()))
+        if (Yii::$app->request->post() && $model->load(Yii::$app->request->post()))
         {
+           $model->update_time=time();
+            
+            $transaction = \Yii::$app->db->beginTransaction();
+                 try{
+                if ( $model->save())
+                {
+                   $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
+                   $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$model->block_code])->one();
+                //print_r($designation);
+               // exit;
+                if ($designation)
+                {
+                   $model->markToDesignation($model->id,$designation->id,$model->datefrom);
+                   $transaction->commit();
+                   $this->redirect(['view','id'=>$model->id]);
+                }
+                
+                }
+                else {print_r($model->errors);exit;}
+                }
+                catch(Exception $e)
+                  {
+                    $transaction->rollBack();
+                  }
         
-            if ($model->save())
-            $model = new WorkDemand();; //reset model
-        }
- 
-       $searchModel = new WorkDemandSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
- 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+       }
+      
+        return $this->render('update', [
             'model' => $model,
             
         ]);
@@ -228,8 +245,8 @@ class WorkdemandController extends Controller
        $dp=$modelSearch->search([]);
        return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
     }
-      public function actionMy()
-     {
+      public function actionMy($ms=0,$d=-1,$s=-1)
+     {/*
         $query = new Query;
 	    $query  ->select('workdemand.id as id,workdemand.name_hi as cname,fname,mobileno,address,district.name_en as dname,block.name_en as bname,panchayat,
 	    ') 
@@ -246,18 +263,30 @@ class WorkdemandController extends Controller
 	                'block',
 	                'block.code =workdemand.block_code'
 	            );
-    $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-
-	if (!Yii::$app->user->can('complaintviewall'))
-       $query->where(['receiver'=>$d]);
+	            
+     if ($ms==-2)
+        $query->where(['marking.status'=>null]);
+     else
+        $query->where(['marking.status'=>$ms]);
+    if ($s!=-1)
+      $query->andWhere(['workdemand.status'=>$s]);
+	if (($d!=-1) && (!Yii::$app->user->can('complaintadmin')))
+	  {
+	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+   
+       $query->andWhere(['receiver'=>$d]);
+       }
         $dp= new ActiveDataProvider([
          'query' => $query,
          'pagination' => [
             'pageSize' => 20,
           ],
         ]);
+        */
+        $dp=WorkDemand::count1($ms,$d,$s,false);
         return $this->render('index1',['dataProvider'=>$dp]);
      
      
      }
+
 }

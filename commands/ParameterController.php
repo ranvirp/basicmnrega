@@ -106,7 +106,7 @@ class ParameterController extends Controller
         
          $colwithnames=1;
          $level=0;
-         $colwithvalues=range(2,8);
+         $colwithvalues=range(2,9);
         break;
         case 'empstatus':
          $tableid=5;

@@ -6,6 +6,9 @@ use app\modules\mnrega\models\District;
 use app\modules\mnrega\models\Block;
 use app\modules\mnrega\models\Panchayat;
 use app\modules\mnrega\models\MarkingSearch;
+use app\modules\mnrega\models\Marking;
+use yii\db\Query;
+use yii\data\ActiveDataProvider;
 
 
 
@@ -49,7 +52,13 @@ public static function statusNames()
  
 
 }
+/*
+ from web, registered -----next mark to officer and change to pending for enquiry
+ pending for enquiry--enquiry report received 
+ 
+ 
 
+*
 
     /**
      * @inheritdoc
@@ -98,7 +107,7 @@ public static function statusNames()
     public function rules()
     {
         return [
-            [['name_hi',  'mobileno', 'district_code',  'complaint_type','complaint_subtype'], 'required'],
+            [['name_hi',  'mobileno', 'district_code',  'complaint_type'], 'required'],
             [['address', 'description','fname','block_code','panchayat_code'], 'string'],
             [['name_hi', 'fname'], 'string', 'max' => 255],
             [['mobileno'], 'string', 'max' => 10],
@@ -136,6 +145,13 @@ public static function statusNames()
             'complaint_subtype' => Yii::t('app', 'Complaint Subtype'),
             
         ];
+    }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMarkings()
+    {
+        return $this->hasMany(Marking::className(), ['request_id' => 'id'])->where(['request_type'=>'complaint','marking.status'=>'0'])->with('receiver1');
     }
      /**
      * @return \yii\db\ActiveQuery
@@ -262,6 +278,13 @@ public static function statusNames()
 			   return  $form->field($this,$attribute)->dropDownList(self::source());
 			    
 			    break;
+			    case 'manualno':
+			     if (Yii::$app->user->isGuest)
+			    return '';
+			    else
+			   return  $form->field($this,$attribute)->textInput();
+			   
+			    break;
 			 
 			default:
 			break;
@@ -336,6 +359,7 @@ public static function statusNames()
        
         $maintype=Yii::$app->request->post('maintype');
         $deadline=$markings['deadline'];
+        $flag=false;
         foreach ($maintype as $x)
             {
                 switch ($x)
@@ -347,6 +371,25 @@ public static function statusNames()
                            $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
                            $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$this->block_code])->one()->id;
                            $this->markToDesignation($this->id,$designation,$deadline);
+                           $flag=true;
+                         break;
+                         case 'cdo':
+                       if (!Yii::$app->user->can('marktopo'))
+                            break;
+                        //find block -
+                           $cdodtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'cdo'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$cdodtid,'level_id'=>$this->district_code])->one()->id;
+                           $this->markToDesignation($this->id,$designation,$deadline);
+                           $flag=true;
+                         break;
+                            case 'dcmnrega':
+                       if (!Yii::$app->user->can('marktopo'))
+                            break;
+                        //find block -
+                           $dcmnregadtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'dcmnrega'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dcmnregadtid,'level_id'=>$this->district_code])->one()->id;
+                           $this->markToDesignation($this->id,$designation,$deadline);
+                           $flag=true;
                          break;
                          case 'sqm':
                           if (!Yii::$app->user->can('marktosqm'))
@@ -357,47 +400,73 @@ public static function statusNames()
                            $sqmdtid=$podt->id;
                            $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one()->id;
                             $this->markToDesignation($this->id,$designation,$deadline);
+                            $flag=true;
                          break;
                          default: break;
                         }
             }
-        if(!Yii::$app->user->can('marktoothers')) return;
-        if (!array_key_exists('designation',$markings) )return;
+        if(Yii::$app->user->can('marktoothers')) {
+        if (array_key_exists('designation',$markings) )
+          {
                 foreach ($markings['designation'] as $x=>$designation_id)
                     {
                         $this->markToDesignation($this->id,$designation_id,$deadline);
+                        $flag=true;
                   
                     }
-        
+            }
+            }
+        if ($flag)
+          {
+            if ($this->status==self::REGISTERED)
+             {
+               $this->status=self::PENDING_FOR_ENQUIRY;
+              }
+            else 
+              if ($this->status==self::ENQUIRY_REPORT_RECEIVED)
+              $this->status=self::PENDING_FOR_ATR;
+          }
        
     }
-    public function count1($s=0,$d=-1)
+    public function count1($ms=0,$d=-1,$s=-1,$count=true)
     {
        $query = new Query;
 	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
-	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as status,marking.id as markingid') 
+	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,marking.id as markingid,marking.status as markingstatus') 
 	        ->from('complaint')
 	        ->join(  'LEFT JOIN',
 	                'marking',
 	                'marking.request_id =complaint.id and marking.request_type=\'complaint\''
 	            )
-	           ->join(  'INNER JOIN',
+	           ->join(  'LEFT JOIN',
 	                'complaint_type',
 	                'complaint.complaint_type =complaint_type.shortcode'
 	            ) 
-	             ->join(  'INNER JOIN',
+	             ->join(  'LEFT JOIN',
 	                'complaint_subtype',
 	                'complaint.complaint_subtype =complaint_subtype.shortcode'
 	            );
-   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-   $query->where(['status'=>$s]);
-	if (!Yii::$app->user->can('complaintviewall'))
-       $query->where(['receiver'=>$d]);
+  
+   if($s!=-1) $query->where(['status'=>$s]);
+   if ($ms==-2)
+      $query->andWhere(['marking.status'=>null]);
+    else 
+      $query->andWhere(['marking.status'=>$ms]);
+	if ($d!=-1)
+	 {
+	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+  
+       $query->andWhere(['receiver'=>$d]);
+    }
         $dp= new ActiveDataProvider([
          'query' => $query,
         
         ]);
+        if ($count)
         return $dp->totalCount;
+        else 
+         return $dp;
+         
     
     }
 }

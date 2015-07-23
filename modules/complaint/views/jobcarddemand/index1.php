@@ -13,7 +13,13 @@ use yii\grid\GridView;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+['header'=>'Id',
+'attribute'=>'id',
+'value'=>function($model,$key,$index,$column)
+{
+        return Html::a($model['id'],Url::to(['/complaint/jobcarddemand/view?id='.$model['id']]));
+},
+'format'=>'html'],
 ['header'=>'name_hi',
 'attribute'=>'Name',
 'value'=>function($model,$key,$index,$column)
@@ -47,10 +53,14 @@ use yii\grid\GridView;
                 $params[0] = '/complaint/jobcarddemand'. '/' . $action ;
                 return Url::toRoute($params);
               },
-              'buttons'=>[
+             'buttons'=>[
                 'filereport'=>function($url,$model,$key)
                 {
+                 if ($model['markingstatus']!=null)
                   return Html::a('<button class="btn btn-success">'.'File Report'.'</button>',$url.'&returnurl='.urlencode(Url::to(['/complaint/jobcarddemand/my'])));
+                else
+                  return Html::a('<button class="btn btn-success">'.'Mark Officer'.'</button>',Url::to(['/complaint/jobcarddemand/update?id='.$model['id']]).'&returnurl='.urlencode(Url::to(['/complaint/jobcarddemand/my'])));
+      
                 }
               ],
               ],

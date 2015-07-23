@@ -41,9 +41,12 @@ $this->registerJs(
         <h3>जॉबकार्ड की मांग करें</h3>
     </div>
 </div>
-    <?php $form = ActiveForm::begin([
+    <?php 
+     $x=$model->isNewRecord?'create':'update?id='.$model->id;
+   
+    $form = ActiveForm::begin([
     'layout' => 'horizontal',
-    'action'=>Url::to(['/complaint/jobcarddemand/create']),
+    'action'=>Url::to(['/complaint/jobcarddemand/'.$x]),
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [
@@ -74,11 +77,18 @@ $this->registerJs(
     <?= $model->showForm($form,"panchayat_code") ?>
 
     <?= $model->showForm($form,"village") ?>
+    <?= $model->showForm($form,"panchayat") ?>
+    
+    
 
 </div>
 <input type="hidden" name="maintype[]" value="po">
  <?=$form->field($model,'marking[deadline]')->hiddenInput(['id'=>'deadline'])->label(false)?>
-
+  <?php if (Yii::$app->user->isGuest) {?>
+   <div class="form-group">
+   <?= $form->field($model, 'captcha')->widget(\yii\captcha\Captcha::classname(),['captchaAction' => '/site/captcha'])?>
+   </div>
+   <?php } ?>
     <div class="form-group text-center">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

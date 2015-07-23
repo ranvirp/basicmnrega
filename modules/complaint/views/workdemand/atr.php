@@ -75,21 +75,25 @@ div.required label:after {
     <div class="col-lg-5" style="margin:5px">
     
     
-    <div class="col-md-3">
-     <?= $form->field($workdemandReport,"complainttrue")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')])?>
+    <div class="col-md-12">
+     <?= $form->field($workdemandReport,"complainttrue")->radioList(['0'=>Yii::t('app','Work Not Given'),'1'=>Yii::t('app','Work Given')],
+     ['itemOptions'=>['onClick'=>'if ($(this).val()=="1") {$("#complainttrue").hide(); $("#workdetails").show();}else {
+     $("#complainttrue").show(); $("#workdetails").hide();}' ]])?>
     </div>
      
-   <div class="col-md-9">
-     <?= $form->field($workdemandReport,"description")->textArea(['class'=>'form-control hindiinput'])?>
+   <div class="col-md-12" class="hide" id="complainttrue">
+     <?= $form->field($workdemandReport,"description")->textArea(['class'=>'form-control hindiinput'])->label(Yii::t('app','Reason for not giving work'))?>
     </div>
+    <div class="col-md-12" class="hide" id="workdetails">
     <p> कार्य देने का विवरण</p>
-   <div class="col-md-12">
+   <div >
     
       <?= $form->field($workdemandReport,"work_id")->textInput()?>
    </div>
    <div class="col-md-12">
     
       <?= $form->field($workdemandReport,"workname")->textInput()?>
+   </div>
    </div>
    <div class="form-group col-md-12">
         <?= Html::submitButton($workdemandReport->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>

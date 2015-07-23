@@ -72,13 +72,7 @@ class Marking extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRequest()
-    {
-        return $this->hasOne(Request::className(), ['id' => 'request_id']);
-    }
+
     public function getComplaint()
     {
        $classmapping=self::mapping();
@@ -283,14 +277,26 @@ class Marking extends \yii\db\ActiveRecord
        */
        
     }
-    public static function setStatus($request_type,$request_id,$status)
+    public static function setStatus($markingid,$status,$message='')
     {
-       $marking=Marking::find()->where(['request_type'=>$request_type,'request_id'=>$request_id])->one();
+       $marking=Marking::findOne($markingid);
+       $transaction=\Yii::$app->db->beginTransaction();
        if ($marking)
          {
            $marking->status=$status;
            $marking->save();
          }
+         if ($message!='')
+         {
+           $reply=new \app\modules\reply\models\Reply;
+           $reply->content_type='marking';
+           $reply->content_type_id=$marking->id;
+           $reply->author_id=Yii::$app->user->id;
+           $reply->create_time=time();
+           $reply->save();
+         
+         }
+        $transaction->commit();
     
     }
     /*

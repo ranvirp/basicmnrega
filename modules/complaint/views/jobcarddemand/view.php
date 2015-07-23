@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
+use app\modules\mnrega\models\MarkingSearch;
 /* @var $this yii\web\View */
 /* @var $model app\modules\complaint\models\JobcardDemand */
 
@@ -38,11 +38,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'block_code',
             'panchayat_code',
             'village',
-            'author',
-            'create_time:datetime',
-            'update_time:datetime',
+           
             'panchayat',
         ],
     ]) ?>
 
+</div>
+<div class="row">
+<?php
+      $marking=new MarkingSearch;
+      $marking->request_type='jobcarddemand';
+      $marking->request_id=$model->id;
+      $dp =$marking->search([]);
+      echo '<div class="col-sm-8">';
+      print $this->render('@app/modules/mnrega/views/marking/index',['searchModel'=>$marking,'dataProvider'=>$dp,'markurl'=>null]);
+       echo '</div>';
+     
+?>
 </div>

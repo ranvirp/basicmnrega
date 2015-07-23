@@ -9,17 +9,15 @@ Following functionality is available for different roles:
    introduce condition about marking in form as well as while saving 
    (modify behavior to introduce functions also)
    introduce transactional 
-
+----------Done----------------
 2. Mark unmarked complaints to officers (po and bdos)
    function :in behaviour MarkingBehaviour/assign 
-   
+ ----complaint/update -------check  
 
 3. Get history of all complaints and their status for a particular complainer 
    or for particular category etc. 
    function: complaintcontroller/advancedsearch
    todo: a good index file for display of complaints
-4. when report is submitted by an officer- he can assign that comlpaint to 
-   himself to verify and add 
 
 complaintadmin
 ---------------
@@ -35,6 +33,9 @@ complaintadmin
 4. filing  atr and updating ATR
 
 5. add lokpals and state quality monitors
+4. when report is submitted by an officer- he can assign that comlpaint to 
+   himself to verify and add 
+
 
 POs
 -----------

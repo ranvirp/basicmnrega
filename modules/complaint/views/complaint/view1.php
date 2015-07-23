@@ -12,6 +12,12 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
 use app\modules\complaint\models\EnquiryReportSummary;
 use app\modules\complaint\models\EnquiryReportPoint;
+use app\modules\complaint\models\AtrSummary;
+use app\modules\complaint\models\AtrPoint;
+use app\modules\complaint\models\Complaint;
+use app\modules\mnrega\models\MarkingSearch;
+
+
 
 ?>
 <style>
@@ -35,12 +41,46 @@ div.required label:after {
  text-align:center
 }
 </style>
-
-<div class="col-sm-12 well">
-<div class="col-lg-4 text-heading" >शिकायत का विवरण</div>
-<div class="col-lg-4 text-heading">जांच आख्या</div>
-<div class="col-lg-4 text-heading">जांच आख्या</div>
-    <div class="col-lg-5" style="margin:5px">
+<?php if (Yii::$app->user->can('marktopo')) {?>
+ <p>
+        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Add Comments', ['/reply/default/create','ct'=>'complaint', 'ctid' => $model->id], [
+            'class' => 'btn btn-danger',
+            
+        ]) ?>
+         <?= Html::a('View Comments', ['/complaint/complaint/viewcomments', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+          <?= Html::a('Add Comments', ['/reply/default/create', 'ct'=>'complaint', 'ctid' => $model->id], ['class' => 'btn btn-primary','onClick'=>'event.preventDefault();populateHtml($(this).attr("href"),"reply")']) ?>
+       
+       
+    </p>
+    <?php } ?>
+<div class="col-sm-offset-3 col-sm-9 well" >
+  <p><span>Status:</span><span><?=Complaint::statusNames()[$model->status]?></p>
+  <p><button onClick="$('#status').toggle()">Toggle</button></p>
+  <div class="col-md-12" id="status">
+<?php
+      $marking=new MarkingSearch;
+      $marking->request_type='complaint';
+      $marking->request_id=$model->id;
+      $dp =$marking->search([]);
+      if (Yii::$app->user->can('changemarkingstatus') )
+        $markurl=Url::to(['/complaint/complaint/setmarkingstatus']);
+     else 
+       $markurl=null;
+      echo '<div class="col-sm-8">';
+         print $this->render('@app/modules/mnrega/views/marking/index',['searchModel'=>$marking,'dataProvider'=>$dp,'markurl'=>$markurl]);
+       echo '</div>';
+     
+?>
+</div>
+</div>
+<div class="col-sm-offset-3 col-sm-9 well">
+<div class="col-lg-3 text-heading" >शिकायत का विवरण</div>
+<div class="col-lg-3 text-heading">जांच आख्या</div>
+<div class="col-lg-3 text-heading">कार्यवाही का विवरण</div>
+</div>
+<div class="col-sm-offset-3 col-sm-9">
+    <div class="col-lg-3" style="margin:5px">
     
    <?= DetailView::widget([
         'model' => $model,
@@ -63,9 +103,12 @@ div.required label:after {
     <?php 
       $enquiryreportsummary=EnquiryReportSummary::find()->where(['complaint_id'=>$model->id])->one();
       $atrsummary=$model->atrSummary;
-      }
+      
     ?>
-    <div class="col-lg-4" style="margin:5px">
+       
+  
+    <div class="col-lg-3" style="margin:5px">
+    <?php if ($enquiryreportsummary) { ?>
     <div class="col-md-12">
      <?= DetailView::widget([
         'model' => $enquiryreportsummary,
@@ -82,39 +125,38 @@ div.required label:after {
     <?=\app\modules\reply\models\File::showAttachmentsInline($enquiryreportsummary,"attachments")?>
     </div>
      
-    
+    <?php } else echo 'Pending';?>
      </div>
-         <div class="col-lg-4" style="margin:5px">
+         <div class="col-lg-3" style="margin:5px">
+          <?php if ($atrsummary) { ?>
+    
     <div class="col-md-12">
      <?= DetailView::widget([
         'model' => $atrsummary,
         'attributes' => [
             'id',
-            'reportby',
             'description',
-            'complainttrue',
-            'firproposed',
-            'daproposed',
-            'amountinvolved',
+            'amountrecovered',
+            'firdone',
+            'dadone',
                    ],
     ]) ?>
     <?=\app\modules\reply\models\File::showAttachmentsInline($enquiryreportsummary,"attachments")?>
     </div>
-     
+     <?php }  else echo 'Pending';?>
     
      </div>
     </div>
-      
-    
+<?php if ($model->complaintPoints)  {?>    
+<div class="col-sm-offset-2 col-sm-10 well">
+<div class="col-lg-3 text-heading" style="margin:5px">शिकायत के अन्य बिंदु</div>
+<div class="col-lg-3 text-heading" style="margin:5px">बिंदु वार जांच आख्या</div>
+<div class="col-lg-3 text-heading" style="margin:5px">बिंदु वार कार्यवाही का विवरण</div>
 </div>
-<div class="col-sm-12 ">
-<div class="col-lg-5 text-heading" style="margin:5px">शिकायत के अन्य बिंदु</div>
-<div class="col-lg-5 text-heading" style="margin:5px">बिंदु वार जांच आख्या</div>
-
    
 <?php foreach ($model->complaintPoints as $cp) {?>
-   <div class="row">
-    <div class="col-lg-5" style="margin:5px">
+   <div class="col-sm-offset-3 col-sm-9">
+    <div class="col-lg-3" style="margin:5px">
 
      <?= DetailView::widget([
         'model' => $cp,
@@ -134,39 +176,60 @@ div.required label:after {
     <?php 
       $complaint_point_id=$cp->id;
       $enquiryreportpoint=EnquiryReportPoint::find()->where(['complaint_point_id'=>$complaint_point_id])->one();
-      if (!$enquiryreportpoint)
-      {
-         $enquiryreportpoint=new EnquiryReportPoint;
-         $enquiryreportpoint->complaint_point_id=$complaint_point_id;
-      }
-    ?>
-    <div class="col-lg-5" style="margin:5px">
-    <div class="col-md-12">
-      <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]report")->textArea(['class'=>'hindiinput form-control'])?>
-   
-      <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]attachments")->widget(\app\modules\reply\widgets\FileWidget::className())?>
-    </div>
-    <div class="col-md-12">
-      <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]trueorfalse")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')])?>
-    </div>
-    <div class="col-md-12">
-       <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]firproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
-    <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]firproposedreason")->textArea(['class'=>'hindiinput'])?>
-   
-    </div>
-    <div class="col-md-12">
-     <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]daproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
-    <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]daproposeddetails")->textArea(['class'=>'hindiinput'])?>
-   
-    </div>
-    <div class="col-md-12">
-        <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]amounttoberecovered")->textInput()?>
-    <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]amountfrom")->textArea(['class'=>'hindiinput'])?>
-  
-    </div>
-    
      
+    ?>
+        <div class="col-lg-3" style="margin:5px">
+<?php if($enquiryreportpoint){ ?>
+ <div class="col-md-12">
+     <?= DetailView::widget([
+        'model' => $enquiryreportpoint,
+        'attributes' => [
+            'trueorfalse',
+            'report',
+            'amounttoberecovered',
+            'amountfrom',
+            'firproposed',
+            'firproposedreason',
+            'daproposed',
+            'daproposeddetails'
+           
+
+        ],
+    ]) ?>
+    <?=\app\modules\reply\models\File::showAttachmentsInline($enquiryreportpoint,"attachments")?>
+    </div>
+     <?php } ?>
+     </div>
    
+    <?php 
+      $atrpoint=AtrPoint::find()->where(['complaint_point_id'=>$complaint_point_id])->one();
+     
+    ?>
+        <div class="col-lg-3" style="margin:5px">
+<?php if($atrpoint){ ?>
+<div class="col-md-12">
+ 
+     <?= DetailView::widget([
+        'model' => $atrpoint,
+        'attributes' => [
+            'atrstatus',
+            'amountrecovered',
+            'amountfrom',
+            'firdone',
+            'firdetails',
+            'dadone',
+            'dadetails'
+           
+
+        ],
+    ]) ?>
+    
+    <?=\app\modules\reply\models\File::showAttachmentsInline($atrpoint,"attachments")?>
+    
+    </div>
+   
+  <?php } else echo 'Pending';?>  
+     
    
     
     </div>
@@ -177,8 +240,4 @@ div.required label:after {
     </div>
  
     <?php }?>
-    </div>
-</div> 
- <div class="form-group">
-        <?= Html::submitButton($enquiryreportsummary->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
-    </div>
+   <?php }?>

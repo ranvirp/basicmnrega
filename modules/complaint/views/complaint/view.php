@@ -1,8 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 use yii\widgets\DetailView;
 use app\modules\mnrega\models\MarkingSearch;
+use app\modules\complaint\models\Complaint;
 /* @var $this yii\web\View */
 /* @var $model app\models\Reply */
 use app\assets\AppAssetGoogle;
@@ -45,22 +48,13 @@ $this->params['breadcrumbs'][] = 'Complaint';
  'attributes'=>[['attribute'=>'district_code','value'=>\app\modules\mnrega\models\District::findOne($model->district_code)->name_en],
                ['attribute'=>'block_code','value'=>\app\modules\mnrega\models\Block::findOne($model->block_code)->name_en],
  'panchayat',
- ['header'=>'Attachments','attribute'=>'attachments','value'=>\app\modules\reply\models\File::showAttachmentsInline($model,"attachments"),'format'=>'html']]
+ ['header'=>'Attachments','attribute'=>'attachments','value'=>\app\modules\reply\models\File::showAttachmentsInline($model,"attachments"),'format'=>'html'],
+ ['header'=>Yii::t('app','Status'),'attribute'=>'status','value'=>Complaint::statusNames()[$model->status]],
+]
 ]
 )?>
 </div>
-<table class="table table-striped">
-<tr><th>Id</th><th><?=Yii::t('app','Name Hi')?></th><th><?=Yii::t('app','Father/Husband Name')?></th><th><?= Yii::t('app','Mobile No')?></th><th><?=Yii::t('app','Address')?></th><th><?=Yii::t('app','Complaint Letter')?></th></tr>
-   <tr>
-    <td><?=$model->showValue('id')?></td>
-    <td><?=$model->showValue('name_hi')?></td>
-    <td><?=$model->showValue('fname')?></td>
-    <td><?=$model->showValue('mobileno')?></td>
-    <td><?=$model->showValue('address')?></td>
-    <td><?=\app\modules\reply\models\File::showAttachmentsInline($model,"attachments")?></td>
-   
-    </tr>
-    </table>
+
    
 </div>
 <?php $cps=$model->complaintPoints;
@@ -92,8 +86,12 @@ if ($cps) {?>
       $marking->request_type='complaint';
       $marking->request_id=$model->id;
       $dp =$marking->search([]);
-      echo '<div class="col-sm-8">';
-      print $this->render('@app/modules/mnrega/views/marking/index',['searchModel'=>$marking,'dataProvider'=>$dp]);
+      if (Yii::$app->user->can('changemarkingstatus') )
+        $markurl=Url::to(['/complaint/complaint/setmarkingstatus']);
+     else 
+       $markurl=null;
+      echo '<div class="col-sm-offset-2 col-sm-8">';
+         print $this->render('@app/modules/mnrega/views/marking/index',['searchModel'=>$marking,'dataProvider'=>$dp,'markurl'=>$markurl]);
        echo '</div>';
      
 ?>

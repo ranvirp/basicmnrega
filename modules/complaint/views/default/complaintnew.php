@@ -28,13 +28,15 @@ div.required label:after {
         return $elem.closest('.dynamicform_wrapper').find('.item').length-1;
     };
 </script>
-<div class="customer-form">
+<h2 class="text-center">Form to submit a complaint</h2>
+<div class="customer-form text-center">
 <?php AppAssetGoogle::register($this);?>
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
     <div class="row">
     <div class="col-md-5">    
      <?=$modelComplaint->showForm($form,'source')?> 
-     <?= $form->field($modelComplaint, 'manualno')->textInput() ?>
+     <?=$modelComplaint->showForm($form,'manualno')?> 
+     
      
    <table class="table table-hover well">
    <caption>शिकायतकर्ता का विवरण</caption>
@@ -103,7 +105,10 @@ div.required label:after {
 <?php if (Yii::$app->user->can('marktopo')) {?>
  <p> Marked to </p><hl>
             <div class="checkbox">
-  <label><input type="checkbox" name="maintype[]" value="po" checked>सम्बंधित खंड विकास अधिकारी</label>
+  <label><input type="checkbox" name="maintype[]" value="po">सम्बंधित खंड विकास अधिकारी</label>
+    <label><input type="checkbox" name="maintype[]" value="cdo">सम्बंधित मुख्य विकास अधिकारी </label>
+  <label><input type="checkbox" name="maintype[]" value="dcmnrega">सम्बंधित उपायुक्त श्रम रोज़गार </label>
+
 <?php };?>
 <?php if (Yii::$app->user->can('marktosqm')) {?>
 
@@ -206,11 +211,13 @@ div.required label:after {
         </div>
     </div><!-- .panel -->
     <?php DynamicFormWidget::end(); ?>
+    <?php if (Yii::$app->user->isGuest) {?>
    <div class="form-group">
    <?= $form->field($modelComplaint, 'captcha')->widget(\yii\captcha\Captcha::classname(),['captchaAction' => '/site/captcha'])?>
    </div>
+   <?php } ?>
     <div class="form-group">
-        <?= Html::submitButton($modelComplaintPoint->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton($modelComplaint->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

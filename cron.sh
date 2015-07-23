@@ -1,1 +1,1 @@
-./yii parameter/populate 1 1
+./yii parameter/populate 9 1

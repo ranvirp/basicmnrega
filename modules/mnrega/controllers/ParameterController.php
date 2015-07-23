@@ -352,6 +352,10 @@ else
        return $this->render('_displaymusterroll',['model'=>$model,'result'=>
         Json::decode($model->json_value,true)]);
         break;
+             case 'houses':
+       return $this->render('_displaywcategoriesdistrictwise',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+        break;
         case 'overall':
        return $this->render('_displayoverall',['model'=>$model,'result'=>
         Json::decode($model->json_value,true)]);

@@ -69,6 +69,9 @@ class JobcarddemandController extends Controller
        
        
         $model = new JobcardDemand();
+         if (Yii::$app->user->isGuest)
+            $model->scenario='guestentry';//captcha validation
+  
         $transaction = \Yii::$app->db->beginTransaction();
         if ($model->load(Yii::$app->request->post()))
         {
@@ -83,11 +86,11 @@ class JobcarddemandController extends Controller
             {
                 $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
                 $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$model->block_code])->one();
-                if ($designtion)
+                if ($designation)
                 {
-                   $model->markToDesignation($designation->id);
+                   $model->markToDesignation($model->id,$designation->id,date('Y-M-d',strtotime('+7 day')));
                    $transaction->commit();
-                   $this->redirect('view',['id'=>$model->id]);
+                   $this->redirect(['view','id'=>$model->id]);
                 }
                 else 
                   {
@@ -112,25 +115,43 @@ class JobcarddemandController extends Controller
      * @param integer $id
      * @return mixed
      */
-        public function action1Update($id)
+        public function actionUpdate($id)
     {
          $model = $this->findModel($id);
-       
- 
-        if ($model->load(Yii::$app->request->post()))
+        if (Yii::$app->request->post() && $model->load(Yii::$app->request->post()))
         {
-        
-            if ($model->save())
-            $model = new JobcardDemand();; //reset model
-        }
- 
-      
-        return $this->render('update', [
+           $model->update_time=time();
+            
+            $transaction = \Yii::$app->db->beginTransaction();
+                 try{
+                if ( $model->save())
+                {
+                   $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
+                   $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$model->block_code])->one();
+                //print_r($designation);
+               // exit;
+                if ($designation)
+                {
+                   $model->markToDesignation($model->id,$designation->id,date('Y-M-d',strtotime('+7 day')));
+                   $transaction->commit();
+                   $this->redirect(['view','id'=>$model->id]);
+                }
+                
+                }
+                else {print_r($model->errors);exit;}
+                }
+                catch(Exception $e)
+                  {
+                    $transaction->rollBack();
+                  }
+    }
+      return $this->render('create', [
             'model' => $model,
             
         ]);
 
     }
+
     /**
      * Deletes an existing JobcardDemand model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -181,8 +202,9 @@ class JobcarddemandController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
      }
-  public function actionMy()
+  public function actionMy($ms=0,$d=-1,$s=-1)
      {
+     /*
         $query = new Query;
 	    $query  ->select('jobcarddemand.id as id,jobcarddemand.name_hi as cname,fname,mobileno,address,district.name_en as dname,block.name_en as bname,panchayat,
 	    ') 
@@ -199,16 +221,28 @@ class JobcarddemandController extends Controller
 	                'block',
 	                'block.code =jobcarddemand.block_code'
 	            );
-	 $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-
-	if (!Yii::$app->user->can('complaintviewall'))
-       $query->where(['receiver'=>$d]);
+	 if ($ms==-2)
+        $query->where(['marking.status'=>null]);
+     else
+        $query->where(['marking.status'=>$ms]);
+    if ($s!=-1)
+      $query->andWhere(['workdemand.status'=>$s]);
+	if (($d==-1) && (!Yii::$app->user->can('complaintadmin')))
+	  {
+	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+   
+       $query->andWhere(['receiver'=>$d]);
+       }
+       else if (Yii::$app->user->can('complaintadmin'))
+        $query->andWhere(['receiver'=>$d]);
         $dp= new ActiveDataProvider([
          'query' => $query,
          'pagination' => [
             'pageSize' => 20,
           ],
         ]);
+        */
+        $dp=JobcardDemand::count1($ms,$d,$s,false);
         return $this->render('index1',['dataProvider'=>$dp]);
      
      

@@ -14,7 +14,13 @@ use app\modules\complaint\models\Complaint;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+['header'=>'Id',
+'attribute'=>'id',
+'value'=>function($model,$key,$index,$column)
+{
+        return Html::a($model['id'],Url::to(['/complaint/complaint/view?id='.$model['id']]));
+},
+'format'=>'html'],
 ['header'=>'Name',
 'attribute'=>'cname',
 'value'=>function($model,$key,$index,$column)
@@ -63,14 +69,11 @@ use app\modules\complaint\models\Complaint;
                 'reqaction'=>function($url,$model,$key)
                 {
                  if ($model['complaintstatus']==Complaint::PENDING_FOR_ENQUIRY)
-                  return Html::a('<button class="btn btn-success">'.'File Enquiry Report'.'</button>',$url.'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint/my'])));
+                  return Html::a('<button class="btn btn-success">'.'File Enquiry Report'.'</button>',Url::to(['/complaint/complaint/filereport?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                   else  if ($model['complaintstatus']==Complaint::PENDING_FOR_ATR)
-                  return Html::a('<button class="btn btn-success">'.'File ATR'.'</button>',$url.'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint/my'])));
-                   else if ($model['complaintstatus']==Complaint::ATR_RECEIVED)
-                  return Html::a('<button class="btn btn-success">'.'Mark Disposed'.'</button>',$url.'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint/my'])));
-                    else if ($model['complaintstatus']==Complaint::REGISTERED)
-                  return Html::a('<button class="btn btn-success">'.'Mark to Officer'.'</button>',$url.'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint/my'])));
-                  
+                  return Html::a('<button class="btn btn-success">'.'File ATR'.'</button>',Url::to(['/complaint/complaint/fileatr?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
+                  else 
+                     return Html::a('<button class="btn btn-success">'.'Mark Officer'.'</button>',Url::to(['/complaint/complaint/update?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                 }
               ],
               ],

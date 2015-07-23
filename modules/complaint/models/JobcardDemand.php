@@ -5,6 +5,9 @@ use app\modules\mnrega\models\Block;
 use app\modules\mnrega\models\Panchayat;
 use app\modules\mnrega\models\MarkingSearch;
 use Yii;
+use yii\db\Query;
+use yii\data\ActiveDataProvider;
+
 
 /**
  * This is the model class for table "jobcarddemand".
@@ -26,6 +29,8 @@ use Yii;
 class JobcardDemand extends \yii\db\ActiveRecord
 {
    public $marking;
+   public $captcha;
+
     /**
      * @inheritdoc
      */
@@ -63,6 +68,7 @@ class JobcardDemand extends \yii\db\ActiveRecord
             [['block_code'], 'string', 'max' => 7],
             [['panchayat_code'], 'string', 'max' => 12],
             [['marking'],'safe'],
+             [['captcha'],'captcha','on'=>'guestentry'],
         ];
     }
 
@@ -147,10 +153,13 @@ case 'name_hi':
 			case 'panchayat_code':
 			   return  
 			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'complaint-panchayat',
-			   'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());$('#workid').val($(this).val()+'/')",'class'=>'form-control']);
+			  'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());",'class'=>'form-control']);
 			    
 			    break;
-									
+			case 'panchayat':
+			   return  
+			   $form->field($this,$attribute)->hiddenInput(['id'=>'panchayat-name'])->label(false);
+			    break;				
 			case 'village':
 			   return  $form->field($this,$attribute)->textInput();
 			    
@@ -228,19 +237,47 @@ case 'name_hi':
 			break;
 		  }
     }
-	 public static function count1()
+    public function count1($ms=0,$d=-1,$s=-1,$count=true)
     {
-     $modelSearch= new MarkingSearch;
-         $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
-         $d=$designation->id;
-      $modelSearch->request_type='jobcarddemand';
-      
-       if (!Yii::$app->user->can('complaintviewall'))
-       $modelSearch->receiver=$d;
-       $modelSearch->status=0;
-       $dp=$modelSearch->search([]);
-       return $dp->totalCount;
-       
+       $query = new Query;
+	    $query  ->select('jobcarddemand.id as id,jobcarddemand.name_hi as cname,fname,mobileno,address,panchayat,district.name_en as districtname,
+	    block.name_en as blockname,
+	    dateofmarking,jobcarddemand.status as status,marking.id as markingid,marking.status as markingstatus') 
+	        ->from('jobcarddemand')
+	        ->join(  'LEFT JOIN',
+	                'marking',
+	                'marking.request_id =jobcarddemand.id and marking.request_type=\'jobcarddemand\''
+	            )
+	           ->join(  'INNER JOIN',
+	                'district',
+	                'jobcarddemand.district_code =district.code'
+	            ) 
+	             ->join(  'INNER JOIN',
+	                'block',
+	                'jobcarddemand.block_code =block.code'
+	            );
+  
+   if($s!=-1) $query->where(['status'=>$s]);
+   if ($ms=='-2')
+      $query->andWhere(['marking.status'=>null]);
+    else 
+      $query->andWhere(['marking.status'=>$ms]);
+	if ($d!=-1)
+	 {
+	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+  
+       $query->andWhere(['receiver'=>$d]);
+    }
+        $dp= new ActiveDataProvider([
+         'query' => $query,
+        
+        ]);
+        if ($count)
+        return $dp->totalCount;
+        else 
+         return $dp;
+         
+    
     }
 	
 }

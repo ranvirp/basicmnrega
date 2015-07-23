@@ -1,9 +1,11 @@
 <?php
 namespace app\modules\complaint\controllers;
 use app\modules\complaint\models\Complaint;
+use app\modules\complaint\models\ComplaintSearch;
+
 use app\modules\complaint\models\ComplaintPoint;
 use app\modules\complaint\models\Complaint_type;
-use app\modules\complaint\models\Complaint_marking;
+use app\modules\mnrega\models\Marking;
 use app\modules\complaint\models\EnquiryReportSummary;
 use app\modules\complaint\models\EnquiryReportPoint;
 use app\modules\complaint\models\AtrSummary;
@@ -29,7 +31,15 @@ class ComplaintController extends Controller
 
 public function actionIndex()
 {
-  return $this->render('dashboard');
+  //return $this->render('dashboard');
+   $searchModel = new ComplaintSearch();
+   $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+   $dataProvider->query=$dataProvider->query->with('markings');
+   //leftJoin('marking',['marking.request_id'=>'complaint.id','marking.request_type'=>'complaint']);
+        return $this->render('index2', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model'=>new \app\modules\complaint\models\Complaint]);
 }
     /**
      * Creates a new Complaint model.
@@ -38,9 +48,10 @@ public function actionIndex()
      */
     public function actionCreate()
     {
-        if (!Yii::$app->user->can('complaintcreate'))
-          throw new ForbiddenHttpException("Not allowed");
+      
         $modelComplaint = new Complaint;
+         if (Yii::$app->user->isGuest)
+            $modelComplaint->scenario='guestentry';//captcha validation
         $modelsComplaintPoint = [new ComplaintPoint];
         if ($modelComplaint->load(Yii::$app->request->post())) {
 
@@ -64,6 +75,12 @@ public function actionIndex()
             if ($valid) {
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
+                      $modelComplaint->status=Complaint::REGISTERED;
+                        $modelComplaint->_createMarking();
+                        
+                          //Audit trail
+                       $modelComplaint->created_by=Yii::$app->user->id;
+                       $modelComplaint->created_at=time();
                     if ($flag = $modelComplaint->save(false)) {
                     
 
@@ -78,12 +95,8 @@ public function actionIndex()
                         }
                     }
                     if ($flag) {
-                        $modelComplaint->_createMarking();
-                        
-                          //Audit trail
-                       $modelComplaint->created_by=Yii::$app->user->id;
-                       $modelComplaint->created_at=time();
-                       $modelComplaint->flag=1;//requires Admin Attention
+                       
+                      // $modelComplaint->flag=1;//requires Admin Attention
                        //
                         $transaction->commit();
                         return $this->redirect(['view', 'id' => $modelComplaint->id]);
@@ -134,6 +147,12 @@ public function actionIndex()
             if ($valid) {
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
+                       $modelComplaint->_createMarking();
+                       
+                       //Audit trail
+                       $modelComplaint->updated_by=Yii::$app->user->id;
+                       $modelComplaint->updated_at=time();
+                       $modelComplaint->flag=1;//requires Admin Attention
                     if ($flag = $modelComplaint->save(false)) {
                         if (! empty($deletedIDs)) {
                             ComplaintPoint::deleteAll(['id' => $deletedIDs]);
@@ -152,12 +171,7 @@ public function actionIndex()
                         }
                     }
                     if ($flag) {
-                         $modelComplaint->_createMarking();
-                       
-                       //Audit trail
-                       $modelComplaint->updated_by=Yii::$app->user->id;
-                       $modelComplaint->updated_at=time();
-                       $modelComplaint->flag=1;//requires Admin Attention
+                         
                        //
                         $transaction->commit();
                         return $this->redirect(['view', 'id' => $modelComplaint->id]);
@@ -180,7 +194,7 @@ public function actionIndex()
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->render('view1', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -270,10 +284,11 @@ public function actionIndex()
                         }
                     }
                     if ($flag) {
-                         $modelComplaint->status=1;//report received
                          $markingid=Yii::$app->request->get('markingid');
                          if ($markingid)
-                         $modelComplaint->markStatus($markingid,1);
+                         $modelComplaint->markStatus($markingid,2);
+                         if ($modelComplaint->status==Complaint::PENDING_FOR_ENQUIRY)
+                           $modelComplaint->status=Complaint::ENQUIRY_REPORT_RECEIVED;
                          $modelComplaint->save(false);
                         $transaction->commit();
                         return $this->render('/default/atrform', ['model' => $modelComplaint]);
@@ -332,8 +347,9 @@ public function actionIndex()
        $dp=$modelSearch->search([]);
        return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
     }
-    public function actionMy($ms=0,$d=-1)
+    public function actionMy($ms=0,$d=-1,$s=-1)
      {
+     /*
         $query = new Query;
 	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
 	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,marking.id as markingid,marking.status as markingstatus') 
@@ -351,14 +367,18 @@ public function actionIndex()
 	                'complaint.complaint_subtype =complaint_subtype.shortcode'
 	            );
   // $query->where(['complaint.status'=>$s]);
-    $query->where(['marking.status'=>$ms]);
-
+  if ($ms==-2)
+    $query->where(['marking.status'=>null]);
+else
+  $query->where(['marking.status'=>$ms]);
+    if ($s!=-1)
+      $query->andWhere(['complaint.status'=>$s]);
 	//if (!Yii::$app->user->can('complaintviewall'))
-	if (($d==-1) && (!Yii::$app->user->can('complaintadmin')))
+	if (($d!=-1) && (!Yii::$app->user->can('complaintadmin')))
 	  {
 	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
    
-       $query->where(['receiver'=>$d]);
+       $query->andWhere(['receiver'=>$d]);
        }
        //print_r($query);
        //exit;
@@ -368,6 +388,8 @@ public function actionIndex()
             'pageSize' => 20,
           ],
         ]);
+        */
+        $dp=Complaint::count1($ms,$d,$s,false);
         return $this->render('index1',['dataProvider'=>$dp]);
      
      
@@ -442,6 +464,12 @@ public function actionIndex()
                     }
                     if ($flag) {
                         //print_r($atrPoint);
+                        $markingid=Yii::$app->request->get('markingid');
+                         if ($markingid)
+                         $modelComplaint->markStatus($markingid,2);
+                         if ($modelComplaint->status==Complaint::PENDING_FOR_ATR)
+                           $modelComplaint->status=Complaint::ATR_RECEIVED;
+                         $modelComplaint->save(false);
                         $transaction->commit();
                         return $this->render('/default/atrreportform', ['model' => $modelComplaint]);
                     }
@@ -457,4 +485,15 @@ public function actionIndex()
             throw new NotFoundHttpException('The requested page does not exist.');
         }
           }
+  public function actionSetmarkingstatus()
+  {
+    $id=\Yii::$app->request->post('request_id');
+    $markingid=Yii::$app->request->post('markingid');
+    $message=Yii::$app->request->post('message');
+    $status=Yii::$app->request->post('markingstatus');
+    Marking::setStatus($markingid,$status,$message);
+  
+  
+  
+  }
 }

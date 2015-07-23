@@ -45,7 +45,13 @@ use yii\grid\GridView;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+['header'=>'Id',
+'attribute'=>'id',
+'value'=>function($model,$key,$index,$column)
+{
+        return Html::a($model['id'],Url::to(['/complaint/workdemand/view?id='.$model['id']]));
+},
+'format'=>'html'],
 ['header'=>'name_hi',
 'attribute'=>'Name',
 'value'=>function($model,$key,$index,$column)
@@ -82,7 +88,11 @@ use yii\grid\GridView;
               'buttons'=>[
                 'filereport'=>function($url,$model,$key)
                 {
+                 if ($model['markingstatus']!=null)
                   return Html::a('<button class="btn btn-success">'.'File Report'.'</button>',$url.'&returnurl='.urlencode(Url::to(['/complaint/workdemand/my'])));
+                else
+                  return Html::a('<button class="btn btn-success">'.'Mark Officer'.'</button>',Url::to(['/complaint/workdemand/update?id='.$model['id']]).'&returnurl='.urlencode(Url::to(['/complaint/workdemand/my'])));
+      
                 }
               ],
               ],

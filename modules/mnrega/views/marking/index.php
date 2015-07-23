@@ -9,7 +9,14 @@ use yii\grid\GridView;
 
 $this->title = Yii::t('app', 'Markings');
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['markurl']=$markurl;
 ?>
+<style>
+.no-padding
+{
+ padding:0;
+}
+</style>
 <div class="marking-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -53,6 +60,31 @@ $this->params['breadcrumbs'][] = $this->title;
 {
                 return $model->showValue('status');
 },],
+
+['header'=>'Change Status',
+'format'=>'raw',
+'value'=>function($model,$key,$index,$column)
+{
+$x='';
+
+if ($this->params['markurl']!=null)
+{
+    $x='<form class="no-padding" action="'.$this->params['markurl'].'" method="POST"
+    onSubmit="event.preventDefault();$.ajax({\'url\':$(this).attr(\'action\'),\'type\':\'POST\',\'data\':$(this).serialize()});">';
+    $x.='<input type="hidden" name="requestid" value="'.$model->request_id.'">';
+  $x.='<input type="hidden" name="requesttype" value="'.$model->request_type.'">';
+  
+    $x.='<input type="hidden" name="markingid" value="'.$model->id.'">';
+    $x.=Html::dropDownList('markingstatus','',['Pending','Solved','Attention']);
+    $x.='<input type="submit" value="Submit" ></input>';
+    $x.='</form>';
+    }else 
+    {
+      $x='<b>Not Allowed!!</b>';
+    }
+    return $x;
+},],
+
             // 'create_time:datetime',
             // 'update_time:datetime',
             // 'read_time:datetime',

@@ -4,7 +4,8 @@ use app\modules\mnrega\models\District;
 use app\modules\mnrega\models\Block;
 use app\modules\mnrega\models\Panchayat;
 use app\modules\mnrega\models\MarkingSearch;
-
+use yii\db\Query;
+use yii\data\ActiveDataProvider;
 use Yii;
 
 /**
@@ -32,6 +33,8 @@ use Yii;
 class WorkDemand extends \yii\db\ActiveRecord
 {
  public $marking;
+ public $captcha;
+
     /**
      * @inheritdoc
      */
@@ -72,6 +75,7 @@ class WorkDemand extends \yii\db\ActiveRecord
             [['panchayat_code'], 'string', 'max' => 12],
             [['panchayat'],'string','max'=>100],
              [['marking'], 'safe'],
+              [['captcha'],'captcha','on'=>'guestentry'],
         ];
     }
 
@@ -285,17 +289,46 @@ class WorkDemand extends \yii\db\ActiveRecord
 			break;
 		  }
     }
-	public static function count1()
+    public function count1($ms=0,$d=-1,$s=-1,$count=true)
     {
-     $modelSearch= new MarkingSearch;
-         $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
-         $d=$designation->id;
-      $modelSearch->request_type='workdemand';
-      
-       if (!Yii::$app->user->can('complaintviewall'))
-       $modelSearch->receiver=$d;
-       $modelSearch->status=0;
-       $dp=$modelSearch->search([]);
-       return $dp->totalCount;
-       }
+       $query = new Query;
+	    $query  ->select('workdemand.id as id,workdemand.name_hi as cname,fname,mobileno,address,panchayat,district.name_en as districtname,
+	    block.name_en as blockname,
+	    datefrom,dateofmarking,workdemand.status as status,marking.id as markingid,marking.status as markingstatus') 
+	        ->from('workdemand')
+	        ->join(  'LEFT JOIN',
+	                'marking',
+	                'marking.request_id =workdemand.id and marking.request_type=\'workdemand\''
+	            )
+	           ->join(  'INNER JOIN',
+	                'district',
+	                'workdemand.district_code =district.code'
+	            ) 
+	             ->join(  'INNER JOIN',
+	                'block',
+	                'workdemand.block_code =block.code'
+	            );
+  
+   if($s!=-1) $query->where(['status'=>$s]);
+   if ($ms==-2)
+      $query->andWhere(['marking.status'=>null]);
+    else 
+      $query->andWhere(['marking.status'=>$ms]);
+	if ($d!=-1)
+	 {
+	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+  
+       $query->andWhere(['receiver'=>$d]);
+    }
+        $dp= new ActiveDataProvider([
+         'query' => $query,
+        
+        ]);
+        if ($count)
+        return $dp->totalCount;
+        else 
+         return $dp;
+         
+    
+    }
 }
