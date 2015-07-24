@@ -20,6 +20,7 @@ use app\modules\gpsphoto\models\Photo;
  */
 class HelloController extends Controller
 {
+
 public function actionCad($designationtype)//Create All Designations
 {
   $dt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>$designationtype])->one();

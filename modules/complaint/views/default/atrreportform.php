@@ -162,7 +162,10 @@ div.required label:after {
  
     <?php }?>
     </div>
-</div> 
- <div class="form-group">
+<div class="row">
+ <div class="form-group col-lg-5">
         <?= Html::submitButton($atrsummary->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
     </div>
+   
+</div>
+</div> 

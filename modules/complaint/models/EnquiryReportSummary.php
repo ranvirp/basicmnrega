@@ -61,12 +61,13 @@ class EnquiryReportSummary extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'complaint_id' => Yii::t('app', 'Complaint ID'),
+            'reportby'=>Yii::t('app','Enquiry Officer'),
             'description' => Yii::t('app', 'Description'),
             'attachments' => Yii::t('app', 'Attachments'),
-            'complainttrue' => Yii::t('app', 'Complainttrue'),
-            'amountinvolved' => Yii::t('app', 'Amountinvolved'),
-            'firproposed' => Yii::t('app', 'Firproposed'),
-            'daproposed' => Yii::t('app', 'Daproposed'),
+            'complainttrue' => Yii::t('app', 'Complaint True?'),
+            'amountinvolved' => Yii::t('app', 'Amount involved'),
+            'firproposed' => Yii::t('app', 'FIR Proposed?'),
+            'daproposed' => Yii::t('app', 'DA Proposed?'),
             'author' => Yii::t('app', 'Author'),
             'create_time' => Yii::t('app', 'Create Time'),
             'update_time' => Yii::t('app', 'Update Time'),
@@ -190,6 +191,18 @@ class EnquiryReportSummary extends \yii\db\ActiveRecord
 			default:
 			break;
 		  }
+    }
+      /**
+     * @inheritdoc
+     */
+    public function attributeHints()
+    {
+        $x=[];
+        foreach ($this->attributes as $name=>$attribute)
+         {
+          $x[$name]=Yii::t('hints',self::tableName().'_'.$name.'_hint');
+         }
+       return array_merge(parent::attributeHints(), $x);
     }
 	
 }

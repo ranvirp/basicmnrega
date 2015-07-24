@@ -72,6 +72,27 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'i18n'=>[
+            'translations' => [
+                'app'=>[
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => "@app/messages",
+                    'sourceLanguage' => 'en',
+                    'fileMap' => [
+                        'app'=>'app.php',
+                       
+                    ]
+                ],
+                'hints'=>[
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => "@app/messages",
+                    'sourceLanguage' => 'en',
+                    'fileMap' => [
+                        'hints'=>'hints.php',
+                    ]
+                ]
+            ]
+        ],
     ],
     'modules'=>[
     'complaint'=>['class'=>'app\modules\complaint\Module'],
@@ -87,6 +108,15 @@ $config = [
             'class' => 'mdm\admin\Module',
             'layout' => 'left-menu',
             'mainLayout' => '@app/views/layouts/main.php',
+            'as access' => [
+            'class' => 'yii\filters\AccessControl',
+            'rules' => [
+                [
+                    'allow' => true,
+                    'roles' => ['Administrator'],
+                ]
+            ]
+        ],
             
         ],
     

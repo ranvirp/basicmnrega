@@ -34,6 +34,8 @@ class Complaint_subtypeController extends Controller
      */
     public function actionIndex()
     {
+      if (!Yii::$app->user->can('complaintadmin'))
+        throw new NotFoundHttpException("You are not allowed!!");
         $searchModel = new Complaint_subtypeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -50,6 +52,9 @@ class Complaint_subtypeController extends Controller
      */
     public function actionView($id)
     {
+       if (!Yii::$app->user->can('complaintadmin'))
+        throw new NotFoundHttpException("You are not allowed!!");
+     
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -63,7 +68,9 @@ class Complaint_subtypeController extends Controller
     
     public function actionCreate()
     {
-       
+        if (!Yii::$app->user->can('complaintadmin'))
+        throw new NotFoundHttpException("You are not allowed!!");
+     
       if (!Yii::$app->user->can('complaintadmin')) 
         throw new NotFoundHttpException('requested page does not exist');
         $model = new Complaint_subtype();
@@ -100,6 +107,9 @@ class Complaint_subtypeController extends Controller
      */
         public function actionUpdate($id)
     {
+      if (!Yii::$app->user->can('complaintadmin'))
+        throw new NotFoundHttpException("You are not allowed!!");
+     
         if (!Yii::$app->user->can('complaintadmin')) 
         throw new NotFoundHttpException('requested page does not exist');
          $model = $this->findModel($id);
@@ -137,6 +147,9 @@ class Complaint_subtypeController extends Controller
      */
     public function actionDelete($id)
     {
+         if (!Yii::$app->user->can('complaintadmin'))
+        throw new NotFoundHttpException("You are not allowed!!");
+     
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

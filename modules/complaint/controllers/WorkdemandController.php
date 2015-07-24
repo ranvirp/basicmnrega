@@ -40,6 +40,9 @@ class WorkdemandController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('complaintagent'))
+      throw new NotFoundHttpException("Not Allowed");
+   
         $dataProvider = new ActiveDataProvider([
             'query' => WorkDemand::find(),
         ]);
@@ -131,6 +134,9 @@ class WorkdemandController extends Controller
      */
         public function actionUpdate($id)
     {
+           if (!Yii::$app->user->can('complaintagent'))
+      throw new NotFoundHttpException("Not Allowed");
+   
          $model = $this->findModel($id);
         if (Yii::$app->request->post() && $model->load(Yii::$app->request->post()))
         {
@@ -198,6 +204,10 @@ class WorkdemandController extends Controller
     }
     public function actionFilereport($id,$returnurl='')
      {
+    
+        if (!_ismarkedtocurrentuser($id) && !Yii::$app->user->can('complaintagent'))
+        throw new NotFoundHttpException("Not permitted");
+
         if (($model = WorkDemand::findOne($id)) !== null) {
           $workdemandreport=WorkDemandReport::find()->where(['work_demand_id'=>$model->id])->one();
            if (!$workdemandreport)
@@ -223,7 +233,7 @@ class WorkdemandController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
      }
- public function actionMy1($t='c',$d=-1)
+ public function action1My1($t='c',$d=-1)
     {
        $modelSearch= new MarkingSearch;
        if ($d==-1)
@@ -245,48 +255,18 @@ class WorkdemandController extends Controller
        $dp=$modelSearch->search([]);
        return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
     }
-      public function actionMy($ms=0,$d=-1,$s=-1)
-     {/*
-        $query = new Query;
-	    $query  ->select('workdemand.id as id,workdemand.name_hi as cname,fname,mobileno,address,district.name_en as dname,block.name_en as bname,panchayat,
-	    ') 
-	        ->from('workdemand')
-	        ->join(  'RIGHT JOIN',
-	                'marking',
-	                'marking.request_id =workdemand.id and marking.request_type=\'workdemand\' and marking.status=0'
-	            )
-	           ->join(  'INNER JOIN',
-	                'district',
-	                'district.code =workdemand.district_code'
-	            ) 
-	             ->join(  'INNER JOIN',
-	                'block',
-	                'block.code =workdemand.block_code'
-	            );
-	            
-     if ($ms==-2)
-        $query->where(['marking.status'=>null]);
-     else
-        $query->where(['marking.status'=>$ms]);
-    if ($s!=-1)
-      $query->andWhere(['workdemand.status'=>$s]);
-	if (($d!=-1) && (!Yii::$app->user->can('complaintadmin')))
-	  {
-	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-   
-       $query->andWhere(['receiver'=>$d]);
-       }
-        $dp= new ActiveDataProvider([
-         'query' => $query,
-         'pagination' => [
-            'pageSize' => 20,
-          ],
-        ]);
-        */
-        $dp=WorkDemand::count1($ms,$d,$s,false);
+      public function actionMy($ms=0,$d=-1,$s=-1,$dcode,$bcode)
+     {
+        if (Yii::$app->user->isGuest)
+         throw new NotFoundHttpException('Not Found');
+        $dp=WorkDemand::count1($ms,$d,$s,false,$dcode,$bcode);
         return $this->render('index1',['dataProvider'=>$dp]);
      
      
      }
-
+protected function _ismarkedtocurrentuser($request_id)
+  {
+    return Marking::find()->where(['request_type'=>'workdemand','request_id'=>$request_id,'receiver'=>Designation::designationByUser(Yii::$app->user->id)])->one()?true:false;
+  
+  }
 }

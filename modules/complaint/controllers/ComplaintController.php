@@ -2,7 +2,7 @@
 namespace app\modules\complaint\controllers;
 use app\modules\complaint\models\Complaint;
 use app\modules\complaint\models\ComplaintSearch;
-
+use app\modules\users\models\Designation;
 use app\modules\complaint\models\ComplaintPoint;
 use app\modules\complaint\models\Complaint_type;
 use app\modules\mnrega\models\Marking;
@@ -32,6 +32,9 @@ class ComplaintController extends Controller
 public function actionIndex()
 {
   //return $this->render('dashboard');
+   if (!Yii::$app->user->can('complaintagent'))
+        throw new NotFoundHttpException("You are not allowed!!");
+     
    $searchModel = new ComplaintSearch();
    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
    $dataProvider->query=$dataProvider->query->with('markings');
@@ -121,6 +124,9 @@ public function actionIndex()
      */
     public function actionUpdate($id)
     {
+        if (!Yii::$app->user->can('complaintagent'))
+        throw new NotFoundHttpException("You are not allowed!!");
+     
         $modelComplaint = $this->findModel($id);
         $modelsComplaintPoint = $modelComplaint->complaintPoints;
 
@@ -213,19 +219,17 @@ public function actionIndex()
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function actionSearch($mobileno)
-    {
-      $models=Complaint::find()->where(['mobileno'=>$mobileno])->asArray()->all(); 
-      return json_encode($models);
-    }
+   
    
     /*
     File Report for a complaint 
     */
     public function actionFilereport($id)
     {
+        if (!$this->_ismarkedtocurrentuser($id) && !Yii::$app->user->can('complaintagent'))
+        throw new NotFoundHttpException("Not permitted");
+        
         $modelComplaint = $this->findModel($id);
-                    
         $modelsComplaintPoint = $modelComplaint->complaintPoints;
         $enquiryReportSummary=$modelComplaint->enquiryReportSummary;
         if (!$enquiryReportSummary) 
@@ -264,7 +268,7 @@ public function actionIndex()
             if (!$valid)
              {
               foreach ($enquiryReportsPoint as $enqreportpoint)
-              print_r($enquiryreportpoint->errors);
+              print_r($enqreportpoint->errors);
               }
             if ($valid) {
                 $transaction = \Yii::$app->db->beginTransaction();
@@ -291,7 +295,14 @@ public function actionIndex()
                            $modelComplaint->status=Complaint::ENQUIRY_REPORT_RECEIVED;
                          $modelComplaint->save(false);
                         $transaction->commit();
-                        return $this->render('/default/atrform', ['model' => $modelComplaint]);
+                        $returnurl1=Yii::$app->request->get('returnurl');
+                         $returnurl=Yii::$app->request->post('returnurl');
+                         if (!$returnurl) $returnurl=$returnurl1;
+                         if ($returnurl)
+                           $this->redirect($returnurl);
+                        else
+                           $this->redirect(['view','id'=>$modelComplaint->id]);
+     
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
@@ -307,10 +318,14 @@ public function actionIndex()
           }
   public function actionViewcomments($id)
   {
-             return $this->render('comments',['model'=>$this->findModel($id)]); 
+       if (Yii::$app->user->isGuest)
+         throw new NotFoundHttpException("Not Allowed");
+        return $this->render('comments',['model'=>$this->findModel($id)]); 
   }
   public function actionMark($id)
   {
+     if (!Yii::$app->user->can('complaintagent'))
+         throw new NotFoundHttpException("Not Allowed");
     $model=$this->findModel($id);
     if (Yii::$app->request->post())
     {
@@ -325,7 +340,7 @@ public function actionIndex()
    /*
      Assigned to current designation
     */
-    public function actionMy1($t='c',$d=-1)
+    public function action1My1($t='c',$d=-1)
     {
        $modelSearch= new MarkingSearch;
        if ($d==-1)
@@ -347,49 +362,12 @@ public function actionIndex()
        $dp=$modelSearch->search([]);
        return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
     }
-    public function actionMy($ms=0,$d=-1,$s=-1)
+    public function actionMy($ms=0,$d=-1,$s=-1,$dcode=null,$bcode=null)
      {
-     /*
-        $query = new Query;
-	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
-	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,marking.id as markingid,marking.status as markingstatus') 
-	        ->from('complaint')
-	        ->join(  'RIGHT JOIN',
-	                'marking',
-	                'marking.request_id =complaint.id and marking.request_type=\'complaint\''
-	            )
-	           ->join(  'RIGHT JOIN',
-	                'complaint_type',
-	                'complaint.complaint_type =complaint_type.shortcode'
-	            ) 
-	             ->join(  'RIGHT JOIN',
-	                'complaint_subtype',
-	                'complaint.complaint_subtype =complaint_subtype.shortcode'
-	            );
-  // $query->where(['complaint.status'=>$s]);
-  if ($ms==-2)
-    $query->where(['marking.status'=>null]);
-else
-  $query->where(['marking.status'=>$ms]);
-    if ($s!=-1)
-      $query->andWhere(['complaint.status'=>$s]);
-	//if (!Yii::$app->user->can('complaintviewall'))
-	if (($d!=-1) && (!Yii::$app->user->can('complaintadmin')))
-	  {
-	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-   
-       $query->andWhere(['receiver'=>$d]);
-       }
-       //print_r($query);
-       //exit;
-        $dp= new ActiveDataProvider([
-         'query' => $query,
-         'pagination' => [
-            'pageSize' => 20,
-          ],
-        ]);
-        */
-        $dp=Complaint::count1($ms,$d,$s,false);
+         if (Yii::$app->user->isGuest)
+           throw new NotFoundHttpException("Not Allowed");
+       
+        $dp=Complaint::count1($ms,$d,$s,false,$dcode,$bcode);
         return $this->render('index1',['dataProvider'=>$dp]);
      
      
@@ -399,7 +377,12 @@ else
     */
     public function actionFileatr($id)
     {
+      if (!$this->_ismarkedtocurrentuser($id) && !Yii::$app->user->can('complaintagent'))
+        throw new NotFoundHttpException("Not permitted");
+        
         $modelComplaint = $this->findModel($id);
+        if ($modelComplaint->status!=Complaint::PENDING_FOR_ATR)
+          return $this->renderContent('First file enquiry report!!!'); 
         $modelsEnquiryPoint = $modelComplaint->enquiryReportsPoint;
         $atrSummary=$modelComplaint->atrSummary;
         if (!$atrSummary) 
@@ -471,7 +454,13 @@ else
                            $modelComplaint->status=Complaint::ATR_RECEIVED;
                          $modelComplaint->save(false);
                         $transaction->commit();
-                        return $this->render('/default/atrreportform', ['model' => $modelComplaint]);
+                         $returnurl1=Yii::$app->request->get('returnurl');
+                         $returnurl=Yii::$app->request->post('returnurl');
+                         if (!$returnurl) $returnurl=$returnurl1;
+                         if ($returnurl)
+                           $this->redirect([$returnurl]);
+                        else
+                           $this->redirect(['view','id'=>$modelComplaint->id]);
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
@@ -487,6 +476,8 @@ else
           }
   public function actionSetmarkingstatus()
   {
+    if (!Yii::$app->user->can('complaintagent'))
+      throw new NotFoundHttpException("Not Allowed");
     $id=\Yii::$app->request->post('request_id');
     $markingid=Yii::$app->request->post('markingid');
     $message=Yii::$app->request->post('message');
@@ -494,6 +485,22 @@ else
     Marking::setStatus($markingid,$status,$message);
   
   
+  
+  }
+  public function actionSetstatus($id,$status,$message='')
+  {
+     if (Yii::$app->user->can('complaintadmin'))
+       {
+         Complaint::setStatus($id,$status,$message);
+         return $status;
+       }
+       else
+         throw new NotFoundHttpException("Not Allowed");
+  
+  }
+  protected function _ismarkedtocurrentuser($request_id)
+  {
+    return Marking::find()->where(['request_type'=>'complaint','request_id'=>$request_id,'receiver'=>Designation::getDesignationByUser(Yii::$app->user->id)])->one()?true:false;
   
   }
 }

@@ -289,12 +289,12 @@ class WorkDemand extends \yii\db\ActiveRecord
 			break;
 		  }
     }
-    public function count1($ms=0,$d=-1,$s=-1,$count=true)
+    public function count1($ms=0,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
     {
        $query = new Query;
 	    $query  ->select('workdemand.id as id,workdemand.name_hi as cname,fname,mobileno,address,panchayat,district.name_en as districtname,
 	    block.name_en as blockname,
-	    datefrom,dateofmarking,workdemand.status as status,marking.id as markingid,marking.status as markingstatus') 
+	    datefrom,dateofmarking,workdemand.status as status,marking.id as markingid,marking.status as markingstatus,workdemand.district_code as district_code,workdemand.block_code as block_code') 
 	        ->from('workdemand')
 	        ->join(  'LEFT JOIN',
 	                'marking',
@@ -309,7 +309,7 @@ class WorkDemand extends \yii\db\ActiveRecord
 	                'workdemand.block_code =block.code'
 	            );
   
-   if($s!=-1) $query->where(['status'=>$s]);
+   if($s!=-1) $query->where(['workdemand.status'=>$s]);
    if ($ms==-2)
       $query->andWhere(['marking.status'=>null]);
     else 
@@ -320,6 +320,10 @@ class WorkDemand extends \yii\db\ActiveRecord
   
        $query->andWhere(['receiver'=>$d]);
     }
+     if ($dcode)
+       $query->andWhere(['workdemand.district_code'=>$dcode]);
+    if ($bcode)
+       $query->andWhere(['workdemand.block_code'=>$bcode]);
         $dp= new ActiveDataProvider([
          'query' => $query,
         
@@ -330,5 +334,17 @@ class WorkDemand extends \yii\db\ActiveRecord
          return $dp;
          
     
+    }
+      /**
+     * @inheritdoc
+     */
+    public function attributeHints()
+    {
+        $x=[];
+        foreach ($this->attributes as $name=>$attribute)
+         {
+          $x[$name]=Yii::t('hints',self::tableName().'_'.$name.'_hint');
+         }
+       return array_merge(parent::attributeHints(), $x);
     }
 }

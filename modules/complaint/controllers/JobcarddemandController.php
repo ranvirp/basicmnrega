@@ -37,6 +37,9 @@ class JobcarddemandController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('complaintagent'))
+      throw new NotFoundHttpException("Not Allowed");
+   
         $searchModel = new JobcardDemandSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -117,7 +120,10 @@ class JobcarddemandController extends Controller
      */
         public function actionUpdate($id)
     {
-         $model = $this->findModel($id);
+         if (!Yii::$app->user->can('complaintagent'))
+      throw new NotFoundHttpException("Not Allowed");
+   
+        $model = $this->findModel($id);
         if (Yii::$app->request->post() && $model->load(Yii::$app->request->post()))
         {
            $model->update_time=time();
@@ -145,7 +151,7 @@ class JobcarddemandController extends Controller
                     $transaction->rollBack();
                   }
     }
-      return $this->render('create', [
+      return $this->render('update', [
             'model' => $model,
             
         ]);
@@ -158,8 +164,11 @@ class JobcarddemandController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function action1Delete($id)
     {
+       if (!Yii::$app->user->can('complaintagent'))
+      throw new NotFoundHttpException("Not Allowed");
+   
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -182,9 +191,9 @@ class JobcarddemandController extends Controller
     }
     public function actionFilereport($id,$returnurl='')
      {
-       if (!Yii::$app->user->can('jobcarddemandfilereport'))
-        throw new \yii\web\ForbiddenHttpException('Not allowed!!!');
-       if (($model = JobcardDemand::findOne($id)) !== null) {
+        if (!_ismarkedtocurrentuser($id) && !Yii::$app->user->can('complaintagent'))
+        throw new NotFoundHttpException("Not permitted");
+    if (($model = JobcardDemand::findOne($id)) !== null) {
           $jobcarddemandreport=JobcardDemandReport::find()->where(['jobcarddemand_id'=>$model->id])->one();
            if (!$jobcarddemandreport)
            $jobcarddemandreport=new JobcardDemandReport;
@@ -202,7 +211,7 @@ class JobcarddemandController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
      }
-  public function actionMy($ms=0,$d=-1,$s=-1)
+  public function actionMy($ms=0,$d=-1,$s=-1,$dcode=null,$bcode=null)
      {
      /*
         $query = new Query;
@@ -242,9 +251,16 @@ class JobcarddemandController extends Controller
           ],
         ]);
         */
-        $dp=JobcardDemand::count1($ms,$d,$s,false);
+        if (Yii::$app->user->isGuest)
+           throw new NotFoundHttpException("Not Allowed");
+        $dp=JobcardDemand::count1($ms,$d,$s,false,$dcode,$bcode);
         return $this->render('index1',['dataProvider'=>$dp]);
      
      
      }
+     protected function _ismarkedtocurrentuser($request_id)
+  {
+    return Marking::find()->where(['request_type'=>'jobcarddemand','request_id'=>$request_id,'receiver'=>Designation::designationByUser(Yii::$app->user->id)])->one()?true:false;
+  
+  }
 }

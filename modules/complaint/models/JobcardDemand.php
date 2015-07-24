@@ -237,12 +237,12 @@ case 'name_hi':
 			break;
 		  }
     }
-    public function count1($ms=0,$d=-1,$s=-1,$count=true)
+    public function count1($ms=0,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
     {
        $query = new Query;
 	    $query  ->select('jobcarddemand.id as id,jobcarddemand.name_hi as cname,fname,mobileno,address,panchayat,district.name_en as districtname,
 	    block.name_en as blockname,
-	    dateofmarking,jobcarddemand.status as status,marking.id as markingid,marking.status as markingstatus') 
+	    dateofmarking,jobcarddemand.status as status,marking.id as markingid,marking.status as markingstatus,jobcarddemand.district_code as district_code,jobcarddemand.block_code as block_code') 
 	        ->from('jobcarddemand')
 	        ->join(  'LEFT JOIN',
 	                'marking',
@@ -257,11 +257,15 @@ case 'name_hi':
 	                'jobcarddemand.block_code =block.code'
 	            );
   
-   if($s!=-1) $query->where(['status'=>$s]);
+   if($s!=-1) $query->where(['jobcarddemand.status'=>$s]);
    if ($ms=='-2')
       $query->andWhere(['marking.status'=>null]);
     else 
       $query->andWhere(['marking.status'=>$ms]);
+       if ($dcode)
+       $query->andWhere(['jobcarddemand.district_code'=>$dcode]);
+    if ($bcode)
+       $query->andWhere(['jobcarddemand.block_code'=>$bcode]);
 	if ($d!=-1)
 	 {
 	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
@@ -278,6 +282,18 @@ case 'name_hi':
          return $dp;
          
     
+    }
+      /**
+     * @inheritdoc
+     */
+    public function attributeHints()
+    {
+        $x=[];
+        foreach ($this->attributes as $name=>$attribute)
+         {
+          $x[$name]=Yii::t('hints',self::tableName().'_'.$name.'_hint');
+         }
+       return array_merge(parent::attributeHints(), $x);
     }
 	
 }

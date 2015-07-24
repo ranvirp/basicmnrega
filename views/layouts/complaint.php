@@ -83,16 +83,35 @@ AppAsset::register($this);
             echo Nav::widget([
             
     'items' => [
+         
               Yii::$app->user->isGuest ?'':
+       ['label' => 'Work Demand', 'url' => ['/complaint/workdemand'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
+            ,'items'=>[
+             ['label' => 'create', 'url' => ['/complaint/workdemand/create'],'options'=>['class'=>'dropdown']],
+             ['label' => 'index', 'url' => ['/complaint/workdemand/index1'],'options'=>['class'=>'dropdown']],
+            ['label' => 'report', 'url' => ['/complaint/report/dwise?t=workdemand'],'options'=>['class'=>'dropdown']],
       
+      ]],
+       ['label' => 'Job Card Demand', 'url' => ['/complaint/jobcarddemand'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
+            ,'items'=>[
+             ['label' => 'create', 'url' => ['/complaint/jobcarddemand/create'],'options'=>['class'=>'dropdown']],
+             ['label' => 'index', 'url' => ['/complaint/jobcarddemand/index1'],'options'=>['class'=>'dropdown']],
+               ['label' => 'report', 'url' => ['/complaint/report/dwise?t=jobcarddemand'],'options'=>['class'=>'dropdown']],
+      
+      ]],
        ['label' => 'Complaints', 'url' => ['/complaint/complaint'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
              ['label' => 'create', 'url' => ['/complaint/complaint/create'],'options'=>['class'=>'dropdown']],
              ['label' => 'index', 'url' => ['/complaint/complaint/index1'],'options'=>['class'=>'dropdown']],
-            
+               ['label' => 'report', 'url' => ['/complaint/report/dwise?t=complaint'],'options'=>['class'=>'dropdown']],
+      
+         !Yii::$app->user->can('complaintadmin') ?'':   
               ['label' => 'Complaint Type', 'url' => ['/complaint/complaint_type/create'],'options'=>['class'=>'dropdown']],
               ['label' => 'Complaint Type', 'url' => ['/complaint/complaint_subtype/create'],'options'=>['class'=>'dropdown']],
-               
+               ['label' => 'Hints', 'url' => ['/complaint/hint/hint?t=hints'],'options'=>['class'=>'dropdown']],
+              ['label' => 'Labels', 'url' => ['/complaint/hint/hint?t=app'],'options'=>['class'=>'dropdown']],
+             
+            
                 
             ]],
         Yii::$app->user->isGuest ?

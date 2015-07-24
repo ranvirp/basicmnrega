@@ -9,6 +9,7 @@ use app\modules\mnrega\models\MarkingSearch;
 use app\modules\mnrega\models\Marking;
 use yii\db\Query;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 
 
 
@@ -140,6 +141,9 @@ public static function statusNames()
             'description' => Yii::t('app', 'विवरण'),
             'block_code' => Yii::t('app', 'विकास खंड'),
             'panchayat_code' => Yii::t('app', 'पंचायत'),
+            'panchayat'=>Yii::t('app','Panchayat'),
+            'gender'=>Yii::t('app','Gender'),
+            
             'attachments' => Yii::t('app', 'संग्लग्नक'),
             'complaint_type' => Yii::t('app', 'Complaint Type'),
             'complaint_subtype' => Yii::t('app', 'Complaint Subtype'),
@@ -428,11 +432,11 @@ public static function statusNames()
           }
        
     }
-    public function count1($ms=0,$d=-1,$s=-1,$count=true)
+    public function count1($ms=0,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
     {
        $query = new Query;
 	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
-	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,marking.id as markingid,marking.status as markingstatus') 
+	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,marking.id as markingid,marking.status as markingstatus,district_code,block_code') 
 	        ->from('complaint')
 	        ->join(  'LEFT JOIN',
 	                'marking',
@@ -447,11 +451,17 @@ public static function statusNames()
 	                'complaint.complaint_subtype =complaint_subtype.shortcode'
 	            );
   
-   if($s!=-1) $query->where(['status'=>$s]);
+   if($s!=-1) $query->where(['complaint.status'=>$s]);
+   
    if ($ms==-2)
       $query->andWhere(['marking.status'=>null]);
     else 
+     if ($ms!=-1)
       $query->andWhere(['marking.status'=>$ms]);
+    if ($dcode)
+       $query->andWhere(['complaint.district_code'=>$dcode]);
+    if ($bcode)
+       $query->andWhere(['complaint.block_code'=>$bcode]);
 	if ($d!=-1)
 	 {
 	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
@@ -469,4 +479,59 @@ public static function statusNames()
          
     
     }
+     public function _search($mobileno)
+    {
+      $models=Complaint::find()->where(['mobileno'=>$mobileno])->asArray()->all(); 
+      return json_encode($models);
+    }
+     public static function setStatus($id,$status,$message='')
+    {
+       $complaint=Complaint::findOne($id);
+       $transaction=\Yii::$app->db->beginTransaction();
+       if ($complaint)
+         {
+           $complaint->status=$status;
+           $complaint->save();
+         }
+         if ($message!='')
+         {
+           $reply=new \app\modules\reply\models\Reply;
+           $reply->content_type='complaint';
+           $reply->content_type_id=$complaint->id;
+           $reply->author_id=Yii::$app->user->id;
+           $reply->create_time=time();
+           $reply->save();
+         
+         }
+        $transaction->commit();
+    
+    }
+    public static function getButton($id,$type)
+    {
+      if ($type=='acceptatr')
+       
+         return '<button class="btn btn-success" onclick="$.get(\''.Url::to(['/complaint/complaint/setStatus?id='.$id.'&status='.self::DISPOSED])."')>Accept ATR</button>";
+      else if ($type=='acceptenquiryreport')
+                   return '<button class="btn btn-success" onclick="$.get(\''.Url::to(['/complaint/complaint/setstatus?id='.$id.'&status='.self::PENDING_FOR_ATR])."')\">Accept Enquiry Report</button>";
+  
+        else if ($type=='rejectenquiryreport')
+                    return '<button class="btn btn-success" onclick="$.get(\''.Url::to(['/complaint/complaint/setstatus?id='.$id.'&status='.self::PENDING_FOR_ENQUIRY])."')\">Reject Enquiry Report</button>";
+  
+     else if ($type=='rejectatr')
+                    return '<button class="btn btn-success" onclick="$.get(\''.Url::to(['/complaint/complaint/setstatus?id='.$id.'&status='.self::PENDING_FOR_ATR])."')\">Reject Enquiry Report</button>";
+  
+    }
+     /**
+     * @inheritdoc
+     */
+    public function attributeHints()
+    {
+        $x=[];
+        foreach ($this->attributes as $name=>$attribute)
+         {
+          $x[$name]=Yii::t('hints',self::tableName().'_'.$name.'_hint');
+         }
+       return array_merge(parent::attributeHints(), $x);
+    }
+
 }

@@ -38,7 +38,8 @@ class EnquiryReportPoint extends \yii\db\ActiveRecord
     {
         return [
             [['complaint_point_id', 'trueorfalse', 'firproposed', 'daproposed', 'author', 'create_time', 'update_time'], 'integer'],
-            [['report', 'amounttoberecovered', 'amountfrom', 'firproposedreason', 'daproposeddetails'], 'string'],
+            [['report', 'amountfrom', 'firproposedreason', 'daproposeddetails'], 'string'],
+            [['amounttoberecovered'],'double'],
             [['attachments'],'safe'],
         ];
     }
@@ -69,15 +70,15 @@ class EnquiryReportPoint extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'complaint_points_id' => Yii::t('app', 'Complaint Points ID'),
-            'trueorfalse' => Yii::t('app', 'Complainttrue').'?',
+            'trueorfalse' => Yii::t('app', 'Complaint True?'),
             'report' => Yii::t('app', 'Report'),
             'attachments' => Yii::t('app', 'Attachments'),
-            'amounttoberecovered' => Yii::t('app', 'Amounttoberecovered'),
-            'amountfrom' => Yii::t('app', 'Amountfrom'),
-            'firproposed' => Yii::t('app', 'Firproposed'),
-            'firproposedreason' => Yii::t('app', 'Firproposedreason'),
-            'daproposed' => Yii::t('app', 'Daproposed'),
-            'daproposeddetails' => Yii::t('app', 'Daproposeddetails'),
+            'amounttoberecovered' => Yii::t('app', 'Amount to be recovered'),
+            'amountfrom' => Yii::t('app', 'Amount to be recovered from'),
+            'firproposed' => Yii::t('app', 'FIR Proposed?'),
+            'firproposedreason' => Yii::t('app', 'FIR Proposed Reason'),
+            'daproposed' => Yii::t('app', 'DA Proposed?'),
+            'daproposeddetails' => Yii::t('app', 'DA Proposed Details'),
             'author' => Yii::t('app', 'Author'),
             'create_time' => Yii::t('app', 'Create Time'),
             'update_time' => Yii::t('app', 'Update Time'),
@@ -221,6 +222,18 @@ class EnquiryReportPoint extends \yii\db\ActiveRecord
 			default:
 			break;
 		  }
+    }
+      /**
+     * @inheritdoc
+     */
+    public function attributeHints()
+    {
+        $x=[];
+        foreach ($this->attributes as $name=>$attribute)
+         {
+          $x[$name]=Yii::t('hints',self::tableName().'_'.$name.'_hint');
+         }
+       return array_merge(parent::attributeHints(), $x);
     }
 	
 }

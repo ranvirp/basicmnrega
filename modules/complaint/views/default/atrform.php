@@ -189,7 +189,14 @@ div.required label:after {
  
     <?php }?>
     </div>
-</div> 
+<div class="row">
  <div class="form-group">
         <?= Html::submitButton($enquiryreportsummary->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
     </div>
+<?= Html::hiddenInput('returnurl','',['id'=>'returnurl'])?>
+
+ <div class="form-group col-lg-5">
+        <?= Html::submitButton('File Enquiry Report and then File ATR', ['class' => 'btn btn-primary','onClick'=>'$("#returnurl").val("'.Url::to(['/complaint/complaint/fileatr?id='.$model->id]).'")']) ?>
+    </div>
+    </div>
+    </div> 

@@ -54,7 +54,7 @@ div.required label:after {
        
     </p>
     <?php } ?>
-<div class="col-sm-offset-3 col-sm-9 well" >
+<div class="col-sm-9 well" >
   <p><span>Status:</span><span><?=Complaint::statusNames()[$model->status]?></p>
   <p><button onClick="$('#status').toggle()">Toggle</button></p>
   <div class="col-md-12" id="status">
@@ -63,7 +63,7 @@ div.required label:after {
       $marking->request_type='complaint';
       $marking->request_id=$model->id;
       $dp =$marking->search([]);
-      if (Yii::$app->user->can('changemarkingstatus') )
+      if (Yii::$app->user->can('complaintadmin') )
         $markurl=Url::to(['/complaint/complaint/setmarkingstatus']);
      else 
        $markurl=null;
@@ -108,7 +108,13 @@ div.required label:after {
        
   
     <div class="col-lg-3" style="margin:5px">
-    <?php if ($enquiryreportsummary) { ?>
+    <?php if ($enquiryreportsummary) { 
+      echo '<div class="col-md-12">';
+       if ($model->status==Complaint::ENQUIRY_REPORT_RECEIVED && Yii::$app->user->can('complaintadmin'))
+         echo Complaint::getButton($model->id,'acceptenquiryreport');
+         //.Complaint::getButton($model->id,'rejectenquiryreport');
+      echo '</div>';
+      ?>
     <div class="col-md-12">
      <?= DetailView::widget([
         'model' => $enquiryreportsummary,
@@ -128,7 +134,11 @@ div.required label:after {
     <?php } else echo 'Pending';?>
      </div>
          <div class="col-lg-3" style="margin:5px">
-          <?php if ($atrsummary) { ?>
+          <?php if ($atrsummary) { 
+           if ($model->status==Complaint::ATR_RECEIVED && Yii::$app->user->can('complaintadmin'))
+              echo Complaint::getButton($model->id,'acceptatr');
+              //.Complaint::getButton($model->id,'rejectatr');
+          ?>
     
     <div class="col-md-12">
      <?= DetailView::widget([

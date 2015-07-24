@@ -162,5 +162,17 @@ class JobcarddemandReport extends \yii\db\ActiveRecord
 			break;
 		  }
     }
+      /**
+     * @inheritdoc
+     */
+    public function attributeHints()
+    {
+        $x=[];
+        foreach ($this->attributes as $name=>$attribute)
+         {
+          $x[$name]=Yii::t('hints',self::tableName().'_'.$name.'_hint');
+         }
+       return array_merge(parent::attributeHints(), $x);
+    }
 	
 }
