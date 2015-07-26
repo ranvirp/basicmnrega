@@ -17,7 +17,8 @@ use app\modules\users\models\Designation;
 /* @var $content string */
 
 AppAsset::register($this);
-//AppAsset_1::register($this);
+//\app\assets\KartikFileInputAsset::register($this);
+AppAsset_1::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

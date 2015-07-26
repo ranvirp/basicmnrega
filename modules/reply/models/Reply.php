@@ -64,4 +64,9 @@ class Reply extends \yii\db\ActiveRecord
             'update_time' => 'Update Time',
         ];
     }
+    public static function lastReply($ct,$ctid)
+    {
+       return self::find()->where(['content_type'=>$ct,'content_type_id'=>$ctid])->orderBy('create_time desc')->limit(1)->one();
+       
+    }
 }

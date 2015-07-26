@@ -37,14 +37,35 @@ div.required label:after {
  text-align:center
 }
 </style>
+
 <script>
  function _count1($elem) {
         return $elem.closest('.dynamicform_wrapper').find('.item').length-1;
     };
 </script>
+ <?php
+ /*
+ $this->registerJs(
+ 
+   '$("document").ready(function(){ 
+      $(".reply-form").on("submit", function() {
+            //$.pjax.reload({container:"#workdemand-grid-view"});  //Reload GridView
+          //  alert("here");
+          // $("#workdemand-grid-view").yiiGridView("applyFilter");
+        });
+    });'
+);
+*/
+?>
 <div class="customer-form">
 <?php AppAssetGoogle::register($this);?>
- <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
+ <?php $form = ActiveForm::begin(['id' => 'dynamic-form',
+ 'options' => ['data-pjax' => '#workdemand-list','class'=>'reply-form' ],
+ 'enableClientValidation'=>false,
+ 'action'=>Url::to(['/complaint/workdemand/filereport?id='.$model->id.'&markingid='.$markingid]),
+ 
+ 
+ ]); ?>
 <div class="col-sm-12 well">
 <div class="col-lg-5 text-heading">कार्य की मांग का विवरण</div>
 <div class="col-lg-5 text-heading">कार्यवाही का विवरण</div>
@@ -59,9 +80,22 @@ div.required label:after {
             'mobileno',
             'address:ntext',
             'gender',
-            'district_code',
-            'block_code',
-            'panchayat_code',
+            [
+             'header'=>Yii::t('app','district_code'),
+             'attribute'=>'district_code',
+             'value'=>$model->showValue('district_code')
+            ],
+            
+             [
+             'header'=>Yii::t('app','block_code'),
+             'attribute'=>'block_code',
+             'value'=>$model->showValue('block_code')
+            ],
+              [
+             'header'=>Yii::t('app','panchayat_code'),
+             'attribute'=>'panchayat_code',
+             'value'=>$model->showValue('panchayat_code')
+            ],
             'village',
             'panchayat',
         ],
@@ -82,7 +116,7 @@ div.required label:after {
     </div>
      
    <div class="col-md-12" class="hide" id="complainttrue">
-     <?= $form->field($workdemandReport,"description")->textArea(['class'=>'form-control hindiinput'])->label(Yii::t('app','Reason for not giving work'))?>
+     <?= $form->field($workdemandReport,"description")->textArea(['class'=>'form-control hindiinput','onclick'=>'js:hindiEnable()'])->label(Yii::t('app','Reason for not giving work'))?>
     </div>
     <div class="col-md-12" class="hide" id="workdetails">
     <p> कार्य देने का विवरण</p>
@@ -103,5 +137,5 @@ div.required label:after {
       
     
 </div>
-
+<?php ActiveForm::end();?>
  

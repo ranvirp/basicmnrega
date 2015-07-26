@@ -202,34 +202,55 @@ class WorkdemandController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function actionFilereport($id,$returnurl='')
+    public function actionFilereport($id,$markingid,$returnurl='')
      {
     
-        if (!_ismarkedtocurrentuser($id) && !Yii::$app->user->can('complaintagent'))
+        if (!$this->_ismarkedtocurrentuser($id,$markingid) && !Yii::$app->user->can('complaintagent'))
         throw new NotFoundHttpException("Not permitted");
-
-        if (($model = WorkDemand::findOne($id)) !== null) {
+        $marking=Marking::findOne($markingid);
+        if (!$marking)
+         throw new NotFoundHttpException("Not permitted");
+        if (($model = WorkDemand::findOne($id)) !== null) 
+        {
           $workdemandreport=WorkDemandReport::find()->where(['work_demand_id'=>$model->id])->one();
            if (!$workdemandreport)
            $workdemandreport=new WorkDemandReport;
            $workdemandreport->work_demand_id=$model->id;
-           $workdemandreport->load(Yii::$app->request->post());
-           if ($workdemandreport->save())
-            {
-              Marking::setStatus('workdemand',$model->id,1);
+           if ($workdemandreport->load(Yii::$app->request->bodyParams))
+           {
+           
+               $transaction=Yii::$app->db->beginTransaction();
+             
+           if (!$workdemandreport->save())
+           {
+             //var_dump($workdemandreport->validators);
+             print_r($workdemandreport->errors);
+             exit;
+             }
+           $model->status=1;
+           $model->save();
+           $marking->status=1;
+           $marking->flag=1;
+           $marking->save();
+           $transaction->commit();
            
               if ($returnurl!='')
                   return $this->redirect($returnurl);
-              else 
-               
+              else if(!Yii::$app->request->isAjax)
+               return $this->redirect(['view','id'=>$id]);
+               else
+                //print "data submitted";
+                {
                 \Yii::$app->getSession()->setFlash('message', 'Report Submitted!!!');
-             }
-              else
-                      \Yii::$app->getSession()->setFlash('message', 'Error in submitting form');
-          
-            return $this->render('atr',['model'=>$model,'workdemandReport'=>$workdemandreport]);
                 }
-        else {
+        }
+        else
+            if (Yii::$app->request->isAjax)
+             return $this->renderAjax('atr',['model'=>$model,'markingid'=>$markingid,'workdemandReport'=>$workdemandreport]);
+            else 
+            return $this->render('atr',['model'=>$model,'markingid'=>$markingid,'workdemandReport'=>$workdemandreport]);
+                
+       } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
      }
@@ -255,7 +276,7 @@ class WorkdemandController extends Controller
        $dp=$modelSearch->search([]);
        return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
     }
-      public function actionMy($ms=0,$d=-1,$s=-1,$dcode,$bcode)
+      public function actionMy($ms=0,$d=-1,$s=-1,$dcode=null,$bcode=null)
      {
         if (Yii::$app->user->isGuest)
          throw new NotFoundHttpException('Not Found');
@@ -264,9 +285,9 @@ class WorkdemandController extends Controller
      
      
      }
-protected function _ismarkedtocurrentuser($request_id)
+protected function _ismarkedtocurrentuser($id,$markingid)
   {
-    return Marking::find()->where(['request_type'=>'workdemand','request_id'=>$request_id,'receiver'=>Designation::designationByUser(Yii::$app->user->id)])->one()?true:false;
+    return Marking::find()->where(['id'=>$markingid,'request_type'=>'workdemand','request_id'=>$id,'receiver'=>\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id)])->one()?true:false;
   
   }
 }

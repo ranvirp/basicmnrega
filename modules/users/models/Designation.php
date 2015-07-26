@@ -254,8 +254,11 @@ class Designation extends \app\modules\users\MyActiveRecord
 		      }
 		   
      }
- public static function getDesignationByUser($userid)
+ public static function getDesignationByUser($userid,$returnobj=false)
  {
+ if ($returnobj)
+     return Designation::find()->where(['officer_userid'=>$userid])->one();
+ else
    return Designation::find()->where(['officer_userid'=>$userid])->one()->id;
  }
      

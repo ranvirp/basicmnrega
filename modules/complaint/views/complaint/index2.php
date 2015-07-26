@@ -9,6 +9,7 @@ use app\modules\complaint\models\Complaint_type;
 
 use app\modules\mnrega\models\District;
 use app\modules\mnrega\models\Block;
+use yii\widgets\Pjax;
 
  ?>
  <div class="form-title">
@@ -16,13 +17,16 @@ use app\modules\mnrega\models\Block;
          <span>List of Complaints</span>
         </div>
     </div>
+    <?php $dataProvider->query=$dataProvider->query->with('markings');?>
+    <?php Pjax::begin(['enablePushState'=>false]);?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'id'=>'complaint-lists',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
              [
-              'header'=>Yii::t('app','Complaint Type'),
+              'header'=>Yii::t('app','Id'),
              'value'=>function ($model,$key,$index,$column)
                       {
                         return Html::a($model->id,Url::to(['/complaint/complaint/view?id='.$model->id]));
@@ -37,7 +41,7 @@ use app\modules\mnrega\models\Block;
               'header'=>Yii::t('app','Complaint Type'),
              'value'=>function ($model,$key,$index,$column)
                       {
-                      
+                        $model->showValue('complaint_type');
                       },
              'attribute'=>'complaint_type',
              'filter'=>ArrayHelper::map(Complaint_type::find()->asArray()->all(),'code','name_hi'),
@@ -50,7 +54,7 @@ use app\modules\mnrega\models\Block;
                          return District::findOne($model->district_code)->name_en;
                       },
              'attribute'=>'district_code',
-             'filter'=>ArrayHelper::map(District::find()->asArray()->all(),'code','name_en'),
+             'filter'=>ArrayHelper::map(District::find()->asArray()->orderBy('name_en asc')->all(),'code','name_en'),
             ],
              [
               'header'=>Yii::t('app','Block'),
@@ -77,11 +81,13 @@ use app\modules\mnrega\models\Block;
               'buttons'=>[
                 'reqaction'=>function($url,$model,$key)
                 {
+                
                  if ($model->status==Complaint::PENDING_FOR_ENQUIRY)
                   {
                     $x='';
                     foreach ($model->markings as $marking)
                     {
+                    if($marking->receiver1)
                     $x.=Html::a('<button class="btn btn-success">'.'File Enquiry Report for'.$marking->receiver1->name_en.'</button>',Url::to(['/complaint/complaint/filereport?id='.$model->id]).'&markingid='.$marking->id.'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                     }
                     return $x;
@@ -93,6 +99,8 @@ use app\modules\mnrega\models\Block;
                     $x='';
                     foreach ($model->markings as $marking)
                     {
+                                        if($marking->receiver1)
+
                     $x.=Html::a('<button class="btn btn-success">'.'File ATR for'.$marking->receiver1->name_en.'</button>',Url::to(['/complaint/complaint/fileatr?id='.$model->id]).'&markingid='.$marking->id.'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                     }
                     return $x;
@@ -102,6 +110,8 @@ use app\modules\mnrega\models\Block;
                         $x='';
                     foreach ($model->markings as $marking)
                     {
+                                        if($marking->receiver1)
+
                     $x.=Html::a('<button class="btn btn-success">'.'Mark Disposed for'.$marking->receiver1->name_en.'</button>',Url::to(['/complaint/complaint/markstatus?s=8&id='.$model->id]).'&markingid='.$marking->id.'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                     }
                     return $x;
@@ -120,3 +130,4 @@ use app\modules\mnrega\models\Block;
         ]])
         
     ?>
+    <?php Pjax::end();?>

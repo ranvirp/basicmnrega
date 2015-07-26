@@ -7,10 +7,10 @@ class m150720_140214_complaint_columns extends Migration
 {
     public function up()
     {
-      $this->alterColumn('{{%complaint}}','fname',Schema::TYPE_STRING.'(255) NULL');
+      $this->alterColumn('{{%complaint}}','fname','DROP NO NULL');
       
-      $this->alterColumn('{{%complaint}}','block_code',Schema::TYPE_STRING.'(12) NULL');
-      $this->alterColumn('{{%complaint}}','panchayat_code',Schema::TYPE_STRING.'(12) NULL');
+      $this->alterColumn('{{%complaint}}','block_code','DROP NO NULL');
+      $this->alterColumn('{{%complaint}}','panchayat_code','DROP NO NULL');
 
     }
 

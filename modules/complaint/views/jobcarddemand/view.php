@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'mobileno',
             'address:ntext',
             'gender',
-            'district_code',
+            'district_code:text:'.$model->showValue('district_code'),
             'block_code',
             'panchayat_code',
             'village',

@@ -33,7 +33,7 @@ class JobcarddemandReport extends \yii\db\ActiveRecord
     {
         return [
             [['jobcarddemand_id', 'author', 'create_time', 'update_time'], 'integer'],
-            [['jobcardno'], 'required'],
+            [['jobcardno'], 'required','when'=>function($model){return $model->complainttrue==1;}],
             [['datefrom'], 'safe'],
             [['description'], 'string'],
             [['jobcardno'], 'string', 'max' => 255],

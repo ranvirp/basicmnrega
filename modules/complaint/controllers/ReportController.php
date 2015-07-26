@@ -36,7 +36,7 @@ class ReportController extends Controller
         if ($t=='workdemand')
          {
          $q=[];
-         $status=Complaint::statusNames();
+         $status=[0=>'pending',1=>'disposed',2=>'reported'];
          foreach ($status as $s1=>$sname)
           {
           $x="SUM(CASE WHEN status=".$s1

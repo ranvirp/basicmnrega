@@ -252,14 +252,17 @@ class WorkDemand extends \yii\db\ActiveRecord
 			case 'jobcardno':
 			   return $this->jobcardno;			    break;
 									
+										
 			case 'district_code':
-			   return $this->district_code;			    break;
+			   return District::findOne($this->district_code)->name_en;			    break;
 									
 			case 'block_code':
-			   return $this->block_code;			    break;
+			   return Block::findOne($this->block_code)->name_en;			    break;
 									
 			case 'panchayat_code':
-			   return $this->panchayat_code;			    break;
+			   return Panchayat::findOne($this->panchayat_code)->name_en;			    break;
+									
+			
 									
 			case 'village':
 			   return $this->village;			    break;
@@ -289,11 +292,11 @@ class WorkDemand extends \yii\db\ActiveRecord
 			break;
 		  }
     }
-    public function count1($ms=0,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
+    public function count1($ms=-1,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
     {
        $query = new Query;
-	    $query  ->select('workdemand.id as id,workdemand.name_hi as cname,fname,mobileno,address,panchayat,district.name_en as districtname,
-	    block.name_en as blockname,
+	    $query  ->select('workdemand.id as id,workdemand.name_hi as cname,fname,mobileno,address,panchayat,district.name_en as dname,
+	    block.name_en as bname,
 	    datefrom,dateofmarking,workdemand.status as status,marking.id as markingid,marking.status as markingstatus,workdemand.district_code as district_code,workdemand.block_code as block_code') 
 	        ->from('workdemand')
 	        ->join(  'LEFT JOIN',
@@ -312,14 +315,18 @@ class WorkDemand extends \yii\db\ActiveRecord
    if($s!=-1) $query->where(['workdemand.status'=>$s]);
    if ($ms==-2)
       $query->andWhere(['marking.status'=>null]);
-    else 
+    else if ($ms!=-1)
       $query->andWhere(['marking.status'=>$ms]);
-	if ($d!=-1)
-	 {
+	
+	  if (!Yii::$app->user->can('complaintviewall') )
+	  {
 	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
   
        $query->andWhere(['receiver'=>$d]);
-    }
+       }
+       else if($d!=-1)
+         $query->andWhere(['receiver'=>$d]);   
+    
      if ($dcode)
        $query->andWhere(['workdemand.district_code'=>$dcode]);
     if ($bcode)

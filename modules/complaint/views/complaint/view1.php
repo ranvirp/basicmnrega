@@ -44,17 +44,11 @@ div.required label:after {
 <?php if (Yii::$app->user->can('marktopo')) {?>
  <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Add Comments', ['/reply/default/create','ct'=>'complaint', 'ctid' => $model->id], [
-            'class' => 'btn btn-danger',
-            
-        ]) ?>
-         <?= Html::a('View Comments', ['/complaint/complaint/viewcomments', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-          <?= Html::a('Add Comments', ['/reply/default/create', 'ct'=>'complaint', 'ctid' => $model->id], ['class' => 'btn btn-primary','onClick'=>'event.preventDefault();populateHtml($(this).attr("href"),"reply")']) ?>
        
        
     </p>
     <?php } ?>
-<div class="col-sm-9 well" >
+<div class="col-sm-12 well" >
   <p><span>Status:</span><span><?=Complaint::statusNames()[$model->status]?></p>
   <p><button onClick="$('#status').toggle()">Toggle</button></p>
   <div class="col-md-12" id="status">
@@ -73,8 +67,8 @@ div.required label:after {
      
 ?>
 </div>
-</div>
-<div class="col-sm-offset-3 col-sm-9 well">
+
+<div class="col-md-12 well">
 <div class="col-lg-3 text-heading" >शिकायत का विवरण</div>
 <div class="col-lg-3 text-heading">जांच आख्या</div>
 <div class="col-lg-3 text-heading">कार्यवाही का विवरण</div>

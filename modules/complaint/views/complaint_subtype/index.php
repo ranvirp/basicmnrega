@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\assets\AppAssetGoogle;
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\complaint\models\Complaint_subtypeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
          <span>List of Complaint_subtype</span>
         </div>
     </div>
+    <?php Pjax::begin(['id'=>'complaint-subtypes']) ;?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -61,6 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'tableOptions'=>['class'=>'table table-striped small'],
         ]); ?>
+          <?php Pjax::end();?>
+  
 
 </div>
 </div>

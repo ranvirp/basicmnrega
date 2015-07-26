@@ -30,7 +30,22 @@ class JobcardDemand extends \yii\db\ActiveRecord
 {
    public $marking;
    public $captcha;
+const PENDING=0;
+const DISPOSED=1;
+public static function statusNames()
+{
+ return 
+   [
+     self::REGISTERED=>Yii::t('app','Registered'),
+     self::PENDING_FOR_ENQUIRY=>Yii::t('app','Pending for enquiry'),
+     self::ENQUIRY_REPORT_RECEIVED=>Yii::t('app','Enquiry report recieved'),
+     self::PENDING_FOR_ATR=>Yii::t('app','Pending for atr'),
+     self::ATR_RECEIVED=>Yii::t('app','Atr received'),
+     self::DISPOSED=>Yii::t('app','disposed'),
+   ];
+ 
 
+}
     /**
      * @inheritdoc
      */
@@ -89,6 +104,7 @@ class JobcardDemand extends \yii\db\ActiveRecord
             'village' => Yii::t('app', 'Village'),
             'block_code' => Yii::t('app', 'Block'),
             'panchayat_code' => Yii::t('app', 'Panchayat'),
+             'panchayat' => Yii::t('app', 'Panchayat'),
             'author' => Yii::t('app', 'Author'),
             'create_time' => Yii::t('app', 'Create Time'),
             'update_time' => Yii::t('app', 'Update Time'),
@@ -213,13 +229,13 @@ case 'name_hi':
 			   return $this->gender;			    break;
 									
 			case 'district_code':
-			   return $this->district_code;			    break;
+			   return District::findOne($this->district_code)->name_en;			    break;
 									
 			case 'block_code':
-			   return $this->block_code;			    break;
+			   return Block::findOne($this->block_code)->name_en;			    break;
 									
 			case 'panchayat_code':
-			   return $this->panchayat_code;			    break;
+			   return Panchayat::findOne($this->panchayat_code)->name_en;			    break;
 									
 			case 'village':
 			   return $this->village;			    break;
@@ -240,8 +256,8 @@ case 'name_hi':
     public function count1($ms=0,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
     {
        $query = new Query;
-	    $query  ->select('jobcarddemand.id as id,jobcarddemand.name_hi as cname,fname,mobileno,address,panchayat,district.name_en as districtname,
-	    block.name_en as blockname,
+	    $query  ->select('jobcarddemand.id as id,jobcarddemand.name_hi as cname,fname,mobileno,address,panchayat,district.name_en as dname,
+	    block.name_en as bname,
 	    dateofmarking,jobcarddemand.status as status,marking.id as markingid,marking.status as markingstatus,jobcarddemand.district_code as district_code,jobcarddemand.block_code as block_code') 
 	        ->from('jobcarddemand')
 	        ->join(  'LEFT JOIN',
@@ -260,18 +276,21 @@ case 'name_hi':
    if($s!=-1) $query->where(['jobcarddemand.status'=>$s]);
    if ($ms=='-2')
       $query->andWhere(['marking.status'=>null]);
-    else 
+    else if ($ms!=-1)
       $query->andWhere(['marking.status'=>$ms]);
        if ($dcode)
        $query->andWhere(['jobcarddemand.district_code'=>$dcode]);
     if ($bcode)
        $query->andWhere(['jobcarddemand.block_code'=>$bcode]);
-	if ($d!=-1)
-	 {
+	
+	  if (!Yii::$app->user->can('complaintviewall') )
+	  {
 	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
   
        $query->andWhere(['receiver'=>$d]);
-    }
+       }
+       else if($d!=-1)
+         $query->andWhere(['receiver'=>$d]);   
         $dp= new ActiveDataProvider([
          'query' => $query,
         

@@ -7,21 +7,24 @@ var map;
 var markers;
 function populateDropdown(url,id)
 {
-     
       $.get(url,
           function(data)
           {
           if (typeof data !='object')
               data = $.parseJSON(data)
-               
+               $('#'+id).html('');
                 var htmlToAppend='<option>None</option>';
+                //$('#'+id).append(htmlToAppend);
               $.each(data,function(key,value)
          {
+       //  alert(key+'-'+value);
         htmlToAppend +="<option value='"+key+"'>" + value  + "</option>";
+       // $('#'+id).append("<option value='"+key+"'>" + value  + "</option>");
+       //$('#'+id).append( new Option(value,key) );
          });
 
                  
-                 $('#'+id).html(htmlToAppend);    
+                 $('#'+id).append(htmlToAppend);    
 }
 );
 }
@@ -42,7 +45,9 @@ marker =new L.marker([gpslat,gpslong]);
 }
 
 
-    function hindiEnable(elem=$('.hindiinput')){
+    function hindiEnable(elem){
+     if (elem==null)
+      elem =$('.hindiinput');
              var options = {
           sourceLanguage:
               google.elements.transliteration.LanguageCode.ENGLISH,

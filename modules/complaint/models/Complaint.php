@@ -153,16 +153,26 @@ public static function statusNames()
      /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMarkings()
+    public function getReplies($markingid)
     {
-        return $this->hasMany(Marking::className(), ['request_id' => 'id'])->where(['request_type'=>'complaint','marking.status'=>'0'])->with('receiver1');
+        return ComplaintReply::find()->where(['marking_id'=>$markingid]);
+         
     }
      /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAtrSummary()
+    public function getMarkings()
     {
-        return $this->hasOne(AtrSummary::className(), ['complaint_id' => 'id']);
+        return $this->hasMany(Marking::className(), ['request_id' => 'id'])->where(['request_type'=>'complaint'])->with('receiver1');
+    }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAtrSummary($markingid=null)
+    {
+        $aq= $this->hasMany(AtrSummary::className(), ['complaint_id' => 'id']);
+        if ($markingid) return $aq->where(['marking_id'=>$markingid])->limit(1);
+        else return $aq;
     }
      /**
      * @return \yii\db\ActiveQuery
@@ -175,25 +185,31 @@ public static function statusNames()
          /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEnquiryReportSummary()
+    public function getEnquiryReportSummary($markingid=null)
     {
-        return $this->hasOne(EnquiryReportSummary::className(), ['complaint_id' => 'id']);
+        $aq= $this->hasMany(EnquiryReportSummary::className(), ['complaint_id' => 'id']);
+         if ($markingid) return $aq->where(['marking_id'=>$markingid])->limit(1);
+        else return $aq;
     }
           /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEnquiryReportsPoint()
+    public function getEnquiryReportsPoint($markingid=null)
     {
-        return $this->hasMany(EnquiryReportPoint::className(), ['complaint_point_id' => 'id'])
+        $aq= $this->hasMany(EnquiryReportPoint::className(), ['complaint_point_id' => 'id'])
         ->via('complaintPoints');
+         if ($markingid) return $aq->where(['marking_id'=>$markingid]);
+        else return $aq;
    }
           /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAtrPoints()
+    public function getAtrPoints($markingid=null)
     {
-        return $this->hasMany(AtrPoint::className(), ['complaint_point_id' => 'id'])
+        $aq= $this->hasMany(AtrPoint::className(), ['complaint_point_id' => 'id'])
         ->via('complaintPoints');
+        if ($markingid) return $aq->where(['marking_id'=>$markingid]);
+        else return $aq;
    }
 
 
@@ -436,7 +452,7 @@ public static function statusNames()
     {
        $query = new Query;
 	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
-	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,marking.id as markingid,marking.status as markingstatus,district_code,block_code') 
+	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,flowtype,marking.id as markingid,marking.status as markingstatus,district_code,block_code') 
 	        ->from('complaint')
 	        ->join(  'LEFT JOIN',
 	                'marking',
@@ -462,12 +478,15 @@ public static function statusNames()
        $query->andWhere(['complaint.district_code'=>$dcode]);
     if ($bcode)
        $query->andWhere(['complaint.block_code'=>$bcode]);
-	if ($d!=-1)
-	 {
+	
+	  if (!Yii::$app->user->can('complaintviewall') )
+	  {
 	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
   
        $query->andWhere(['receiver'=>$d]);
-    }
+       }
+       else if($d!=-1)
+         $query->andWhere(['receiver'=>$d]);   
         $dp= new ActiveDataProvider([
          'query' => $query,
         
@@ -490,8 +509,11 @@ public static function statusNames()
        $transaction=\Yii::$app->db->beginTransaction();
        if ($complaint)
          {
+          if ($complaint->status<$status)
+          {
            $complaint->status=$status;
            $complaint->save();
+           }
          }
          if ($message!='')
          {

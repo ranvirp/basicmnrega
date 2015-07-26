@@ -189,18 +189,28 @@ class JobcarddemandController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function actionFilereport($id,$returnurl='')
+    public function actionFilereport($id,$markingid,$returnurl='')
      {
-        if (!_ismarkedtocurrentuser($id) && !Yii::$app->user->can('complaintagent'))
+        if (!$this->_ismarkedtocurrentuser($id,$markingid) && !Yii::$app->user->can('complaintagent'))
         throw new NotFoundHttpException("Not permitted");
+        $marking=Marking::findOne($markingid);
+        if (!$marking)
+          throw new NotFoundHttpException('The requested page does not exist.wrong markingid');
     if (($model = JobcardDemand::findOne($id)) !== null) {
           $jobcarddemandreport=JobcardDemandReport::find()->where(['jobcarddemand_id'=>$model->id])->one();
            if (!$jobcarddemandreport)
            $jobcarddemandreport=new JobcardDemandReport;
            $jobcarddemandreport->jobcarddemand_id=$model->id;
-         if( Yii::$app->request->post() && $jobcarddemandreport->load(Yii::$app->request->post()) && $jobcarddemandreport->save())
+         if( Yii::$app->request->post() && $jobcarddemandreport->load(Yii::$app->request->post()))
          {
-           Marking::setStatus('jobcarddemand',$model->id,1);
+          $transaction=Yii::$app->db->beginTransaction();
+           $jobcardemandreport->save();
+           $model->status=1;
+           $model->save();
+           $marking->status=1;
+           $marking->flag=1;
+           $marking->save();
+           $transaction->commit();
            if ($returnurl!='')
             return $this->redirect($returnurl);
           else
@@ -258,9 +268,9 @@ class JobcarddemandController extends Controller
      
      
      }
-     protected function _ismarkedtocurrentuser($request_id)
+     protected function _ismarkedtocurrentuser($id,$markingid)
   {
-    return Marking::find()->where(['request_type'=>'jobcarddemand','request_id'=>$request_id,'receiver'=>Designation::designationByUser(Yii::$app->user->id)])->one()?true:false;
+    return Marking::find()->where(['id'=>$markingid,'request_type'=>'jobcarddemand','request_id'=>$id,'receiver'=>\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id)])->one()?true:false;
   
   }
 }

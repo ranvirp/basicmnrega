@@ -20,24 +20,36 @@ use yii\grid\GridView;
         return Html::a($model['id'],Url::to(['/complaint/jobcarddemand/view?id='.$model['id']]));
 },
 'format'=>'html'],
-['header'=>'name_hi',
-'attribute'=>'Name',
+['header'=>Yii::t('app','Name'),
+'attribute'=>'name_hi',
 'value'=>function($model,$key,$index,$column)
 {
         return $model['cname'];
-},],['header'=>'Father/Husband Name',
+},],['header'=>Yii::t('app','Father/Husband Name'),
 'attribute'=>'fname',
 'value'=>function($model,$key,$index,$column)
 {
                 return $model['fname'];
-},],['header'=>'Mobile No',
+},],
+['header'=>Yii::t('app','Mobile No'),
 'attribute'=>'mobileno',
 'value'=>function($model,$key,$index,$column)
 {
                 return $model['mobileno'];
 },],
-'dname',
-'bname',
+['header'=>Yii::t('app','District'),
+'attribute'=>'dname',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model['dname'];
+},],
+['header'=>Yii::t('app','Block'),
+'attribute'=>'bname',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model['bname'];
+},],
+
 ['header'=>'Panchayat',
 'attribute'=>'panchayat',
 'value'=>function($model,$key,$index,$column)
@@ -49,14 +61,14 @@ use yii\grid\GridView;
               'template'=>'{filereport}',
               'urlCreator'=>function($action, $model, $key, $index)
               {
-                $params = is_array($model['id']) ? $model['id']: ['id' => (string) $model['id']];
+                $params = is_array($model['id']) ? $model['id']: ['id' => (string) $model['id'],'markingid'=>$model['markingid']];
                 $params[0] = '/complaint/jobcarddemand'. '/' . $action ;
                 return Url::toRoute($params);
               },
              'buttons'=>[
                 'filereport'=>function($url,$model,$key)
                 {
-                 if ($model['markingstatus']!=null)
+                 if ($model['markingid']!=null)
                   return Html::a('<button class="btn btn-success">'.'File Report'.'</button>',$url.'&returnurl='.urlencode(Url::to(['/complaint/jobcarddemand/my'])));
                 else
                   return Html::a('<button class="btn btn-success">'.'Mark Officer'.'</button>',Url::to(['/complaint/jobcarddemand/update?id='.$model['id']]).'&returnurl='.urlencode(Url::to(['/complaint/jobcarddemand/my'])));

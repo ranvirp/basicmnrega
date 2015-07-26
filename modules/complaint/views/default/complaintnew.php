@@ -6,6 +6,10 @@ use yii\widgets\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
 use app\modules\complaint\models\Complaint_type;
 use app\modules\complaint\models\Complaint_subtype;
+use app\modules\complaint\models\Complaint;
+use app\modules\complaint\models\ComplaintSearch;
+
+
 
 use app\assets\AppAssetGoogle;
 ?>
@@ -24,18 +28,49 @@ div.required label:after {
 }
 </style>
 <script>
+$(document).ready(function(){
+$('#mobileno').mouseout(function()
+{ 
+$('input[name="ComplaintSearch[mobileno]"]').val($(this).val());
+$('.grid-view').yiiGridView('applyFilter');
+//$.pjax.reload({container:'#complaint-lists'});
+
+});
+$('#complaint-name_hi').mouseout(function()
+{ 
+$('input[name="ComplaintSearch[name_hi]"]').val($(this).val());
+$('.grid-view').yiiGridView('applyFilter');
+//$.pjax.reload({container:'#complaint-lists'});
+
+});
+
+});
  function _count1($elem) {
         return $elem.closest('.dynamicform_wrapper').find('.item').length-1;
     };
 </script>
-<h2 class="text-center">Form to submit a complaint</h2>
-<div class="customer-form text-center">
+<?php
+if (Yii::$app->user->can('complaintagent')) 
+{
+$searchModel=new ComplaintSearch;
+$dp=$searchModel->search(Yii::$app->request->get());
+$dp->pagination->pageSize=1;
+print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'=>$dp,'searchModel'=>$searchModel]);
+
+}
+
+?>
+<div class="bordered-form complaint-form">
+  <div class="form-title">
+    <div class="form-title-span">
+        <span>Form for creating Complaint</span>
+    </div>
+</div>
 <?php AppAssetGoogle::register($this);?>
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
     <div class="row">
     <div class="col-md-5">    
-     <?=$modelComplaint->showForm($form,'source')?> 
-     <?=$modelComplaint->showForm($form,'manualno')?> 
+     
      
      
    <table class="table table-hover well">
@@ -69,9 +104,13 @@ div.required label:after {
     </td>
   </tr>
     </table>
+     <?=$modelComplaint->showForm($form,'source')?> 
+     <?=$modelComplaint->showForm($form,'manualno')?>
      <?php 
         $url=Url::to(['/complaint/complaint_subtype/get?code=']);
      ?>
+     </div>
+     <div class="col-md-6">
     <div class="row well" style="margin-right:0;margin-left:0!important">
         <div class="col-sm-6">
                 <?= $form->field($modelComplaint, "complaint_type")->dropDownList(ArrayHelper::Map(Complaint_type::find()->asArray()->all(),'shortcode','name_hi'),['prompt'=>'None','onChange' => 'populateDropdown("'.$url.'"+$(this).val(),"complaint-complaint_subtype")']) ?>
@@ -134,7 +173,7 @@ div.required label:after {
 
  </div>
    
-<div class="col-md-6">
+
     <table class="table table-striped" id="prevcomp">
     
     </table>

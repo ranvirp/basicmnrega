@@ -231,27 +231,27 @@ return [
 
 'संग्लग्नक'=>'',
 
-'Block Code'=>'@@विकास खंड@@',
+'Block Code'=>'विकास खंड',
 
-'Complaint Letter'=>'@@शिकायती पत्र@@',
+'Complaint Letter'=>'शिकायती पत्र',
 
-'District Code'=>'@@जिला@@',
+'District Code'=>'जिला',
 
-'Father/Husband Name'=>'@@पिता/पति का नाम@@',
+'Father/Husband Name'=>'पिता/पति का नाम',
 
-'Firproposed'=>'@@एफआईआर संस्तुत@@',
+'Firproposed'=>'एफआईआर संस्तुत',
 
-'Firproposedreason'=>'@@एफ आई आर संस्तुति का कारण @@',
+'Firproposedreason'=>'एफ आई आर संस्तुति का कारण',
 
-'Fname'=>'@@पिता/पति का नाम@@',
+'Fname'=>'पिता/पति का नाम',
 
-'Mobile No'=>'@@मोबाइल नंबर@@',
+'Mobile No'=>'मोबाइल नंबर',
 
-'No of days'=>'@@कितने दिन काम चािहए@@',
+'No of days'=>'कितने दिन काम चािहए',
 
-'Panchayat Code'=>'@@पंचायत@@',
+'Panchayat Code'=>'पंचायत',
 
-'True Or False'=>'@@@@',
+'True Or False'=>'',
 
 'Address'=>'पता',
 

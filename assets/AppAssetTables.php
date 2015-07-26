@@ -13,16 +13,16 @@ use yii\web\AssetBundle;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class AppAsset extends AssetBundle
+class AppAssetTables extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     public $css = [
-       'css/site.css',
+      // 'css/site.css',
        // 'css/prettyPhoto.css',
         //'css/blue/style.css',
-     //   'css/jquery.dataTables.css',
+        'css/jquery.dataTables.css',
       //  "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css",
 
     ];
@@ -41,20 +41,14 @@ class AppAsset extends AssetBundle
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
         'yii\bootstrap\BootstrapPluginAsset',
-        
        // 'yii\jui\juiAsset',
     ];
     public function init()
     {
-    $this->js=['js/common.js?'.time(), 
+   $this->js=[
+   'js/common.js?'.time(), 
     //'js/jquery.prettyPhoto.js',
       //  'js/jquery.tablesorter.min.js',
-    //    'js/jquery.dataTables.min.js'
-    ];
-    $this->css=['css/site.css?'.time(), 
-    //'js/jquery.prettyPhoto.js',
-      //  'js/jquery.tablesorter.min.js',
-    //    'js/jquery.dataTables.min.js'
-    ];
+        'js/jquery.dataTables.min.js'];
     }
 }

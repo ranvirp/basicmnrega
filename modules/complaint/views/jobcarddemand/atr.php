@@ -59,9 +59,23 @@ div.required label:after {
             'mobileno',
             'address:ntext',
             'gender',
-            'district_code',
-            'block_code',
-            'panchayat_code',
+            [
+             'header'=>Yii::t('app','district_code'),
+             'attribute'=>'district_code',
+             'value'=>$model->showValue('district_code')
+            ],
+            
+             [
+             'header'=>Yii::t('app','block_code'),
+             'attribute'=>'block_code',
+             'value'=>$model->showValue('block_code')
+            ],
+              [
+             'header'=>Yii::t('app','panchayat_code'),
+             'attribute'=>'panchayat_code',
+             'value'=>$model->showValue('panchayat_code')
+            ],
+            
             'village',
             'panchayat',
         ],
