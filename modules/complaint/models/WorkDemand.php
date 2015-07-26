@@ -66,6 +66,8 @@ class WorkDemand extends \yii\db\ActiveRecord
             [['address', 'workchoice'], 'string'],
             [['mobileno','noofdays', 'author', 'create_time', 'update_time'], 'integer'],
             [['datefrom', 'dateto'], 'safe'],
+            [['datefrom', 'dateto'], 'default','value'=>null],
+            
             [['name_hi', 'fname', 'village'], 'string', 'max' => 255],
             [['gender'], 'string', 'max' => 1],
             [['mobileno'], 'string', 'max' => 10],
@@ -173,7 +175,7 @@ class WorkDemand extends \yii\db\ActiveRecord
 			case 'block_code':
 			   $url="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
 			   $id='workdemand-panchayat';
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->orderBy('name_en asc')->all(),"code","name_en"),["prompt"=>"None..",
 			   'onChange'=>'populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
 			    
 			    break;
@@ -203,6 +205,7 @@ class WorkDemand extends \yii\db\ActiveRecord
 			case 'datefrom':
 			   return  $form->field($this,$attribute)->widget(\yii\jui\DatePicker::classname(), [
     'dateFormat' => 'yyyy-MM-dd',
+    'language'=>'en-US',
     'options'=>['onChange'=>"$('#deadline').val($(this).val())"],
 ]);
 			    break;
@@ -210,6 +213,8 @@ class WorkDemand extends \yii\db\ActiveRecord
 			case 'dateto':
 			   return  $form->field($this,$attribute)->widget(\yii\jui\DatePicker::classname(), [
     'dateFormat' => 'yyyy-MM-dd',
+    'language'=>'en-US',
+    
 ]);
 			    break;
 									
