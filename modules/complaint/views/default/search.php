@@ -14,14 +14,24 @@ $form = ActiveForm::begin([
 ]) ?>
 <div class="row">
 <div class="col-md-4 col-sm-4">
-    <?= $form->field($model, 'mobileno') ?>
+<?php 
+$types=['complaint'=>Yii::t('app','Complaint'),
+        'workdemand'=>Yii::t('app','Work Demand'),
+        'jobcarddemand'=>Yii::t('app','Jobcarddemand'),
+       ];
+
+?>
+    <?= $form->field($model, 'type')->dropDownList($types) ?>
 </div>
 <div class="col-md-1"></div>
 <div class="col-md-4 col-sm-4">
 
-    <?= $form->field($model, 'ticketno')?>
+    <?= $form->field($model, 'id')->textInput()?>
 </div>
 <div class="col-md-1">
+</div>
+<div class="col-md-12">
+   <?= $form->field($model, 'captcha')->widget(\yii\captcha\Captcha::classname(),['captchaAction' => '/site/captcha'])?>
 </div>
 <div class="col-md-3 col-sm-3 top-offset">
     <div class="form-group">

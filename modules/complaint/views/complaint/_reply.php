@@ -20,8 +20,7 @@ use \kartik\helpers\Enum;
  border-radius:2px;
 }
 </style>
- <div class="col-md-8 comment-container">
-	<p class="comment-author">
+ 	<p class="comment-author">
 		<csmall>Posted by <?php $user=\app\modules\users\models\Designation::getDesignationByUser($reply->author,true);
 		    $name='name_'.Yii::$app->language;
 			echo $user?$user->$name:'';?></csmall>|
@@ -32,14 +31,12 @@ use \kartik\helpers\Enum;
 	<?=$reply->reply?>
 		
 	</p>
-		<div class="pull-right">
+		<p>
 		<h4> Attachments</h4>
 		<div class="hline"></div>
-		<p></p>
 			<?=\app\modules\reply\models\File::showAttachmentsInline($reply,'attachments')?>
-		</div>
-	   </div>
+		</p>
+	  
 	
 
-</div>
 	

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\modules\mnrega\models\MarkingSearch;
+use app\modules\complaint\models\WorkdemandReport;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\complaint\models\WorkDemand */
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+    <?php if (!Yii::$app->user->isGuest) {?>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -24,8 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?php } ?>
     </p>
-
+<div class="col-md-6">
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -46,7 +49,25 @@ $this->params['breadcrumbs'][] = $this->title;
             
         ],
     ]) ?>
-
+    </div>
+    <div class="col-md-6">
+   <?php if ($report=WorkdemandReport::find()->where(['work_demand_id'=>$model->id])->one()) {?>
+    <?= DetailView::widget([
+        'model' => $report,
+        'attributes' => [
+            'id',
+            ['header'=>'Work Given?',
+            'attribute'=>'complainttrue',
+            'value'=>$report->complainttrue?'Yes':'No',
+            ],
+            'description:text:Details',
+            'work_id',
+            'workname',
+             
+        ],
+    ]) ?>
+<?php } else print "Pending" ?>
+</div>
 </div>
 <div class="row">
 <?php

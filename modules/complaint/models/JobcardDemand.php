@@ -110,6 +110,14 @@ public static function statusNames()
             'update_time' => Yii::t('app', 'Update Time'),
         ];
     }
+    
+          /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReport()
+    {
+       return $this->hasOne(JobcarddemandReport::className(),['jobcarddemand_id','id']);
+    }
 	/*
 	*@return form of individual elements
 	*/

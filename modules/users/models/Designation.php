@@ -44,10 +44,11 @@ class Designation extends \app\modules\users\MyActiveRecord
     {
         return [
             [['designation_type_id','officer_userid'], 'integer'],
-            [['officer_name_hi', 'officer_name_en','level_id'], 'string', 'max' => 100],
+            [['officer_name_hi', 'officer_name_en'], 'string', 'max' => 100],
             [['officer_mobile', 'officer_mobile1'], 'string', 'max' => 12],
             [['officer_email'], 'email'],
             [['name_hi','name_en'],'required'],
+            [['level_id'],'required'],
            // [['officer_userid'], 'string', 'max' => 10]
         ];
     }

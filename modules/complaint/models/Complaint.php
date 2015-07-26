@@ -470,7 +470,7 @@ public static function statusNames()
    if($s!=-1) $query->where(['complaint.status'=>$s]);
    
    if ($ms==-2)
-      $query->andWhere(['marking.status'=>null]);
+      $query->andWhere(['marking.id'=>null]);
     else 
      if ($ms!=-1)
       $query->andWhere(['marking.status'=>$ms]);

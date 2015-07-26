@@ -72,7 +72,7 @@ div.required label:after {
 <div class="col-lg-5 text-heading" >शिकायत का विवरण</div>
 <div class="col-lg-5 text-heading">जांच आख्या/कार्यवाही का विवरण</div>
 </div>
-<div class="col-sm-offset-3 col-sm-9">
+<div class="col-md-12">
     <div class="col-lg-5" style="margin:5px">
     
    <?= DetailView::widget([

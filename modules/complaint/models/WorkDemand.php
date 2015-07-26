@@ -107,6 +107,13 @@ class WorkDemand extends \yii\db\ActiveRecord
             'update_time' => Yii::t('app', 'Update Time'),
         ];
     }
+          /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReport()
+    {
+       return $this->hasOne(WorkdemandReport::className(),['work_demand_id','id']);
+    }
 	/*
 	*@return form of individual elements
 	*/

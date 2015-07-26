@@ -42,7 +42,7 @@ class AppAsset extends AssetBundle
         'yii\bootstrap\BootstrapAsset',
         'yii\bootstrap\BootstrapPluginAsset',
         
-       // 'yii\jui\juiAsset',
+        'yii\jui\juiAsset',
     ];
     public function init()
     {
