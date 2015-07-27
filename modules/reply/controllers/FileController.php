@@ -4,6 +4,7 @@ namespace app\modules\reply\controllers;
 
 use Yii;
 use app\modules\reply\models\File;
+use app\modules\complaint\models\ComplaintReply;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
