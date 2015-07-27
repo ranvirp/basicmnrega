@@ -22,9 +22,9 @@ use yii\widgets\PjaxAsset;
   $this->registerJs(
    '$("document").ready(function(){ 
         $("#complaint-list").on("pjax:end", function() {
-        
-
-          // $("#complaint-grid-view").yiiGridView("applyFilter");
+        console.log(flag);
+        if (flag==1)
+          $("#complaint-grid-view").yiiGridView("applyFilter");
 
 
             //$.pjax.reload({container:"#complaint-subtypes"});  //Reload GridView

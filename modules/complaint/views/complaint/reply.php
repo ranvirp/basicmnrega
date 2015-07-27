@@ -11,7 +11,8 @@ $this->title = 'Add Reply';
 ?>
  <?php
  $this->registerJs(
-   '$("document").ready(function(){ 
+   'flag=0;
+   $("document").ready(function(){ 
       $(".reply-form").on("submit", function() {
             //$.pjax.reload({container:"#complaint-list"});  //Reload GridView
             $("#complaint-grid-view").yiiGridView("applyFilter");
@@ -43,7 +44,7 @@ $this->title = 'Add Reply';
  
  <?=$form->field($model,'attachments')->widget(\app\modules\reply\widgets\FileWidget::className()) ?>
  
- <?=Html::submitButton('Save',['class'=>'reply-form'])?>
+ <?=Html::submitButton('Save',['class'=>'reply-form','onClick'=>'flag=1'])?>
  <?php
  ActiveForm::end();
 ?>

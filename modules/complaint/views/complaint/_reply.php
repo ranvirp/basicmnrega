@@ -31,12 +31,13 @@ use \kartik\helpers\Enum;
 	<?=$reply->reply?>
 		
 	</p>
+	<?php if ($reply->attachments!='') {?>
 		<p>
 		<h4> Attachments</h4>
 		<div class="hline"></div>
 			<?=\app\modules\reply\models\File::showAttachmentsInline($reply,'attachments')?>
 		</p>
 	  
-	
+	<?php } ?>
 
 	

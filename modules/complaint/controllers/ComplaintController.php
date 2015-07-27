@@ -544,7 +544,7 @@ public function actionIndex()
       $model->author=Yii::$app->user->id;
       if (!$model->save())
         print_r($model->errors);
-        switch ($model->type)
+        switch ($model->reply_type)
         {
           case ComplaintReply::ENQUIRY_REPORT:
              Marking::setStatus($markingid,Complaint::ENQUIRY_REPORT_RECEIVED);
