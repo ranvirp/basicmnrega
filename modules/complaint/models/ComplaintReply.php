@@ -51,8 +51,9 @@ public static function types()
     public function rules()
     {
         return [
-            [['reply',  'marking_id'], 'required'],
+            [['reply',  'marking_id','reply_type'], 'required'],
             [['attachments'],'safe'],
+            [['reply_type'],'integer'],
             [['created_at','updated_at','author'],'integer'],
             
             

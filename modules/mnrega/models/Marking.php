@@ -196,7 +196,11 @@ class Marking extends \yii\db\ActiveRecord
 			case 'dateofmarking':
 			   return $this->dateofmarking;			    break;
 			case 'status':
-			   return $this->status==0?'Pending':'Solved';
+			   $classmapping= self::mapping();
+			   $class=$classmapping[$this->request_type];
+			   $statuses=$class::statusNames();
+			   return $statuses[$this->status];
+			   //return $this->status==0?'Pending':'Solved';
 			   break;
 									
 			case 'deadline':
