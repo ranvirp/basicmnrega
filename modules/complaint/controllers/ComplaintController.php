@@ -544,8 +544,27 @@ public function actionIndex()
       $model->author=Yii::$app->user->id;
       if (!$model->save())
         print_r($model->errors);
-      Marking::setStatus($markingid,Complaint::ATR_RECEIVED);
-      Complaint::setStatus($id,Complaint::ATR_RECEIVED);
+        switch ($model->type)
+        {
+          case ComplaintReply::ENQUIRY_REPORT:
+             Marking::setStatus($markingid,Complaint::ENQUIRY_REPORT_RECEIVED);
+             Complaint::setStatus($id,Complaint::ENQUIRY_REPORT_RECEIVED);
+          break;
+          case ComplaintReply::ATR_CUM_ENQUIRY_REPORT:
+             Marking::setStatus($markingid,Complaint::ATR_RECEIVED);
+             Complaint::setStatus($id,Complaint::ATR_RECEIVED);
+          break;
+          case ComplaintReply::ATR_REPORT:
+             Marking::setStatus($markingid,Complaint::ATR_RECEIVED);
+             Complaint::setStatus($id,Complaint::ATR_RECEIVED);
+          break;
+          default:
+          break;
+        
+        
+        }
+     // Marking::setStatus($markingid,Complaint::ATR_RECEIVED);
+      //Complaint::setStatus($id,Complaint::ATR_RECEIVED);
       $transaction->commit();
        print "Saved";
        }
