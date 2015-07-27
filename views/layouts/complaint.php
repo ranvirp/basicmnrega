@@ -43,8 +43,12 @@ AppAsset_1::register($this);
     {
      padding:0;
     }
-   .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;}
+   .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;color:white;}
 .navbar {min-height:30px !important;font-size:8px;}
+ .nav >li > a:hover, .nav >li > a:focus , .nav .open>a,.nav .open>a:hover,.nav .open>a:focus
+{
+ background:blue;
+}
     .navbar-green
     {
      background-color:#faf3e3
