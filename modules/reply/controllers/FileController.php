@@ -164,9 +164,9 @@ class FileController extends Controller
 					$title=Yii::$app->request->post('title');
 					$file_id=Yii::$app->request->post('file_id');
 					//exit;
-					
+					$model=str_replace("\\Complaint\\","\\complaint\\",$model);
 					$model = new $model;
-            $files = \yii\web\UploadedFile::getInstances($model,$attribute);
+                $files = \yii\web\UploadedFile::getInstances($model,$attribute);
 
             if ($files) {  
 				foreach ($files as $index=>$file)
