@@ -63,7 +63,13 @@ AppAsset::register($this);
   background: -moz-linear-gradient(rgba(244,196,48,1),white, green); /* For Firefox 3.6 to 15 */
   background: linear-gradient(rgba(244,196,48,1),white, green); /* Standard syntax */
 } 
-   .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;}
+   .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;color:white;}
+     .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;color:white;}
+.navbar {min-height:30px !important;font-size:8px;}
+ .nav >li > a:hover, .nav >li > a:focus , .nav .open>a,.nav .open>a:hover,.nav .open>a:focus
+{
+ background:blue;
+}
 .navbar {min-height:30px !important;font-size:8px;}
     .navbar-green
     {
