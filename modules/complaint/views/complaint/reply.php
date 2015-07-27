@@ -11,7 +11,7 @@ $this->title = 'Add Reply';
 ?>
  <?php
  $this->registerJs(
-   'flag=0;
+   '
    $("document").ready(function(){ 
       $(".reply-form").on("submit", function() {
             //$.pjax.reload({container:"#complaint-list"});  //Reload GridView
@@ -43,7 +43,16 @@ $this->title = 'Add Reply';
  <?=$form->field($model,'reply_type')->dropDownList(ComplaintReply::types()) ?>
  
  <?=$form->field($model,'attachments')->widget(\app\modules\reply\widgets\FileWidget::className()) ?>
- 
+ <?php 
+ if (Yii::$app->user->can('complaintagent')){
+     $complaint = \app\modules\complaint\models\Complaint::findOne($id);
+     if ($complaint)
+     {
+       echo Html::dropDownList('complaintstatus',$complaint->status,\app\modules\complaint\models\Complaint::statusNames(),['id'=>'complaintstatus','label'=>'Complaint Status','onchange'=>'$(\'#anchor1\').attr(\'href\','."'".Url::to(['/complaint/complaint/setstatus?id='.$id."&status="])."'+$('#complaintstatus').val()".')']);
+       echo Html::a('Save without reply','#',['class'=>'reply-form','id'=>'anchor1','ajax'=>true]);
+     }
+ }
+ ?>
  <?=Html::submitButton('Save',['class'=>'reply-form','onClick'=>'flag=1'])?>
  <?php
  ActiveForm::end();

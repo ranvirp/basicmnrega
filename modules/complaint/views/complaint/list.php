@@ -1,9 +1,8 @@
 
-<div class="container-fluid">
 <?php
 $count=0;
 $items=[];
-foreach ($replies->all() as $reply)
+foreach ($replies->orderBy('created_at desc')->all() as $reply)
 {
     $x=[];
 	$x['header']='Reply #'.($count+1);
@@ -21,5 +20,5 @@ echo \yii\jui\Accordion::widget([
     
 ]);
 ?>
-</div>
+
 

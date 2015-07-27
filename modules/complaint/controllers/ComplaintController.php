@@ -19,6 +19,7 @@ use yii\web\ForbiddenHttpException;
 
 use app\modules\complaint\Utility;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\web\Controller;
 use Yii;
 use yii\base\Model;
@@ -56,6 +57,7 @@ public function actionIndex()
         $modelComplaint = new Complaint;
          if (Yii::$app->user->isGuest)
             $modelComplaint->scenario='guestentry';//captcha validation
+        $flagcomplex=0;
         $modelsComplaintPoint = [new ComplaintPoint];
         if ($modelComplaint->load(Yii::$app->request->post())) {
 
@@ -242,8 +244,8 @@ public function actionIndex()
         $marking=Marking::findOne($markingid);
         if (!$marking)
           throw new NotFoundHttpException("Requested Page does not exist.. wrong markingid ");
-        if ($modelComplaint->flowtype==1) 
-          return $this->redirect(Url::to(['/complaint/filereply?id='.$id.'&markingid='.$markingid]));
+        if ($modelComplaint->flowtype==0) 
+          return $this->redirect(Url::to(['/complaint/complaint/filereply?id='.$id.'&markingid='.$markingid]));
         $modelsComplaintPoint = $modelComplaint->complaintPoints;
         $enquiryReportSummary=$modelComplaint->getEnquiryReportSummary($markingid)->one();
         if (!$enquiryReportSummary) 
@@ -406,7 +408,7 @@ public function actionIndex()
         if (!$marking)
           throw new NotFoundHttpException("Requested Page does not exist.. wrong markingid ");
        
-          if ($modelComplaint->flowtype==1) 
+          if ($modelComplaint->flowtype==0) 
           return $this->redirect(Url::to(['/complaint/filereply?id='.$id.'&markingid='.$markingid]));
       
         if ($marking->status!=Complaint::PENDING_FOR_ATR)
@@ -519,7 +521,7 @@ public function actionIndex()
   }
   public function actionSetstatus($id,$status,$message='')
   {
-     if (Yii::$app->user->can('complaintadmin'))
+     if (Yii::$app->user->can('complaintadmin') ||Yii::$app->user->can('complaintagent') )
        {
          Complaint::setStatus($id,$status,$message);
          return $status;
@@ -534,6 +536,7 @@ public function actionIndex()
     //Add to Reply
     $model=new ComplaintReply;
     $model->marking_id=$markingid;
+   
     if ($model->load(Yii::$app->request->bodyParams) )
      {
       $transaction= Yii::$app->db->beginTransaction();
@@ -559,6 +562,11 @@ public function actionIndex()
              Complaint::setStatus($id,Complaint::ATR_RECEIVED);
           break;
           default:
+           $complaintstatus=Yii::$app->request->post('complaintstatus');
+           if ($complaintstatus)
+            {
+              Complaint::setStatus($id,$complaintstatus);
+            }
           break;
         
         
@@ -586,6 +594,15 @@ public function actionIndex()
   protected function _ismarkedtocurrentuser($id,$markingid)
   {
     return Marking::find()->where(['id'=>$markingid,'request_id'=>$id,'receiver'=>Designation::getDesignationByUser(Yii::$app->user->id)])->one()?true:false;
+  
+  }
+  public function actionGetreply($id)
+  {
+    $cr=ComplaintReply::findOne($id);
+    if ($cr)
+       return $this->render('_reply',['reply'=>$cr]);
+    else
+       return '';
   
   }
 }

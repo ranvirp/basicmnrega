@@ -20,7 +20,7 @@ use yii\widgets\PjaxAsset;
 //  PjaxAsset::register($this) ;
   yii\widgets\ActiveFormAsset::register($this);
   $this->registerJs(
-   '$("document").ready(function(){ 
+   'flag=0;$("document").ready(function(){ 
         $("#complaint-list").on("pjax:end", function() {
         console.log(flag);
         if (flag==1)
@@ -33,14 +33,37 @@ use yii\widgets\PjaxAsset;
 );
 
   ?>
+  <script>
+   function changeparams(elem,selector)
+   {
+   var y='<style>.no-print{visibility: screenonly;}#grid-table{border:1px}</style>';
+    var x= $(selector)[0].outerHTML;
+    x=x.replace(/(['"])/g, "&quot;");
+    var p=new Object
+    p.html=x
+    elem.data('params',p);
+    //console.log(elem.data());
+    
+   }
+  </script>
   <?php 
   Pjax::begin(['id'=>'complaint-list','enablePushState'=>false,'formSelector'=>'.reply-form','linkSelector'=>'.reply-form']);
   Pjax::end();
+  ?>
+  <p><?=Html::a('Export as Pdf',Url::to(['/complaint/report/cmypdf?'.Yii::$app->request->queryString]))?>
+  <?php //['onclick'=>'changeparams($(this),"#grid-table");','data'=>['method'=>'post','params'=>['html'=>'test"hi""HI""']]])
   ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'id'=>'complaint-grid-view',
        // 'filterModel' => $searchModel,
+       /*
+       'panel' => [
+'type' => GridView::TYPE_PRIMARY,
+],
+'exportConfig'=>['pdf'=>['mode'=>'UTF-8']],
+       'toolbar'=>['{export}'],
+       */
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 ['header'=>'Id',
@@ -77,7 +100,7 @@ use yii\widgets\PjaxAsset;
 {
                 return ucwords(strtolower($model['dname'])).'-'.ucwords(strtolower($model['bname'])).'-'.ucwords(strtolower($model['panchayat']));
 },],
-['header'=>Yii::t('app','Complaint Type'),
+['header'=>'<p style-"font-family:ind_hi_1_001;">'.Yii::t('app','Complaint Type').'</p>',
 'value'=>function($model,$key,$index,$column)
 {
       return $model['ctype'];
@@ -91,15 +114,19 @@ use yii\widgets\PjaxAsset;
        
        
 },],
-['header'=>'Action taken',
+['header'=>Yii::t('app','Action Taken'),
+ 'contentOptions'=>['class'=>'no-print'],
  'value'=>function($model,$key,$index,$column)
 {
-      
+      /*
         $reply= \app\modules\complaint\models\ComplaintReply::lastReply($model['markingid']);
         if ($reply) return $this->render('_reply',['reply'=>$reply]);
                 else return 'No Action Taken';
+        */
+        $replies=\app\modules\complaint\models\ComplaintReply::find()->where(['marking_id'=>$model['markingid']]);
+        return $this->render('list',['replies'=>$replies]);
        
-},'format'=>'html'],
+},'format'=>'raw'],
             ['class' => 'yii\grid\ActionColumn',
              'controller'=>'/complaint/complaint',
               'template'=>'{reply}{reqaction}',
@@ -112,15 +139,17 @@ use yii\widgets\PjaxAsset;
               'buttons'=>[
                 'reqaction'=>function($url,$model,$key)
                 {
+                  $statuses=Complaint::statusNames();
+                  $x=$statuses[$model['complaintstatus']]."<br/>";
                  if ($model['flowtype']==1)
                  {
                  if ($model['complaintstatus']==Complaint::PENDING_FOR_ENQUIRY)
                   return Html::a('<button class="btn btn-success">'.'File Enquiry Report'.'</button>',Url::to(['/complaint/complaint/filereport?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                   else  if ($model['complaintstatus']==Complaint::PENDING_FOR_ATR)
-                  return Html::a('<button class="btn btn-success">'.'File ATR'.'</button>',Url::to(['/complaint/complaint/fileatr?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
+                  return $x.Html::a('<button class="btn btn-success">'.'File ATR'.'</button>',Url::to(['/complaint/complaint/fileatr?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                   else 
                     if (Yii::$app->user->can('complaintadmin') && $model['complaintstatus']=Complaint::ATR_RECEIVED)
-                     return Html::a('<button class="btn btn-success">'.'Mark As Disposed'.'</button>',Url::to(['/complaint/complaint/view?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
+                     return $x.$Html::a('<button class="btn btn-success">'.'Mark As Disposed'.'</button>',Url::to(['/complaint/complaint/view?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                      else
                       return '';
                 }
@@ -129,8 +158,10 @@ use yii\widgets\PjaxAsset;
                 {
                 if ($model['flowtype']==0)
                 {
+                 $statuses=Complaint::statusNames();
+                  $x=$statuses[$model['complaintstatus']]."<br/>";
              //   $x.=  Html::a('Quick Reply',Url::to(['/reply/default/create?ct=marking&ctid='.$model['markingid']]),['class'=>'reply-form','onclick'=>"$(document).pjax('a.reply-form','#new-container-".$key."')"]);
-               $x=  Html::a('Quick Reply',Url::to(['/complaint/complaint/filereply?id='.$model['id'].'&markingid='.$model['markingid']]),['class'=>'reply-form','data-pjax'=>1]);
+               $x.=  Html::a('Quick Reply',Url::to(['/complaint/complaint/filereply?id='.$model['id'].'&markingid='.$model['markingid']]),['class'=>'reply-form','data-pjax'=>1]);
                
                  
                  return $x;
@@ -141,6 +172,6 @@ use yii\widgets\PjaxAsset;
               ],
               ],
         ],
-        'tableOptions'=>['class'=>'table table-bordered'],
+        'tableOptions'=>['class'=>'table table-bordered','id'=>'grid-table'],
         ]); ?>
      
