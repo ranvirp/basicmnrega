@@ -60,7 +60,16 @@ marker =new L.marker([gpslat,gpslong]);
           new google.elements.transliteration.TransliterationControl(options);
         google_control.makeTransliteratable(elem);
     }
-       
+function exportToPdf(selector,url)
+{
+  $.post(url,
+  {'html':$(selector)[0].outerHTML},
+  function(data){
+  document.write( data);
+  }
+  );
+
+}
 /*
 function updateClock ( )
  	{

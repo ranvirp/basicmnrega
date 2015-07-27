@@ -27,30 +27,29 @@ div.required label:after {
  padding:5px;
 }
 </style>
+<?php $canagent=Yii::$app->user->can('complaintagent'); echo $canagent;?>
 <script>
+<?php if ($canagent) {?>
 $(document).ready(function(){
-$('#mobileno').mouseout(function()
+$('#search').click(function()
 { 
-$('input[name="ComplaintSearch[mobileno]"]').val($(this).val());
-$('.grid-view').yiiGridView('applyFilter');
-//$.pjax.reload({container:'#complaint-lists'});
+      $('input[name="ComplaintSearch[mobileno]"]').val($('#mobileno').val());
 
-});
-$('#complaint-name_hi').mouseout(function()
-{ 
-$('input[name="ComplaintSearch[name_hi]"]').val($(this).val());
-$('.grid-view').yiiGridView('applyFilter');
+     $('input[name="ComplaintSearch[name_hi]"]').val($('#complaint-name_hi').val());
+    $('.grid-view').yiiGridView('applyFilter');
+    return false;
 //$.pjax.reload({container:'#complaint-lists'});
 
 });
 
 });
+<?php }?>
  function _count1($elem) {
         return $elem.closest('.dynamicform_wrapper').find('.item').length-1;
     };
 </script>
 <?php
-if (Yii::$app->user->can('complaintagent')) 
+if ($canagent) 
 {
 $searchModel=new ComplaintSearch;
 $dp=$searchModel->search(Yii::$app->request->get());
@@ -98,10 +97,11 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
         </td>
          
        
-    
+    <?php if ($canagent) {?>
     <td>
-     <button onClick="populateHtml('<?=Url::to(['/complaint/complaint/search?mobileno='])?>'+$('#mobileno').val(),'prevcomp');return false;">Search</button>
+     <button id="search">Search</button>
     </td>
+    <?php } ?>
   </tr>
     </table>
      <?=$modelComplaint->showForm($form,'source')?> 
@@ -118,7 +118,11 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
         <div class="col-sm-6">
             <?= $form->field($modelComplaint, "complaint_subtype")->dropDownList(ArrayHelper::Map(Complaint_subtype::find()->where(['complaint_type_code'=>$modelComplaint->complaint_type])->asArray()->all(),'shortcode','name_hi'),['prompt'=>'None']) ?>
         </div>
-   
+        <?php if ($canagent) { ?>
+   <div class="col-sm-12">
+     <?=$form->field($modelComplaint,'flowtype')->dropDownList([0=>'Simple',1=>'Complex'])->label('Work Flow Type') ?>
+   </div>
+   <?php } ?>
      <div class="col-sm-12">
       <?= $form->field($modelComplaint, "description")->textArea(['onclick' => 'hindiEnable($(this))']) ?>
 </div>

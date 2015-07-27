@@ -21,10 +21,10 @@ use \kartik\helpers\Enum;
 }
 </style>
  	<p class="comment-author">
-		<csmall>Posted by <?php $user=\app\modules\users\models\Designation::getDesignationByUser($reply->author,true);
+		<small>Posted by <?php $user=\app\modules\users\models\Designation::getDesignationByUser($reply->author,true);
 		    $name='name_'.Yii::$app->language;
-			echo $user?$user->$name:'';?></csmall>|
-		<csmall2>Posted  <?=\kartik\helpers\Enum::timeElapsed(date("F j, Y, g:i a",$reply->created_at))?></csmall2>
+			echo $user?$user->$name:'';?></small>|
+		<small2>Posted  <?=\kartik\helpers\Enum::timeElapsed(date("F j, Y, g:i a",$reply->created_at))?></small2>
 		
 	</p>
 	<p class="comment-body">

@@ -117,6 +117,7 @@ public static function statusNames()
             [['block_code'], 'string', 'max' => 7],
             [['panchayat_code'], 'string', 'max' => 12],
              [['panchayat'], 'string', 'max' => 100],
+             [['flowtype'],'safe'],
            
              [['attachments','marking'], 'safe'],
              [['source','manualno'],'string'],
@@ -439,17 +440,20 @@ public static function statusNames()
         if(Yii::$app->user->can('marktoothers')) {
         if (array_key_exists('designation',$markings) )
           {
-                foreach ($markings['designation'] as $x=>$designation_id)
+                foreach ($markings['designation'] as $designation_id)
                     {
+                      if (is_numeric($designation_id))
+                      {
                         $this->markToDesignation($this->id,$designation_id,$deadline);
                         $flag=true;
+                     }
                   
                     }
             }
             }
         if ($flag)
           {
-            if ($this->status==self::REGISTERED)
+            if ($this->status==self::REGISTERED || $this->status==null)
              {
                $this->status=self::PENDING_FOR_ENQUIRY;
               }
@@ -521,17 +525,19 @@ public static function statusNames()
       $models=Complaint::find()->where(['mobileno'=>$mobileno])->asArray()->all(); 
       return json_encode($models);
     }
-     public static function setStatus($id,$status,$message='')
+     public static function setStatus($id,$status,$message='',$markingid)
     {
        $complaint=Complaint::findOne($id);
+       $marking=Marking::findOne($id);
        $transaction=\Yii::$app->db->beginTransaction();
        if ($complaint)
          {
-          if ($complaint->status<$status)
-          {
+          
            $complaint->status=$status;
            $complaint->save();
-           }
+           $marking->status=$status;
+           $marking->save();
+           
          }
          if ($message!='')
          {

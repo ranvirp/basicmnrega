@@ -113,7 +113,7 @@ public static function statusNames()
      */
     public function getReport()
     {
-       return $this->hasOne(JobcarddemandReport::className(),['jobcarddemand_id','id']);
+       return $this->hasOne(JobcarddemandReport::className(),['jobcarddemand_id'=>'id']);
     }
 	/*
 	*@return form of individual elements
