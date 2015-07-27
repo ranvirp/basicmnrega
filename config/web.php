@@ -6,7 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'homeUrl'=>'/basicmnrega/web/index.php',
+    'homeUrl'=>'/index.php',
    'language'=>'hi',
     'components' => [
     'assetManager'=>['linkAssets'=>true],
