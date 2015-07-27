@@ -75,7 +75,7 @@ use yii\widgets\PjaxAsset;
 'attribute'=>'panchayat',
 'value'=>function($model,$key,$index,$column)
 {
-                return $model['panchayat'];
+                return ucwords(strtolower($model['dname'])).'-'.ucwords(strtolower($model['bname'])).'-'.ucwords(strtolower($model['panchayat']));
 },],
 ['header'=>Yii::t('app','Complaint Type'),
 'value'=>function($model,$key,$index,$column)

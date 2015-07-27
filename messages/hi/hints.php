@@ -63,7 +63,7 @@ return [
 
 'enquiryreport_point_update_time_hint'=>'',
 
-'enquiryreport_summary_reportby_hint'=>'',
+'enquiryreport_summary_reportby_hint'=>'जांच अधिकारी का नाम और पदनाम ',
 
 'enquiryreport_point_complaint_point_id_hint'=>'',
 

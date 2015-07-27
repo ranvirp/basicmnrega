@@ -245,7 +245,7 @@ public function actionIndex()
         if ($modelComplaint->flowtype==1) 
           return $this->redirect(Url::to(['/complaint/filereply?id='.$id.'&markingid='.$markingid]));
         $modelsComplaintPoint = $modelComplaint->complaintPoints;
-        $enquiryReportSummary=$complaint->getEnquiryReportSummary($markingid);
+        $enquiryReportSummary=$modelComplaint->getEnquiryReportSummary($markingid)->one();
         if (!$enquiryReportSummary) 
         { 
           $enquiryReportSummary=new EnquiryReportSummary;

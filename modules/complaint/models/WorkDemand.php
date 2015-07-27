@@ -34,7 +34,19 @@ class WorkDemand extends \yii\db\ActiveRecord
 {
  public $marking;
  public $captcha;
+const PENDING=0;
+const DISPOSED=1;
+public static function statusNames()
+{
+ return 
+   [
+     self::PENDING=>Yii::t('app','Pending'),
+     self::DISPOSED=>Yii::t('app','Disposed'),
+     
+   ];
+ 
 
+}
     /**
      * @inheritdoc
      */
@@ -42,6 +54,7 @@ class WorkDemand extends \yii\db\ActiveRecord
     {
         return 'workdemand';
     }
+    
 /**
      * @inheritdoc
      */

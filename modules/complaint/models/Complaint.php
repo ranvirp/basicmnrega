@@ -422,6 +422,17 @@ public static function statusNames()
                             $this->markToDesignation($this->id,$designation,$deadline);
                             $flag=true;
                          break;
+                         case 'lokpal':
+                          if (!Yii::$app->user->can('marktosqm'))
+                            break;
+                        //find block -
+                           $sqmdt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'lokpal'])->one();
+                           if(!$sqmdt) break;
+                           $sqmdtid=$podt->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one()->id;
+                            $this->markToDesignation($this->id,$designation,$deadline);
+                            $flag=true;
+                         break;
                          default: break;
                         }
             }
@@ -452,7 +463,7 @@ public static function statusNames()
     {
        $query = new Query;
 	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
-	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,flowtype,marking.id as markingid,marking.status as markingstatus,district_code,block_code') 
+	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,flowtype,marking.id as markingid,marking.status as markingstatus,complaint.district_code,complaint.block_code,district.name_en as dname,block.name_en as bname') 
 	        ->from('complaint')
 	        ->join(  'LEFT JOIN',
 	                'marking',
@@ -465,6 +476,13 @@ public static function statusNames()
 	             ->join(  'LEFT JOIN',
 	                'complaint_subtype',
 	                'complaint.complaint_subtype =complaint_subtype.shortcode'
+	            )->join(  'INNER JOIN',
+	                'district',
+	                'complaint.district_code =district.code'
+	            ) 
+	             ->join(  'INNER JOIN',
+	                'block',
+	                'complaint.block_code =block.code'
 	            );
   
    if($s!=-1) $query->where(['complaint.status'=>$s]);

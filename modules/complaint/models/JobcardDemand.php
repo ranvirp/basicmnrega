@@ -36,12 +36,9 @@ public static function statusNames()
 {
  return 
    [
-     self::REGISTERED=>Yii::t('app','Registered'),
-     self::PENDING_FOR_ENQUIRY=>Yii::t('app','Pending for enquiry'),
-     self::ENQUIRY_REPORT_RECEIVED=>Yii::t('app','Enquiry report recieved'),
-     self::PENDING_FOR_ATR=>Yii::t('app','Pending for atr'),
-     self::ATR_RECEIVED=>Yii::t('app','Atr received'),
-     self::DISPOSED=>Yii::t('app','disposed'),
+     self::PENDING=>Yii::t('app','Pending'),
+     self::DISPOSED=>Yii::t('app','Disposed'),
+     
    ];
  
 

@@ -4,6 +4,10 @@ namespace app\modules\complaint\controllers;
 use yii\web\Controller;
 use app\modules\mnrega\models\District;
 use app\modules\complaint\models\Complaint;
+use app\modules\complaint\models\WorkDemand;
+
+use app\modules\complaint\models\JobcardDemand;
+
 use Yii;
 
 class ReportController extends Controller
@@ -27,7 +31,7 @@ class ReportController extends Controller
           $q[]=$x;
           }
           $q[]="SUM( 1) AS total";
-          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint inner join district on district.code=complaint.district_code group by dname,dcode order by dname asc";
+          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint left join district on district.code=complaint.district_code group by dname,dcode order by dname asc";
        //print $query;
        //exit;
        $db=Yii::$app->db;
@@ -36,7 +40,8 @@ class ReportController extends Controller
         if ($t=='workdemand')
          {
          $q=[];
-         $status=[0=>'pending',1=>'disposed',2=>'reported'];
+         //$status=[0=>'pending',1=>'disposed',2=>'reported'];
+         $status=WorkDemand::statusNames();
          foreach ($status as $s1=>$sname)
           {
           $x="SUM(CASE WHEN status=".$s1
@@ -53,7 +58,7 @@ class ReportController extends Controller
         if ($t=='jobcarddemand')
          {
          $q=[];
-         $status=Complaint::statusNames();
+         $status=JobcardDemand::statusNames();
          foreach ($status as $s1=>$sname)
           {
           $x="SUM(CASE WHEN status=".$s1

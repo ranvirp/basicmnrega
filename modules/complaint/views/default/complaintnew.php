@@ -152,6 +152,8 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
 <?php if (Yii::$app->user->can('marktosqm')) {?>
 
   <label><input type="checkbox" name="maintype[]" value="sqm">सम्बंधित राज्य गुणवत्ता मॉनिटर</label>
+    <label><input type="checkbox" name="maintype[]" value="lokpal">सम्बंधित मनरेगा लोकपाल</label>
+
 <?php };?>
 <?php if (Yii::$app->user->can('marktoothers')){ ?>
   <label><input type="checkbox" name="" onClick="$('#designation-select').toggle()" >Others</label>
