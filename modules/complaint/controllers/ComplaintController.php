@@ -381,7 +381,7 @@ public function actionIndex()
        $dp=$modelSearch->search([]);
        return $this->render('index',['searchModel'=>$modelSearch,'dataProvider'=>$dp]);
     }
-    public function actionMy($ms=0,$d=-1,$s=-1,$dcode=null,$bcode=null)
+    public function actionMy($ms=-1,$d=-1,$s=-1,$dcode=null,$bcode=null)
      {
          
          if (Yii::$app->user->isGuest)

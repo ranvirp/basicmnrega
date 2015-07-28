@@ -463,7 +463,7 @@ public static function statusNames()
           }
        
     }
-    public function count1($ms=0,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
+    public function count1($ms=-1,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
     {
        $query = new Query;
 	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,

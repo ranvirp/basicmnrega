@@ -119,3 +119,31 @@ a.desc:after {
     font-size:12px;
    }
   
+.comment-author
+{
+ border-bottom: 1px solid;
+   // display: block;
+    padding: 5px;
+    font-style:italics;
+   
+    display: inline-block;
+    vertical-align: top;
+    float: none;
+    font-size:70%;
+}
+.comment-body
+{
+ 
+}
+.comment-container
+{
+ background:white;
+ border:1px solid;
+ border-radius:2px;
+}
+.comment-attachments
+{
+ background:white;
+ border:1px solid;
+ border-radius:2px;
+}

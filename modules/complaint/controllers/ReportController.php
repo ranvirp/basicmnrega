@@ -104,7 +104,7 @@ class ReportController extends Controller
    
    }
 
-public function actionCmypdf($ms=0,$d=-1,$s=-1,$dcode=null,$bcode=null)
+public function actionCmypdf($ms=-1,$d=-1,$s=-1,$dcode=null,$bcode=null)
      {
         
          if (Yii::$app->user->isGuest)

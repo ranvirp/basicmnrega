@@ -123,6 +123,7 @@ use yii\widgets\PjaxAsset;
         if ($reply) return $this->render('_reply',['reply'=>$reply]);
                 else return 'No Action Taken';
         */
+        
         $replies=\app\modules\complaint\models\ComplaintReply::find()->where(['marking_id'=>$model['markingid']]);
         return $this->render('list',['replies'=>$replies]);
        

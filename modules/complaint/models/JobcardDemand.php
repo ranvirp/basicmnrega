@@ -258,7 +258,7 @@ case 'name_hi':
 			break;
 		  }
     }
-    public function count1($ms=0,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
+    public function count1($ms=-1,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null)
     {
        $query = new Query;
 	    $query  ->select('jobcarddemand.id as id,jobcarddemand.name_hi as cname,fname,mobileno,address,panchayat,district.name_en as dname,
