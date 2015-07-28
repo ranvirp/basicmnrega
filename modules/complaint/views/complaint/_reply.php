@@ -1,30 +1,12 @@
 <?php
 use \kartik\helpers\Enum;
 ?>
-<style>
-.comment-author
-{
- border-bottom: 1px solid;
-    display: block;
-    padding: 5px;
-    font-style:italics;
-}
-.comment-body
-{
- 
-}
-.comment-container
-{
- background:white;
- border:1px solid;
- border-radius:2px;
-}
-</style>
+
  	<p class="comment-author">
 		<small>Posted by <?php $user=\app\modules\users\models\Designation::getDesignationByUser($reply->author,true);
 		    $name='name_'.Yii::$app->language;
-			echo $user?$user->$name:'';?></small>|
-		<small2>Posted  <?=\kartik\helpers\Enum::timeElapsed(date("F j, Y, g:i a",$reply->created_at))?></small2>
+			echo $user?$user->$name:'';?>|
+		<?=\kartik\helpers\Enum::timeElapsed(date("F j, Y, g:i a",$reply->created_at))?></small>
 		
 	</p>
 	<p class="comment-body">
@@ -32,12 +14,12 @@ use \kartik\helpers\Enum;
 		
 	</p>
 	<?php if ($reply->attachments!='') {?>
-		<p>
-		<h4> Attachments</h4>
+		<div class="comment-attachments">
+		 <p style="text-align:center"><b><?=Yii::t('app','Attachments') ?></b></p>
 		<div class="hline"></div>
 			<?=\app\modules\reply\models\File::showAttachmentsInline($reply,'attachments')?>
-		</p>
-	  
+		
+		</div>
 	<?php } ?>
 
 	

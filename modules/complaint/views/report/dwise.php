@@ -24,7 +24,7 @@ foreach ($counts as $count)
 foreach ($status as $s1=>$sname) {
 $key=strtolower(str_replace(" ","_",$sname)).'_count';
 if (array_key_exists($key,$count))
-  print "<td>".$count[$key]."</td>";
+  print "<td>".Html::a($count[$key],Url::to(['/complaint/'.$t.'/my?s='.$s1.'&dcode='.$count['dcode']]))."</td>";
   else 
     print "<td>0</td>";
         

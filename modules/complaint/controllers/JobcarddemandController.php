@@ -221,7 +221,7 @@ class JobcarddemandController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
      }
-  public function actionMy($ms=0,$d=-1,$s=-1,$dcode=null,$bcode=null)
+  public function actionMy($ms=-1,$d=-1,$s=-1,$dcode=null,$bcode=null)
      {
      /*
         $query = new Query;
