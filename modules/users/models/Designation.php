@@ -21,6 +21,9 @@ use Yii;
 class Designation extends \app\modules\users\MyActiveRecord
 {
  public $resetpasswd=0;
+ public $createuser=1;
+ public $randpasswd=0;
+ public $inactiveuser=0;
     /**
      * @inheritdoc
      */
@@ -49,6 +52,8 @@ class Designation extends \app\modules\users\MyActiveRecord
             [['officer_email'], 'email'],
             [['name_hi','name_en'],'required'],
             [['level_id'],'required'],
+            [['officer_email'],'required' ,'on'=>'randpasswd'],
+            [['resetpasswd','randpasswd','createuser','inactiveuser'],'safe'],
            // [['officer_userid'], 'string', 'max' => 10]
         ];
     }
@@ -195,8 +200,7 @@ class Designation extends \app\modules\users\MyActiveRecord
     }
     public function createUserAndRole()
      {
-         $this->name_hi=$this->designationType->name_hi.','.$this->level->name_hi;
-         $this->name_en=$this->designationType->name_en.','.$this->level->name_en;   
+           
             
         $role=$this->designationType->shortcode;
         $username=$role.'_'.strtolower($this->level->name_en);
@@ -221,19 +225,37 @@ class Designation extends \app\modules\users\MyActiveRecord
         ]);
        // if ($usermodel && !$this->resetpasswd)
         //return;
+        $password=$username."$$$";
+        if ($this->randpasswd)
+           $password=Yii::$app->security->generateRandomString();
+           
 		if (!$usermodel) 
 		  {
 		  //$usermodel->delete();
 		     $usermodel=new \app\modules\users\models\User;
 		     $usermodel->username=$username;
-		  }
-		     //$usermodel->newPassword=$username;
-		     $usermodel->setPassword($username."$$$");
+		     $usermodel->setPassword($password);
 		    // $usermodel->email=$username.'@test.com';
 		     //$usermodel->role_id=2;
-		     $usermodel->email=$this->officer_email;
-		     $usermodel->status=User::STATUS_ACTIVE;
-		     $usermodel->scenario='login';
+		    
+		  }
+		   $usermodel->email=$this->officer_email;
+		     //$usermodel->newPassword=$username;
+		     if ($this->resetpasswd)
+		        $usermodel->setPassword($password);
+		    if ($this->inactiveuser)
+		      $usermodel->status=User::STATUS_DISABLED;
+		    else
+		      $usermodel->status=User::STATUS_ACTIVE;
+		      $usermodel->scenario='login';
+		      if ($this->randpasswd)
+		       {
+		          $passwordresetform=new PasswordResetRequestForm;
+		          $passwordresetform->email=$this->officer_email;
+		          $passwordresetform->sendEmail();
+		          $usermodel->scenario='email';
+		       }
+		     
 		     if (!$usermodel->save())
 		      {
 		        print_r($usermodel->errors);
@@ -251,8 +273,7 @@ class Designation extends \app\modules\users\MyActiveRecord
 		      {
 		        print_r($this->errors);exit;
 		      }
-		      
-		      }
+		    } 
 		   
      }
  public static function getDesignationByUser($userid,$returnobj=false)

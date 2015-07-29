@@ -46,7 +46,7 @@ class AppAssetTables extends AssetBundle
     public function init()
     {
    $this->js=[
-   'js/common.js?'.time(), 
+  // 'js/common.js?'.time(), 
     //'js/jquery.prettyPhoto.js',
       //  'js/jquery.tablesorter.min.js',
         'js/jquery.dataTables.min.js'];

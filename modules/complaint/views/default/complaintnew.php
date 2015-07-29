@@ -14,10 +14,7 @@ use app\modules\complaint\models\ComplaintSearch;
 use app\assets\AppAssetGoogle;
 ?>
 <style>
-div.required label:after {
-    content: " *";
-    color: red;
-}
+
 .panel-body
 {
  padding:0px;

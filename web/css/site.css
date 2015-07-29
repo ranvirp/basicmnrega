@@ -147,3 +147,7 @@ a.desc:after {
  border:1px solid;
  border-radius:2px;
 }
+div.required label:after {
+    content: " *";
+    color: red;
+}

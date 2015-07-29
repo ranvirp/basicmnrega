@@ -139,4 +139,5 @@ class UserController extends Controller
         
         return $this->render('ChangePassword',['model'=>$user]);
     }
+
 }

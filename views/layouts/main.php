@@ -11,6 +11,7 @@ use app\assets\AppAsset_1;
 /* @var $content string */
 
 AppAsset::register($this);
+
 //AppAsset_1::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -155,6 +156,8 @@ AppAsset::register($this);
             'url' => ['/users/user/logout'],
             'items'=>[
             ['label'=>'Change Password','url'=>['/users/user/changepassword']],
+            ['label'=>'Reset Password','url'=>['/users/user/request-password-reset']],
+            
             ['label'=>'Logout','url'=>['/users/user/logout'],'linkOptions' => ['data-method' => 'post']],
             ]
             ],],'options'=>['class'=>'nav navbar-nav pull-right']
