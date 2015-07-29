@@ -30,7 +30,8 @@
         "2amigos/yii2-chartjs-widget": "~2.0",
         "kartik-v/yii2-grid": "@dev",
         "robregonm/yii2-pdf": "*",
-        "kartik-v/yii2-mpdf": "@dev"
+        "kartik-v/yii2-mpdf": "@dev",
+        "2amigos/yii2-multi-select-widget": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

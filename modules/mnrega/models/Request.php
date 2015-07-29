@@ -20,6 +20,20 @@ use Yii;
  */
 class Request extends \yii\db\ActiveRecord
 {
+   const PENDING=0;
+   const DISPOSED=1;
+public static function statusNames()
+{
+ return 
+   [
+     self::PENDING=>Yii::t('app','Pending'),
+     self::DISPOSED=>Yii::t('app','Disposed'),
+     
+   ];
+ 
+
+}
+    
     /**
      * @inheritdoc
      */
@@ -159,7 +173,7 @@ class Request extends \yii\db\ActiveRecord
     }
         public function _createMarking()
     {
-       if (!Yii::$app->user->can('complaintmarking'))
+       if (!Yii::$app->user->can('requestmarking'))
 	      return;
 	     //Now create markings
 	    $markings=$this->marking;
@@ -178,12 +192,12 @@ class Request extends \yii\db\ActiveRecord
                             break;
                         //find block -
                            $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
-                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$this->block_code])->one()->id;
-                           $this->markToDesignation($this->id,$designation,$deadline);
+                           $designation=ArrayHelper::map(\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid])->asArray()->all(),'id','id');
+                           $this->markToDesignation($this->id,$designations,$deadline);
                            $flag=true;
                          break;
                          case 'cdo':
-                       if (!Yii::$app->user->can('marktopo'))
+                       if (!Yii::$app->user->can('marktocdo'))
                             break;
                         //find block -
                            $cdodtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'cdo'])->one()->id;
@@ -192,7 +206,7 @@ class Request extends \yii\db\ActiveRecord
                            $flag=true;
                          break;
                             case 'dcmnrega':
-                       if (!Yii::$app->user->can('marktopo'))
+                       if (!Yii::$app->user->can('marktodcmnrega'))
                             break;
                         //find block -
                            $dcmnregadtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'dcmnrega'])->one()->id;
@@ -221,6 +235,15 @@ class Request extends \yii\db\ActiveRecord
                            $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one()->id;
                             $this->markToDesignation($this->id,$designation,$deadline);
                             $flag=true;
+                         break;
+                         case 'dm':
+                       if (!Yii::$app->user->can('marktodm'))
+                            break;
+                        //find block -
+                           $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'dm'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dmdtid,'level_id'=>$this->district_code])->one()->id;
+                           $this->markToDesignation($this->id,$designation,$deadline);
+                           $flag=true;
                          break;
                          default: break;
                         }

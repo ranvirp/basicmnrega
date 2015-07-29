@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use app\modules\mnrega\models\Marking;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\mnrega\models\MarkingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -75,7 +75,9 @@ if ($this->params['markurl']!=null)
   $x.='<input type="hidden" name="requesttype" value="'.$model->request_type.'">';
   
     $x.='<input type="hidden" name="markingid" value="'.$model->id.'">';
-    $x.=Html::dropDownList('markingstatus','',['Pending','Solved','Attention']);
+    $classmap=Marking::mapping();
+    $classname=$classmap[$model->request_type];
+    $x.=Html::dropDownList('markingstatus','',$classname::statusNames());
     $x.='<input type="submit" value="Submit" ></input>';
     $x.='</form>';
     }else 

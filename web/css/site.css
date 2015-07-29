@@ -151,3 +151,50 @@ div.required label:after {
     content: " *";
     color: red;
 }
+.tile.tile-medium {
+    height: 150px;
+    margin-left: 200px;
+    margin-top: 50px;
+    width: 150px;
+}
+.tile.tile-large {
+    height: 350px;
+    margin-left: 200px;
+    margin-top: 50px;
+    width: 350px;
+}
+.tile.tile-teal {
+    background-color: #00aba9;
+}
+.tile {
+    background-color: #2e8bcc;
+    border: 4px solid #fff;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    float: left;
+    min-height: 75px;
+    min-width: 75px;
+    opacity: 0.75;
+    text-align: center;
+    z-index: 1;
+}
+.tile h1, .tile h2, .tile h3, .tile h4, .tile h5, .tile h6 {
+    color: #fff;
+}
+h1, .h1 {
+    font-size: 36px;
+}
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: inherit;
+    font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
+    font-weight: 100;
+    line-height: 1.1;
+}
+.water-container {
+    background: rgba(0, 0, 0, 0) url("/basicmnrega/web/images/water.jpg") repeat scroll 0 0 / 100% auto;
+}

@@ -94,6 +94,7 @@ class DesignationController extends Controller
  
         $searchModel = new DesignationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query=$dataProvider->query->with('user');
  
         return $this->render('index', [
             'searchModel' => $searchModel,
