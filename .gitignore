@@ -2,7 +2,7 @@
 /runtime
 /web/assets
 /uploads
-#config/mailer.php
+config/mailer.php
 #config/db.php
 # phpstorm project files
 .idea
