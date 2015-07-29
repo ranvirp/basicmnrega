@@ -9,6 +9,7 @@ $config = [
     'homeUrl'=>'/index.php',
    'language'=>'hi',
     'components' => [
+   
      'response'=>[
                 'formatters' => [
                 'pdf' => [
@@ -46,6 +47,20 @@ $config = [
 	
     'class' => 'yii\caching\FileCache',
 	    ],
+	    /*
+	    'cache' => [
+        'class' => 'yii\caching\MemCache',
+        'servers' => [
+            [
+                'host' => '127.0.0.1',
+                'port' => 20058,
+                'weight' => 100,
+            ],
+
+        ],
+    ],
+	    
+	    */
     'urlManager' => [
 			'enablePrettyUrl' => true,
 		//	'enableStrictParsing' => true,
@@ -79,6 +94,8 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'mailer'=>require(__DIR__ . '/mailer.php'),
+        /*
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             // send all mails to a file by default. You have to set
@@ -86,6 +103,7 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+        */
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

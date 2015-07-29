@@ -70,22 +70,27 @@ class DesignationController extends Controller
  
         if ($model->load(Yii::$app->request->post()))
         {
+          $model->name_hi=$model->designationType->name_hi.','.$model->level->name_hi;
+         $model->name_en=$model->designationType->name_en.','.$model->level->name_en; 
           if (!($searchmodel=Designation::findOne(['designation_type_id'=>$model->designation_type_id,'level_id'=>$model->level_id])))
            {
              $designation_type=DesignationType::findOne($model->designation_type_id);
-            if ($model->validate())
-            {
-            $model->createUserAndRole();
+            if ($model->createuser==1)
+             $model->createUserAndRole();
+            else
+             $model->save();
              $model = new Designation();; //reset model
            
       
-            }
+           
+           
             }
             else 
               {
                 \Yii::$app->getSession()->setFlash('error', 'Designation already Exists. Try Updating <a href="'.\yii\helpers\Url::to(['/users/designation/update?id='.$searchmodel->id]).'">Update</a>');
               }
         }
+        
  
         $searchModel = new DesignationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -121,13 +126,13 @@ class DesignationController extends Controller
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\masterdata\models\Designation'][$model->$attribute]['required'])
             );
             
-            if ($model->save())
-            {
+            if ($model->createuser==1)
              $model->createUserAndRole();
-      
+             else 
+              $model->save();
             $model = new Designation();; //reset model
             
-            }
+            
         }
  
        $searchModel = new DesignationSearch();

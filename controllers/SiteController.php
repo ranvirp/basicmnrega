@@ -8,6 +8,10 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\modules\users\models\PasswordResetRequestForm;
+use app\modules\users\models\ResetPasswordForm;
+use yii\base\InvalidParamException;
+use yii\web\BadRequestHttpException;
 
 class SiteController extends Controller
 {
@@ -106,5 +110,6 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
     
 }

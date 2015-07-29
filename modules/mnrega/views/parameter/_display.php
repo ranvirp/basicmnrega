@@ -1,7 +1,8 @@
 
+
 <?php
 $this->registerJs(
-   '$("document").ready(function(){ 
+   '
         $(document).ready(function() 
     { 
        // $("#myTable").tablesorter(); 
@@ -14,7 +15,7 @@ $this->registerJs(
     } 
 ); 
     
-    });'
+    '
 );
 if (!is_array($result))
    print "Invalid result array";
@@ -105,3 +106,4 @@ if (!is_array($result))
        print '</tbody></table>'; 
      
    }
+ 
