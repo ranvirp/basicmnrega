@@ -18,7 +18,7 @@ if ($model->designation_type_id && $model->level_id)
   {
    $classname=$model->designationType->level->class_name;
    if (class_exists($classname))
-   $dd=\yii\helpers\ArrayHelper::map($classname::find()->asArray()->all(),'id','name_en');
+   $dd=\yii\helpers\ArrayHelper::map($classname::find()->asArray()->all(),'code','name_en');
    else
      $dd=[];
   /*

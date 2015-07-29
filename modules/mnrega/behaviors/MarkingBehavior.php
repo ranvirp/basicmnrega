@@ -134,7 +134,11 @@ public function beforeSave($event)
 	*/
 	public function markToDesignation($request_id,$designation,$deadline)
 	 {
-	   $rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'receiver'=>$designation])->one();
+	            
+	            if (is_array($designation) )
+	               foreach ($designation as $id)
+	                markToDesignation($request_id,$id,$deadline);
+	                    $rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'receiver'=>$designation])->one();
                            if (!$rmarking)
                            {
                                 $rmarking=new Marking;

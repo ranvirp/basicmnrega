@@ -84,7 +84,14 @@ class Designation extends \app\modules\users\MyActiveRecord
         return $this->hasOne(DesignationType::className(), ['id' => 'designation_type_id']);
     }
 
-   
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'officer_userid']);
+    }
+
 	/*
 	*@return form of individual elements
 	*/

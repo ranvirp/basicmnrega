@@ -150,7 +150,7 @@ use yii\widgets\PjaxAsset;
                   return $x.Html::a('<button class="btn btn-success">'.'File ATR'.'</button>',Url::to(['/complaint/complaint/fileatr?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                   else 
                     if (Yii::$app->user->can('complaintadmin') && $model['complaintstatus']=Complaint::ATR_RECEIVED)
-                     return $x.$Html::a('<button class="btn btn-success">'.'Mark As Disposed'.'</button>',Url::to(['/complaint/complaint/view?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
+                     return $x.Html::a('<button class="btn btn-success">'.'Mark As Disposed'.'</button>',Url::to(['/complaint/complaint/view?id='.$model['id']]).'&markingid='.$model['markingid'].'&returnurl='.urlencode(Url::to(['/complaint/complaint'])));
                      else
                       return '';
                 }

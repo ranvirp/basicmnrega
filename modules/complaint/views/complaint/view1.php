@@ -69,12 +69,12 @@ div.required label:after {
 </div>
 
 <div class="col-md-12 well">
-<div class="col-lg-3 text-heading" >शिकायत का विवरण</div>
-<div class="col-lg-3 text-heading">जांच आख्या</div>
-<div class="col-lg-3 text-heading">कार्यवाही का विवरण</div>
+<div class="col-md-3 text-heading" >शिकायत का विवरण</div>
+<div class="col-md-3 text-heading">जांच आख्या</div>
+<div class="col-md-3 text-heading">कार्यवाही का विवरण</div>
 </div>
-<div class="col-sm-offset-3 col-sm-9">
-    <div class="col-lg-3" style="margin:5px">
+<div class="col-sm-12">
+    <div class="col-md-3" style="margin:5px">
     
    <?= DetailView::widget([
         'model' => $model,
@@ -101,7 +101,7 @@ div.required label:after {
     ?>
        
   
-    <div class="col-lg-3" style="margin:5px">
+    <div class="col-md-3" style="margin:5px">
     <?php if ($enquiryreportsummary) { 
       echo '<div class="col-md-12">';
        if ($model->status==Complaint::ENQUIRY_REPORT_RECEIVED && Yii::$app->user->can('complaintadmin'))
@@ -127,7 +127,7 @@ div.required label:after {
      
     <?php } else echo 'Pending';?>
      </div>
-         <div class="col-lg-3" style="margin:5px">
+         <div class="col-md-3" style="margin:5px">
           <?php if ($atrsummary) { 
            if ($model->status==Complaint::ATR_RECEIVED && Yii::$app->user->can('complaintadmin'))
               echo Complaint::getButton($model->id,'acceptatr');
@@ -153,14 +153,14 @@ div.required label:after {
     </div>
 <?php if ($model->complaintPoints)  {?>    
 <div class="col-sm-offset-2 col-sm-10 well">
-<div class="col-lg-3 text-heading" style="margin:5px">शिकायत के अन्य बिंदु</div>
-<div class="col-lg-3 text-heading" style="margin:5px">बिंदु वार जांच आख्या</div>
-<div class="col-lg-3 text-heading" style="margin:5px">बिंदु वार कार्यवाही का विवरण</div>
+<div class="col-md-3 text-heading" style="margin:5px">शिकायत के अन्य बिंदु</div>
+<div class="col-md-3 text-heading" style="margin:5px">बिंदु वार जांच आख्या</div>
+<div class="col-md-3 text-heading" style="margin:5px">बिंदु वार कार्यवाही का विवरण</div>
 </div>
    
 <?php foreach ($model->complaintPoints as $cp) {?>
-   <div class="col-sm-offset-3 col-sm-9">
-    <div class="col-lg-3" style="margin:5px">
+   <div class="col-sm-12">
+    <div class="col-md-3" style="margin:5px">
 
      <?= DetailView::widget([
         'model' => $cp,
@@ -182,7 +182,7 @@ div.required label:after {
       $enquiryreportpoint=EnquiryReportPoint::find()->where(['complaint_point_id'=>$complaint_point_id])->one();
      
     ?>
-        <div class="col-lg-3" style="margin:5px">
+        <div class="col-md-3" style="margin:5px">
 <?php if($enquiryreportpoint){ ?>
  <div class="col-md-12">
      <?= DetailView::widget([
@@ -209,7 +209,7 @@ div.required label:after {
       $atrpoint=AtrPoint::find()->where(['complaint_point_id'=>$complaint_point_id])->one();
      
     ?>
-        <div class="col-lg-3" style="margin:5px">
+        <div class="col-md-3" style="margin:5px">
 <?php if($atrpoint){ ?>
 <div class="col-md-12">
  
