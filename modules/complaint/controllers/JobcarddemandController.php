@@ -35,7 +35,7 @@ class JobcarddemandController extends Controller
      * Lists all JobcardDemand models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex1()
     {
         if (!Yii::$app->user->can('complaintagent'))
       throw new NotFoundHttpException("Not Allowed");
@@ -45,8 +45,9 @@ class JobcarddemandController extends Controller
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'model'=>new \app\modules\complaint\models\JobcardDemand        ]);
+           'dataProvider' => $dataProvider,
+            'model'=>null    
+            ]);
     }
 
     /**

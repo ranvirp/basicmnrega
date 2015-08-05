@@ -7,7 +7,7 @@ class m150720_071724_modify_marking_table extends Migration
 {
     public function up()
     {
-       $this->addColumn('{{%marking}}','request_type',Schema::TYPE_STRING);
+      // $this->addColumn('{{%marking}}','request_type',Schema::TYPE_STRING);
     }
 
     public function down()

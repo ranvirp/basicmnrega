@@ -6,4 +6,6 @@ return [
     'username' => 'mac',
     'password' => 'mac',
     'charset' => 'utf8',
+    //'enableSchemaCache'=>true,
+    //'enableQueryCache'=>true,
 ];

@@ -18,11 +18,11 @@ use yii\widgets\Pjax;
         </div>
     </div>
     <?php $dataProvider->query=$dataProvider->query->with('markings');?>
-    <?php Pjax::begin(['enablePushState'=>false]);?>
+    <?php Pjax::begin(['enablePushState'=>false, 'id'=>'complaint-lists']);?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'id'=>'complaint-lists',
+       
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
              [
@@ -34,19 +34,37 @@ use yii\widgets\Pjax;
              'attribute'=>'id',
              'format'=>'html'
             ],
-            'name_hi',
-            'fname',
-            'mobileno',
-            [
-              'header'=>Yii::t('app','Complaint Type'),
+            ['header'=>Yii::t('app','Complainant'),
+             'attribute'=>'name_hi',
              'value'=>function ($model,$key,$index,$column)
                       {
-                        $model->showValue('complaint_type');
+                      return $model->showValue('name_hi')."<br>".$model->showValue('fname')
+                      .$model->showValue('mobileno');
+                      },
+              'format'=>'html'
+             ],
+             ['header'=>Yii::t('app','Mobile No'),
+             'attribute'=>'mobileno',
+             'value'=>function ($model,$key,$index,$column)
+                      {
+                      return 
+                      $model->showValue('mobileno');
+                      },
+             
+             ],
+            
+            [
+              'header'=>Yii::t('app','Complaint'),
+             'value'=>function ($model,$key,$index,$column)
+                      {
+                       return '<b><small>'.$model->showValue('complaint_type').'</small></b>'."<br>".
+                        $model->showValue('description');
                       },
              'attribute'=>'complaint_type',
+             'format'=>'html',
              'filter'=>ArrayHelper::map(Complaint_type::find()->asArray()->all(),'code','name_hi'),
             ],
-             'description',
+             
               [
               'header'=>Yii::t('app','District'),
              'value'=>function ($model,$key,$index,$column)

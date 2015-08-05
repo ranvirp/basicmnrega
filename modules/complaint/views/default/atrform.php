@@ -49,9 +49,11 @@ div.required label:after {
 <?php AppAssetGoogle::register($this);?>
  <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 <div class="col-sm-12 well">
-<div class="col-lg-5 text-heading" >शिकायत का विवरण</div>
-<div class="col-lg-5 text-heading">जांच आख्या</div>
-    <div class="col-lg-5" style="margin:5px">
+<div class="col-md-5 text-heading" >शिकायत का विवरण</div>
+<div class="col-md-5 text-heading">जांच आख्या</div>
+</div>
+<div class="col-sm-12 well">
+    <div class="col-md-5" style="margin:5px">
     
    <?= DetailView::widget([
         'model' => $model,
@@ -76,18 +78,20 @@ div.required label:after {
     <?=\app\modules\reply\models\File::showAttachmentsInline($model,"attachments")?>
     </div>
     <?php 
-      $enquiryreportsummary=EnquiryReportSummary::find()->where(['complaint_id'=>$model->id])->one();
-      if (!$enquiryreportsummary) {$enquiryreportsummary=new EnquiryReportSummary;
-      $enquiryreportsummary->complaint_id=$model->id;
-      }
+    if ($enquiryreportsummary->accepted==0)
+    {
+     // $enquiryreportsummary=EnquiryReportSummary::find()->where(['complaint_id'=>$model->id])->one();
+     // if (!$enquiryreportsummary) {$enquiryreportsummary=new EnquiryReportSummary;
+     // $enquiryreportsummary->complaint_id=$model->id;
+      //}
     ?>
-    <div class="col-lg-5" style="margin:5px">
+    <div class="col-md-5" style="margin:5px">
     <div class="col-md-12">
      <?= $enquiryreportsummary->showForm($form,"reportby")?>
       </div>
     <div class="col-md-12">
     
-      <?= $form->field($enquiryreportsummary,"description")->textArea(['class'=>'hindiinput form-control'])?>
+      <?= $form->field($enquiryreportsummary,"description")->textArea(['class'=>'hindiinput form-control','onclick'=>'hindiEnable()'])?>
    </div>
    <div class="col-md-12">
    
@@ -114,18 +118,51 @@ div.required label:after {
     
     
      </div>
+     <?php }  else {?>
+      <div class="col-md-5" style="margin:5px">
+   
+     <div class="col-md-12 pull-right">
+     <small><?php switch($enquiryreportsummary->accepted)
+               {
+                 case 0: echo Yii::t('app','Not Reviewed');break;
+                 case 1: echo Yii::t('app','Accepted');break;
+                  case 2: echo Yii::t('app','Rejected');break;
+                  default: break;
+                
+               
+               }
+                ?></small>
+     </div>
+       <div class="col-md-12">
+     <?= DetailView::widget([
+        'model' => $enquiryreportsummary,
+        'attributes' => [
+            'id',
+            'reportby',
+            'description',
+            'complainttrue',
+            'firproposed',
+            'daproposed',
+            'amountinvolved',
+            
+                   ],
+    ]) ?>
+    <?=\app\modules\reply\models\File::showAttachmentsInline($enquiryreportsummary,"attachments")?>
+    </div>
+     
+     <?php } ?>
     </div>
       
     
 </div>
 <div class="col-sm-12 ">
-<div class="col-lg-5 text-heading" style="margin:5px">शिकायत के अन्य बिंदु</div>
-<div class="col-lg-5 text-heading" style="margin:5px">बिंदु वार जांच आख्या</div>
+<div class="col-md-5 text-heading" style="margin:5px">शिकायत के अन्य बिंदु</div>
+<div class="col-md-5 text-heading" style="margin:5px">बिंदु वार जांच आख्या</div>
 
-   
+ </div>  
 <?php foreach ($model->complaintPoints as $cp) {?>
-   <div class="row">
-    <div class="col-lg-5" style="margin:5px">
+   <div class="col-sm-12">
+    <div class="col-md-5" style="margin:5px">
 
      <?= DetailView::widget([
         'model' => $cp,
@@ -143,36 +180,36 @@ div.required label:after {
     <?=\app\modules\reply\models\File::showAttachmentsInline($cp,"attachments")?>
     </div>
     <?php 
-      $complaint_point_id=$cp->id;
-      $enquiryreportpoint=EnquiryReportPoint::find()->where(['complaint_point_id'=>$complaint_point_id])->one();
-      if (!$enquiryreportpoint)
+     $complaint_point_id=$cp->id;
+     // $enquiryreportpoint=EnquiryReportPoint::find()->where(['complaint_point_id'=>$complaint_point_id])->one();
+      if ($enquiryreportspoint[$cp->id]->accepted==0)
       {
-         $enquiryreportpoint=new EnquiryReportPoint;
-         $enquiryreportpoint->complaint_point_id=$complaint_point_id;
-      }
+        // $enquiryreportpoint=new EnquiryReportPoint;
+         //$enquiryreportpoint->complaint_point_id=$complaint_point_id;
+      //}
     ?>
-    <div class="col-lg-5" style="margin:5px">
+    <div class="col-md-5" style="margin:5px">
     <div class="col-md-12">
-      <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]report")->textArea(['class'=>'hindiinput form-control'])?>
+      <?= $form->field($enquiryreportspoint[$cp->id],"[{$complaint_point_id}]report")->textArea(['class'=>'hindiinput form-control','onclick'=>'hindiEnable()'])?>
    
-      <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]attachments")->widget(\app\modules\reply\widgets\FileWidget::className())?>
+      <?= $form->field($enquiryreportspoint[$cp->id],"[{$complaint_point_id}]attachments")->widget(\app\modules\reply\widgets\FileWidget::className())?>
     </div>
     <div class="col-md-12">
-      <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]trueorfalse")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')])?>
+      <?= $form->field($enquiryreportspoint[$cp->id],"[{$complaint_point_id}]trueorfalse")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')])?>
     </div>
     <div class="col-md-12">
-       <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]firproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
-    <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]firproposedreason")->textArea(['class'=>'hindiinput'])?>
-   
-    </div>
-    <div class="col-md-12">
-     <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]daproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
-    <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]daproposeddetails")->textArea(['class'=>'hindiinput'])?>
+       <?= $form->field($enquiryreportspoint[$cp->id],"[{$complaint_point_id}]firproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
+    <?= $form->field($enquiryreportspoint[$cp->id],"[{$complaint_point_id}]firproposedreason")->textArea(['class'=>'hindiinput'])?>
    
     </div>
     <div class="col-md-12">
-        <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]amounttoberecovered")->textInput()?>
-    <?= $form->field($enquiryreportpoint,"[{$complaint_point_id}]amountfrom")->textArea(['class'=>'hindiinput'])?>
+     <?= $form->field($enquiryreportspoint[$cp->id],"[{$complaint_point_id}]daproposed")->radioList(['0'=>Yii::t('app','No'),'1'=>Yii::t('app','Yes')])?>
+    <?= $form->field($enquiryreportspoint[$cp->id],"[{$complaint_point_id}]daproposeddetails")->textArea(['class'=>'hindiinput'])?>
+   
+    </div>
+    <div class="col-md-12">
+        <?= $form->field($enquiryreportspoint[$cp->id],"[{$complaint_point_id}]amounttoberecovered")->textInput()?>
+    <?= $form->field($enquiryreportspoint[$cp->id],"[{$complaint_point_id}]amountfrom")->textArea(['class'=>'hindiinput'])?>
   
     </div>
     
@@ -182,13 +219,45 @@ div.required label:after {
     
     </div>
     
-    
+    <?php }  else 
+      { ?>
+       <div class="col-md-5" style="margin:5px">
+       <div class="col-md-12 pull-right">
+     <small><?php switch($enquiryreportspoint[$cp->id]->accepted)
+               {
+                 case 0: echo Yii::t('app','Not Reviewed');break;
+                 case 1: echo Yii::t('app','Accepted');break;
+                  case 2: echo Yii::t('app','Rejected');break;
+                  default: break;
+                
+               
+               }
+                ?></small>
+     </div>
+       <div class="col-md-12">
+     <?= DetailView::widget([
+        'model' => $enquiryreportspoint[$cp->id],
+        'attributes' => [
+            'trueorfalse',
+            'report',
+            'amounttoberecovered',
+            'amountfrom',
+            'firproposed',
+            'firproposedreason',
+            'daproposed',
+            'daproposeddetails'
+           
+
+        ],
+    ]) ?>
+    <?=\app\modules\reply\models\File::showAttachmentsInline($enquiryreportspoint[$cp->id],"attachments")?>
+    </div>
    
-   
+   <?php } ?>
     </div>
  
     <?php }?>
-    </div>
+    
 <div class="row">
  <div class="form-group">
         <?= Html::submitButton($enquiryreportsummary->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
@@ -200,3 +269,4 @@ div.required label:after {
     </div>
     </div>
     </div> 
+<?php ActiveForm::end();?>

@@ -49,6 +49,7 @@ class WorkdemandController extends Controller
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'model'=>null,
         ]);
     }
 
@@ -212,9 +213,9 @@ class WorkdemandController extends Controller
          throw new NotFoundHttpException("Not permitted");
         if (($model = WorkDemand::findOne($id)) !== null) 
         {
-          $workdemandreport=WorkDemandReport::find()->where(['work_demand_id'=>$model->id])->one();
+          $workdemandreport=WorkdemandReport::find()->where(['work_demand_id'=>$model->id])->one();
            if (!$workdemandreport)
-           $workdemandreport=new WorkDemandReport;
+           $workdemandreport=new WorkdemandReport;
            $workdemandreport->work_demand_id=$model->id;
            if ($workdemandreport->load(Yii::$app->request->bodyParams))
            {

@@ -24,7 +24,9 @@ use app\assets\AppAssetGoogle;
  padding:5px;
 }
 </style>
-<?php $canagent=Yii::$app->user->can('complaintagent'); echo $canagent;?>
+<?php $canagent=Yii::$app->user->can('complaintagent'); 
+//echo $canagent;
+?>
 <script>
 <?php if ($canagent) {?>
 $(document).ready(function(){
@@ -33,7 +35,9 @@ $('#search').click(function()
       $('input[name="ComplaintSearch[mobileno]"]').val($('#mobileno').val());
 
      $('input[name="ComplaintSearch[name_hi]"]').val($('#complaint-name_hi').val());
-    $('.grid-view').yiiGridView('applyFilter');
+     $('input[name="ComplaintSearch[mobileno]"]').trigger('change');
+     //$('input[name="ComplaintSearch[name_hi]"]').trigger('change');
+  // $('.grid-view').yiiGridView('applyFilter');
     return false;
 //$.pjax.reload({container:'#complaint-lists'});
 

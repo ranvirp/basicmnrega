@@ -7,7 +7,13 @@ var map;
 var markers;
 function populateDropdown(url,id)
 {
-      $.get(url,
+      $.ajax({
+         'url':url,
+          'type':'GET',
+          'beforeSend':function() {
+             $('#'+id).html('<img src="'+imageloader+'" />');
+          },
+          'success':
           function(data)
           {
           if (typeof data !='object')
@@ -26,15 +32,23 @@ function populateDropdown(url,id)
                  
                  $('#'+id).append(htmlToAppend);    
 }
-);
+});
 }
 function populateHtml(url,id)
 {
-     $.get(url,
+     $.ajax({
+          'url':url,
+          'type':'GET',
+          
+          'beforeSend':function() {
+             $('#'+id).html('<img src="'+imageloader+'" />');
+          },
+          'success':
           function(data)
           {
+          
              $('#'+id).html(data); 
-          });
+          }});
 }
 function addMarker(gpslat,gpslong)
 {

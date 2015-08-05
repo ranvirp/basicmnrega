@@ -202,5 +202,9 @@ public function actionCmypdf($ms=-1,$d=-1,$s=-1,$dcode=null,$bcode=null)
          return $this->renderContent($out);
        // return $this->render('../complaint/index1',['dataProvider'=>$dp,'searchModel'=>$searchModel]);
      }
+     public function actionReport1()
+     {
+       return $this->render('report1');
+     }
 }
 ?>

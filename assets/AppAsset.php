@@ -51,7 +51,10 @@ class AppAsset extends AssetBundle
       //  'js/jquery.tablesorter.min.js',
     //    'js/jquery.dataTables.min.js'
     ];
-    $this->css=['css/site.css?'.time(), 
+    $this->css=[
+    //'css/improvely.css?'.time(), 
+    'css/site.css?'.time(), 
+    
     //'js/jquery.prettyPhoto.js',
       //  'js/jquery.tablesorter.min.js',
     //    'js/jquery.dataTables.min.js'

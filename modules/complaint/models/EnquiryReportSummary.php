@@ -35,7 +35,11 @@ class EnquiryReportSummary extends \yii\db\ActiveRecord
     {
         return [
             [['complaint_id', 'complainttrue', 'firproposed', 'daproposed', 'author', 'create_time', 'update_time'], 'integer'],
-            [['description',  'amountinvolved','reportby'], 'string'],
+            [['description','reportby'], 'string'],
+            [['amountinvolved'],'double'],
+            [['description',  'reportby','marking_id'], 'required'],
+          [['marking_id','complaint_id'],'unique','targetAttribute' => ['marking_id','complaint_id']],
+            
              [['attachments'],'safe'],
         ];
     }

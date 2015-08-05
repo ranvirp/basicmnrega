@@ -130,7 +130,7 @@ use yii\widgets\PjaxAsset;
 },'format'=>'raw'],
             ['class' => 'yii\grid\ActionColumn',
              'controller'=>'/complaint/complaint',
-              'template'=>'{reply}{reqaction}',
+              'template'=>'{simple}',
               'urlCreator'=>function($action, $model, $key, $index)
               {
                 $params = is_array($model['id']) ? $model['id']: ['id' => (string) $model['id']];
@@ -138,6 +138,11 @@ use yii\widgets\PjaxAsset;
                 return Url::toRoute($params);
               },
               'buttons'=>[
+               'simple'=>function($url,$model,$key)
+               {
+                  return \yii\helpers\Html::a('Take Action','#',['onclick'=>'$(\'#complaint-panel-div\').html();populateHtml(\''.\yii\helpers\Url::to(['/complaint/marking/marking?id='.$model['id'].'&markingid='.$model['markingid']]).'\',\'complaint-panel-div\');return false;']);
+
+               },
                 'reqaction'=>function($url,$model,$key)
                 {
                   $statuses=Complaint::statusNames();

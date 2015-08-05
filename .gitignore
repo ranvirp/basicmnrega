@@ -3,7 +3,8 @@
 /web/assets
 /uploads
 config/mailer.php
-#config/db.php
+config/db.php
+config/params.php
 # phpstorm project files
 .idea
 
