@@ -70,22 +70,17 @@ class ComplaintreplyController extends Controller
  
         if ($model->load(Yii::$app->request->post()))
         {
-           if (array_key_exists('app\modules\complaint\models\ComplaintReply',Utility::rules()))
-            foreach ($model->attributes as $attribute)
-            if (Utility::rules('app\modules\complaint\models\ComplaintReply') && array_key_exists($attribute,Utility::rules()['app\modules\complaint\models\ComplaintReply']))
-            $model->validators->append(
-               \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\complaint\models\ComplaintReply'][$model->$attribute]['required'])
-            );
+
             if ($model->save())
             $model = new ComplaintReply();; //reset model
         }
  
-        $searchModel = new ComplaintReplySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+       // $searchModel = new ComplaintReplySearch();
+        //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
  
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        return $this->render('create', [
+           // 'searchModel' => $searchModel,
+            //'dataProvider' => $dataProvider,
             'model' => $model,
             
         ]);

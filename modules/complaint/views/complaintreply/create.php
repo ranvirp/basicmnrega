@@ -11,7 +11,8 @@ $this->title = Yii::t('app', 'Create {modelClass}', [
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Complaint Replies'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php \app\assets\AppAssetGoogle::register($this);?>
 <div class="complaint-reply-create">
-<?=  $this->render('_form');
+<?=  $this->render('_form',['model'=>$model]);
 	   ?>
 </div>

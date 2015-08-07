@@ -414,13 +414,20 @@ public static function statusNames()
     {
       return $this->name_hi;
     }
-  public function _createSingleMarking($actiontype,$canmark=0,$change=0)
+  public function _createSingleMarking($actiontype='a',$canmark=0)
     {
           $designation=Designation::getDesignationByUser(Yii::$app->user->id,true);
 	      $sender=$designation->id;
           $sender_designation_type_id=$designation->designation_type_id;
           $sender_name=$designation->name_en.','.$designation->officer_name_en;
           $sender_mobileno=$designation->officer_mobile;
+          $maintype=Yii::$app->request->post('maintype');
+        
+	      $this->load(Yii::$app->request->bodyParams);
+	      $marking=$this->marking;
+	      if (array_key_exists('actiontype',$marking))
+	      $actiontype=$marking['actiontype'];
+	      $flag=false;
         //   $transaction =Yii::$app->db->beginTransaction();                
 	      switch($actiontype)
 	      {
@@ -442,10 +449,7 @@ public static function statusNames()
 	          break;
 	          
 	      }
-	      $maintype=Yii::$app->request->post('maintype');
-        
-	      $this->load(Yii::$app->request->bodyParams);
-	      $marking=$this->marking;
+	      
 	      
           $deadline=$marking['deadline'];
           $rmarking=null;
@@ -462,7 +466,7 @@ public static function statusNames()
                            {
                            $receiver=$designation->id;
                            $receiver_designation_type_id=$designation->designation_type_id;
-                           $receiver_name=$designation->designationType->name_hi.$designation->officer_name_hi;
+                           $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
                            $receiver_mobileno=$designation->officer_mobile;
                            
                            $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
@@ -478,7 +482,8 @@ public static function statusNames()
                            $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$cdodtid,'level_id'=>$this->district_code])->one();
                            $receiver=$designation->id;
                            $receiver_designation_type_id=$designation->designation_type_id;
-                           $receiver_name=$designation->designationType->name_hi.$designation->officer_name_hi;
+                           $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
                            $receiver_mobileno=$designation->officer_mobile;
                            
                            $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
@@ -492,7 +497,8 @@ public static function statusNames()
                            $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dcmnregadtid,'level_id'=>$this->district_code])->one();
                            $receiver=$designation->id;
                            $receiver_designation_type_id=$designation->designation_type_id;
-                           $receiver_name=$designation->designationType->name_hi.$designation->officer_name_hi;
+                          $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
                            $receiver_mobileno=$designation->officer_mobile;
                            
                            $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$designation,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
@@ -509,7 +515,8 @@ public static function statusNames()
                            $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one();
                            $receiver=$designation->id;
                            $receiver_designation_type_id=$designation->designation_type_id;
-                           $receiver_name=$designation->designationType->name_hi.$designation->officer_name_hi;
+                           $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
                            $receiver_mobileno=$designation->officer_mobile;
                            
                            $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
@@ -525,7 +532,8 @@ public static function statusNames()
                            $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one();
                            $receiver=$designation->id;
                            $receiver_designation_type_id=$designation->designation_type_id;
-                           $receiver_name=$designation->designationType->name_hi.$designation->officer_name_hi;
+                           $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
                            $receiver_mobileno=$designation->officer_mobile;
                            
                            $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
@@ -543,7 +551,8 @@ public static function statusNames()
                                {
                                  $receiver=$designation->id;
                                  $receiver_designation_type_id=$designation->designation_type_id;
-                                 $receiver_name=$designation->designationType->name_hi.$designation->officer_name_hi;
+                                 $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
                                  $receiver_mobileno=$designation->officer_mobile;
                            
                                  $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
@@ -560,7 +569,7 @@ public static function statusNames()
                            $receiver_name=$marking['others']['name'];
                            $receiver_mobileno=$marking['others']['mobileno'];
                            $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
-                                 $flag=true;
+                           $flag=true;
                          break;
                          default: 
                          
@@ -573,11 +582,11 @@ public static function statusNames()
                  if ($actiontype=='a')
                  {
                    $this->atrofficer=$rmarking->id;
-                   //$this->status=self::PENDING_FOR_ATR;
+                   $this->status=self::PENDING_FOR_ATR;
                  } else if ($actiontype=='e')
                  {
                    $this->enqrofficer=$rmarking->id;
-                   //$this->status=self::PENDING_FOR_ATR;
+                   $this->status=self::PENDING_FOR_ENQUIRY;
                  }
                 
                }
@@ -772,7 +781,7 @@ public static function statusNames()
     {
        $query = new Query;
 	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
-	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,flowtype,marking.id as markingid,marking.status as markingstatus,complaint.district_code,complaint.block_code,district.name_en as dname,block.name_en as bname') 
+	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,flowtype,marking.id as markingid,marking.status as markingstatus,complaint.district_code,complaint.block_code,district.name_en as dname,block.name_en as bname,marking.flag as mflag') 
 	        ->from('complaint')
 	        ->join(  'LEFT JOIN',
 	                'marking',
@@ -805,7 +814,7 @@ public static function statusNames()
        $query->andWhere(['complaint.district_code'=>$dcode]);
     if ($bcode)
        $query->andWhere(['complaint.block_code'=>$bcode]);
-	
+      // $query->andWhere('marking.flag!=1');
 	  if (!Yii::$app->user->can('complaintviewall') )
 	  {
 	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
@@ -825,32 +834,121 @@ public static function statusNames()
          
     
     }
+     public function count2($ms=-1,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null,$flag=0)
+    {
+       $query = new Query;
+	    $query  ->select('complaint.id as id,complaint.name_hi as cname,fname,mobileno,address,panchayat,
+	    complaint_type.name_hi as ctype,complaint_subtype.name_hi as csubtype,complaint.description as desc,dateofmarking,complaint.status as complaintstatus,flowtype,marking.id as markingid,marking.status as markingstatus,complaint.district_code,complaint.block_code,district.name_en as dname,block.name_en as bname,marking.flag as mflag') 
+	        ->from('complaint')
+	        ->join(  'LEFT JOIN',
+	                'marking',
+	                'marking.request_id =complaint.id and marking.request_type=\'complaint\''
+	            )
+	           ->join(  'LEFT JOIN',
+	                'complaint_type',
+	                'complaint.complaint_type =complaint_type.shortcode'
+	            ) 
+	             ->join(  'LEFT JOIN',
+	                'complaint_subtype',
+	                'complaint.complaint_subtype =complaint_subtype.shortcode'
+	            )->join(  'INNER JOIN',
+	                'district',
+	                'complaint.district_code =district.code'
+	            ) 
+	             ->join(  'INNER JOIN',
+	                'block',
+	                'complaint.block_code =block.code'
+	            );
+  
+   if($s!=-1) $query->where(['complaint.status'=>$s]);
+   
+   if ($ms==-2)
+      $query->andWhere(['marking.id'=>null]);
+    else 
+     if ($ms!=-1)
+      $query->andWhere(['marking.status'=>$ms]);
+    if ($dcode)
+       $query->andWhere(['complaint.district_code'=>$dcode]);
+    if ($bcode)
+       $query->andWhere(['complaint.block_code'=>$bcode]);
+	$query->andWhere(['marking.flag'=>$flag]);
+	  if (!Yii::$app->user->can('complaintviewall') )
+	  {
+	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
+  
+       $query->andWhere(['receiver'=>$d]);
+       }
+       else if($d!=-1)
+         $query->andWhere(['receiver'=>$d]);   
+        $dp= new ActiveDataProvider([
+         'query' => $query,
+        
+        ]);
+        if ($count)
+        return $dp->totalCount;
+        else 
+         return $dp;
+         
+    
+    }
+
      public function _search($mobileno)
     {
       $models=Complaint::find()->where(['mobileno'=>$mobileno])->asArray()->all(); 
       return json_encode($models);
     }
-     public static function setStatus($id,$status,$message='')
+public static function setStatus($id,$status)
     {
        $complaint=Complaint::findOne($id);
        $transaction=\Yii::$app->db->beginTransaction();
        if ($complaint)
          {
-          
+          if ($status==self::DISPOSED)
+           {
+             foreach (Marking::find()->where(['request_type'=>'complaint','request_id'=>$complaint->id])->all() as $marking)
+              {
+               $marking->flag=1;//close marking
+               $marking->save();
+              }
+           }else
+           if (($status==self::PENDING_FOR_ENQUIRY)|| ($status==self::PENDING_FOR_ATR))
+           {
+                foreach (Marking::find()->where(['request_type'=>'complaint','request_id'=>$complaint->id])->andWhere('status!='.$status)->all() as $marking)
+              {
+               $marking->flag=1;//close marking
+               $marking->save();
+              }
+			  $marking=Marking::find()->where(['request_type'=>'complaint','request_id'=>$complaint->id])->andWhere('status='.$status)->one();
+			  if ($marking)
+			  {
+				  $marking->flag=0;
+				  $marking->save();
+			  }
+           }
            $complaint->status=$status;
            $complaint->save();
-           
+		   $marking=null;
+		   if ($status==self::PENDING_FOR_ENQUIRY)
+		   { 
+			  if (($marking=$complaint->enquiryOfficer))
+			  {
+				  $marking->flag=0;
+				  $marking->save();
+			  }
+		   }
+		   else 
+			   if ($status==self::PENDING_FOR_ATR)
+		   { 
+				   
+			  if (($marking=$complaint->atrOfficer)!=null)
+			  {
+				  $marking->flag=0;
+				  $marking->status=$status;
+				  $marking->save();
+			  }
+		   }
          }
-         if ($message!='')
-         {
-           $reply=new \app\modules\reply\models\Reply;
-           $reply->content_type='complaint';
-           $reply->content_type_id=$complaint->id;
-           $reply->author_id=Yii::$app->user->id;
-           $reply->create_time=time();
-           $reply->save();
-         
-         }
+
         $transaction->commit();
     
     }
@@ -883,6 +981,36 @@ public static function statusNames()
        return array_merge(parent::attributeHints(), $x);
     }
 */
+/*
+@parameter $status array of statuses
+*/
+public static function countmarkings($status,$d)
+{
+  
+         if(count($status)==0) 
+          {
+           $status=array_keys(self::statusNames());
+          }
+        $q=[];
+        
+        // print_r($status);
+         //exit;
+         foreach ($status as $s1)
+          {
+           $x="SUM(CASE WHEN receiver=".$d." AND marking.status=".$s1."";
+          $q[]=$x." THEN 1 ELSE 0 END) AS complaint_count"."_".$s1;
+          }
+          $q[]="SUM(CASE WHEN receiver=".$d." THEN 1 ELSE 0 END) AS complaint_count";
+          
+        
+        $query="SELECT ".implode(",",$q)." FROM marking left join complaint on marking.request_type='complaint' and marking.request_id=complaint.id ";
+        $db=Yii::$app->db;
+        $counts= $db->createCommand($query)->queryAll();
+         
+       
+        return $counts;
+    }
+  
 /*
 @parameter $status array of statuses
 */

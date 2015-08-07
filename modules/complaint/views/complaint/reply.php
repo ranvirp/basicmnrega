@@ -45,6 +45,7 @@ $markingid=$marking->id;
  <?=$form->field($model,'reply')->textArea(['class'=>'hindiinput form-control','onclick'=>'js:hindiEnable()']) ?>
  <?=$form->field($model,'reply_type')->dropDownList(ComplaintReply::replyOptions($marking)) ?>
  
+ 
  <?=$form->field($model,'attachments')->widget(\app\modules\reply\widgets\FileWidget::className()) ?>
  <?php 
  if (Yii::$app->user->can('complaintagent')){

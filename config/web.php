@@ -137,6 +137,17 @@ $config = [
         ],
     ],
     'modules'=>[
+     'vote' => [
+        'class' => 'chiliec\vote\Module',
+        'allow_guests' => false, // if true will check IP, otherwise - UserID
+        'allow_change_vote' => true, // if true vote can be changed
+        'matchingModels' => [ // matching model names with whatever unique integer ID
+            'pond' => 0, // may be just integer value
+            //'audio' => ['id'=>1], // or array with 'id' key
+           // 'video' => ['id'=>2, 'allow_guests'=>false], // own value 'allow_guests'
+           // 'photo' => ['id'=>3, 'allow_guests'=>false, 'allow_change_vote'=>false],
+        ],      
+    ],
     'complaint'=>['class'=>'app\modules\complaint\Module'],
     'users'=>['class'=>'app\modules\users\Module'],
     'reply'=>['class'=>'app\modules\reply\Module'],

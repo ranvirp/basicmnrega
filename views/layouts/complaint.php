@@ -89,7 +89,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
            // echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
            echo "<div class='pull-left'>".'<h1>मनरेगा शिकायत प्रबंधन</h1>'.'</div>'.'<div class="pull-right"><h4>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h4></div>';
             NavBar::end();
-      echo '<div class="menubar">';
+      echo '<div class="menubar hidden-print">';
             echo Nav::widget([
             
     'items' => [
@@ -111,9 +111,10 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
       ]],
        ['label' => 'Complaints', 'url' => ['/complaint/complaint'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
-             ['label' => 'create', 'url' => ['/complaint/complaint/create'],'options'=>['class'=>'dropdown']],
-             ['label' => 'index', 'url' => ['/complaint/complaint/index'],'options'=>['class'=>'dropdown']],
-               ['label' => 'report', 'url' => ['/complaint/report/dwise?t=complaint'],'options'=>['class'=>'dropdown']],
+             ['label' => 'Create', 'url' => ['/complaint/complaint/create'],'options'=>['class'=>'dropdown']],
+             ['label' => 'Index', 'url' => ['/complaint/complaint/index'],'options'=>['class'=>'dropdown']],
+               ['label' => 'Report Source Wise District Wise', 'url' => ['/complaint/report/dwise1'],'options'=>['class'=>'dropdown']],
+       ['label' => 'Report Source Wise', 'url' => ['/complaint/report/sourcewise'],'options'=>['class'=>'dropdown']],
       
          !Yii::$app->user->can('complaintadmin') ?'':   
               ['label' => 'Complaint Type', 'url' => ['/complaint/complaint_type/create'],'options'=>['class'=>'dropdown']],
@@ -151,7 +152,7 @@ echo '</div>';
    
   
                
-    <div class="col-md-offest-1 col-md-2">
+    <div class="col-md-offest-1 col-md-2 hidden-print">
     <?php
    // include 'unmarked.php';
    if (Yii::$app->user->can('complaintadmin') || Yii::$app->user->can('complaintagent'))

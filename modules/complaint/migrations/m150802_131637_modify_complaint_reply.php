@@ -7,13 +7,28 @@ class m150802_131637_modify_complaint_reply extends Migration
 {
     public function safeUp()
     {
-       $this->addColumn('{{%complaint_reply}}','complainttrue',Schema::TYPE_INTEGER);
-       $this->addColumn('{{%complaint_reply}}','amountinvolved',Schema::TYPE_DOUBLE);
-       $this->addColumn('{{%complaint_reply}}','firproposed',Schema::TYPE_INTEGER);
-       $this->addColumn('{{%complaint_reply}}','daproposed',Schema::TYPE_INTEGER);
-       $this->addColumn('{{%complaint_reply}}','firdone',Schema::TYPE_INTEGER);
-       $this->addColumn('{{%complaint_reply}}','dadone',Schema::TYPE_INTEGER);
-       $this->addColumn('{{%complaint_reply}}','amountrecovered',Schema::TYPE_DOUBLE);
+       $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+        
+         $this->createTable('{{%enquiryreport_attributes}}', [
+          'id'=>Schema::TYPE_PK,
+          'complaint_id'=>Schema::TYPE_INTEGER,
+          ], $tableOptions);
+       $this->createTable('{{%atr_attributes}}', [
+          'id'=>Schema::TYPE_PK,
+          'complaint_id'=>Schema::TYPE_INTEGER,
+          ], $tableOptions);
+       $this->addColumn('{{%enquiryreport_attributes}}','complainttrue',Schema::TYPE_INTEGER);
+       $this->addColumn('{{%enquiryreport_attributes}}','amountinvolved',Schema::TYPE_DOUBLE);
+       $this->addColumn('{{%enquiryreport_attributes}}','firproposed',Schema::TYPE_INTEGER);
+       $this->addColumn('{{%enquiryreport_attributes}}','daproposed',Schema::TYPE_INTEGER);
+       $this->addColumn('{{%atr_attributes}}','complainttrue',Schema::TYPE_INTEGER);
+       $this->addColumn('{{%atr_attributes}}','firdone',Schema::TYPE_INTEGER);
+       $this->addColumn('{{%atr_attributes}}','dadone',Schema::TYPE_INTEGER);
+       $this->addColumn('{{%atr_attributes}}','amountrecovered',Schema::TYPE_DOUBLE);
        
     }
 

@@ -352,7 +352,7 @@ public function actionIndex()
          throw new NotFoundHttpException("Not Allowed");
         return $this->render('comments',['model'=>$this->findModel($id)]); 
   }
-  public function actionMark($id,$a='e',$canmark=0)
+  public function actionMark($id,$a='e',$canmark=0,$change=1)
   {
      //if (!Yii::$app->user->can('complaintagent'))
        //  throw new NotFoundHttpException("Not Allowed");
@@ -364,11 +364,11 @@ public function actionIndex()
     
     if ($model)
     {
-    
+     
       $model->_createSingleMarking($a,$canmark);
      }
      }
-    return $this->renderAjax('markingsingle',['modelComplaint'=>$model,'actiontype'=>$a,'canmark'=>$canmark]);
+    return $this->renderAjax('markingsingle',['modelComplaint'=>$model,'actiontype'=>$a,'canmark'=>$canmark,'change'=>$change]);
     
   }
    /*

@@ -9,6 +9,7 @@ const ENQUIRY_REPORT=1;
 const ATR_REPORT=2;
 const INSTRUCTION=3;
 const AGENT_FEEDBACK=4;
+const REPLY_TO_QUESTION=5;
 
 public static function types()
 {
@@ -20,6 +21,7 @@ public static function types()
      self::ATR_REPORT=>Yii::t('app','Action Taken Report'),
      self::INSTRUCTION=>Yii::t('app','Instruction'),
      self::AGENT_FEEDBACK=>Yii::t('app','Agent Feedback'),
+     self::REPLY_TO_QUESTION=>Yii::t('app','Reply To Question'),
      
    ];
  
@@ -31,19 +33,20 @@ public static function replyOptions($marking)
      self::QUESTION=>Yii::t('app','Question'),
      ];
 if ($marking->status==Complaint::PENDING_FOR_ATR)
-  return array_merge($a,[
+  return [
     // self::ENQUIRY_REPORT=>Yii::t('app','Enquiry Report'),
-     
+     self::QUESTION=>Yii::t('app','Question'),
      self::ATR_REPORT=>Yii::t('app','Action Taken Report'),
   
-  ]);
+  ];
   else
     if ($marking->status==Complaint::PENDING_FOR_ENQUIRY)
-  return array_merge($a,[
+  return [
+  self::QUESTION=>Yii::t('app','Question'),
      self::ENQUIRY_REPORT=>Yii::t('app','Enquiry Report'),
      
     
-  ]);
+  ];
   else if ((Yii::$app->user->can('complaintagent') || Yii::$app->user->can('complaintadmin')))
       return self::types();
       else return $a;

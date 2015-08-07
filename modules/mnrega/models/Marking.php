@@ -240,11 +240,11 @@ class Marking extends \yii\db\ActiveRecord
          //exit;
          foreach ($status as $s1)
           {
-          $x="SUM(CASE WHEN marking.status=".$s1." and request_type='".$tc."'";
+          $x="SUM(CASE WHEN marking.flag!=1 AND marking.status=".$s1." and request_type='".$tc."'";
           if ($d!=-1) $x.="and receiver=".$d;
           $q[]=$x." THEN 1 ELSE 0 END) AS ".$tc."_count"."_".$s1;
           }
-          $x="SUM(CASE WHEN request_type='".$tc."'";
+          $x="SUM(CASE WHEN marking.flag!=1 AND request_type='".$tc."'";
            if ($d!=-1) $x.="and receiver=".$d;
 
           $q[]=$x." THEN 1 ELSE 0 END) AS ".$tc."_count";
@@ -285,26 +285,58 @@ class Marking extends \yii\db\ActiveRecord
        */
        
     }
+    public static function countflag($t,$flags,$d=-1)
+     
+      {
+        if(count($t)==0) return;//nothing to do
+         if(count($flags)==0) 
+          {
+           $status=['0'];
+          }
+        $q=[];
+        foreach ($t as $tc)
+        {
+        // print_r($status);
+         //exit;
+         foreach ($flags as $flag)
+          {
+          $x="SUM(CASE WHEN marking.flag=".$flag." and request_type='".$tc."'";
+          if ($d!=-1) $x.="and receiver=".$d;
+          $q[]=$x." THEN 1 ELSE 0 END) AS ".$tc."_count"."_".$flag;
+          }
+          $x="SUM(CASE WHEN request_type='".$tc."'";
+           if ($d!=-1) $x.="and receiver=".$d;
+
+          $q[]=$x." THEN 1 ELSE 0 END) AS ".$tc."_count";
+         
+        }
+        $query="SELECT ".implode(",",$q)." FROM marking";
+        //inner join ".$tc." on marking.request_type='".
+         // $tc."' and marking.status=".$tc.".status";
+        $db=Yii::$app->db;
+        $counts= $db->createCommand($query)->queryAll();
+         
+        /*
+        $counts=$db->cache(function($db,$query)
+          {
+          $db->createCommand($query)->queryAll();
+            });
+            */
+        return $counts;
+    
+       
+    }
     public static function setStatus($markingid,$status,$message='')
     {
        $marking=Marking::findOne($markingid);
-       $transaction=\Yii::$app->db->beginTransaction();
+       
        if ($marking)
          {
            $marking->status=$status;
            $marking->save();
          }
-         if ($message!='')
-         {
-           $reply=new \app\modules\reply\models\Reply;
-           $reply->content_type='marking';
-           $reply->content_type_id=$marking->id;
-           $reply->author_id=Yii::$app->user->id;
-           $reply->create_time=time();
-           $reply->save();
          
-         }
-        $transaction->commit();
+       
     
     }
     /*

@@ -35,7 +35,9 @@ if(Yii::$app->user->can('complaintviewall'))
                        <li  class="">
                             <a href='<?=Url::to(['/complaint/complaint/my?s='.$s.'&d='.$d])?>'>
                                 <span class="badge pull-right">
-                           <?=$complaintcounts[0]['complaint_count_'.$s]?>
+                           <?=
+                           $complaintcounts[0]['complaint_count_'.$s]
+                           ?>
                             </span>
                              <?=Yii::t('app',$sname)?>
                              </a>
@@ -109,4 +111,20 @@ if(Yii::$app->user->can('complaintviewall'))
    }
 ?>
    </ul>
+  
                 </div>
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked">
+                    <li  class="active">
+                    <a href='<?=Url::to(['/complaint/complaint/my1?flag=4'])?>'>
+                                <span class="badge pull-right">
+                          <?php
+                            $flagcounts=Marking::countflag(['complaint'],[4]);
+                           echo $flagcounts[0]['complaint_count_4'];
+                           ?>
+                            </span>
+                             <?=Yii::t('app','Alerts')?>
+                            </a>
+                      </li>
+                    </div>
+                

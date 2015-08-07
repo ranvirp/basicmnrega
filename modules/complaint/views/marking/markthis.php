@@ -1,3 +1,5 @@
+
+
 <?php
 
 use yii\helpers\Html;
@@ -28,7 +30,7 @@ $this->registerJs(
 </div>
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
-    'action'=>Url::to(['/complaint/complaintreply/create']),
+    'action'=>Url::to(['/complaint/marking/markthis?id='.$id.'&markingid='.$markingid.'&a='.$a]),
 	'options'=>['data-pjax'=>1],
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
@@ -52,31 +54,11 @@ $this->registerJs(
    
    
 
-<?php
-/*
-try {
-$x= Utility::rules()["app\modules\complaint\models\ComplaintReply"][$changeattribute];
-} catch (Exception $e) {$x=null;}
-$modelArray=Yii::$app->request->post("ComplaintReply");
-		if ($x && $model && array_key_exists($changeattribute,$modelArray) && array_key_exists($modelArray[$changeattribute],$x))
-		{
-			$attribute_value=$modelArray[$changeattribute];
-			
-			foreach ($x[$attribute_value]["show"] as $field)
-			{
-			  
-				echo "<div class=\"row\">\n";
-			
-				echo $model->showForm($form,$field);
-				echo "</div>";
-			
-			}
-		}
-**/
-?>    <div class="form-group">
+   <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
+

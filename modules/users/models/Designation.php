@@ -225,16 +225,22 @@ class Designation extends \app\modules\users\MyActiveRecord
 		//$userclass=Yii::$app->getModule('user')->modelClasses['User'];
 		//$usermodel=$userclass::find()->where('username=:username',[':username'=>$username])->one();
 		//$usermodel=null;
+		$existinguserexists=0;
 		if (!$this->officer_userid)
+		{
 		 $usermodel = User::findOne([
            // 'status' => User::STATUS_ACTIVE,
            // 'email' => $this->email,
               'username'=>$username,
         ]);
+        $existinguserexists=1;
+        }
         else
          $usermodel=User::findOne($this->officer_userid);
        // if ($usermodel && !$this->resetpasswd)
         //return;
+        
+          
         $password=$username."$$$";
         if ($this->randpasswd)
            $password=Yii::$app->security->generateRandomString();
@@ -243,8 +249,11 @@ class Designation extends \app\modules\users\MyActiveRecord
 		  {
 		  //$usermodel->delete();
 		     $usermodel=new \app\modules\users\models\User;
+		     
 		     $usermodel->username=$username;
-		     $usermodel->setPassword($password);
+		     if ($existinguserexists)
+		        $usermodel->username=$username.'_'.($this->level->code);
+		      $usermodel->setPassword($password);
 		    // $usermodel->email=$username.'@test.com';
 		     //$usermodel->role_id=2;
 		    

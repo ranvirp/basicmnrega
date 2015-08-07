@@ -17,11 +17,16 @@ use yii\widgets\Pjax;
          <span>List of Complaints</span>
         </div>
     </div>
-    <?php $dataProvider->query=$dataProvider->query->with('markings');?>
+    <?php $dataProvider->query=$dataProvider->query->with('enquiryOfficer')->with('atrOfficer');?>
     <?php Pjax::begin(['enablePushState'=>false, 'id'=>'complaint-lists']);?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'afterRow'=>function($model, $key, $index, $grid)
+                     {
+                       return '<tr><td colspan="5">'.($model->enquiryOfficer?Yii::t('app','Enquiry Officer').':'.$model->enquiryOfficer->receiver_name:'').
+                       ($model->atrOfficer?Yii::t('app','ATR Officer').':'.$model->atrOfficer->receiver_name:'').'</td></tr>';
+                     },
        
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
@@ -29,7 +34,9 @@ use yii\widgets\Pjax;
               'header'=>Yii::t('app','Id'),
              'value'=>function ($model,$key,$index,$column)
                       {
-                        return Html::a($model->id,Url::to(['/complaint/complaint/view?id='.$model->id]));
+                       $sources=Complaint::source();
+                        return Html::a($model->id,Url::to(['/complaint/complaint/view?id='.$model->id]))."<br>".
+                               Yii::t('app','Source').':'.Yii::t('app',$sources[$model->source]);
                       },
              'attribute'=>'id',
              'format'=>'html'
@@ -55,9 +62,10 @@ use yii\widgets\Pjax;
             
             [
               'header'=>Yii::t('app','Complaint'),
+              'contentOptions'=>['class'=>'scrollable'],
              'value'=>function ($model,$key,$index,$column)
                       {
-                       return '<b><small>'.$model->showValue('complaint_type').'</small></b>'."<br>".
+                       return '<strong>'.$model->showValue('complaint_type').'</strong>'."<br>".
                         $model->showValue('description');
                       },
              'attribute'=>'complaint_type',
@@ -94,9 +102,15 @@ use yii\widgets\Pjax;
             ],
                ['class' => 'yii\grid\ActionColumn',
              'controller'=>'/complaint/complaint',
-              'template'=>'{reqaction}',
+              'template'=>'{simple}',
             
               'buttons'=>[
+				  'simple'=>function($url,$model,$key)
+					  {
+						  
+					  return \yii\helpers\Html::a('Take Action','#',['id'=>$model->id.'-action','onclick'=>'$(\'#complaint-panel-div\').html();populateHtml(\''.\yii\helpers\Url::to(['/complaint/marking/complaint?id='.$model->id]).'\',\'complaint-panel-div\');return false;']);
+	  
+				  },
                 'reqaction'=>function($url,$model,$key)
                 {
                 

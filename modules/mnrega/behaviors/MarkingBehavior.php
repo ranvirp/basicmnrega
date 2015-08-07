@@ -147,7 +147,7 @@ public function beforeSave($event)
 	                  if ($rmarking)
 	                   {
 	                    // print_r($rmarking->toArray());
-	                     print "already marked for this action"." cannot create new marking existing marking#".$rmarking->id.' '.$rmarking->status;
+	                     //print "already marked for this action"." cannot create new marking existing marking#".$rmarking->id.' '.$rmarking->status;
 	                     return $rmarking;
 	                   }
 	                    if ($receiver!=0)
@@ -181,7 +181,11 @@ public function beforeSave($event)
                            $rmarking->update_time=time();
                            $rmarking->canmark=$canmark;
                            $rmarking->purpose=$purpose;
-                           $rmarking->save();
+                           if (!$rmarking->save())
+                           {
+                             print_r($rmarking->errors);
+                             exit;
+                            }
                            return $rmarking;
      }
      public function markStatus($markingid,$status)

@@ -3,6 +3,7 @@ namespace app\modules\complaint\controllers;
 
 use yii\web\Controller;
 use app\modules\mnrega\models\District;
+use app\modules\users\models\DesignationType;
 use app\modules\complaint\models\Complaint;
 use app\modules\complaint\models\ComplaintSearch;
 
@@ -14,7 +15,57 @@ use Yii;
 
 class ReportController extends Controller
 {
-  public function actionDwise($t='complaint')
+ public function actionDesignationtypewise()
+ {
+   $sources=Complaint::source();
+   $q=[];
+   $q1=[];
+   $q2=[];
+   $t='complaint';
+   foreach ($sources as $code=>$source)
+   {
+   
+    $x="SUM(CASE WHEN source='".$code
+          ."' THEN 1 ELSE 0 END) AS ".'source_'.$code."_count";
+    $q1[]='source_'.$code."_count";
+    $q[]=$x;
+   
+   }
+     $q[]="SUM( 1) AS total";
+     $q1[]='total';
+     $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint left join district on district.code=complaint.district_code group by dname,dcode order by dname asc";
+      $queryhead="SELECT dname,dcode,".implode(",",$q1)." FROM (".$query.") x"." UNION ALL ".
+                "SELECT 'TOTAL' as dname, '-1' as dcode,".implode(",",$q)." FROM complaint";
+    $db=Yii::$app->db;
+    $counts= $db->createCommand($queryhead)->queryAll();  
+    return $this->render('sourcewise',['counts'=> $counts,'source'=>$sources,'t'=>'complaint']);
+ }
+ public function actionSourcewise()
+ {
+   $sources=Complaint::source();
+   $q=[];
+   $q1=[];
+   $q2=[];
+   $t='complaint';
+   foreach ($sources as $code=>$source)
+   {
+   
+    $x="SUM(CASE WHEN source='".$code
+          ."' THEN 1 ELSE 0 END) AS ".'source_'.$code."_count";
+    $q1[]='source_'.$code."_count";
+    $q[]=$x;
+   
+   }
+     $q[]="SUM( 1) AS total";
+     $q1[]='total';
+     $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint left join district on district.code=complaint.district_code group by dname,dcode order by dname asc";
+      $queryhead="SELECT dname,dcode,".implode(",",$q1)." FROM (".$query.") x"." UNION ALL ".
+                "SELECT 'TOTAL' as dname, '-1' as dcode,".implode(",",$q)." FROM complaint";
+    $db=Yii::$app->db;
+    $counts= $db->createCommand($queryhead)->queryAll();  
+    return $this->render('sourcewise',['counts'=> $counts,'source'=>$sources,'t'=>'complaint']);
+ }
+  public function actionDwise($t='complaint',$source='',$desgn='')
    {
         // print_r($status);
          //exit;
@@ -28,16 +79,32 @@ class ReportController extends Controller
          $status=Complaint::statusNames();
          foreach ($status as $s1=>$sname)
           {
-          $x="SUM(CASE WHEN status=".$s1
-          ." THEN 1 ELSE 0 END) AS ".strtolower(str_replace(" ","_",$sname))."_count";
+          $x="SUM(CASE WHEN status=".$s1;
+          
+          if ($source!='')
+           $x.=" AND source='".$source."'";
+         if ($desgn!='')
+         $x.=" AND marking.receiver_designation_type_id=".$desgn;
+          $x.=" THEN 1 ELSE 0 END) AS ".'status_'.$s1."_count";
           $q[]=$x;
+          $q1[]='status_'.$s1."_count";
           }
-          $q[]="SUM( 1) AS total";
-          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint left join district on district.code=complaint.district_code group by dname,dcode order by dname asc";
-       //print $query;
+          if ($source=='')
+          $q[]="SUM(1) AS total";
+          else
+          if ($desgn=='')
+          $q[]="SUM(case when source='".$source."' THEN 1 else 0 end) AS total";
+          else
+           $q[]="SUM(case when source='".$source."' AND marking.receiver_designation_type_id=".$desgn." THEN 1 else 0 end) AS total";
+          $q1[]='total';
+          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint left join marking on (marking.id=complaint.enqrofficer or marking.id=complaint.atrofficer) left join district on district.code=complaint.district_code group by dname,dcode order by dname asc";
+         $queryhead="SELECT dname,dcode,".implode(",",$q1)." FROM (".$query.") x"." UNION ALL ".
+                "SELECT 'TOTAL' as dname, '-1' as dcode,".implode(",",$q)." FROM complaint";
+          
+      //print $query;
        //exit;
        $db=Yii::$app->db;
-        $counts= $db->createCommand($query)->queryAll();
+        $counts= $db->createCommand($queryhead)->queryAll();
         } else 
         if ($t=='workdemand')
          {
@@ -74,9 +141,16 @@ class ReportController extends Controller
        $db=Yii::$app->db;
         $counts= $db->createCommand($query)->queryAll();
         }
-     return $this->render('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t]);
+    if (Yii::$app->request->isAjax)
+     return $this->renderPartial('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source]);
+    else
+     return $this->render('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source]);
        
      
+   }
+   public function actionDwise1()
+   {
+    return $this->render('wrapper',['sourceselected'=>'-5']);
    }
    public function actionPdf()
    {
