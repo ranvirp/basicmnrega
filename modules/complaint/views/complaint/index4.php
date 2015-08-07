@@ -143,8 +143,12 @@ use yii\widgets\PjaxAsset;
                 if (Yii::$app->user->can('complaintagent') || Yii::$app->user->can('complaintadmin'))
                   return \yii\helpers\Html::a('Take Action','#',['id'=>$model['id'].'-action','onclick'=>'$(\'#complaint-panel-div\').html();populateHtml(\''.\yii\helpers\Url::to(['/complaint/marking/complaint/?id='.$model['id'].'&markingid='.$model['markingid']]).'\',\'complaint-panel-div\');return false;']);
                 else
+                {
+                  if ($model['markingstatus']<$model['markingstatustarget'])
                   return \yii\helpers\Html::a('Take Action','#',['id'=>$model['markingid'].'-action','onclick'=>'$(\'#complaint-panel-div\').html();populateHtml(\''.\yii\helpers\Url::to(['/complaint/marking/?id='.$model['id'].'&markingid='.$model['markingid']]).'\',\'complaint-panel-div\');return false;']);
-
+                 else
+                   return '<p> Nothing to be done</p>';
+                 }
                },
                 'reqaction'=>function($url,$model,$key)
                 {

@@ -15,6 +15,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Complaint', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Complaint';
 ?>
 <?php AppAssetGoogle::register($this);?>
+<button onclick="javascript:window.print()">Print</button>
+
 <div class="reply-view row" id="complaint-view">
 
     <div id='reply'>
@@ -62,10 +64,16 @@ $this->params['breadcrumbs'][] = 'Complaint';
 </div>
 <div class="col-md-12">
 <?php
+ if (!isset($print)) $print=0;
   $cr=new \app\modules\complaint\models\ComplaintReply;
   $cr->complaint_id=$model->id;
   $dp=$cr->search([]);
-  $dp->pagination->pageSize=5;
+  if ($print!=1)
+  $dp->pagination->pageSize=1;
+  else
+  $dp->pagination=false;
+   $dp->query=$dp->query->orderBy('created_at desc');
+       
  // print $this->render('replylistview',['dataProvider'=>$dp]);
  print $this->render('replygridview',['dataProvider'=>$dp,'searchModel'=>$cr]);
 ?>

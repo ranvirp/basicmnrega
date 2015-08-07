@@ -87,6 +87,187 @@ public static function statusNames()
     {
         return $this->hasOne(RequestType::className(), ['id' => 'request_type_id']);
     }
+      public function _createMultipleMarking($actiontype,$canmark=0)
+    {
+//	public function markToDesignation($request_id,$sender,$sender_name,$sender_mobileno,$designation_type_id,$designation=0,$name='',$mobileno='',$purpose,$canmark,$status,$statustarget,$deadline)
+
+       if (!Yii::$app->user->can('complaintmarking'))
+	      return;
+	      $designation=Designation::getDesignationByUser(Yii::$app->user->id,true);
+	      $sender=$designation->id;
+          $sender_designation_type_id=$designation->designation_type_id;
+          $sender_name=$designation->officer_name_en;
+          $sender_mobileno=$designation->officer_mobile;
+                           
+	      switch($actiontype)
+	      {
+	        case 'enq':
+	          $status=self::PENDING_FOR_ENQUIRY;
+	          $statustarget=self::ENQUIRY_REPORT_ACCEPTED;
+	          $purpose="For Enquiry";
+	          break;
+	        case 'atr':
+	          $status=self::PENDING_FOR_ATR;
+	          $statustarget=self::DISPOSED;
+	          $purpose="For ATR";
+	          break;
+	         case 'enqatr':
+	          $status=self::PENDING_FOR_ENQUIRY;
+	          $statustarget=self::DISPOSED;
+	          $purpose="For Enquiry and ATR";
+	          break;
+	          default:
+	          $status=self::PENDING_FOR_ENQUIRY;
+	          $statustarget=self::DISPOSED;
+	          $purpose="For Enquiry and ATR";
+	          break;
+	          
+	      }
+	     //Now create markings
+	    //  print_r($markings);
+	     // exit;
+       
+        $maintype=Yii::$app->request->post('maintype');
+        $this->load(Yii::$app->request->post());
+        if (!$maintype) $maintype=[];
+        $markings=$this->marking;
+        //print_r($markings);
+        //exit;
+        $deadline=$markings['deadline'];
+        if (array_key_exists('designation',$markings))
+        $designations=$markings['designation'];
+        else 
+         $designations=[];
+          if (array_key_exists('others',$markings))
+        $others=$markings['others'];
+        else 
+        $others=null;
+        
+        $flag=false;
+        foreach ($maintype as $x)
+            {
+                switch ($x)
+                    {
+                       case 'po':
+                       if (!Yii::$app->user->can('marktopo'))
+                            break;
+                        //find block -
+                        
+                           $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$this->block_code])->one()->id;
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_hi;
+                           $receiver_mobileno=$designation->officer_mobileno;
+                           
+                           $this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
+                           $flag=true;
+                         break;
+                         case 'cdo':
+                       if (!Yii::$app->user->can('marktopo'))
+                            break;
+                        //find block -
+                           $cdodtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'cdo'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$cdodtid,'level_id'=>$this->district_code])->one()->id;
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_hi;
+                           $receiver_mobileno=$designation->officer_mobileno;
+                           
+                           $this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
+                            $flag=true;
+                         break;
+                            case 'dcmnrega':
+                       if (!Yii::$app->user->can('marktopo'))
+                            break;
+                        //find block -
+                           $dcmnregadtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'dcmnrega'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dcmnregadtid,'level_id'=>$this->district_code])->one()->id;
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_hi;
+                           $receiver_mobileno=$designation->officer_mobileno;
+                           
+                           $this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$designation,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
+                             $flag=true;
+                         break;
+                         case 'sqm':
+                          if (!Yii::$app->user->can('marktosqm'))
+                            break;
+                        //find block -
+                           $sqmdt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'sqm'])->one();
+                           if(!$sqmdt) break;
+                           $sqmdtid=$podt->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one()->id;
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_hi;
+                           $receiver_mobileno=$designation->officer_mobileno;
+                           
+                           $this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
+                        $flag=true;
+                         break;
+                         case 'lokpal':
+                          if (!Yii::$app->user->can('marktosqm'))
+                            break;
+                        //find block -
+                           $sqmdt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'lokpal'])->one();
+                           if(!$sqmdt) break;
+                           $sqmdtid=$podt->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one();
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_hi;
+                           $receiver_mobileno=$designation->officer_mobileno;
+                           
+                           $this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
+                           $flag=true;
+                         break;
+                         default: break;
+                        }
+            }
+        if(Yii::$app->user->can('marktoothers')) {
+                foreach ($designations as $designation_id)
+                    {
+                      if (is_numeric($designation_id))
+                      {
+                           $designation =\app\modules\users\models\Designation::findOne($designation_id);
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_hi;
+                           $receiver_mobileno=$designation->officer_mobileno;
+                           
+                           $this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
+                           $flag=true;
+                     }
+                  
+                    }
+            
+            }
+            if ($others)
+            {
+                           $receiver=0;
+                           $receiver_designation_type_id=$others['designation_type_id'];
+                           $receiver_name=$others['name'];
+                           $receiver_mobileno=$others['mobileno'];
+                           
+                           $this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline);
+                           $flag=true;
+                     
+            
+            }
+        if ($flag)
+          {
+            if ($this->status==self::REGISTERED || $this->status==null)
+             {
+               $this->status=self::PENDING_FOR_ENQUIRY;
+              }
+            else 
+              if ($this->status==self::ENQUIRY_REPORT_RECEIVED)
+              $this->status=self::PENDING_FOR_ATR;
+          }
+       
+    }
 	/*
 	*@return form of individual elements
 	*/

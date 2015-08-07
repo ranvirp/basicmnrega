@@ -36,7 +36,7 @@ class ComplaintreplyController extends Controller
         $searchModel = new ComplaintReplySearch();
         $searchModel->complaint_id=$id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->pagination->pageSize=5;
+        $dataProvider->pagination->pageSize=1;
         $dataProvider->query=$dataProvider->query->orderBy('created_at desc');
         return $this->renderPartial('../complaint/replygridview', [
             'searchModel' => $searchModel,

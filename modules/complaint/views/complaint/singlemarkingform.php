@@ -40,4 +40,9 @@ $form->field($modelComplaint,'marking[others][designation_type_id]')->dropDownLi
    <?= $form->field($modelComplaint,'marking[deadline]')->widget(\yii\jui\DatePicker::classname(), [
     'dateFormat' => 'yyyy-MM-dd',
 ])->label(Yii::t('app','Deadline'))?>
-<?= $form->field($modelComplaint,'marking[actiontype]')->dropDownList(['a'=>Yii::t('app','For Action'),'e'=>Yii::t('app','For Enquiry')])->label('Action Type')?>
+<?php 
+if (Yii::$app->user->can('complaintadmin') || Yii::$app->user->can('complaintagent')) 
+  $actions=['a'=>Yii::t('app','For Action'),'e'=>Yii::t('app','For Enquiry')];
+else
+  $actions=['e'=>Yii::t('app','For Enquiry')];
+$form->field($modelComplaint,'marking[actiontype]')->dropDownList($actions)->label('Action Type')?>

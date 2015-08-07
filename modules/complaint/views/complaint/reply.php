@@ -57,7 +57,7 @@ $markingid=$marking->id;
      }
  }
  ?>
- <?=Html::submitButton('Save',['class'=>'reply-form','onClick'=>'flag=1'])?>
+ <?=Html::submitButton('Save',['class'=>'reply-form','onClick'=>'flag=1;$(this).prop("disabled",true)'])?>
  <?php
  ActiveForm::end();
 ?>

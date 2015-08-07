@@ -213,11 +213,12 @@ class ComplaintController extends Controller {
 	 * @param integer $id
 	 * @return mixed
 	 */
-	public function actionView($id) {
-		$this->view->params['sidebar'] = Yii::getAlias('@app/modules/complaint/views/complaint/sidebar.php');
+	public function actionView($id,$print=1) {
+		//$this->view->params['sidebar'] = Yii::getAlias('@app/modules/complaint/views/complaint/sidebar.php');
 		$model = $this->findModel($id);
 		return $this->render('viewcontainer', [
 				'model' => $model,
+				'print'=>$print,
 		]);
 	}
 
@@ -236,10 +237,11 @@ class ComplaintController extends Controller {
 		}
 	}
 
-	public function actionMark($id, $a = 'e', $canmark = 0) {
+	public function actionMark($id, $a = 'e', $canmark = 0,$change=0) {
 		if (!(Yii::$app->user->can('canmark') || Yii::$app->user->can('complaintagent') || Yii::$app->user->can('complaintadmin')))
 			throw new NotFoundHttpException("Not Allowed");
-		if (!Yii::$app->user->can('complaintadmin')) {
+		if (!(Yii::$app->user->can('complaintadmin')|| Yii::$app->user->can('complaintagent'))) {
+		    $change=0;
 			$canmark = 0;
 		}
 		$model = $this->findModel($id);
@@ -247,7 +249,7 @@ class ComplaintController extends Controller {
 
 			if ($model) {
 
-				$model->_createSingleMarking($a, $canmark);
+				$model->_createSingleMarking($a, $canmark,$change);
 				$model->save();
 				print "done";
 			}
@@ -256,7 +258,7 @@ class ComplaintController extends Controller {
 		return $this->renderAjax('markingsingle', ['modelComplaint' => $model, 'district_code' => $model->district_code, 'actiontype' => $a, 'canmark' => $canmark]);
 	}
 
-	public function actionMy($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null) {
+	public function actionMy($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null,$sender=-1,$allflags=false) {
 
 		if (Yii::$app->user->isGuest)
 			throw new NotFoundHttpException("Not Allowed");
@@ -264,7 +266,7 @@ class ComplaintController extends Controller {
 		$complaintSearch->load(Yii::$app->request->get());
 		$searchModel = [];
 		$searchModel['id'] = $complaintSearch->id;
-		$dp = Complaint::count1($ms, $d, $s, false, $dcode, $bcode);
+		$dp = Complaint::count1($ms, $d, $s, false, $dcode, $bcode,$sender,$allflags);
 		return $this->render('index4', ['dataProvider' => $dp, 'searchModel' => $searchModel]);
 	}
 		public function actionMy1($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null,$flag=0) {
@@ -391,6 +393,8 @@ class ComplaintController extends Controller {
 	}
 	public function actionLeftmenu()
 	 {
+	 if (Yii::$app->user->isGuest)
+	  throw new NotFoundHttpException(" Please do not hack it");
 	   if (Yii::$app->user->can('complaintadmin') || Yii::$app->user->can('complaintagent'))
 	     return $this->renderPartial('//layouts/leftmenuadmin.php');
 	  else 

@@ -1,7 +1,15 @@
 <?php
+use app\modules\mnrega\models\Marking;
+use app\modules\complaint\models\JobcardDemand;
+use app\modules\complaint\models\WorkDemand;
+use app\modules\complaint\models\Complaint;
+use app\modules\users\models\Designation;
+use yii\helpers\Url;
      if(Yii::$app->user->can('complaintagent'))
      {
-        $complaintcount_unmarked=Complaint::count1(-2);
+    // $ms=-1,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null,$sender=-1,$allflags=false,$enqrofficer=false,$atrofficer=false)
+ 
+        $complaintcount_unmarked=Complaint::count1(-2,-1,-1,true,null,null,-1,false,true,true);
      $jobcarddemandcount_unmarked=JobcardDemand::count1(-2);
      $workdemandcount_unmarked=WorkDemand::count1(-2);
      ?>

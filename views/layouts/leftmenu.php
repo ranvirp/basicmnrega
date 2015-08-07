@@ -30,6 +30,7 @@ if(Yii::$app->user->can('complaintviewall'))
    foreach (Complaint::statusNames() as $s=>$sname)
    {
     if ($s==0) continue;
+    if ($s==Complaint::DISPOSED) continue;
    ?>
                  
                        <li  class="">
@@ -44,8 +45,26 @@ if(Yii::$app->user->can('complaintviewall'))
                        
                  
 <?php   
-   }
-?>
+   }?>
+   <li  class="">
+                            <a href='<?=Url::to(['/complaint/complaint/index?s='.Complaint::DISPOSED.'&d='.$d])?>'>
+                                <span class="badge pull-right">
+                                <?php
+                           $query="select count(*) as count1 from complaint inner join marking on marking.request_type='complaint' and marking.id=atrofficer where receiver=".$d .'';
+                            $db= Yii::$app->db;
+                            $counts2= $db->createCommand($query)->queryAll();
+                          //  print_r($counts);
+                            echo $counts2[0]['count1'];
+  
+                           
+                           
+                           ?> 
+                           <?=$counts1[0]['complaint_count_'.$s]?>
+                            </span>
+                             <?=Yii::t('app',$sname)?>
+                             </a>
+                      </li> 
+
    </ul>
                 </div>
    <div class="panel-body">
@@ -92,6 +111,7 @@ if(Yii::$app->user->can('complaintviewall'))
    <?php
    foreach (WorkDemand::statusNames() as $s=>$sname)
    {
+     
    ?>
                  
                        <li  class="">
@@ -121,6 +141,26 @@ if(Yii::$app->user->can('complaintviewall'))
                            ?>
                             </span>
                              <?=Yii::t('app','Alerts')?>
+                            </a>
+                      </li>
+                    </div>
+                                       <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked">
+                    <li  class="active">
+                    <a href='<?=Url::to(['/complaint/complaint/my?sender='.$d])?>'>
+                                <span class="badge pull-right">
+                          <?php
+                           $query="select count(*) as count1 from marking where sender=".$d .' and status<statustarget';
+                            $db= Yii::$app->db;
+                            $counts= $db->createCommand($query)->queryAll();
+                          //  print_r($counts);
+                            echo $counts[0]['count1'];
+  
+                           
+                           
+                           ?>
+                            </span>
+                             <?=Yii::t('app','Information')?>
                             </a>
                       </li>
                     </div>

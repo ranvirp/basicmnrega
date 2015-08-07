@@ -8,6 +8,7 @@ use app\modules\complaint\models\WorkDemand;
 use app\modules\complaint\models\WorkDemandSearch;
 use app\modules\complaint\models\WorkDemandReport;
 use app\modules\mnrega\models\Marking;
+use app\modules\users\models\Designation;
 
 
 
@@ -100,12 +101,38 @@ class WorkdemandController extends Controller
                // exit;
                 if ($designation)
                 {
-                   $model->markToDesignation($model->id,$designation->id,$model->datefrom);
+                //($request_id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0)
+                   if (Yii::$app->user->isGuest)
+                   {
+                      $sender=0;
+                      $sender->designation_type_id=-100;
+                      $sender_name=$model->name_hi;
+                      $sender_mobileno=$model->mobileno;
+                    }
+                   else
+                    {
+                    $senderdesignation=Designation::getDesignationByUser(Yii::$app->user->id,true);
+                    $sender=$senderdesignation->id;
+                    $sender_designation_type_id=$senderdesignation->designation_type_id;
+                    $sender_name=$senderdesignation->officer_name_en;
+                    $sender_mobileno=$senderdesignation->officer_mobile;
+                    }
+                   $receiver=$designation->id;
+                   $receiver_designation_type_id=$designation->designation_type_id;
+                   $receiver_name=$designation->name_en;
+                   $receiver_mobileno=$designation->officer_mobileno;
+                   $purpose="For action and report";
+                   $canmark=0;
+                   $status=WorkDemand::PENDING;
+                   $statustarget=WorkDemand::DISPOSED;
+                   $deadline=$model->datefrom;
+                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0);
+                    }
                    $transaction->commit();
                    $this->redirect(['view','id'=>$model->id]);
                 }
-                }
-                else {print_r($model->errors);exit;}
+                
+                else {print_r($model->errors);$transaction->rollBack();exit;}
                 }
                 catch(Exception $e)
                   {
@@ -151,15 +178,43 @@ class WorkdemandController extends Controller
                    $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$model->block_code])->one();
                 //print_r($designation);
                // exit;
-                if ($designation)
+                  $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
+                $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$model->block_code])->one();
+                  if ($designation)
                 {
-                   $model->markToDesignation($model->id,$designation->id,$model->datefrom);
-                   $transaction->commit();
+                //($request_id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0)
+                   if (Yii::$app->user->isGuest)
+                   {
+                      $sender=0;
+                      $sender->designation_type_id=-100;
+                      $sender_name=$model->name_hi;
+                      $sender_mobileno=$model->mobileno;
+                    }
+                   else
+                    {
+                    $senderdesignation=Designation::getDesignationByUser(Yii::$app->user->id,true);
+                    $sender=$senderdesignation->id;
+                    $sender_designation_type_id=$senderdesignation->designation_type_id;
+                    $sender_name=$senderdesignation->officer_name_en;
+                    $sender_mobileno=$senderdesignation->officer_mobile;
+                    }
+                   $receiver=$designation->id;
+                   $receiver_designation_type_id=$designation->designation_type_id;
+                   $receiver_name=$designation->name_en;
+                   $receiver_mobileno=$designation->officer_mobile;
+                   $purpose="For action and report";
+                   $canmark=0;
+                   $status=WorkDemand::PENDING;
+                   $statustarget=WorkDemand::DISPOSED;
+                   $deadline=$model->datefrom;
+                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,1);
+                    }
+                    $transaction->commit();
                    $this->redirect(['view','id'=>$model->id]);
-                }
+            
                 
                 }
-                else {print_r($model->errors);exit;}
+                else {print_r($model->errors);$transaction->rollBack();exit;}
                 }
                 catch(Exception $e)
                   {

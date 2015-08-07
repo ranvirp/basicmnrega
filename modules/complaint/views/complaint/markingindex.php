@@ -48,9 +48,9 @@ $this->params['markurl']=$markurl;
 'attribute'=>'receiver',
 'value'=>function($model,$key,$index,$column)
 {
-                return $model->showValue('receiver');
+                return $model->receiver_name;
 },],
-'receiver_name',
+
 [
 'attribute'=>'dateofmarking',
 'value'=>function($model,$key,$index,$column)
@@ -63,7 +63,7 @@ $this->params['markurl']=$markurl;
 {
                 return $model->showValue('status');
 },],
-
+($this->params['markurl']==null)?[]:
 ['header'=>'Change Status',
 'format'=>'raw',
 'value'=>function($model,$key,$index,$column)
@@ -83,9 +83,6 @@ if ($this->params['markurl']!=null)
     $x.=Html::dropDownList('markingstatus','',$classname::statusNames());
     $x.='<input type="submit" value="Submit" ></input>';
     $x.='</form>';
-    }else 
-    {
-      $x='<b>Not Allowed!!</b>';
     }
     return $x;
 },],

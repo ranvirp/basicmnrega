@@ -35,14 +35,14 @@ public static function replyOptions($marking)
 if ($marking->status==Complaint::PENDING_FOR_ATR)
   return [
     // self::ENQUIRY_REPORT=>Yii::t('app','Enquiry Report'),
-     self::QUESTION=>Yii::t('app','Question'),
+   //  self::QUESTION=>Yii::t('app','Question'),
      self::ATR_REPORT=>Yii::t('app','Action Taken Report'),
   
   ];
   else
     if ($marking->status==Complaint::PENDING_FOR_ENQUIRY)
   return [
-  self::QUESTION=>Yii::t('app','Question'),
+  //self::QUESTION=>Yii::t('app','Question'),
      self::ENQUIRY_REPORT=>Yii::t('app','Enquiry Report'),
      
     

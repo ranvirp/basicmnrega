@@ -70,7 +70,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
      width:100%;
     }
     </style>
-   
+ 
 </head>
 <body class="">
 
@@ -137,11 +137,17 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
 ]);
 echo '</div>';
 ?>
-<div class="row">
+<div class="row hidden-print">
   <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
 </div>
+<a class="hide" id="refreshlink"></a>
+
+<?php
+ \yii\widgets\Pjax::begin(['id'=>"test-div",'enablePushState'=>false]);
+                    \yii\widgets\Pjax::end();
+                    ?>
     <div class="row">
     <?php if (!Yii::$app->user->isGuest) {?>
     <div class="col-md-12 text-center">
@@ -151,14 +157,25 @@ echo '</div>';
       
    
   
-               
-    <div class="col-md-offest-1 col-md-2 hidden-print">
+   <?php   echo '<a class="hide" id="leftmenurefreshlink" href="'.Url::to(['/complaint/complaint/leftmenu']).'"></a>';?>
+          
+    <div class="col-md-offest-1 col-md-2 hidden-print" id="leftmenu">
     <?php
    // include 'unmarked.php';
    if (Yii::$app->user->can('complaintadmin') || Yii::$app->user->can('complaintagent'))
+    {
+    require "unmarked.php";
     require 'leftmenuadmin.php';
+     //  echo '<a class="hide" id="maincontainerrefreshlink" href="'..'"></a>';
+
+    }
     else
+    {
+    
    require 'leftmenu.php';
+  // echo '<a class="hide" id="leftmenurefreshlink" href="'..'"></a>';
+    
+   }
    ?>
    </div>
     
@@ -166,8 +183,7 @@ echo '</div>';
                     <div id="complaint-panel-div">
                     </div>
                     <?php 
-                    //\yii\widgets\Pjax::begin(['id'=>"complaint-panel-div",'enablePushState'=>false]);
-                    //\yii\widgets\Pjax::end();
+                   
                     ?>
               <?php  }   else { ?>
         <div class="col-md-12 small">

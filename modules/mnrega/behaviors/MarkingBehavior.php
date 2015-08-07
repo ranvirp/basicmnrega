@@ -133,7 +133,7 @@ public function beforeSave($event)
 	 
 	}
 	*/
-	public function markToDesignation($request_id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline)
+	public function markToDesignation($request_id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0)
 	 {
 	            
 	            //if (is_array($designation) )
@@ -143,12 +143,24 @@ public function beforeSave($event)
 	                  //  $rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'receiver_designation_type_id'=>$receiver_designation_type_id,'name'=>$name])->one();
 	                 //else
 	                   //$rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'receiver'=>$designation])->one();
+	                  if (strtotime($deadline)<time())
+                              $deadline=date('Y-m-d',strtotime('+7 day'));
+	                 if ($sender==$receiver)
+	                   {
+	                     print "Marking to yourself..ridiculous..not allowed";
+	                     return null;
+	                     
+	                     
+	                   }
+	                   if ($change==0)
+	                   {
 	                  $rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'status'=>$status])->andWhere('flag!=1')->one();
 	                  if ($rmarking)
 	                   {
 	                    // print_r($rmarking->toArray());
 	                     //print "already marked for this action"." cannot create new marking existing marking#".$rmarking->id.' '.$rmarking->status;
 	                     return $rmarking;
+	                   }
 	                   }
 	                    if ($receiver!=0)
 	                     $rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'receiver'=>$receiver])->one();
@@ -181,6 +193,7 @@ public function beforeSave($event)
                            $rmarking->update_time=time();
                            $rmarking->canmark=$canmark;
                            $rmarking->purpose=$purpose;
+                          
                            if (!$rmarking->save())
                            {
                              print_r($rmarking->errors);

@@ -33,7 +33,7 @@ if(Yii::$app->user->can('complaintviewall'))
    ?>
                  
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?s='.$s.'&d='.$d])?>'>
+                            <a href='<?=Url::to(['/complaint/complaint/index?s='.$s.'&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=
                            $complaintcounts[0]['complaint_count_'.$s]

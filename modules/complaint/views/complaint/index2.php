@@ -95,7 +95,8 @@ use yii\widgets\Pjax;
               'header'=>Yii::t('app','Status'),
              'value'=>function ($model,$key,$index,$column)
                       {
-                        return Complaint::statusNames()[$model->status];
+                        $status=Complaint::statusNames();
+                        return $status[$model->status];
                       },
              'attribute'=>'status',
              'filter'=>Complaint::statusNames(),
