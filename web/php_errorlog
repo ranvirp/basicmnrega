@@ -17,3 +17,8 @@
 [27-Jul-2015 06:42:50 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\WorkDemandReport' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 215
 [27-Jul-2015 07:12:06 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\WorkDemandReport' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 215
 [27-Jul-2015 07:12:07 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\WorkDemandReport' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 215
+[28-Jul-2015 23:04:40 America/Chicago] PHP Fatal error:  require(): Failed opening required '/home/nregaup0/testmnrega/config/params.php' (include_path='.:/usr/local/php55/pear') in /home/nregaup0/testmnrega/config/web.php on line 3
+[28-Jul-2015 23:09:10 America/Chicago] PHP Fatal error:  require(): Failed opening required '/home/nregaup0/testmnrega/config/mailer.php' (include_path='.:/usr/local/php55/pear') in /home/nregaup0/testmnrega/config/web.php on line 97
+[29-Jul-2015 04:34:48 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\WorkDemandReport' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 215
+[29-Jul-2015 04:58:46 America/Chicago] PHP Fatal error:  Call to a member function formName() on a non-object in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/base/Model.php on line 831
+[29-Jul-2015 04:58:56 America/Chicago] PHP Fatal error:  Call to a member function formName() on a non-object in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/base/Model.php on line 831
