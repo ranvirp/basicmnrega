@@ -5,8 +5,9 @@
  */
 var map;
 var markers;
-function populateDropdown(url,id,clickableid=null)
+function populateDropdown(url,id,clickableid)
 {
+     clickableid= typeof clickableid !== 'undefined' ? clickableid : null;
       $.ajax({
          'url':url,
           'type':'GET',
@@ -36,8 +37,9 @@ function populateDropdown(url,id,clickableid=null)
 }
 });
 }
-function populateHtml(url,id,clickableid=null)
+function populateHtml(url,id,clickableid)
 {
+    clickableid= typeof clickableid !== 'undefined' ? clickableid : null;
      $.ajax({
           'url':url,
           'type':'GET',
