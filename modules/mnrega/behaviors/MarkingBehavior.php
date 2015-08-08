@@ -152,16 +152,20 @@ public function beforeSave($event)
 	                     
 	                     
 	                   }
-	                   if ($change==0)
-	                   {
+	                   
 	                  $rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'status'=>$status])->andWhere('flag!=1')->one();
 	                  if ($rmarking)
 	                   {
 	                    // print_r($rmarking->toArray());
 	                     //print "already marked for this action"." cannot create new marking existing marking#".$rmarking->id.' '.$rmarking->status;
+	                     if ($change==0)
 	                     return $rmarking;
+	                     else
+	                     {
+	                     	$rmarking->flag=1;$rmarking->save();$rmarking=null;
+	                     }
 	                   }
-	                   }
+	                   
 	                    if ($receiver!=0)
 	                     $rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'receiver'=>$receiver])->one();
 	                  else $rmarking=null;
