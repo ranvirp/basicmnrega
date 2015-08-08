@@ -2,7 +2,17 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 ?>
-<table class="table table-striped">
+
+  
+
+
+ <div class="form-title">
+        <div class="form-title-span">
+         <span>Status of Complaints as on <?= date('d-m-Y')?></span>
+        </div>
+    </div>
+    
+<table class="table table-bordered">
 <tr>
   <th>District</th>
   <th>Total</th>
@@ -19,12 +29,12 @@ use yii\helpers\Html;
 foreach ($counts as $count)
 {
  print '<tr>'
- .'<td>'.Html::a($count['dname'],Url::to(['/complaint/'.$t.'/my?s=-1&dcode='.$count['dcode']])).'</td>'
+ .'<td>'.Html::a($count['dname'],Url::to(['/complaint/'.$t.'/index?s=-1&dcode='.$count['dcode']])).'</td>'
   .'<td>'.$count['total'].'</td>';
 foreach ($status as $s1=>$sname) {
-$key=strtolower(str_replace(" ","_",$sname)).'_count';
+$key=$q1[]='status'.$s1."_count";;
 if (array_key_exists($key,$count))
-  print "<td>".Html::a($count[$key],Url::to(['/complaint/'.$t.'/my?s='.$s1.'&dcode='.$count['dcode']]))."</td>";
+  print "<td>".Html::a($count[$key],Url::to(['/complaint/'.$t.'/index?s='.$s1.'&dcode='.$count['dcode']]))."</td>";
   else 
     print "<td>0</td>";
         

@@ -19,6 +19,7 @@ use app\modules\users\models\Designation;
 AppAsset::register($this);
 //\app\assets\KartikFileInputAsset::register($this);
 AppAsset_1::register($this);
+$this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif'."';",\yii\web\View::POS_READY);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -43,29 +44,33 @@ AppAsset_1::register($this);
     {
      padding:0;
     }
+    <?php
+    /*
    .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;color:white;}
 .navbar {min-height:30px !important;font-size:8px;}
  .nav >li > a:hover, .nav >li > a:focus , .nav .open>a,.nav .open>a:hover,.nav .open>a:focus
 {
  background:blue;
 }
+*/
+?>
     .navbar-green
     {
      background-color:#faf3e3
     }
-    .menubar
+    .menubar1
     {
      margin-bottom:15px;
      margin-top:5px;
      border:solid 1px;
-     //background-color:#3c68b6;
-     background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+   //  background-color:#3c68b6;
+     //background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
      background-size: 100%;
      display:table;
      width:100%;
     }
     </style>
-   
+ 
 </head>
 <body class="">
 
@@ -84,7 +89,7 @@ AppAsset_1::register($this);
            // echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
            echo "<div class='pull-left'>".'<h1>मनरेगा शिकायत प्रबंधन</h1>'.'</div>'.'<div class="pull-right"><h4>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h4></div>';
             NavBar::end();
-      echo '<div class="menubar">';
+      echo '<div class="menubar hidden-print">';
             echo Nav::widget([
             
     'items' => [
@@ -93,22 +98,23 @@ AppAsset_1::register($this);
        ['label' => 'Work Demand', 'url' => ['/complaint/workdemand'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
              ['label' => 'create', 'url' => ['/complaint/workdemand/create'],'options'=>['class'=>'dropdown']],
-             ['label' => 'index', 'url' => ['/complaint/workdemand/index1'],'options'=>['class'=>'dropdown']],
+             ['label' => 'index', 'url' => ['/complaint/workdemand/index'],'options'=>['class'=>'dropdown']],
             ['label' => 'report', 'url' => ['/complaint/report/dwise?t=workdemand'],'options'=>['class'=>'dropdown']],
       
       ]],
        ['label' => 'Job Card Demand', 'url' => ['/complaint/jobcarddemand'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
              ['label' => 'create', 'url' => ['/complaint/jobcarddemand/create'],'options'=>['class'=>'dropdown']],
-             ['label' => 'index', 'url' => ['/complaint/jobcarddemand/index1'],'options'=>['class'=>'dropdown']],
+             ['label' => 'index', 'url' => ['/complaint/jobcarddemand/index'],'options'=>['class'=>'dropdown']],
                ['label' => 'report', 'url' => ['/complaint/report/dwise?t=jobcarddemand'],'options'=>['class'=>'dropdown']],
       
       ]],
        ['label' => 'Complaints', 'url' => ['/complaint/complaint'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
-             ['label' => 'create', 'url' => ['/complaint/complaint/create'],'options'=>['class'=>'dropdown']],
-             ['label' => 'index', 'url' => ['/complaint/complaint/index1'],'options'=>['class'=>'dropdown']],
-               ['label' => 'report', 'url' => ['/complaint/report/dwise?t=complaint'],'options'=>['class'=>'dropdown']],
+             ['label' => 'Create', 'url' => ['/complaint/complaint/create'],'options'=>['class'=>'dropdown']],
+             ['label' => 'Index', 'url' => ['/complaint/complaint/index'],'options'=>['class'=>'dropdown']],
+               ['label' => 'Report Source Wise District Wise', 'url' => ['/complaint/report/dwise1'],'options'=>['class'=>'dropdown']],
+       ['label' => 'Report Source Wise', 'url' => ['/complaint/report/sourcewise'],'options'=>['class'=>'dropdown']],
       
          !Yii::$app->user->can('complaintadmin') ?'':   
               ['label' => 'Complaint Type', 'url' => ['/complaint/complaint_type/create'],'options'=>['class'=>'dropdown']],
@@ -131,74 +137,63 @@ AppAsset_1::register($this);
 ]);
 echo '</div>';
 ?>
+<div class="row hidden-print">
+  <?= Breadcrumbs::widget([
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]) ?>
+</div>
+<a class="hide" id="refreshlink"></a>
+
+<?php
+ \yii\widgets\Pjax::begin(['id'=>"test-div",'enablePushState'=>false]);
+                    \yii\widgets\Pjax::end();
+                    ?>
     <div class="row">
     <?php if (!Yii::$app->user->isGuest) {?>
     <div class="col-md-12 text-center">
      <?=\Yii::$app->getSession()->getFlash('message');?>
 
     </div>
-      <div class="col-md-offest-1 col-md-3">
+      
    
+  
+   <?php   echo '<a class="hide" id="leftmenurefreshlink" href="'.Url::to(['/complaint/complaint/leftmenu']).'"></a>';?>
+          
+    <div class="col-md-offest-1 col-md-2 hidden-print" id="leftmenu">
     <?php
-     if(Yii::$app->user->can('complaintagent'))
-     {
-        $complaintcount_unmarked=Complaint::count1(-2);
-     $jobcarddemandcount_unmarked=JobcardDemand::count1(-2);
-     $workdemandcount_unmarked=WorkDemand::count1(-2);
-     ?>
-            <section class="panel">
-                <div class="panel-body">
-                    <ul class="nav nav-pills nav-stacked">
-                    <li  class="active">
-                    <a>
-                                <span class="badge pull-right">
-                           <?=$complaintcount_unmarked+$workdemandcount_unmarked+$jobcarddemandcount_unmarked?>
-                            </span>
-                             <?=Yii::t('app','Unmarked')?>
-                            </a>
-                      </li>
-                       <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?ms='.urlencode('-2')])?>'>
-                                <span class="badge pull-right">
-                           <?=$complaintcount_unmarked?>
-                            </span>
-                             <?=Yii::t('app','Complaints')?>
-                             </a>
-                      </li>
-                       <li  class="">
-                            <a href='<?=Url::to(['/complaint/workdemand/my?ms='.urlencode('-2')])?>'>
-                                <span class="badge pull-right">
-                           <?=$workdemandcount_unmarked?>
-                            </span>
-                             <?=Yii::t('app','Work Demand')?>
-                             </a>
-                      </li>
-                       <li  class="">
-                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?ms='.urlencode('-2')])?>'>
-                                <span class="badge pull-right">
-                           <?=$jobcarddemandcount_unmarked?>
-                            </span>
-                             <?=Yii::t('app','Jobcarddemand')?>
-                             </a>
-                      </li>
-                       
-                    </ul>
-                </div>
-                </section>
-               
-    <?php };
-   require 'leftmenu.php';?>
-    </div>
-                    <div class="col-md-9">
-        <?php } else { ?>
+   // include 'unmarked.php';
+   if (Yii::$app->user->can('complaintadmin') || Yii::$app->user->can('complaintagent'))
+    {
+    require "unmarked.php";
+    require 'leftmenuadmin.php';
+     //  echo '<a class="hide" id="maincontainerrefreshlink" href="'..'"></a>';
+
+    }
+    else
+    {
+    
+   require 'leftmenu.php';
+  // echo '<a class="hide" id="leftmenurefreshlink" href="'..'"></a>';
+    
+   }
+   ?>
+   </div>
+    
+                    <div class="col-md-8">
+                    <div id="complaint-panel-div">
+                    </div>
+                    <?php 
+                   
+                    ?>
+              <?php  }   else { ?>
         <div class="col-md-12 small">
         <?php } ?>
-            <?= Breadcrumbs::widget([
-                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-            ]) ?>
+          
             <?= $content ?>
         </div>
-    </div>
+    
+    
+</div>
 </div>
     <footer class="footer">
         <div class="container">

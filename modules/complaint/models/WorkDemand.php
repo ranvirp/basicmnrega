@@ -111,7 +111,7 @@ public static function statusNames()
             'block_code' => Yii::t('app', 'Block'),
             'panchayat_code' => Yii::t('app', 'Panchayat'),
             'village' => Yii::t('app', 'Village'),
-            'noofdays' => Yii::t('app', 'Noofdays'),
+            'noofdays' => Yii::t('app', 'No Of Days'),
             'datefrom' => Yii::t('app', 'Datefrom'),
             'dateto' => Yii::t('app', 'Dateto'),
             'workchoice' => Yii::t('app', 'Workchoice'),
@@ -119,6 +119,27 @@ public static function statusNames()
             'create_time' => Yii::t('app', 'Create Time'),
             'update_time' => Yii::t('app', 'Update Time'),
         ];
+    }
+       /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDistrict()
+    {
+        return $this->hasOne(\app\modules\mnrega\models\District::className(), ['code' => 'district_code']);
+    }
+      /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBlock()
+    {
+        return $this->hasOne(\app\modules\mnrega\models\Block::className(), ['code' => 'block_code']);
+    }
+      /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPanchayat1()
+    {
+        return $this->hasOne(\app\modules\mnrega\models\Panchayat::className(), ['code' => 'panchayat_code']);
     }
           /**
      * @return \yii\db\ActiveQuery
@@ -188,7 +209,7 @@ public static function statusNames()
 			    
 			    break;
 			    case 'panchayat':
-			   return  $form->field($this,$attribute)->hiddenInput(['value'=>'','id'=>'panchayat-name'])->label(false);
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>'','id'=>'panchayat-name','value'=>'NA'])->label(false)->hint(false);
 			    
 			    break;
 									
@@ -370,6 +391,7 @@ public static function statusNames()
       /**
      * @inheritdoc
      */
+     /*
     public function attributeHints()
     {
         $x=[];
@@ -379,4 +401,31 @@ public static function statusNames()
          }
        return array_merge(parent::attributeHints(), $x);
     }
+    */
+    public static function counts($status)
+{
+  
+         if(count($status)==0) 
+          {
+           $status=array_keys(self::statusNames());
+          }
+        $q=[];
+        
+        // print_r($status);
+         //exit;
+         foreach ($status as $s1)
+          {
+           $x="SUM(CASE WHEN status=".$s1."";
+          $q[]=$x." THEN 1 ELSE 0 END) AS workdemand_count"."_".$s1;
+          }
+          $q[]="SUM(1) AS workdemand_count";
+          
+        
+        $query="SELECT ".implode(",",$q)." FROM workdemand";
+        $db=Yii::$app->db;
+        $counts= $db->createCommand($query)->queryAll();
+         
+       
+        return $counts;
+        }
 }

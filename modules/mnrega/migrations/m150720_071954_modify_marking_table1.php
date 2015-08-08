@@ -7,7 +7,7 @@ class m150720_071954_modify_marking_table1 extends Migration
 {
     public function up()
     {
-       $this->addColumn('{{%marking}}','status',Schema::TYPE_INTEGER);
+      // $this->addColumn('{{%marking}}','status',Schema::TYPE_INTEGER);
     }
 
     public function down()

@@ -27,28 +27,16 @@ use app\assets\AppAssetGoogle;
 <?=Html::textInput('hint_names[]',$name,['class'=>'form-control'])?>
 <?=Html::textInput('hint_values[]',$value,['class'=>'hindiinput form-control'])?>
 <?php } ?>
-   
+<div class="newentries">
+<?=Html::textInput('hint_names[]','',['class'=>'form-control','placeholder'=>'New Entry'])?>
+<?=Html::textInput('hint_values[]','',['class'=>'hindiinput form-control','placeholder'=>'New Entry HIndi Name'])?>
+
+</div>
+<div id="container">
+</div>
+<button onclick="$('#container').append($('.newentries').clone());return false;">Add New</button>
 <?php
-/*
-try {
-$x= Utility::rules()["app\modules\complaint\models\Complaint_marking"][$changeattribute];
-} catch (Exception $e) {$x=null;}
-$modelArray=Yii::$app->request->post("Complaint_marking");
-		if ($x && $model && array_key_exists($changeattribute,$modelArray) && array_key_exists($modelArray[$changeattribute],$x))
-		{
-			$attribute_value=$modelArray[$changeattribute];
-			
-			foreach ($x[$attribute_value]["show"] as $field)
-			{
-			  
-				echo "<div class=\"row\">\n";
-			
-				echo $model->showForm($form,$field);
-				echo "</div>";
-			
-			}
-		}
-**/
+
 ?>    <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

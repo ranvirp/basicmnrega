@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('reply', [
         'model' => $model,
         'id'=>$id,
-        'markingid'=>$markingid,
+        'marking'=>$marking,
     ]) ?>
 
 </div>

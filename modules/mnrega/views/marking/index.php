@@ -17,7 +17,7 @@ $this->params['markurl']=$markurl;
  padding:0;
 }
 </style>
-<div class="marking-index">
+<div class="marking-index col-md-12">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -30,9 +30,10 @@ $this->params['markurl']=$markurl;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
        // 'filterModel' => $searchModel,
+       'options'=>['class'=>'grid-view table-rsponsive'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+'id',
 'request_type',[
 'attribute'=>'request_id',
 'value'=>function($model,$key,$index,$column)
@@ -48,7 +49,9 @@ $this->params['markurl']=$markurl;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('receiver');
-},],[
+},],
+'receiver_name',
+[
 'attribute'=>'dateofmarking',
 'value'=>function($model,$key,$index,$column)
 {
@@ -96,5 +99,4 @@ if ($this->params['markurl']!=null)
         'tableOptions'=>['class'=>'table table-hover'],
         ]); ?>
 
-</div>
 </div>

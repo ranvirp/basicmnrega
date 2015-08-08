@@ -32,17 +32,20 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('id');
-},],['header'=>'name_hi',
+},],[
+//'header'=>'name_hi',
 'attribute'=>'name_hi',
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('name_hi');
-},],['header'=>'fname',
+},],[
+//'header'=>'fname',
 'attribute'=>'fname',
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('fname');
-},],['header'=>'gender',
+},],[
+//'header'=>'gender',
 'attribute'=>'gender',
 'value'=>function($model,$key,$index,$column)
 {
@@ -53,9 +56,21 @@ $this->params['breadcrumbs'][] = $this->title;
 {
                 return $model->showValue('mobileno');
 },],            // 'address:ntext',
-            // 'jobcardno',
-            // 'district_code',
-            // 'block_code',
+             'jobcardno',
+                        [
+            'attribute'=>'district_code',
+            'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('district_code');
+},
+],
+                        [
+            'attribute'=>'block_code',
+            'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('block_code');
+},
+],
             // 'panchayat_code',
             // 'village',
             // 'noofdays',
@@ -68,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-        'tableOptions'=>['class'=>'small'],
+        'tableOptions'=>['class'=>'small table table-striped'],
         ]); ?>
 
 </div>

@@ -107,7 +107,27 @@ public static function statusNames()
             'update_time' => Yii::t('app', 'Update Time'),
         ];
     }
-    
+       /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDistrict()
+    {
+        return $this->hasOne(\app\modules\mnrega\models\District::className(), ['code' => 'district_code']);
+    }
+      /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBlock()
+    {
+        return $this->hasOne(\app\modules\mnrega\models\Block::className(), ['code' => 'block_code']);
+    }
+      /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPanchayat1()
+    {
+        return $this->hasOne(\app\modules\mnrega\models\Panchayat::className(), ['code' => 'panchayat_code']);
+    }
           /**
      * @return \yii\db\ActiveQuery
      */
@@ -179,7 +199,7 @@ case 'name_hi':
 			    break;
 			case 'panchayat':
 			   return  
-			   $form->field($this,$attribute)->hiddenInput(['id'=>'panchayat-name'])->label(false);
+			   $form->field($this,$attribute)->hiddenInput(['id'=>'panchayat-name','value'=>'NA'])->label(false);
 			    break;				
 			case 'village':
 			   return  $form->field($this,$attribute)->textInput();
@@ -319,5 +339,31 @@ case 'name_hi':
          }
        return array_merge(parent::attributeHints(), $x);
     }
+    public static function counts($status)
+{
+  
+         if(count($status)==0) 
+          {
+           $status=array_keys(self::statusNames());
+          }
+        $q=[];
+        
+        // print_r($status);
+         //exit;
+         foreach ($status as $s1)
+          {
+           $x="SUM(CASE WHEN status=".$s1."";
+          $q[]=$x." THEN 1 ELSE 0 END) AS jobcarddemand_count"."_".$s1;
+          }
+          $q[]="SUM(1) AS jobcarddemand_count";
+          
+        
+        $query="SELECT ".implode(",",$q)." FROM jobcarddemand";
+        $db=Yii::$app->db;
+        $counts= $db->createCommand($query)->queryAll();
+         
+       
+        return $counts;
+        }
 	
 }

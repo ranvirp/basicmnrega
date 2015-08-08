@@ -5,9 +5,15 @@
  */
 var map;
 var markers;
-function populateDropdown(url,id)
+function populateDropdown(url,id,clickableid=null)
 {
-      $.get(url,
+      $.ajax({
+         'url':url,
+          'type':'GET',
+          'beforeSend':function() {
+             $('#'+id).html('<img src="'+imageloader+'" />');
+          },
+          'success':
           function(data)
           {
           if (typeof data !='object')
@@ -24,17 +30,29 @@ function populateDropdown(url,id)
          });
 
                  
-                 $('#'+id).append(htmlToAppend);    
+                 $('#'+id).append(htmlToAppend); 
+                  if (clickableid !=null)
+             $('#'+clickableid).trigger('click');
 }
-);
+});
 }
-function populateHtml(url,id)
+function populateHtml(url,id,clickableid=null)
 {
-     $.get(url,
+     $.ajax({
+          'url':url,
+          'type':'GET',
+          
+          'beforeSend':function() {
+             $('#'+id).html('<img src="'+imageloader+'" />');
+          },
+          'success':
           function(data)
           {
+          
              $('#'+id).html(data); 
-          });
+             if (clickableid !=null)
+             $('#'+clickableid).trigger('click');
+          }});
 }
 function addMarker(gpslat,gpslong)
 {

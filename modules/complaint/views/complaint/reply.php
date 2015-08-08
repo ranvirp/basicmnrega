@@ -10,6 +10,7 @@ use app\modules\complaint\models\ComplaintReply;
 $this->title = 'Add Reply';
 ?>
  <?php
+ /*
  $this->registerJs(
    '
    $("document").ready(function(){ 
@@ -19,10 +20,13 @@ $this->title = 'Add Reply';
         });
     });'
 );
+*/
+$markingid=$marking->id;
+
 ?>
 <div class="form-title">
         <div class="form-title-span">
-         <span>Reply for Complaint # <?= $id ?></span>
+         <span>Reply for Complaint # <?= $id ?> and marking id <?=$markingid?></span>
         </div>
     </div>
 <?php 
@@ -31,7 +35,6 @@ $this->title = 'Add Reply';
 ?>
 <div class="col-md-12">
 <?php
-
  $form = ActiveForm::begin([
  'options' => ['data-pjax' => 1,'class'=>'reply-form' ],
  'enableClientScript' => true,
@@ -40,7 +43,8 @@ $this->title = 'Add Reply';
  ]);
  ?>
  <?=$form->field($model,'reply')->textArea(['class'=>'hindiinput form-control','onclick'=>'js:hindiEnable()']) ?>
- <?=$form->field($model,'reply_type')->dropDownList(ComplaintReply::types()) ?>
+ <?=$form->field($model,'reply_type')->dropDownList(ComplaintReply::replyOptions($marking)) ?>
+ 
  
  <?=$form->field($model,'attachments')->widget(\app\modules\reply\widgets\FileWidget::className()) ?>
  <?php 
@@ -53,7 +57,7 @@ $this->title = 'Add Reply';
      }
  }
  ?>
- <?=Html::submitButton('Save',['class'=>'reply-form','onClick'=>'flag=1'])?>
+ <?=Html::submitButton('Save',['class'=>'reply-form','onClick'=>'flag=1;$(this).prop("disabled",true)'])?>
  <?php
  ActiveForm::end();
 ?>

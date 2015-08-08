@@ -37,9 +37,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'mobileno',
             'address:ntext',
             'gender',
-            'district_code:text:'.$model->showValue('district_code'),
-            'block_code',
-            'panchayat_code',
+             ['attribute'=>'district_code','value'=>$model->district->name_en],
+            ['attribute'=>'block_code','value'=>$model->block->name_en],
+            ['attribute'=>'panchayat_code','value'=>$model->panchayat1->name_en],
             'village',
            
             'panchayat',
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
       $marking->request_type='jobcarddemand';
       $marking->request_id=$model->id;
       $dp =$marking->search([]);
-      echo '<div class="col-sm-8">';
+      echo '<div class="col-sm-12">';
       print $this->render('@app/modules/mnrega/views/marking/index',['searchModel'=>$marking,'dataProvider'=>$dp,'markurl'=>null]);
        echo '</div>';
      

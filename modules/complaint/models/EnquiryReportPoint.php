@@ -41,6 +41,9 @@ class EnquiryReportPoint extends \yii\db\ActiveRecord
             [['report', 'amountfrom', 'firproposedreason', 'daproposeddetails'], 'string'],
             [['amounttoberecovered'],'double'],
             [['attachments'],'safe'],
+            [['marking_id','complaint_point_id'],'unique','targetAttribute' => ['marking_id','complaint_point_id']],
+            
+            [['report','marking_id'],'required'],
         ];
     }
 /**

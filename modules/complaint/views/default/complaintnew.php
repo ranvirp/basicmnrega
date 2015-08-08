@@ -24,7 +24,9 @@ use app\assets\AppAssetGoogle;
  padding:5px;
 }
 </style>
-<?php $canagent=Yii::$app->user->can('complaintagent'); echo $canagent;?>
+<?php $canagent=Yii::$app->user->can('complaintagent'); 
+//echo $canagent;
+?>
 <script>
 <?php if ($canagent) {?>
 $(document).ready(function(){
@@ -33,7 +35,9 @@ $('#search').click(function()
       $('input[name="ComplaintSearch[mobileno]"]').val($('#mobileno').val());
 
      $('input[name="ComplaintSearch[name_hi]"]').val($('#complaint-name_hi').val());
-    $('.grid-view').yiiGridView('applyFilter');
+     $('input[name="ComplaintSearch[mobileno]"]').trigger('change');
+     //$('input[name="ComplaintSearch[name_hi]"]').trigger('change');
+  // $('.grid-view').yiiGridView('applyFilter');
     return false;
 //$.pjax.reload({container:'#complaint-lists'});
 
@@ -142,33 +146,12 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
 
         <div class="col-sm-4">
        
-<?php if (Yii::$app->user->can('marktopo')) {?>
- <p> Marked to </p><hl>
-            <div class="checkbox">
-  <label><input type="checkbox" name="maintype[]" value="po">सम्बंधित खंड विकास अधिकारी</label>
-    <label><input type="checkbox" name="maintype[]" value="cdo">सम्बंधित मुख्य विकास अधिकारी </label>
-  <label><input type="checkbox" name="maintype[]" value="dcmnrega">सम्बंधित उपायुक्त श्रम रोज़गार </label>
 
-<?php };?>
-<?php if (Yii::$app->user->can('marktosqm')) {?>
 
-  <label><input type="checkbox" name="maintype[]" value="sqm">सम्बंधित राज्य गुणवत्ता मॉनिटर</label>
-    <label><input type="checkbox" name="maintype[]" value="lokpal">सम्बंधित मनरेगा लोकपाल</label>
+          <?=$this->render('../complaint/singlemarkingform',['form'=>$form,'modelComplaint'=>$modelComplaint])?>
 
-<?php };?>
-<?php if (Yii::$app->user->can('marktoothers')){ ?>
-  <label><input type="checkbox" name="" onClick="$('#designation-select').toggle()" >Others</label>
-<?php } ?>
-</div>
- <?= $form->field($modelComplaint,'marking[deadline]')->widget(\yii\jui\DatePicker::classname(), [
-    'dateFormat' => 'yyyy-MM-dd',
-])->label('Deadline')?>
-<div id="designation-select" style="display:none">
-<div id="form1">
-<?= $form->field($modelComplaint,'marking[designation][]')->widget(\app\modules\users\widgets\DesignationWidget::className())->label(false)?>
-</div>
   
-</div>
+     </div>
         </div>
        
         

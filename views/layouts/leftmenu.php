@@ -11,27 +11,32 @@ if(Yii::$app->user->can('complaintviewall'))
        $d=-1;
     else
        $d=Designation::getDesignationByUser(Yii::$app->user->id);
-     $counts=Marking::count1(['complaint','workdemand','jobcarddemand'],[0,1,2,3,4,5,6,7],$d);
+    $counts=Marking::count1(['complaint','workdemand','jobcarddemand'],[0,1,2,3,4,5,6,7],$d);
+    //$counts1=Complaint::countmarkings([0,1,2,3,4,5,6,7],$d);
+    $counts1=$counts;
    ?>
    <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
                     <li  class="active">
                     <a>
                                 <span class="badge pull-right">
-                           <?=$counts[0]['complaint_count']?>
+                           <?=$counts1[0]['complaint_count']?>
                             </span>
                              <?=Yii::t('app','Complaints')?>
                             </a>
                       </li>
    <?php
+   
    foreach (Complaint::statusNames() as $s=>$sname)
    {
+    if ($s==0) continue;
+    if ($s==Complaint::DISPOSED) continue;
    ?>
                  
                        <li  class="">
                             <a href='<?=Url::to(['/complaint/complaint/my?ms='.$s.'&d='.$d])?>'>
                                 <span class="badge pull-right">
-                           <?=$counts[0]['complaint_count_'.$s]?>
+                           <?=$counts1[0]['complaint_count_'.$s]?>
                             </span>
                              <?=Yii::t('app',$sname)?>
                              </a>
@@ -40,8 +45,26 @@ if(Yii::$app->user->can('complaintviewall'))
                        
                  
 <?php   
-   }
-?>
+   }?>
+   <li  class="">
+                            <a href='<?=Url::to(['/complaint/complaint/index?s='.Complaint::DISPOSED.'&d='.$d])?>'>
+                                <span class="badge pull-right">
+                                <?php
+                           $query="select count(*) as count1 from complaint inner join marking on marking.request_type='complaint' and marking.id=atrofficer where receiver=".$d .'';
+                            $db= Yii::$app->db;
+                            $counts2= $db->createCommand($query)->queryAll();
+                          //  print_r($counts);
+                            echo $counts2[0]['count1'];
+  
+                           
+                           
+                           ?> 
+                           <?=$counts1[0]['complaint_count_'.$s]?>
+                            </span>
+                             <?=Yii::t('app',$sname)?>
+                             </a>
+                      </li> 
+
    </ul>
                 </div>
    <div class="panel-body">
@@ -88,6 +111,7 @@ if(Yii::$app->user->can('complaintviewall'))
    <?php
    foreach (WorkDemand::statusNames() as $s=>$sname)
    {
+     
    ?>
                  
                        <li  class="">
@@ -106,3 +130,37 @@ if(Yii::$app->user->can('complaintviewall'))
 ?>
    </ul>
                 </div>
+                                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked">
+                    <li  class="active">
+                    <a href='<?=Url::to(['/complaint/complaint/my1?flag=3'])?>'>
+                                <span class="badge pull-right">
+                          <?php
+                            $flagcounts=Marking::countflag(['complaint'],[3]);
+                           echo $flagcounts[0]['complaint_count_3'];
+                           ?>
+                            </span>
+                             <?=Yii::t('app','Alerts')?>
+                            </a>
+                      </li>
+                    </div>
+                                       <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked">
+                    <li  class="active">
+                    <a href='<?=Url::to(['/complaint/complaint/my?sender='.$d])?>'>
+                                <span class="badge pull-right">
+                          <?php
+                           $query="select count(*) as count1 from marking where sender=".$d .' and status<statustarget';
+                            $db= Yii::$app->db;
+                            $counts= $db->createCommand($query)->queryAll();
+                          //  print_r($counts);
+                            echo $counts[0]['count1'];
+  
+                           
+                           
+                           ?>
+                            </span>
+                             <?=Yii::t('app','Information')?>
+                            </a>
+                      </li>
+                    </div>

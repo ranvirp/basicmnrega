@@ -17,36 +17,62 @@ use yii\widgets\Pjax;
          <span>List of Complaints</span>
         </div>
     </div>
-    <?php $dataProvider->query=$dataProvider->query->with('markings');?>
-    <?php Pjax::begin(['enablePushState'=>false]);?>
+    <?php $dataProvider->query=$dataProvider->query->with('enquiryOfficer')->with('atrOfficer');?>
+    <?php Pjax::begin(['enablePushState'=>false, 'id'=>'complaint-lists']);?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'id'=>'complaint-lists',
+        'afterRow'=>function($model, $key, $index, $grid)
+                     {
+                       return '<tr><td colspan="5">'.($model->enquiryOfficer?Yii::t('app','Enquiry Officer').':'.$model->enquiryOfficer->receiver_name:'').
+                       ($model->atrOfficer?Yii::t('app','ATR Officer').':'.$model->atrOfficer->receiver_name:'').'</td></tr>';
+                     },
+       
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
              [
               'header'=>Yii::t('app','Id'),
              'value'=>function ($model,$key,$index,$column)
                       {
-                        return Html::a($model->id,Url::to(['/complaint/complaint/view?id='.$model->id]));
+                       $sources=Complaint::source();
+                        return Html::a($model->id,Url::to(['/complaint/complaint/view?id='.$model->id]))."<br>".
+                               Yii::t('app','Source').':'.Yii::t('app',$sources[$model->source]);
                       },
              'attribute'=>'id',
              'format'=>'html'
             ],
-            'name_hi',
-            'fname',
-            'mobileno',
-            [
-              'header'=>Yii::t('app','Complaint Type'),
+            ['header'=>Yii::t('app','Complainant'),
+             'attribute'=>'name_hi',
              'value'=>function ($model,$key,$index,$column)
                       {
-                        $model->showValue('complaint_type');
+                      return $model->showValue('name_hi')."<br>".$model->showValue('fname')
+                      .$model->showValue('mobileno');
+                      },
+              'format'=>'html'
+             ],
+             ['header'=>Yii::t('app','Mobile No'),
+             'attribute'=>'mobileno',
+             'value'=>function ($model,$key,$index,$column)
+                      {
+                      return 
+                      $model->showValue('mobileno');
+                      },
+             
+             ],
+            
+            [
+              'header'=>Yii::t('app','Complaint'),
+              'contentOptions'=>['class'=>'scrollable'],
+             'value'=>function ($model,$key,$index,$column)
+                      {
+                       return '<strong>'.$model->showValue('complaint_type').'</strong>'."<br>".
+                        $model->showValue('description');
                       },
              'attribute'=>'complaint_type',
+             'format'=>'html',
              'filter'=>ArrayHelper::map(Complaint_type::find()->asArray()->all(),'code','name_hi'),
             ],
-             'description',
+             
               [
               'header'=>Yii::t('app','District'),
              'value'=>function ($model,$key,$index,$column)
@@ -69,16 +95,23 @@ use yii\widgets\Pjax;
               'header'=>Yii::t('app','Status'),
              'value'=>function ($model,$key,$index,$column)
                       {
-                        return Complaint::statusNames()[$model->status];
+                        $status=Complaint::statusNames();
+                        return $status[$model->status];
                       },
              'attribute'=>'status',
              'filter'=>Complaint::statusNames(),
             ],
                ['class' => 'yii\grid\ActionColumn',
              'controller'=>'/complaint/complaint',
-              'template'=>'{reqaction}',
+              'template'=>'{simple}',
             
               'buttons'=>[
+				  'simple'=>function($url,$model,$key)
+					  {
+						  
+					  return \yii\helpers\Html::a('Take Action','#',['id'=>$model->id.'-action','onclick'=>'$(\'#complaint-panel-div\').html();populateHtml(\''.\yii\helpers\Url::to(['/complaint/marking/complaint?id='.$model->id]).'\',\'complaint-panel-div\');return false;']);
+	  
+				  },
                 'reqaction'=>function($url,$model,$key)
                 {
                 

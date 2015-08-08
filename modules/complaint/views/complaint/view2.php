@@ -61,37 +61,37 @@ div.required label:after {
         $markurl=Url::to(['/complaint/complaint/setmarkingstatus']);
      else 
        $markurl=null;
-      echo '<div class="col-sm-8">';
+      echo '<div class="col-sm-12">';
          print $this->render('@app/modules/mnrega/views/marking/index',['searchModel'=>$marking,'dataProvider'=>$dp,'markurl'=>$markurl]);
        echo '</div>';
      
 ?>
 </div>
-
+</div>
 <div class="col-md-12 well">
-<div class="col-lg-5 text-heading" >शिकायत का विवरण</div>
-<div class="col-lg-5 text-heading">जांच आख्या/कार्यवाही का विवरण</div>
+    <div class="col-lg-5 text-heading" >शिकायत का विवरण</div>
+    <div class="col-lg-5 text-heading">जांच आख्या/कार्यवाही का विवरण</div>
 </div>
 <div class="col-md-12">
     <div class="col-lg-5" style="margin:5px">
     
-   <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'name_hi',
-            'fname',
-            'mobileno',
-            'address:ntext',
-            'gender',
-            'district_code',
-            'block_code',
-            'panchayat_code',
-            
-            'panchayat',
-        ],
-    ]) ?>
-    <?=\app\modules\reply\models\File::showAttachmentsInline($model,"attachments")?>
+		<?= DetailView::widget([
+		 'model' => $model,
+		 'attributes' => [
+			'id',
+			'name_hi',
+			'fname',
+			'mobileno',
+			'address:ntext',
+			'gender',
+			 ['attribute'=>'district_code','value'=>$model->district->name_en],
+			['attribute'=>'block_code','value'=>$model->block->name_en],
+			['attribute'=>'panchayat_code','value'=>$model->panchayat1->name_en],
+			
+			'panchayat',
+		],
+	]) ?>
+	<?=\app\modules\reply\models\File::showAttachmentsInline($model,"attachments")?>
     </div>
     <?php 
       $enquiryreportsummary=EnquiryReportSummary::find()->where(['complaint_id'=>$model->id])->one();
@@ -112,5 +112,5 @@ div.required label:after {
     
     <?php }?>
     </div>
-    </div>
+</div>
   

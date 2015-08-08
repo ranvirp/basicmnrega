@@ -119,6 +119,9 @@ class DesignationController extends Controller
     	if ($x) $model->id=$x->id;
         if ($model->load(Yii::$app->request->post()))
         {
+         $model->name_hi=$model->designationType->name_hi.','.$model->level->name_hi;
+         $model->name_en=$model->designationType->name_en.','.$model->level->name_en; 
+         
         if (array_key_exists('app\modules\users\models\Designation',Utility::rules()))
            
             foreach ($model->attributes as $attribute)

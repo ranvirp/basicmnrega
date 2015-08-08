@@ -11,6 +11,8 @@ use app\assets\AppAsset_1;
 /* @var $content string */
 
 AppAsset::register($this);
+$this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif'."';",\yii\web\View::POS_READY);
+
 
 //AppAsset_1::register($this);
 ?>
@@ -152,7 +154,7 @@ AppAsset::register($this);
         
         Yii::$app->user->isGuest ?
         ['label' => 'Login', 'url' => ['/users/user/login']] :
-        ['label' => \app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()?\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->name_en:'missing'.' (' . Yii::$app->user->identity->username . ')',
+        ['label' => \app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->name_en.' (' . Yii::$app->user->identity->username . ')',
             'url' => ['/users/user/logout'],
             'items'=>[
             ['label'=>'Change Password','url'=>['/users/user/changepassword']],
@@ -165,11 +167,14 @@ AppAsset::register($this);
 echo '</div>';
            // NavBar::end();
         ?>
+        
         <div class="container-fluid">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
             <div class="row-fluid">
+            <?= Yii::$app->session->getFlash('success')?>
+            <?= Yii::$app->session->getFlash('error')?>
             </div>
             <?= $content ?>
         </div>

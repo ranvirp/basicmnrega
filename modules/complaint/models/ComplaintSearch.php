@@ -57,6 +57,8 @@ class ComplaintSearch extends Complaint
 
         $query->andFilterWhere([
             'id' => $this->id,
+			'status'=>$this->status,
+			'source'=>$this->source,
         ]);
 
         $query->andFilterWhere(['like', 'name_hi', $this->name_hi])
@@ -69,6 +71,7 @@ class ComplaintSearch extends Complaint
             ->andFilterWhere(['like', 'block_code', $this->block_code])
             ->andFilterWhere(['like', 'panchayat_code', $this->panchayat_code])
             ->andFilterWhere(['like', 'attachments', $this->attachments]);
+		
 
         return $dataProvider;
     }
