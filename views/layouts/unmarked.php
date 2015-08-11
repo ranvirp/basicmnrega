@@ -9,7 +9,7 @@ use yii\helpers\Url;
      {
     // $ms=-1,$d=-1,$s=-1,$count=true,$dcode=null,$bcode=null,$sender=-1,$allflags=false,$enqrofficer=false,$atrofficer=false)
  
-        $complaintcount_unmarked=Complaint::count1(-2,-1,-1,true,null,null,-1,false,true,true);
+        $complaintcount_unmarked=Complaint::count1(-1,-1,-1,true,null,null,-1,true,true,true);
      $jobcarddemandcount_unmarked=JobcardDemand::count1(-2);
      $workdemandcount_unmarked=WorkDemand::count1(-2);
      ?>
@@ -25,7 +25,7 @@ use yii\helpers\Url;
                             </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?ms='.urlencode('-2')])?>'>
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms=-1&enqrofficer=true&atrofficer=true'])?>'>
                                 <span class="badge pull-right">
                            <?=$complaintcount_unmarked?>
                             </span>

@@ -258,7 +258,7 @@ class ComplaintController extends Controller {
 		return $this->renderAjax('markingsingle', ['modelComplaint' => $model, 'district_code' => $model->district_code, 'actiontype' => $a, 'canmark' => $canmark,'change'=>$change]);
 	}
 
-	public function actionMy($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null,$sender=-1,$allflags=false) {
+	public function actionMy($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null,$sender=-1,$allflags=false,$enqrofficer=false,$atrofficer=false) {
 
 		if (Yii::$app->user->isGuest)
 			throw new NotFoundHttpException("Not Allowed");
@@ -266,7 +266,7 @@ class ComplaintController extends Controller {
 		$complaintSearch->load(Yii::$app->request->get());
 		$searchModel = [];
 		$searchModel['id'] = $complaintSearch->id;
-		$dp = Complaint::count1($ms, $d, $s, false, $dcode, $bcode,$sender,$allflags);
+		$dp = Complaint::count1($ms, $d, $s, false, $dcode, $bcode,$sender,$allflags,$enqrofficer,$atrofficer);
 		return $this->render('index4', ['dataProvider' => $dp, 'searchModel' => $searchModel]);
 	}
 		public function actionMy1($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null,$flag=0) {

@@ -416,12 +416,13 @@ public static function statusNames()
     }
   public function _createSingleMarking($actiontype='a',$canmark=0,$change=0)
     {
+          
           $designation=Designation::getDesignationByUser(Yii::$app->user->id,true);
 	      $sender=$designation->id;
           $sender_designation_type_id=$designation->designation_type_id;
           $sender_name=$designation->name_en.','.$designation->officer_name_en;
           $sender_mobileno=$designation->officer_mobile;
-         // $maintype=Yii::$app->request->post('maintype');
+          $maintype=Yii::$app->request->post('maintype');
         
 	      $this->load(Yii::$app->request->bodyParams);
 	      $marking=$this->marking;
@@ -478,8 +479,11 @@ public static function statusNames()
                        if (!Yii::$app->user->can('marktopo'))
                             break;
                         //find block -
+                       
                            $cdodtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'cdo'])->one()->id;
                            $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$cdodtid,'level_id'=>$this->district_code])->one();
+                           if ($designation)
+                           {
                            $receiver=$designation->id;
                            $receiver_designation_type_id=$designation->designation_type_id;
                            $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
@@ -487,6 +491,11 @@ public static function statusNames()
                            $receiver_mobileno=$designation->officer_mobile;
                            
                            $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           }
+                           else {
+                            print "cdo designation does not exist";
+                            
+                           }
                             $flag=true;
                          break;
                             case 'dcmnrega':
@@ -640,10 +649,9 @@ public static function statusNames()
        $query->andWhere('marking.flag!=1');
        if ($sender!=-1)
        $query->andWhere('marking.sender='.$sender);
-       if ($enqrofficer)
-        $query->andWhere('complaint.enqrofficer=null');
-     if ($atrofficer)
-        $query->andWhere('complaint.atrofficer=null');
+       if ($enqrofficer && $atrofficer)
+        $query->orWhere('complaint.atrofficer is null AND complaint.enqrofficer is null');
+     
 	  if (!Yii::$app->user->can('complaintviewall') )
 	  {
 	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
@@ -747,12 +755,7 @@ public static function setStatus($id,$status)
                $marking->flag=1;//close marking
                $marking->save();
               }
-			  $marking=Marking::find()->where(['request_type'=>'complaint','request_id'=>$complaint->id])->andWhere('status='.$status)->one();
-			  if ($marking)
-			  {
-				  $marking->flag=0;
-				  $marking->save();
-			  }
+			  
            }
            $complaint->status=$status;
            $complaint->save();
@@ -762,6 +765,7 @@ public static function setStatus($id,$status)
 			  if (($marking=$complaint->enquiryOfficer))
 			  {
 				  $marking->flag=0;
+				  $marking->status=$status;
 				  $marking->save();
 			  }
 		   }

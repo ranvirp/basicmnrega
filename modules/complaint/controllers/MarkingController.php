@@ -108,7 +108,7 @@ class MarkingController extends \yii\web\Controller {
 			if ($enqrofficermarking != null)
 				$actionbuttons.='<span class="pull-right">' . $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Change"), 'id' => $id, 'a' => 'e', 'change' => 1]) . '</span>';
 			else
-				$actionbuttons.='<span>' . Yii::t('app', 'Nobody') . '</span>' . '<span class="pull-right">' . $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Appoint"), 'id' => $id, 'a' => 'e']) . '</span>';
+				$actionbuttons.='<span>' . Yii::t('app', 'Nobody') . '</span>' . '<span class="pull-right">' . $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Appoint"), 'id' => $id, 'a' => 'e','change'=>0]) . '</span>';
 			$actionbuttons.='<p class="bg-success"><strong>' . Yii::t('app', 'ATR Officer') . '</strong></p>';
 			$atrofficermarking = $complaint->atrOfficer;
 			$atrofficername = $atrofficermarking ? $atrofficermarking->receiver_name : '';
@@ -116,7 +116,7 @@ class MarkingController extends \yii\web\Controller {
 			if ($atrofficermarking != null)
 				$actionbuttons.='<span class="pull-right">' . $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Change"), 'id' => $id, 'a' => 'a', 'change' => 1]) . '</span>';
 			else
-				$actionbuttons.='<span>' . Yii::t('app', 'Nobody') . '</span>' . '<span class="pull-right">' . $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Appoint"), 'id' => $id, 'a' => 'a', 'change' => 1]) . '</span>';
+				$actionbuttons.='<span>' . Yii::t('app', 'Nobody') . '</span>' . '<span class="pull-right">' . $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Appoint"), 'id' => $id, 'a' => 'a', 'change' => 0]) . '</span>';
 
 			$actionbuttons.='</p>';
 			$replytype = 'Review';
@@ -228,10 +228,26 @@ class MarkingController extends \yii\web\Controller {
 	}
 
 	protected function _removeInconsistencies($complaint) {
+	        if ($complaint->status==Complaint::ENQUIRY_REPORT_RECEIVED)
+	        {
+	          if ($complaint->enqrofficer == null)
+	          {
+	            $complaint->status=COMPLAINT::PENDING_FOR_ATR;
+	            $complaint->save();
+	          }
+	        }
+	        if ($complaint->status==Complaint::ATR_RECEIVED)
+	        {
+	          if ($complaint->atrofficer == null)
+	          {
+	            $complaint->status=COMPLAINT::PENDING_FOR_ATR;
+	            $complaint->save();
+	          }
+	        }
 		//All markings which is more advanced than current status of complaint shall be deactivated
 		$markings = Marking::find()->where('status>' . $complaint->status)->all();
 		foreach ($markings as $marking) {
-			if (($marking->id === $complaint->enqrofficer) || ($marking->id === $complaint->atrofficer)) {
+			if ((($marking->id === $complaint->enqrofficer) && ($complaint->status==Complaint::PENDING_FOR_ENQUIRY) )|| (($marking->id === $complaint->atrofficer) && ($complaint->status==Complaint::PENDING_FOR_ATR))) {
 				$marking->status = $complaint->status;
 				$marking->flag = 0;
 			} else {

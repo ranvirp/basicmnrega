@@ -7,7 +7,9 @@ use app\modules\users\models\DesignationType;
   <div class="col-md-12"><span>Mark to Officer</span></div> 
 <?php if (Yii::$app->user->can('marktopo')) {?>
             <div class="checkbox">
+   <?php if (is_numeric($modelComplaint->block_code)) {?>
   <label><input type="radio" name="maintype" value="po" checked>सम्बंधित खंड विकास अधिकारी</label>
+  <?php } ?>
   <label><input type="radio" name="maintype" value="cdo">सम्बंधित मुख्य विकास अधिकारी</label>
  <label><input type="radio" name="maintype" value="dcmnrega">सम्बंधित उपायुक्त, श्रम रोजगार एवं नियोजन  </label>
  
