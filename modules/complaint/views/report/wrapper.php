@@ -5,11 +5,11 @@ use yii\helpers\Html;
 <script>
 $(document).ready(function(){
 $('input[name="source"]').change(function(){
- populateHtml("<?=Url::to(['/complaint/report/dwise?t=complaint&source='])?>"+$(this).val()+'&desgn='+$('input[name="level"]').val(),'report');
+ populateHtml("<?=Url::to(['/complaint/report/dwise?t=complaint&source='])?>"+$(this).val()+'&desgn='+$('input[name="level"]:checked').val(),'report');
  return false;
 });
 $('input[name="level"]').change(function(){
- populateHtml("<?=Url::to(['/complaint/report/dwise?t=complaint&desgn='])?>"+$(this).val()+'&source='+$('input[name="source"]').val(),'report');
+ populateHtml("<?=Url::to(['/complaint/report/dwise?t=complaint&desgn='])?>"+$(this).val()+'&source='+$('input[name="source"]:checked').val(),'report');
  return false;
 });
 });
@@ -17,7 +17,7 @@ $('input[name="level"]').change(function(){
 <button onclick="javascript:window.print()">Print This Webpage</button>
 <p>
 <label for="level">Select Level:</label>
-<label><input type="radio" name="level" value="" ><span>All</span></label>
+<label><input type="radio" name="level" value="" checked><span>All</span></label>
 <?php
   $x=["'po'","'cdo'","'dm'","'jdc'","'sqm'","'tac'"];
   
@@ -35,7 +35,7 @@ $('input[name="level"]').change(function(){
 
  <p>
 <label for="source">Select Source:</label>
- <label><input type="radio" name="source" value="" ><span>All</span></label>
+ <label><input type="radio" name="source" value="" checked><span>All</span></label>
  <?php foreach (\app\modules\complaint\models\Complaint::source() as $source=>$name) 
   {
    echo ' <label><input type="radio" name="source" value="'.$source.'" ' .'>'.$name.'</label>';

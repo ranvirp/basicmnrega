@@ -32,7 +32,7 @@ foreach ($counts as $count)
  .'<td>'.Html::a($count['dname'],Url::to(['/complaint/'.$t.'/index?s=-1&dcode='.$count['dcode']])).'</td>'
   .'<td>'.$count['total'].'</td>';
 foreach ($status as $s1=>$sname) {
-$key=$q1[]='status'.$s1."_count";;
+$key=$q1[]='status_'.$s1."_count";;
 if (array_key_exists($key,$count))
   print "<td>".Html::a($count[$key],Url::to(['/complaint/'.$t.'/index?s='.$s1.'&dcode='.$count['dcode']]))."</td>";
   else 

@@ -9,6 +9,8 @@ namespace app\commands;
 
 use yii\console\Controller;
 use app\modules\gpsphoto\models\Photo;
+use yii\db\Migration;
+use Yii;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -20,6 +22,21 @@ use app\modules\gpsphoto\models\Photo;
  */
 class HelloController extends Controller
 {
+public function actionLoadOnce()
+{
+  $rows=require Yii::getAlias('@app').'/tests/unit/fixtures/data/complaint.php';
+  $migrate=new Migration;
+  $insertrows=[];
+  $columns=[];
+  $row=$rows[0];
+    $columns=array_keys($row);
+    $insertrows[]=array_values($row);
+  
+  print_r($insertrows);
+  print_r($columns);
+  
+  $migrate->batchInsert('{{%complaint}}',$columns,$insertrows);
+}
 
 public function actionCad($designationtype)//Create All Designations
 {

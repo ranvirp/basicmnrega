@@ -12,6 +12,15 @@ $config= [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'gii'],
     'controllerNamespace' => 'app\commands',
+   
+    'controllerMap' => [
+         'fixture' => [
+             'class' => 'yii\faker\FixtureController',
+             'providers' => [
+                 'app\tests\unit\faker\providers\Complaint',
+             ],
+         ],
+     ],
     'modules' => [
         'gii' => 'yii\gii\Module',
          'users'=>['class'=>'app\modules\users\Module'],

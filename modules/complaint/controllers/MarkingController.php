@@ -21,7 +21,7 @@ class MarkingController extends \yii\web\Controller {
     }
 	public function actionIndex($markingid) {
 		$complaintview = '';
-		$actionbuttons = '';
+		$actionbuttons = '<ul class="nav nav-pills">';
 		
 		$marking = $this->findMarking($markingid);
 		$complaintview.='<a class="hide" id="maincontainerrefreshlink" href="'.Url::to(['/complaint/marking/?markingid='.$markingid]).'"></a>';
@@ -34,7 +34,7 @@ class MarkingController extends \yii\web\Controller {
 
 			$replytype = 'Review';
 			if (($complaint->status == Complaint::ATR_RECEIVED) || ($complaint->status == Complaint::ENQUIRY_REPORT_RECEIVED))
-				$actionbuttons.=$this->renderPartial('actionreview', ['text' => $replytype, 'id' => $marking->request_id, 'marking' => $marking]);
+				$actionbuttons.='<li>'.$this->renderPartial('actionreview', ['text' => $replytype, 'id' => $marking->request_id, 'marking' => $marking]).'</li>';
 			if ($markingid != $complaint->enqrofficer)
 				$actionbuttons.=$this->renderPartial('actionmarkthis', ['text' => "Mark this marking for Enquiry", 'id' => $marking->request_id, 'markingid' => $marking->id, 'a' => 'e']);
 			else
@@ -52,7 +52,7 @@ class MarkingController extends \yii\web\Controller {
 
 			if ($marking->status == Complaint::PENDING_FOR_ENQUIRY) {
 				$replytype = 'File Enquiry Report';
-				$actionbuttons.=$this->renderPartial('actionreply', ['text' => $replytype . ' for myself', 'id' => $marking->request_id, 'markingid' => $marking->id]);
+				$actionbuttons.='<li>'.$this->renderPartial('actionreply', ['text' => $replytype . ' for myself', 'id' => $marking->request_id, 'markingid' => $marking->id]).'</li>';
 			} else if ($marking->status == Complaint::PENDING_FOR_ATR) {
 				$replytype = 'File ATR';
 				
@@ -60,17 +60,17 @@ class MarkingController extends \yii\web\Controller {
 			}
 			$submarkings = Marking::find()->where(['sender' => Designation::getDesignationByUser(Yii::$app->user->id), 'request_type' => 'complaint', 'request_id' => $marking->request_id])->andWhere('flag=0')->all();
             if (!$submarkings && ($marking->status==Complaint::PENDING_FOR_ATR))
-              $actionbuttons.='<span>' . $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Mark an Officer for Enquiry"), 'id' => $marking->request_id, 'a' => 'e', 'change' => 1]) . '</span>';
+              $actionbuttons.='<li>'. $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Mark an Officer for Enquiry"), 'id' => $marking->request_id, 'a' => 'e', 'change' => 1]) . '</li>';
 		    
 			foreach ($submarkings as $submarking) {
 			  $actionbuttons.='<u>'.'Marked to '.$submarking->receiver_name.' for enquiry'.'</u>';
 				if ($submarking->status == Complaint::PENDING_FOR_ENQUIRY) {
 					$replytype = 'File Enquiry Report';
-					$actionbuttons.=$this->renderPartial('actionreply', ['text' => $replytype . ' for ' . $submarking->receiver_name, 'id' => $marking->request_id, 'markingid' => $marking->id]);
-					$actionbuttons.=$this->renderPartial('actionclosemarking', ['text' => 'Close this marking for'.$submarking->receiver_name, 'id' => $marking->request_id, 'markingid' => $submarking->id]);
+					$actionbuttons.='<li>'.$this->renderPartial('actionreply', ['text' => $replytype . ' for ' . $submarking->receiver_name, 'id' => $marking->request_id, 'markingid' => $marking->id]).'</li>';
+					$actionbuttons.='<li>'.$this->renderPartial('actionclosemarking', ['text' => 'Close this marking for'.$submarking->receiver_name, 'id' => $marking->request_id, 'markingid' => $submarking->id]).'</li>';
 				} else if ($submarking->status == Complaint::PENDING_FOR_ATR) {
 					$replytype = 'File ATR';
-					$actionbuttons.=$this->renderPartial('actionreply', ['text' => $replytype . ' for ' . $submarking->receiver_name, 'id' => $marking->request_id, 'markingid' => $marking->id]);
+					$actionbuttons.='<li>'.$this->renderPartial('actionreply', ['text' => $replytype . ' for ' . $submarking->receiver_name, 'id' => $marking->request_id, 'markingid' => $marking->id]).'</li>';
 				}
 				else 
 				 {
@@ -79,10 +79,11 @@ class MarkingController extends \yii\web\Controller {
 				 }
 				$reports = ComplaintReply::find()->where(['marking_id' => $submarking->id])->andWhere(['reply_type' => ComplaintReply::ENQUIRY_REPORT])->orWhere(['reply_type' => ComplaintReply::ATR_REPORT])->andWhere(['accepted' => 0])->all();
 				foreach ($reports as $report) {
-					$actionbuttons.='<p>'.'Report Received from '.$submarking->receiver_name.'</p>';
+					$actionbuttons.='<li>'.'Report Received from '.$submarking->receiver_name.'</li>';
 				}
 			}
 		}
+		$actionbuttons.='</ul>';
 		return $this->renderAjax('controlpanel', ['complaintview' => $complaintview, 'actionbuttons' => $actionbuttons,'id'=>0,'markingid'=>$markingid]);
 	}
 
@@ -90,7 +91,7 @@ class MarkingController extends \yii\web\Controller {
 
 
 		$complaintview = '';
-		$actionbuttons = '';
+		$actionbuttons = '<ul class="nav nav-pills nav-stacked">';
 		$complaint = Complaint::findOne($id);
 		$this->_removeInconsistencies($complaint);
 		$complaintview.='<a class="hide" id="maincontainerrefreshlink" href="'.Url::to(['/complaint/marking/complaint?id='.$id.'&markingid='.$markingid]).'"></a>';
@@ -122,12 +123,12 @@ class MarkingController extends \yii\web\Controller {
 
 
 			if ($complaint->status == Complaint::ATR_RECEIVED) {
-				$actionbuttons.=$this->renderPartial('actionstatus', ['text' => "Mark as Disposed", 'id' => $id, 'status' => Complaint::DISPOSED]);
-				$actionbuttons .= $this->renderPartial('actionmarkthis', ['text' => "Ask for fresh report with comment", 'id' => $id,'markingid'=>$complaint->atrofficer, 'a' => 'a']);
+				$actionbuttons.='<li class="active">'.$this->renderPartial('actionstatus', ['text' => "Mark as Disposed", 'id' => $id, 'status' => Complaint::DISPOSED]).'</li>';
+				$actionbuttons .= '<li class="active">'.$this->renderPartial('actionmarkthis', ['text' => "Ask for fresh report with comment", 'id' => $id,'markingid'=>$complaint->atrofficer, 'a' => 'a']).'</li>';
 			} else if ($complaint->status == Complaint::ENQUIRY_REPORT_RECEIVED) {
 				$atrmarking = $complaint->atrofficer;
-				$actionbuttons.='<p>' . $this->renderPartial('actionstatus', ['text' => "Mark as Pending for ATR", 'id' => $id, 'status' => Complaint::PENDING_FOR_ATR]) . '</p>';
-				$actionbuttons .= $this->renderPartial('actionmarkthis', ['text' => "Ask for fresh report with comment", 'id' => $id, 'markingid'=>$complaint->enqrofficer, 'a' => 'e']);
+				$actionbuttons.='<li>'.$this->renderPartial('actionstatus', ['text' => "Mark as Pending for ATR", 'id' => $id, 'status' => Complaint::PENDING_FOR_ATR]) . '</li>';
+				$actionbuttons .= '<li>'.$this->renderPartial('actionmarkthis', ['text' => "Ask for fresh report with comment", 'id' => $id, 'markingid'=>$complaint->enqrofficer, 'a' => 'e']).'</li>';
 			}
 			if ($complaint->status == Complaint::PENDING_FOR_ENQUIRY) {
 			if ($enqrofficermarking)
@@ -137,10 +138,10 @@ class MarkingController extends \yii\web\Controller {
 			  }
 			} else if ($complaint->status == Complaint::PENDING_FOR_ATR) {
 				$replytype = 'File ATR';
-				$actionbuttons.=$this->renderPartial('actionreply', ['text' => $replytype . ' for '.$atrofficername, 'id' => $id, 'markingid' => $complaint->atrofficer]);
+				$actionbuttons.='<li>'.$this->renderPartial('actionreply', ['text' => $replytype . ' for '.$atrofficername, 'id' => $id, 'markingid' => $complaint->atrofficer]).'</li>';
 			}
 		}
-
+        $actionbuttons.='</ul>';
 		return $this->renderAjax('controlpanel', ['complaintview' => $complaintview, 'actionbuttons' => $actionbuttons,'id'=>$id,'markingid'=>0]);
 	}
 

@@ -7,7 +7,7 @@ use app\modules\users\models\DesignationType;
 <?php $form = ActiveForm::begin(['id' => 'dynamic-form',
 'options'=>['data-pjax'=>1]
 ]); ?>
-   <?=$this->render('../complaint/singlemarkingform',['form'=>$form,'modelComplaint'=>$modelComplaint])?>
+   <?=$this->render('../complaint/singlemarkingform',['form'=>$form,'modelComplaint'=>$modelComplaint,'change'=>$change])?>
 
 
  <div class="form-group">
