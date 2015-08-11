@@ -228,6 +228,17 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     overflow: scroll;
 
 }
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    background-color: #a81121;
+    color: #fff;
+}
+.gradient1 {
+  background-image:
+    linear-gradient(
+      to top right, 
+      red, #f06d06
+    );
+}
 @media print
 
 {

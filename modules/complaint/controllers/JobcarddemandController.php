@@ -6,8 +6,9 @@ use Yii;
 use app\common\Utility;
 use app\modules\complaint\models\JobcardDemand;
 use app\modules\complaint\models\JobcardDemandSearch;
-use app\modules\complaint\models\JobcardDemandReport;
+use app\modules\complaint\models\JobcarddemandReport;
 use app\modules\mnrega\models\Marking;
+use app\modules\users\models\Designation;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -73,6 +74,7 @@ class JobcarddemandController extends Controller
        
        
         $model = new JobcardDemand();
+        $model->status=JobcardDemand::PENDING;
          if (Yii::$app->user->isGuest)
             $model->scenario='guestentry';//captcha validation
   
@@ -111,12 +113,12 @@ class JobcarddemandController extends Controller
                    $receiver=$designation->id;
                    $receiver_designation_type_id=$designation->designation_type_id;
                    $receiver_name=$designation->name_en;
-                   $receiver_mobileno=$designation->officer_mobileno;
+                   $receiver_mobileno=$designation->officer_mobile;
                    $purpose="For action and report";
                    $canmark=0;
                    $status=JobcardDemand::PENDING;
                    $statustarget=JobcardDemand::DISPOSED;
-                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0);
+                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0);
                     }
                     $transaction->commit();
                    $this->redirect(['view','id'=>$model->id]);
@@ -128,7 +130,7 @@ class JobcarddemandController extends Controller
              $model = new JobcardDemand();; //reset model
             
            }
-        }
+        
  
      
         return $this->render('create', [
@@ -185,12 +187,12 @@ class JobcarddemandController extends Controller
                    $receiver=$designation->id;
                    $receiver_designation_type_id=$designation->designation_type_id;
                    $receiver_name=$designation->name_en;
-                   $receiver_mobileno=$designation->officer_mobileno;
+                   $receiver_mobileno=$designation->officer_mobile;
                    $purpose="For action and report";
                    $canmark=0;
                    $status=JobcardDemand::PENDING;
                    $statustarget=JobcardDemand::DISPOSED;
-                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0);
+                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0);
                     }
                     $transaction->commit();
                    $this->redirect(['view','id'=>$model->id]);
@@ -257,10 +259,10 @@ class JobcarddemandController extends Controller
          if( Yii::$app->request->post() && $jobcarddemandreport->load(Yii::$app->request->post()))
          {
           $transaction=Yii::$app->db->beginTransaction();
-           $jobcardemandreport->save();
-           $model->status=1;
+           $jobcarddemandreport->save();
+           $model->status=JobcardDemand::DISPOSED;
            $model->save();
-           $marking->status=1;
+           $marking->status=JobcardDemand::DISPOSED;
            $marking->flag=1;
            $marking->save();
            $transaction->commit();

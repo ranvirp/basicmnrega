@@ -52,6 +52,7 @@ class Marking extends \yii\db\ActiveRecord
             [['request_id', 'sender', 'receiver', 'create_time', 'update_time', 'read_time'], 'integer'],
             [['dateofmarking', 'deadline','request_type'], 'safe'],
             [['status','statustarget','receiver_designation_type_id'],'integer'],
+             [['receiver_mobileno','sender_mobileno','sender_designation_type_id'],'integer'],
         ];
     }
 

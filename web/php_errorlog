@@ -22,3 +22,9 @@
 [29-Jul-2015 04:34:48 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\WorkDemandReport' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 215
 [29-Jul-2015 04:58:46 America/Chicago] PHP Fatal error:  Call to a member function formName() on a non-object in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/base/Model.php on line 831
 [29-Jul-2015 04:58:56 America/Chicago] PHP Fatal error:  Call to a member function formName() on a non-object in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/base/Model.php on line 831
+[09-Aug-2015 00:59:41 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\WorkDemandReport' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 271
+[09-Aug-2015 00:59:42 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\WorkDemandReport' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/WorkdemandController.php on line 271
+[09-Aug-2015 01:10:16 America/Chicago] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN), expecting function (T_FUNCTION) in /home/nregaup0/testmnrega/modules/complaint/controllers/JobcarddemandController.php on line 134
+[09-Aug-2015 01:17:56 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\controllers\Designation' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/JobcarddemandController.php on line 105
+[09-Aug-2015 01:32:06 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\JobcardDemandReport' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/JobcarddemandController.php on line 255
+[09-Aug-2015 01:37:24 America/Chicago] PHP Fatal error:  Call to a member function save() on a non-object in /home/nregaup0/testmnrega/modules/complaint/controllers/JobcarddemandController.php on line 262

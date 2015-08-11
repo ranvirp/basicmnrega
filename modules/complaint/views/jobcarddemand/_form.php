@@ -82,7 +82,7 @@ $this->registerJs(
     
 
 </div>
-<input type="hidden" name="maintype[]" value="po">
+<input type="hidden" name="maintype" value="po">
  <?=$form->field($model,'marking[deadline]')->hiddenInput(['id'=>'deadline'])->label(false)?>
   <?php if (Yii::$app->user->isGuest) {?>
    <div class="form-group">

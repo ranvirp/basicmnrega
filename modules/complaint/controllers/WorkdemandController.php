@@ -5,8 +5,8 @@ namespace app\modules\complaint\controllers;
 use Yii;
 use app\common\Utility;
 use app\modules\complaint\models\WorkDemand;
-use app\modules\complaint\models\WorkDemandSearch;
-use app\modules\complaint\models\WorkDemandReport;
+use app\modules\complaint\models\WorkdemandSearch;
+use app\modules\complaint\models\WorkdemandReport;
 use app\modules\mnrega\models\Marking;
 use app\modules\users\models\Designation;
 
@@ -77,6 +77,7 @@ class WorkdemandController extends Controller
        
        
         $model = new WorkDemand();
+        $model->status=WorkDemand::PENDING;
    if (Yii::$app->user->isGuest)
             $model->scenario='guestentry';//captcha validation
        
@@ -120,13 +121,13 @@ class WorkdemandController extends Controller
                    $receiver=$designation->id;
                    $receiver_designation_type_id=$designation->designation_type_id;
                    $receiver_name=$designation->name_en;
-                   $receiver_mobileno=$designation->officer_mobileno;
+                   $receiver_mobileno=$designation->officer_mobile;
                    $purpose="For action and report";
                    $canmark=0;
                    $status=WorkDemand::PENDING;
                    $statustarget=WorkDemand::DISPOSED;
                    $deadline=$model->datefrom;
-                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0);
+                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0);
                     }
                    $transaction->commit();
                    $this->redirect(['view','id'=>$model->id]);
@@ -207,7 +208,7 @@ class WorkdemandController extends Controller
                    $status=WorkDemand::PENDING;
                    $statustarget=WorkDemand::DISPOSED;
                    $deadline=$model->datefrom;
-                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,1);
+                   $model->markToDesignation($model->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,1);
                     }
                     $transaction->commit();
                    $this->redirect(['view','id'=>$model->id]);

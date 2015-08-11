@@ -70,7 +70,7 @@ public static function statusNames()
     public function rules()
     {
         return [
-            [['name_hi', 'fname', 'mobileno', 'district_code', 'block_code', 'panchayat_code'], 'required'],
+            [['name_hi', 'fname', 'mobileno', 'district_code', 'block_code', 'panchayat_code','panchayat'], 'required'],
             [['address'], 'string'],
             [['author', 'create_time', 'update_time'], 'integer'],
             [['name_hi', 'fname', 'village'], 'string', 'max' => 255],

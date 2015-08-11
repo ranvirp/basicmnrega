@@ -469,7 +469,7 @@ public static function statusNames()
                            $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
                            $receiver_mobileno=$designation->officer_mobile;
                            
-                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
                            $flag=true;
                            }
                            else "block_code ".$this->block_code." does not exist";
@@ -486,7 +486,7 @@ public static function statusNames()
                            
                            $receiver_mobileno=$designation->officer_mobile;
                            
-                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
                             $flag=true;
                          break;
                             case 'dcmnrega':
@@ -501,7 +501,7 @@ public static function statusNames()
                            
                            $receiver_mobileno=$designation->officer_mobile;
                            
-                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
                              $flag=true;
                              
                          break;
@@ -519,7 +519,7 @@ public static function statusNames()
                            
                            $receiver_mobileno=$designation->officer_mobile;
                            
-                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
                         $flag=true;
                          break;
                          case 'lokpal':
@@ -536,7 +536,7 @@ public static function statusNames()
                            
                            $receiver_mobileno=$designation->officer_mobile;
                            
-                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
                            $flag=true;
                          break;
                          case 'otherdesignation':
@@ -555,7 +555,7 @@ public static function statusNames()
                            
                                  $receiver_mobileno=$designation->officer_mobile;
                            
-                                 $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                                 $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
                                  $flag=true;
                                
                                }
@@ -568,7 +568,7 @@ public static function statusNames()
                            $receiver_designation_type_id=$marking['others']['designation_type_id'];
                            $receiver_name=$marking['others']['name'];
                            $receiver_mobileno=$marking['others']['mobileno'];
-                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
                            $flag=true;
                          break;
                          default: 

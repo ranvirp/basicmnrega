@@ -133,7 +133,7 @@ public function beforeSave($event)
 	 
 	}
 	*/
-	public function markToDesignation($request_id,$sender,$sender_name,$sender_mobileno,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0)
+	public function markToDesignation($request_id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change=0)
 	 {
 	            
 	            //if (is_array($designation) )
@@ -153,13 +153,24 @@ public function beforeSave($event)
 	                     
 	                   }
 	                   
-	                  $rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'status'=>$status])->andWhere('flag!=1')->one();
-	                  if ($rmarking)
+	                  $rmarkings=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'status'=>$status])->andWhere('flag!=1')->all();
+	                  if ($rmarkings)
 	                   {
 	                    // print_r($rmarking->toArray());
 	                     //print "already marked for this action"." cannot create new marking existing marking#".$rmarking->id.' '.$rmarking->status;
 	                     if ($change==0)
-	                     return $rmarking;
+	                     {
+	                      $rmarking1=null;
+	                     foreach ($rmarkings as $rmarking)
+	                     {
+	                      if ($rmarking->receiver!=$receiver)
+	                      {
+	                       $rmarking->flag=1;$rmarking->save();
+	                       }
+	                       else $rmarking1=$rmarking;
+	                     }
+	                     return $rmarking1;
+	                     }
 	                     else
 	                     {
 	                     	$rmarking->flag=1;$rmarking->save();$rmarking=null;
@@ -167,23 +178,32 @@ public function beforeSave($event)
 	                   }
 	                   
 	                    if ($receiver!=0)
+	                    {
 	                     $rmarking=Marking::find()->where(['request_id'=>$request_id,'request_type'=>$this->request_type,'receiver'=>$receiver])->one();
+	                     print "we are here";
+	                     exit;
+	                     
+	                     
+	                     }
 	                  else $rmarking=null;
                            if (!$rmarking)
                            {
                                 $rmarking=new Marking;
                                 $rmarking->created_by=Yii::$app->user->id;
                                  $rmarking->create_time=time();
+                               
                           
                            }
-                           
+                          
                            $rmarking->sender=$sender;
-                           $rmarking->sender_designation_type_id=Designation::findOne($sender)->designation_type_id;
+                           $rmarking->sender_designation_type_id=$sender_designation_type_id;
+                           //Designation::findOne($sender)->designation_type_id;
                            
                            $rmarking->sender_name=$sender_name;
                            $rmarking->sender_mobileno=$sender_mobileno;
                            
                            $rmarking->receiver=$receiver;
+                           $rmarking->receiver_designation_type_id=$receiver_designation_type_id;
                            $rmarking->receiver_name=$receiver_name;
                            $rmarking->receiver_mobileno=$receiver_mobileno;
                            $rmarking->request_id=$request_id;

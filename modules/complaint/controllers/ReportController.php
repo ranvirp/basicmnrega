@@ -79,7 +79,7 @@ class ReportController extends Controller
          $status=Complaint::statusNames();
          foreach ($status as $s1=>$sname)
           {
-          $x="SUM(CASE WHEN status=".$s1;
+          $x="SUM(CASE WHEN complaint.status=".$s1;
           
           if ($source!='')
            $x.=" AND source='".$source."'";
@@ -89,17 +89,20 @@ class ReportController extends Controller
           $q[]=$x;
           $q1[]='status_'.$s1."_count";
           }
-          if ($source=='')
+          if (($source=='')&&($desgn==''))
           $q[]="SUM(1) AS total";
           else
           if ($desgn=='')
           $q[]="SUM(case when source='".$source."' THEN 1 else 0 end) AS total";
+         
+          else if ($source=='')
+          $q[]="SUM(case when marking.receiver_designation_type_id=".$desgn." THEN 1 else 0 end) AS total";
           else
            $q[]="SUM(case when source='".$source."' AND marking.receiver_designation_type_id=".$desgn." THEN 1 else 0 end) AS total";
           $q1[]='total';
-          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint left join marking on (marking.id=complaint.enqrofficer or marking.id=complaint.atrofficer) left join district on district.code=complaint.district_code group by dname,dcode order by dname asc";
+          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint left outer  join marking on ((marking.id=complaint.enqrofficer or marking.id=complaint.atrofficer) and marking.request_id=complaint.id and marking.request_type='complaint') left join district on district.code=complaint.district_code group by dname,dcode order by dname asc";
          $queryhead="SELECT dname,dcode,".implode(",",$q1)." FROM (".$query.") x"." UNION ALL ".
-                "SELECT 'TOTAL' as dname, '-1' as dcode,".implode(",",$q)." FROM complaint";
+                "SELECT 'TOTAL' as dname, '-1' as dcode,".implode(",",$q)." FROM complaint left join marking on (marking.id=complaint.enqrofficer or marking.id=complaint.atrofficer)";
           
       //print $query;
        //exit;
