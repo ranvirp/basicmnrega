@@ -188,7 +188,8 @@ public function beforeSave($event)
                            if (!$rmarking)
                            {
                                 $rmarking=new Marking;
-                                $rmarking->created_by=Yii::$app->user->id;
+                               // $rmarking->created_by=Yii::$app->user->id;
+                               $rmarking->created_by=1;
                                  $rmarking->create_time=time();
                                
                           
@@ -212,7 +213,8 @@ public function beforeSave($event)
                            $rmarking->status=$status;
                            $rmarking->statustarget=$statustarget;
                            $rmarking->flag=0;//pending
-                           $rmarking->updated_by=Yii::$app->user->id;
+                          // $rmarking->updated_by=Yii::$app->user->id;
+                          $rmarking->updated_by=1;
                            $rmarking->update_time=time();
                            $rmarking->canmark=$canmark;
                            $rmarking->purpose=$purpose;

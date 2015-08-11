@@ -22,6 +22,22 @@ use Yii;
  */
 class HelloController extends Controller
 {
+public function actionLoadMarking()
+{
+ $complaints=\app\modules\complaint\models\Complaint::find()->where('id<1000')->all();
+ $i=1;
+  foreach ($complaints as $complaint)
+  {
+   if ($i==1) {$maintype='po';$actiontype='a';}
+   if ($i==2) {$maintype='cdo';$actiontype='a';}
+   if ($i==3) {$maintype='sqm';$actiontype='e';}
+   $complaint->_createSingleMarking1($actiontype,0,0,$maintype);
+   $complaint->save();
+    if ($i==3) $i=1; else $i++;
+  
+  }
+
+}
 public function actionLoadOnce()
 {
   $rows=require Yii::getAlias('@app').'/tests/unit/fixtures/data/complaint.php';
@@ -29,11 +45,15 @@ public function actionLoadOnce()
   $insertrows=[];
   $columns=[];
   $row=$rows[0];
-    $columns=array_keys($row);
+  $columns=array_keys($row);
+  foreach ($rows as $row)
+  {
+    
     $insertrows[]=array_values($row);
+    }
   
-  print_r($insertrows);
-  print_r($columns);
+ // print_r($insertrows);
+  //print_r($columns);
   
   $migrate->batchInsert('{{%complaint}}',$columns,$insertrows);
 }

@@ -421,7 +421,7 @@ public static function statusNames()
           $sender_designation_type_id=$designation->designation_type_id;
           $sender_name=$designation->name_en.','.$designation->officer_name_en;
           $sender_mobileno=$designation->officer_mobile;
-          $maintype=Yii::$app->request->post('maintype');
+         // $maintype=Yii::$app->request->post('maintype');
         
 	      $this->load(Yii::$app->request->bodyParams);
 	      $marking=$this->marking;
@@ -511,8 +511,8 @@ public static function statusNames()
                         //find block -
                            $sqmdt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'sqm'])->one();
                            if(!$sqmdt) break;
-                           $sqmdtid=$podt->id;
-                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one();
+                           $sqmdtid=$sqmdt->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$this->district_code])->one();
                            $receiver=$designation->id;
                            $receiver_designation_type_id=$designation->designation_type_id;
                            $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
@@ -529,7 +529,7 @@ public static function statusNames()
                            $sqmdt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'lokpal'])->one();
                            if(!$sqmdt) break;
                            $sqmdtid=$podt->id;
-                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one();
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$this->district_code])->one();
                            $receiver=$designation->id;
                            $receiver_designation_type_id=$designation->designation_type_id;
                            $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
@@ -890,7 +890,182 @@ public static function counts($status)
        */
        
     }
-
+public function _createSingleMarking1($actiontype='a',$canmark=0,$change=0,$maintype)
+    {
+          $designation=Designation::getDesignationByUser(1,true);
+	      $sender=$designation->id;
+          $sender_designation_type_id=$designation->designation_type_id;
+          $sender_name=$designation->name_en.','.$designation->officer_name_en;
+          $sender_mobileno=$designation->officer_mobile;
+         // $maintype=Yii::$app->request->post('maintype');
+        
+	      //$this->load(Yii::$app->request->bodyParams);
+	      $marking=$this->marking;
+	     // if (array_key_exists('actiontype',$marking))
+	      //$actiontype=$marking['actiontype'];
+	      $flag=false;
+        //   $transaction =Yii::$app->db->beginTransaction();                
+	      switch($actiontype)
+	      {
+	        case 'e':
+	          $status=self::PENDING_FOR_ENQUIRY;
+	          $statustarget=self::ENQUIRY_REPORT_RECEIVED;
+	          $purpose="For Enquiry";
+	          break;
+	        case 'a':
+	          $status=self::PENDING_FOR_ATR;
+	          $statustarget=self::ATR_RECEIVED;
+	          $purpose="For ATR";
+	          break;
+	         
+	          default:
+	          $status=self::PENDING_FOR_ATR;
+	          $statustarget=self::ATR_RECEIVED;
+	          $purpose="For Enquiry";
+	          break;
+	          
+	      }
+	      
+	      
+          $deadline=$marking['deadline'];
+          $rmarking=null;
+                switch ($maintype)
+                    {
+                       case 'po':
+                      
+                        //find block -
+                        
+                           $podtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$podtid,'level_id'=>$this->block_code])->one();
+                           if ($designation)
+                           {
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           $receiver_mobileno=$designation->officer_mobile;
+                           
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           $flag=true;
+                           }
+                           else "block_code ".$this->block_code." does not exist";
+                         break;
+                         case 'cdo':
+                       
+                        //find block -
+                           $cdodtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'cdo'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$cdodtid,'level_id'=>$this->district_code])->one();
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
+                           $receiver_mobileno=$designation->officer_mobile;
+                           
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                            $flag=true;
+                         break;
+                            case 'dcmnrega':
+                      
+                        //find block -
+                           $dcmnregadtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'dcmnrega'])->one()->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dcmnregadtid,'level_id'=>$this->district_code])->one();
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                          $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
+                           $receiver_mobileno=$designation->officer_mobile;
+                           
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                             $flag=true;
+                             
+                         break;
+                         case 'sqm':
+                         
+                        //find block -
+                           $sqmdt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'sqm'])->one();
+                           if(!$sqmdt) break;
+                           $sqmdtid=$sqmdt->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$this->district_code])->one();
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
+                           $receiver_mobileno=$designation->officer_mobile;
+                           
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                        $flag=true;
+                         break;
+                         case 'lokpal':
+                          
+                        //find block -
+                           $sqmdt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'lokpal'])->one();
+                           if(!$sqmdt) break;
+                           $sqmdtid=$podt->id;
+                           $designation=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$sqmdtid,'level_id'=>$event->sender->district_code])->one();
+                           $receiver=$designation->id;
+                           $receiver_designation_type_id=$designation->designation_type_id;
+                           $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
+                           $receiver_mobileno=$designation->officer_mobile;
+                           
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           $flag=true;
+                         break;
+                         case 'otherdesignation':
+                        
+                        //find block -
+                           $designation_id=$marking['otherdesignation'];
+                           if (is_numeric($designation))
+                            {
+                              $designation=\app\modules\users\models\Designation::findOne($designation_id);
+                              if ($designation)
+                               {
+                                 $receiver=$designation->id;
+                                 $receiver_designation_type_id=$designation->designation_type_id;
+                                 $receiver_name=$designation->officer_name_en.' '.$designation->name_en;
+                           
+                                 $receiver_mobileno=$designation->officer_mobile;
+                           
+                                 $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                                 $flag=true;
+                               
+                               }
+                            
+                            }
+                           
+                         break;
+                         case 'unregistered':
+                           $receiver=0;
+                           $receiver_designation_type_id=$marking['others']['designation_type_id'];
+                           $receiver_name=$marking['others']['name'];
+                           $receiver_mobileno=$marking['others']['mobileno'];
+                           $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
+                           $flag=true;
+                         break;
+                         default: 
+                         
+                         break;
+                        }
+            if ($flag) 
+            {
+               if ($rmarking)
+               {
+                 if ($actiontype=='a')
+                 {
+                   $this->atrofficer=$rmarking->id;
+                   $this->status=self::PENDING_FOR_ATR;
+                 } else if ($actiontype=='e')
+                 {
+                   $this->enqrofficer=$rmarking->id;
+                   $this->status=self::PENDING_FOR_ENQUIRY;
+                 }
+                
+               }
+               
+            
+            }
+           
+        
+    }
 
 
 }
