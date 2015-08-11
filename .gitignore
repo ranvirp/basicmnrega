@@ -2,6 +2,8 @@
 /runtime
 /web/assets
 /uploads
+/config/db.php
+/config/params.php
 # phpstorm project files
 .idea
 
