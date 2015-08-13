@@ -1,26 +1,29 @@
 <?php
-use app\assets\AppAssetGoogle;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
+//use yii\widgets\Pjax;
 use app\modules\complaint\models\ComplaintReply;
+//app\assets\AppAssetGoogle::register($this);
 ?>
 <?php 
 $this->title = 'Add Reply';
 ?>
  <?php
- /*
+ 
  $this->registerJs(
    '
    $("document").ready(function(){ 
-      $(".reply-form").on("submit", function() {
+      $(".reply-form").on("submit", function(event) {
             //$.pjax.reload({container:"#complaint-list"});  //Reload GridView
-            $("#complaint-grid-view").yiiGridView("applyFilter");
+            //$("#complaint-grid-view").yiiGridView("applyFilter");
+            event.preventDefault(); // stop default submit behavior
+    $.pjax.submit(event, "#complaint-action-div",{push:false,timeout:false});
+            
         });
     });'
 );
-*/
+
 $markingid=$marking->id;
 
 ?>
@@ -36,7 +39,7 @@ $markingid=$marking->id;
 <div class="col-md-12">
 <?php
  $form = ActiveForm::begin([
- 'options' => ['data-pjax' => 1,'class'=>'reply-form' ],
+ 'options' => ['class'=>'reply-form' ],
  'enableClientScript' => true,
  'action'=>Url::to(['/complaint/complaint/filereply?id='.$id.'&markingid='.$markingid]),
      
@@ -57,7 +60,7 @@ $markingid=$marking->id;
      }
  }
  ?>
- <?=Html::submitButton('Save',['class'=>'reply-form','onClick'=>'flag=1;$(this).prop("disabled",true)'])?>
+ <?=Html::submitButton('Save',['class'=>'reply-form','onClick'=>'prevflag=1;'])?>
  <?php
  ActiveForm::end();
 ?>

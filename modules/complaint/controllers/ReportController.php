@@ -65,7 +65,7 @@ class ReportController extends Controller
     $counts= $db->createCommand($queryhead)->queryAll();  
     return $this->render('sourcewise',['counts'=> $counts,'source'=>$sources,'t'=>'complaint']);
  }
-  public function actionDwise($t='complaint',$source='',$desgn='')
+  public function actionDwise($t='complaint',$source='',$desgn='',$daterange='')
    {
         // print_r($status);
          //exit;
@@ -73,6 +73,18 @@ class ReportController extends Controller
          Yii::$app->language='en';
          $counts=[];
          $status=[];
+         $time1=0;
+         $time2=time();
+         if ($daterange!='')
+         {
+          $dates=explode("to",$daterange);
+          $date1=$dates[0];
+          $date2=$dates[1];
+          $time1=strtotime($date1);
+          $time2=strtotime($date2);
+          print $date1.' '.$date2;
+          //exit;
+         }
          if ($t=='complaint')
          {
          $q=[];
@@ -100,12 +112,22 @@ class ReportController extends Controller
           else if (($desgn!='') && ($source!=''))
            $q[]="SUM(case when source='".$source."' AND (complaint.enqrofficer=marking.id OR complaint.atrofficer=marking.id) AND marking.receiver_designation_type_id=".$desgn." THEN 1 else 0 end) AS total";
           $q1[]='total';
-          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint";
+          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint ";
+          
           if ($desgn!='')
           $query.=" left  join marking on (marking.request_id=complaint.id and marking.request_type='complaint')";
-          $query.=" left join district on district.code=complaint.district_code group by dname,dcode order by dname asc";
+          $query.=" left join district on district.code=complaint.district_code"; 
+          if ($daterange!=''&& is_numeric($time1) && is_numeric($time2))
+          {
+            $query.=" where complaint.created_at>=$time1 and complaint.created_at<=$time2";
+          }
+          $query.=" group by dname,dcode order by dname asc";
          $queryhead="SELECT dname,dcode,".implode(",",$q1)." FROM (".$query.") x"." UNION ALL ".
                 "SELECT 'TOTAL' as dname, '-1' as dcode,".implode(",",$q)." FROM complaint left join marking on (marking.request_id=complaint.id and marking.request_type='complaint')";
+                if ($daterange!=''&& is_numeric($time1) && is_numeric($time2))
+          {
+            $queryhead.=" where complaint.created_at>=$time1 and complaint.created_at<=$time2";
+          }
           
      // print $query;
        //exit;
@@ -149,9 +171,9 @@ class ReportController extends Controller
         $counts= $db->createCommand($query)->queryAll();
         }
     if (Yii::$app->request->isAjax)
-     return $this->renderPartial('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source]);
+     return $this->renderPartial('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source,'desgn'=>$desgn]);
     else
-     return $this->render('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source]);
+     return $this->render('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source,'desgn'=>$desgn]);
        
      
    }

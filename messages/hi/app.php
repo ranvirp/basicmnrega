@@ -365,7 +365,7 @@ return [
 
 'Partially'=>'आंशिक',
 
-'Pending for atr'=>'ए टी आर हेतु लंबित ',
+'Pending for atr'=>'कार्यवाही हेतु लंबित ',
 
 'Receiver'=>'प्राप्तकर्ता',
 

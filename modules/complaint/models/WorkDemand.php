@@ -425,7 +425,9 @@ public static function statusNames()
         $db=Yii::$app->db;
         $counts= $db->createCommand($query)->queryAll();
          
-       
+    // print ($query);
+     //print_r($counts);
+      //exit;
         return $counts;
         }
 }

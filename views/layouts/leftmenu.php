@@ -11,7 +11,7 @@ if(Yii::$app->user->can('complaintviewall'))
        $d=-1;
     else
        $d=Designation::getDesignationByUser(Yii::$app->user->id);
-    $counts=Marking::count1(['complaint','workdemand','jobcarddemand'],[0,1,2,3,4,5,6,7],$d);
+    $counts=Marking::count1(['complaint','workdemand','jobcarddemand'],[0,1,2,3,4,5],$d);
     //$counts1=Complaint::countmarkings([0,1,2,3,4,5,6,7],$d);
     $counts1=$counts;
    ?>
@@ -34,7 +34,7 @@ if(Yii::$app->user->can('complaintviewall'))
    ?>
                  
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?ms='.$s.'&d='.$d])?>'>
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms='.$s.'&d='.$d.'&title='.'List of Complaints with status '.$sname])?>'>
                                 <span class="badge pull-right">
                            <?=$counts1[0]['complaint_count_'.$s]?>
                             </span>
@@ -59,9 +59,9 @@ if(Yii::$app->user->can('complaintviewall'))
                            
                            
                            ?> 
-                           <?=$counts1[0]['complaint_count_'.$s]?>
+                           
                             </span>
-                             <?=Yii::t('app',$sname)?>
+                             <?=Yii::t('app','Disposed')?>
                              </a>
                       </li> 
 
@@ -160,7 +160,7 @@ if(Yii::$app->user->can('complaintviewall'))
                            
                            ?>
                             </span>
-                             <?=Yii::t('app','Information')?>
+                             <?=Yii::t('app','Report Awaited from Subordinates')?>
                             </a>
                       </li>
                     </div>

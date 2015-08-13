@@ -14,7 +14,9 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Complaint', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Complaint';
 ?>
-<?php AppAssetGoogle::register($this);?>
+<?php 
+//AppAssetGoogle::register($this);
+?>
 <button onclick="javascript:window.print()">Print</button>
 
 <div class="reply-view row" id="complaint-view">
@@ -109,7 +111,8 @@ if ($cps) {?>
       $marking->request_type='complaint';
       $marking->request_id=$model->id;
       $dp =$marking->search([]);
-      $dp->query=$dp->query->andWhere('flag!=1');
+     // $dp->query=$dp->query->andWhere('flag!=1');
+     $dp->query=$dp->query->orderBy('flag asc');
       if (Yii::$app->user->can('complaintagent') || Yii::$app->user->can('complaintadmin'))
         $markurl=Url::to(['/complaint/complaint/setmarkingstatus']);
      else 

@@ -1,4 +1,3 @@
-
 <?php
 \yii\widgets\Pjax::begin(['id'=>'reply-list','enablePushState'=>false,'timeout'=>false]);
 echo \yii\grid\GridView::widget([

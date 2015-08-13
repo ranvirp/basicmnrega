@@ -15,7 +15,7 @@ if(Yii::$app->user->can('complaintviewall'))
       $jobcarddemandcounts=JobcardDemand::counts([]);
 
  $workdemandcounts=WorkDemand::counts([]);
-
+//print_r( $workdemandcounts);
    ?>
    <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
@@ -94,6 +94,7 @@ if(Yii::$app->user->can('complaintviewall'))
    <?php
    foreach (WorkDemand::statusNames() as $s=>$sname)
    {
+   
    ?>
                  
                        <li  class="">

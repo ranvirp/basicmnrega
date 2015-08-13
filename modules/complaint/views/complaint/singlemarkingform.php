@@ -10,6 +10,8 @@ use app\modules\users\models\DesignationType;
    <?php if (is_numeric($modelComplaint->block_code)) {?>
   <label><input type="radio" name="maintype" value="po" checked>सम्बंधित खंड विकास अधिकारी</label>
   <?php } ?>
+  <?php };?>
+  <?php if (Yii::$app->user->can('marktoothers')) {?>
   <label><input type="radio" name="maintype" value="cdo">सम्बंधित मुख्य विकास अधिकारी</label>
  <label><input type="radio" name="maintype" value="dcmnrega">सम्बंधित उपायुक्त, श्रम रोजगार एवं नियोजन  </label>
  

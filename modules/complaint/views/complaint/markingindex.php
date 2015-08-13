@@ -63,6 +63,7 @@ $this->params['markurl']=$markurl;
 {
                 return $model->showValue('status');
 },],
+['header'=>'Flag','value'=>function($model,$key,$index,$column){return ($model->flag==1?Yii::t('app','inactive'):Yii::t('app','Active'));}],
 ($this->params['markurl']==null)?[]:
 ['header'=>'Change Status',
 'format'=>'raw',

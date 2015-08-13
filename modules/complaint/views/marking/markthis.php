@@ -1,11 +1,10 @@
-
-
 <?php
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use app\common\Utility;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\complaint\models\ComplaintReply */
@@ -15,10 +14,16 @@ use app\common\Utility;
  
  $changeattribute='';
 $this->registerJs(
-   '$("document").ready(function(){ 
-        $("#new_complaint-reply").on("pjax:end", function() {
-            $.pjax.reload({container:"#complaint-replys"});  //Reload GridView
+'
+         $("document").ready(function(){ 
+      $(".reply-form").on("submit", function(event) {
+            //$.pjax.reload({container:"#complaint-list"});  //Reload GridView
+            //$("#complaint-grid-view").yiiGridView("applyFilter");
+            event.preventDefault(); // stop default submit behavior
+    $.pjax.submit(event, "#complaint-action-div",{push:false,timeout:false});
+            
         });
+   
     });'
 );
 ?>
@@ -29,19 +34,11 @@ $this->registerJs(
     </div>
 </div>
     <?php $form = ActiveForm::begin([
-    'layout' => 'horizontal',
+    
     'action'=>Url::to(['/complaint/marking/markthis?id='.$id.'&markingid='.$markingid.'&a='.$a]),
-	'options'=>['data-pjax'=>1],
-    'fieldConfig' => [
-        'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
-        'horizontalCssClasses' => [
-            'label' => 'col-sm-4',
-            'offset' => 'col-sm-offset-4',
-            'wrapper' => 'col-sm-8',
-            'error' => '',
-            'hint' => '',
-        ],
-    ],
+	'options'=>['class'=>'reply-form'],
+	'enableClientScript' => true,
+  
 ]); ?>
 
    
@@ -55,7 +52,7 @@ $this->registerJs(
    
 
    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Create') , ['class' => 'btn btn-success reply-form' ,'onClick'=>'']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

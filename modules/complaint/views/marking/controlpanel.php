@@ -1,6 +1,6 @@
  <script>
-  $(document).pjax('a#leftmenurefreshlink','#leftmenu',{'timeout':false,'pushState':false});
-  $(document).pjax('a#maincontainerrefreshlink','#complaint-control-panel',{'timeout':false,'pushState':false});
+  $(document).pjax('a#leftmenurefreshlink','#leftmenu',{'timeout':false,'push':false});
+  $(document).pjax('a#maincontainerrefreshlink','#complaint-control-panel',{'timeout':false,'push':false});
   $(document).ready(function(){
   $("#complaint-action-div").on("pjax:end", function() {
             $('a#refreshlink').trigger('click');  //Reload GridView
@@ -22,7 +22,8 @@
   });
   </script>
 <?php $details="Details about Complaint";?>
-<div class="row id="complaint-control-panel" data-pjax="1">
+<button onclick="$('#complaint-control-panel').toggle();">Toggle Visibility</button>
+<div class="row" id="complaint-control-panel" >
 <div class="col-md-8">
  <div class="bordered-form">
   <div class="form-title">

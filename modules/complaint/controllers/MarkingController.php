@@ -59,7 +59,7 @@ class MarkingController extends \yii\web\Controller {
 				$actionbuttons.=$this->renderPartial('actionreply', ['text' => $replytype . ' for myself', 'id' => $marking->request_id, 'markingid' => $marking->id]);
 			}
 			$submarkings = Marking::find()->where(['sender' => Designation::getDesignationByUser(Yii::$app->user->id), 'request_type' => 'complaint', 'request_id' => $marking->request_id])->andWhere('flag=0')->all();
-            if (!$submarkings && ($marking->status==Complaint::PENDING_FOR_ATR))
+            if (!$submarkings && ($marking->status==Complaint::PENDING_FOR_ATR) && (Yii::$app->user->can('canmark')))
               $actionbuttons.='<li>'. $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Mark an Officer for Enquiry"), 'id' => $marking->request_id, 'a' => 'e', 'change' => 1]) . '</li>';
 		    
 			foreach ($submarkings as $submarking) {
@@ -213,8 +213,10 @@ class MarkingController extends \yii\web\Controller {
 		$marking->save();
 		$transaction->commit();
 		return "done";
+		$model = new ComplaintReply;
 		} else
-		// $searchModel = new ComplaintReplySearch();
+		{
+		//$searchModel = new ComplaintReplySearch();
 		//$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 			return $this->renderAjax('markthis', [
 					// 'searchModel' => $searchModel,
@@ -224,6 +226,7 @@ class MarkingController extends \yii\web\Controller {
 				    'markingid'=>$markingid,
 				    'a'=>$a,
 			]);
+			}
 
 	}
 

@@ -19,6 +19,9 @@ use app\modules\users\models\Designation;
 AppAsset::register($this);
 //\app\assets\KartikFileInputAsset::register($this);
 AppAsset_1::register($this);
+app\assets\AppAssetGoogle::register($this);
+\yii\widgets\PjaxAsset::register($this);
+
 $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif'."';",\yii\web\View::POS_READY);
 ?>
 <?php $this->beginPage() ?>
@@ -145,8 +148,8 @@ echo '</div>';
 <a class="hide" id="refreshlink"></a>
 
 <?php
- \yii\widgets\Pjax::begin(['id'=>"test-div",'enablePushState'=>false]);
-                    \yii\widgets\Pjax::end();
+ //\yii\widgets\Pjax::begin(['id'=>"test-div",'enablePushState'=>false,'timeout'=>false]);
+                   // \yii\widgets\Pjax::end();
                     ?>
     <div class="row">
     <?php if (!Yii::$app->user->isGuest) {?>

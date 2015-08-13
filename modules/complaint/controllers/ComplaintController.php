@@ -38,19 +38,23 @@ class ComplaintController extends Controller {
 		$searchModel = new ComplaintSearch();
 		
 		$status = Yii::$app->request->get('s');
-		if ($status!=null)
+		if ($status>=0)
 			$searchModel->status = $status;
 		$source = Yii::$app->request->get('source');
-		if ($source!=null)
+		if ($source!='')
 			$searchModel->source = $source;
 		$dcode = Yii::$app->request->get('dcode');
 		if ($dcode!=null && $dcode!=-1 )
 			$searchModel->district_code = $dcode;
+			
+		    // $searchModel->enqrofficer=
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams
 	
 		);
+		
 		//$dataProvider->query = $dataProvider->query->with('markings');
-		//leftJoin('marking',['marking.request_id'=>'complaint.id','marking.request_type'=>'complaint']);
+		//$dataProvider->query=$dataProvider->query->join('LEFT OUTER JOIN','marking',['marking.request_id'=>'complaint.id','marking.request_type'=>'complaint'])->
+		 //where('(complaint.enqrofficer=marking.id or complaint.atrofficer=marking.id) and complaint.receiver_designation_id='.$desgn )->select('distinct complaint.*');
 		return $this->render('index2', [
 				'searchModel' => $searchModel,
 				'dataProvider' => $dataProvider,
@@ -258,7 +262,7 @@ class ComplaintController extends Controller {
 		return $this->renderAjax('markingsingle', ['modelComplaint' => $model, 'district_code' => $model->district_code, 'actiontype' => $a, 'canmark' => $canmark,'change'=>$change]);
 	}
 
-	public function actionMy($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null,$sender=-1,$allflags=false,$enqrofficer=false,$atrofficer=false) {
+	public function actionMy($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null,$sender=-1,$allflags=false,$enqrofficer=false,$atrofficer=false,$title='List of Complaints') {
 
 		if (Yii::$app->user->isGuest)
 			throw new NotFoundHttpException("Not Allowed");
@@ -267,9 +271,9 @@ class ComplaintController extends Controller {
 		$searchModel = [];
 		$searchModel['id'] = $complaintSearch->id;
 		$dp = Complaint::count1($ms, $d, $s, false, $dcode, $bcode,$sender,$allflags,$enqrofficer,$atrofficer);
-		return $this->render('index4', ['dataProvider' => $dp, 'searchModel' => $searchModel]);
+		return $this->render('index4', ['dataProvider' => $dp, 'searchModel' => $searchModel,'title'=>$title]);
 	}
-		public function actionMy1($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null,$flag=0) {
+		public function actionMy1($ms = -1, $d = -1, $s = -1, $dcode = null, $bcode = null,$flag=0,$title='List of Complaints') {
 
 		if (Yii::$app->user->isGuest)
 			throw new NotFoundHttpException("Not Allowed");
@@ -278,7 +282,7 @@ class ComplaintController extends Controller {
 		$searchModel = [];
 		$searchModel['id'] = $complaintSearch->id;
 		$dp = Complaint::count2($ms, $d, $s, false, $dcode, $bcode,$flag);
-		return $this->render('index4', ['dataProvider' => $dp, 'searchModel' => $searchModel]);
+		return $this->render('index4', ['dataProvider' => $dp, 'searchModel' => $searchModel,'title'=>$title]);
 	}
 
 	public function actionSetmarkingstatus() {
@@ -379,6 +383,7 @@ class ComplaintController extends Controller {
 				//Complaint::setStatus($id,Complaint::ATR_RECEIVED);
 				$transaction->commit();
 				print "Saved";
+				$model = new ComplaintReply;
 			} catch (Exception $e) {
 				$transaction->rollBack();
 				print_r($model->errors);

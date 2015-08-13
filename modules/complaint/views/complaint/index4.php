@@ -6,33 +6,34 @@ use app\modules\complaint\models\Complaint;
 use app\modules\complaint\models\ComplaintSearch;
 use yii\widgets\Pjax;
 use yii\widgets\PjaxAsset;
-\app\assets\AppAssetGoogle::register($this);
+//\app\assets\AppAssetGoogle::register($this);
 
  ?>
  
 
  <div class="form-title">
         <div class="form-title-span">
-         <span>List of Complaints</span>
+         <span><?= $title ?></span>
         </div>
     </div>
   <?php 
-//  PjaxAsset::register($this) ;
+  PjaxAsset::register($this) ;
+/*
   yii\widgets\ActiveFormAsset::register($this);
   $this->registerJs(
    'flag=0;$("document").ready(function(){ 
-        $("#complaint-list").on("pjax:end", function() {
-        console.log(flag);
-        if (flag==1)
-          $("#complaint-grid-view").yiiGridView("applyFilter");
+        //$("#complaint-list").on("pjax:end", function() {
+        //console.log(flag);
+        //if (flag==1)
+         // $("#complaint-grid-view").yiiGridView("applyFilter");
 
 
             //$.pjax.reload({container:"#complaint-subtypes"});  //Reload GridView
-        });
+       // });
     });'
 );
 
-  ?>
+  
   <script>
    function changeparams(elem,selector)
    {
@@ -46,9 +47,11 @@ use yii\widgets\PjaxAsset;
     
    }
   </script>
+  */
+  ?>
   <?php 
-  Pjax::begin(['id'=>'complaint-list','enablePushState'=>false,'formSelector'=>'.reply-form','linkSelector'=>'.reply-form']);
-  Pjax::end();
+  Pjax::begin(['id'=>'complaint-lists','enablePushState'=>false]);
+  
   ?>
   <p><?=Html::a('Export as Pdf',Url::to(['/complaint/report/cmypdf?'.Yii::$app->request->queryString]))?>
   <?php //['onclick'=>'changeparams($(this),"#grid-table");','data'=>['method'=>'post','params'=>['html'=>'test"hi""HI""']]])
@@ -187,4 +190,5 @@ use yii\widgets\PjaxAsset;
         ],
         'tableOptions'=>['class'=>'table table-bordered','id'=>'grid-table'],
         ]); ?>
+        Pjax::end();
      

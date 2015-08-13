@@ -77,7 +77,7 @@ class File extends \yii\db\ActiveRecord
 			   {
 				   $str.='<tr><td>'.$file->title.
 					   '</td>';
-				   $str.='<td>'.\yii\helpers\Html::a($file->filename,$file->url).
+				   $str.='<td>'.\yii\helpers\Html::a($file->filename,$file->url,['data'=>['pjax'=>"0"]]).
 					     '</td></tr>';
 			   }
 		   }
@@ -108,7 +108,7 @@ class File extends \yii\db\ActiveRecord
 			   {
 				   $str.='<tr><td>'.$file->title.
 					   '</td>';
-				   $str.='<td>'.\yii\helpers\Html::a($file->filename,$file->url).
+				   $str.='<td>'.\yii\helpers\Html::a($file->filename,$file->url,['data'=>['pjax'=>"0"]]).
 					     '</td></tr>';
 			   }
 		   }

@@ -29,3 +29,11 @@
 [09-Aug-2015 01:32:06 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\JobcardDemandReport' not found in /home/nregaup0/testmnrega/modules/complaint/controllers/JobcarddemandController.php on line 255
 [09-Aug-2015 01:37:24 America/Chicago] PHP Fatal error:  Call to a member function save() on a non-object in /home/nregaup0/testmnrega/modules/complaint/controllers/JobcarddemandController.php on line 262
 [11-Aug-2015 11:48:37 America/Chicago] PHP Parse error:  syntax error, unexpected 'is' (T_STRING) in /home/nregaup0/testmnrega/modules/complaint/controllers/MarkingController.php on line 233
+[11-Aug-2015 22:23:42 America/Chicago] PHP Parse error:  syntax error, unexpected 'use' (T_USE) in /home/nregaup0/testmnrega/modules/complaint/views/report/wrapper.php on line 21
+[11-Aug-2015 22:51:48 America/Chicago] PHP Parse error:  syntax error, unexpected ';', expecting ']' in /home/nregaup0/testmnrega/modules/complaint/views/report/wrapper.php on line 39
+[12-Aug-2015 04:47:13 America/Chicago] PHP Parse error:  syntax error, unexpected '?' in /home/nregaup0/testmnrega/modules/complaint/views/report/wrapper.php on line 38
+[12-Aug-2015 04:48:50 America/Chicago] PHP Parse error:  syntax error, unexpected '?>', expecting ']' in /home/nregaup0/testmnrega/modules/complaint/views/report/wrapper.php on line 38
+[12-Aug-2015 04:49:10 America/Chicago] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home/nregaup0/testmnrega/modules/complaint/views/report/wrapper.php on line 38
+[12-Aug-2015 13:54:14 America/Chicago] PHP Parse error:  syntax error, unexpected '}' in /home/nregaup0/testmnrega/modules/complaint/views/complaint/reply.php on line 25
+[12-Aug-2015 14:38:07 America/Chicago] PHP Parse error:  syntax error, unexpected 'disabled' (T_STRING), expecting ']' in /home/nregaup0/testmnrega/modules/complaint/views/marking/markthis.php on line 54
+[12-Aug-2015 21:52:23 America/Chicago] PHP Parse error:  syntax error, unexpected 'push' (T_STRING) in /home/nregaup0/testmnrega/modules/complaint/views/complaint/reply.php on line 21

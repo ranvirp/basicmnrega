@@ -476,7 +476,7 @@ public static function statusNames()
                            else "block_code ".$this->block_code." does not exist";
                          break;
                          case 'cdo':
-                       if (!Yii::$app->user->can('marktopo'))
+                       if (!Yii::$app->user->can('marktoothers'))
                             break;
                         //find block -
                        
@@ -499,7 +499,7 @@ public static function statusNames()
                             $flag=true;
                          break;
                             case 'dcmnrega':
-                       if (!Yii::$app->user->can('marktopo'))
+                       if (!Yii::$app->user->can('marktoothers'))
                             break;
                         //find block -
                            $dcmnregadtid=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>'dcmnrega'])->one()->id;
@@ -655,7 +655,7 @@ public static function statusNames()
 	  if (!Yii::$app->user->can('complaintviewall') )
 	  {
 	   $d=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-  
+  if ($sender=='-1')
        $query->andWhere(['receiver'=>$d]);
        }
        else if($d!=-1)
@@ -869,7 +869,7 @@ public static function counts($status)
         $query="SELECT ".implode(",",$q)." FROM complaint";
         $db=Yii::$app->db;
         $counts= $db->createCommand($query)->queryAll();
-         
+         //print_r($counts);
        
         return $counts;
           
