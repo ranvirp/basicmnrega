@@ -1,5 +1,8 @@
 <?php
 namespace app\modules\work\models;
+use app\modules\mnrega\models\Block;
+use app\modules\mnrega\models\Panchayat;
+use app\modules\mnrega\models\District;
 
 use Yii;
 
@@ -37,6 +40,11 @@ use Yii;
  */
 class Work extends \yii\db\ActiveRecord
 {
+   public static function statuses()
+   {
+     return ['0'=>'Not Started','1'=>'Ongoing','2'=>'Completed'];
+   
+   }
     /**
      * @inheritdoc
      */
@@ -59,40 +67,31 @@ class Work extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
+     /**
      * @inheritdoc
      */
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'uniqueid' => 'Uniqueid',
             'workid' => 'Workid',
-            'name_hi' => 'Name Hi',
-            'name_en' => 'Name En',
-            'description' => 'Description',
-            'agency_code' => 'Agency Code',
-            'work_type_code' => 'Work Type Code',
-            'estcost' => 'Estcost',
-            'scheme_code' => 'Scheme Code',
+            'name_hi' => 'Name in Hindi',
+            'name_en' => 'Name in English',
             'district_code' => 'District Code',
-            'block_code' => 'Block Code',
-            'panchayat_code' => 'Panchayat Code',
-            'village_code' => 'Village Code',
-            'district' => 'District',
-            'block' => 'Block',
-            'panchayat' => 'Panchayat',
+            'block_code' => 'Block',
+            'panchayat_code' => 'Panchayat',
             'village' => 'Village',
-            'division_code' => 'Division Code',
-            'address' => 'Address',
+            'gatasankhya' => 'गाटा संख्या',
+            'totarea' => 'Area',
+            'estcost' => 'Estimated Cost',
+            'persondays' => 'Expected Person Days',
             'gpslat' => 'Gpslat',
             'gpslong' => 'Gpslong',
-            'work_admin' => 'Work Admin',
             'status' => 'Status',
             'remarks' => 'Remarks',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
         ];
     }
 	/*
@@ -100,6 +99,17 @@ class Work extends \yii\db\ActiveRecord
 	*/
 	public function showForm($form,$attribute)
 	{
+	$designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
+	   if ($designation->designationType->level->name_en=='District')
+	   {
+	     $district=$designation->level->code;
+	     $district_name=$designation->level->name_en;
+	   } else if ($designation->designationType->level->name_en=='Block')
+	   {
+	     $district=substr($designation->level->code,0,4);
+	     $district_name=District::findOne($district)->name_en;
+	   }
+	   else {$district=null;$district_name=null;}
 		switch ($attribute)
 		  {
 		   
@@ -118,9 +128,29 @@ class Work extends \yii\db\ActiveRecord
 			   return  $form->field($this,$attribute)->textInput();
 			    
 			    break;
+			case 'agency_code':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+			case 'scheme_code':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;						
+			case 'work_type_code':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+			case 'workid':
+			   return  $form->field($this,$attribute)->textInput(['id'=>'workid','class'=>'form-control required']);
+			 //  ->widget(\yii\widgets\MaskedInput::className(), [
+      //'mask' => '9999999999/WC/999999999999999999',
+      //'options'=>['id'=>'workid','class'=>'form-control required'],
+  //]);
+			    
+			    break;
 									
 			case 'name_hi':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  $form->field($this,$attribute)->textInput(['class'=>'form-control hindiinput']);
 			    
 			    break;
 									
@@ -129,63 +159,51 @@ class Work extends \yii\db\ActiveRecord
 			    
 			    break;
 									
-			case 'description':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
-			case 'agency_code':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
-			case 'work_type_code':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
-			case 'estcost':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
-			case 'scheme_code':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
 			case 'district_code':
-			   return  $form->field($this,$attribute)->textInput();
+			 $url="'"."/basicmnrega/web/jsons/'+$(this).val()+'.json'";
+			   $id='block-code';
+			if ($district!=null)
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>$district])->label(false);
+			   else
+			     return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->asArray()->orderBy('name_en asc')->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   'onChange'=>'$(\'#district-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
+			 
+			    
+			    
+			    break;
+			    case 'district':
+			    if ($district!=null)
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>$district_name,'id'=>'district-name'])->label(false);
+			    else 
+			       return  $form->field($this,$attribute)->hiddenInput(['id'=>'district-name'])->label(false);
+			
+			    break;
+			    case 'block':
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>'','id'=>'block-name'])->label(false);
+			    
+			    break;
+			    case 'panchayat':
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>'','id'=>'panchayat-name'])->label(false);
 			    
 			    break;
 									
 			case 'block_code':
-			   return  $form->field($this,$attribute)->textInput();
+			   $url="'"."/basicmnrega/web/jsons/'+$(this).val()+'.json'";
+			   $id='pond-panchayat';
+			   if ($district!=null)
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$district])->orderBy('name_en asc')->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
+			   else
+			     return  $form->field($this,$attribute)->dropDownList([],["prompt"=>"None..",
+			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control','id'=>'block-code']);
+			 
 			    
 			    break;
 									
 			case 'panchayat_code':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
-			case 'village_code':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
-			case 'district':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
-			case 'block':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
-			case 'panchayat':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  
+			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'pond-panchayat',
+			   'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());$('#workid').val($(this).val()+'/')",'class'=>'form-control']);
 			    
 			    break;
 									
@@ -194,15 +212,15 @@ class Work extends \yii\db\ActiveRecord
 			    
 			    break;
 									
-			case 'division_code':
-			   return  $form->field($this,$attribute)->textInput();
+						
+			
+									
+			case 'estcost':
+			   return  $form->field($this,$attribute)->textInput(['class'=>'form-control']);
 			    
 			    break;
 									
-			case 'address':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
+			
 									
 			case 'gpslat':
 			   return  $form->field($this,$attribute)->textInput();
@@ -214,19 +232,14 @@ class Work extends \yii\db\ActiveRecord
 			    
 			    break;
 									
-			case 'work_admin':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
-									
 			case 'status':
-			   return  $form->field($this,$attribute)->textInput();
-			    
+			      return  $form->field($this,$attribute)->dropDownList(self::statuses());
+			 
 			    break;
 									
 			case 'remarks':
-			   return  $form->field($this,$attribute)->textInput();
-			    
+			    return  $form->field($this,$attribute)->textInput();
+			   
 			    break;
 									
 			case 'created_at':

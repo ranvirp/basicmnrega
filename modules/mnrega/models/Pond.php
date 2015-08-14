@@ -115,8 +115,16 @@ class Pond extends \yii\db\ActiveRecord
 	public function showForm($form,$attribute)
 	{
 	   $designation=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
-	   $district=$designation->level->code;
-	   $district_name=$designation->level->name_en;
+	   if ($designation->designationType->level->name_en=='District')
+	   {
+	     $district=$designation->level->code;
+	     $district_name=$designation->level->name_en;
+	   } else if ($designation->designationType->level->name_en=='Block')
+	   {
+	     $district=substr($designation->level->code,0,4);
+	     $district_name=District::findOne($district)->name_en;
+	   }
+	   else {$district=null;$district_name=null;}
 		switch ($attribute)
 		  {
 		   
@@ -141,12 +149,23 @@ class Pond extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'district_code':
+			 $url="'"."/basicmnrega/web/jsons/'+$(this).val()+'.json'";
+			   $id='block-code';
+			if ($district!=null)
 			   return  $form->field($this,$attribute)->hiddenInput(['value'=>$district])->label(false);
+			   else
+			     return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->asArray()->orderBy('name_en asc')->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   'onChange'=>'$(\'#district-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
+			 
+			    
 			    
 			    break;
 			    case 'district':
-			   return  $form->field($this,$attribute)->hiddenInput(['value'=>$district_name])->label(false);
-			    
+			    if ($district!=null)
+			   return  $form->field($this,$attribute)->hiddenInput(['value'=>$district_name,'id'=>'district-name'])->label(false);
+			    else 
+			       return  $form->field($this,$attribute)->hiddenInput(['id'=>'district-name'])->label(false);
+			
 			    break;
 			    case 'block':
 			   return  $form->field($this,$attribute)->hiddenInput(['value'=>'','id'=>'block-name'])->label(false);
@@ -160,8 +179,13 @@ class Pond extends \yii\db\ActiveRecord
 			case 'block_code':
 			   $url="'"."/basicmnrega/web/jsons/'+$(this).val()+'.json'";
 			   $id='pond-panchayat';
+			   if ($district!=null)
 			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$district])->orderBy('name_en asc')->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
 			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
+			   else
+			     return  $form->field($this,$attribute)->dropDownList([],["prompt"=>"None..",
+			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control','id'=>'block-code']);
+			 
 			    
 			    break;
 									
