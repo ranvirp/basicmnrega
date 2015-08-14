@@ -111,13 +111,16 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
     'items' => [
       ['label'=>'Home','url'=>['/site/index']],
        ['label'=>'Complaint','url'=>['/complaint']],
-        ['label'=>'Permissions','url'=>['/admin'],'linkOptions'=>[]
+        Yii::$app->user->isGuest ?'':
+       
+     
+       
+         ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/android.apk','linkOptions'=>['data-toggle'=>'tooltip','data-placement'=>"left" ,'title'=>file_get_contents(Yii::getAlias('@app').'/modules/gpsphoto/apkhelp.txt')]],
+      !Yii::$app->user->can('siteadmin') ?'':
+       ['label'=>'Permissions','url'=>['/admin'],'linkOptions'=>[]
 
         ],
-     
-        Yii::$app->user->isGuest ?'':
-         ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/android.apk','linkOptions'=>['data-toggle'=>'tooltip','data-placement'=>"left" ,'title'=>file_get_contents(Yii::getAlias('@app').'/modules/gpsphoto/apkhelp.txt')]],
-      
+        !Yii::$app->user->can('siteadmin') ?'':
        ['label' => 'Master Data', 'url' => ['/site/index'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
              ['label' => 'Level', 'url' => ['/users/level/create'],'options'=>['class'=>'dropdown']],

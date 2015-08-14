@@ -37,3 +37,9 @@
 [12-Aug-2015 13:54:14 America/Chicago] PHP Parse error:  syntax error, unexpected '}' in /home/nregaup0/testmnrega/modules/complaint/views/complaint/reply.php on line 25
 [12-Aug-2015 14:38:07 America/Chicago] PHP Parse error:  syntax error, unexpected 'disabled' (T_STRING), expecting ']' in /home/nregaup0/testmnrega/modules/complaint/views/marking/markthis.php on line 54
 [12-Aug-2015 21:52:23 America/Chicago] PHP Parse error:  syntax error, unexpected 'push' (T_STRING) in /home/nregaup0/testmnrega/modules/complaint/views/complaint/reply.php on line 21
+[14-Aug-2015 07:58:56 America/Chicago] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home/nregaup0/testmnrega/views/layouts/complaint.php on line 140
+[14-Aug-2015 08:47:05 America/Chicago] PHP Parse error:  syntax error, unexpected ',' in /home/nregaup0/testmnrega/modules/complaint/models/SearchForm.php on line 22
+[14-Aug-2015 08:47:27 America/Chicago] PHP Fatal error:  Class 'app\modules\complaint\models\Yii' not found in /home/nregaup0/testmnrega/modules/complaint/models/SearchForm.php on line 20
+[14-Aug-2015 10:38:10 America/Chicago] PHP Parse error:  syntax error, unexpected 'is_numeric' (T_STRING) in /home/nregaup0/testmnrega/modules/complaint/controllers/MarkingController.php on line 133
+[14-Aug-2015 10:38:14 America/Chicago] PHP Parse error:  syntax error, unexpected 'is_numeric' (T_STRING) in /home/nregaup0/testmnrega/modules/complaint/controllers/MarkingController.php on line 133
+[14-Aug-2015 11:28:54 America/Chicago] PHP Fatal error:  Call to a member function label() on a non-object in /home/nregaup0/testmnrega/modules/complaint/views/report/wrapper.php on line 70

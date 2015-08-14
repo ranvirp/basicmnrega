@@ -6,6 +6,7 @@ use yii\web\Controller;
 use app\modules\complaint\models\Complaint;
 use app\modules\complaint\models\JobcardDemand;
 use app\modules\complaint\models\WorkDemand;
+use app\modules\complaint\models\SearchForm;
 use Yii;
 class DefaultController extends Controller
 {
@@ -13,7 +14,38 @@ class DefaultController extends Controller
     
     public function actionIndex()
     {
-        return $this->render('index');
+       $x='';
+       $model = new SearchForm;
+       if ($model->load(Yii::$app->request->post()))
+       {
+        switch($model->type)
+        {
+          case 'complaint':
+           if ($model=Complaint::findOne($model->id))
+            $x= $this->renderPartial('../complaint/view',['model'=>Complaint::findOne($model->id)]);
+             else
+                      $x='Not Found';
+          break;
+          case 'jobcarddemand':
+          if ($model=JobcardDemand::findOne($model->id))
+                      $x= $this->renderPartial('../jobcarddemand/view',['model'=>$model]);
+          else
+                      $x='Not Found';
+
+          break;
+          case 'workdemand':
+           if ($model=WorkDemand::findOne($model->id))
+                      $x= $this->renderPartial('../workdemand/view',['model'=>WorkDemand::findOne($model->id)]);
+            else
+                      $x='Not Found';
+
+          break;
+          default:
+          break;
+        }
+       
+       }
+        return $this->render('index',['result'=>$x]);
     }
     public function actionJobdemand()
     {

@@ -23,7 +23,7 @@ return [
 
 'Complainant Details'=>'',
 
-'Complaint'=>'',
+'Complaint'=>'शिकायत ',
 
 'Complaint ID'=>'',
 
@@ -171,7 +171,7 @@ return [
 
 'Transformerdesc'=>'',
 
-'Type'=>'',
+'Type'=>'दर्ज शिकायत/मांग का प्रकार ?',
 
 'Typeofconductor'=>'',
 
@@ -392,5 +392,7 @@ return [
 'Jobcard Demand'=>'जॉब कार्ड की मांग ',
 
 ''=>'',
+
+'Number'=>'संख्या',
 
 ];

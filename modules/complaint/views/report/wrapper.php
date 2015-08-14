@@ -44,9 +44,12 @@ echo '</div>';
 ?>
 <p>
 <label for="level">Select Level:</label>
-<label><input type="radio" name="level" value="" checked><span>All</span></label>
+
 <?php
+//<label><input type="radio" name="level" value="" checked><span>All</span></label>
   $x=["'po'","'cdo'","'dm'","'jdc'","'sqm'","'tac'"];
+  $items=[];
+  $items['']='All';
   
     $query="select id,shortcode from designation_type where shortcode in (".implode(",",$x).")";
     $db=Yii::$app->db;
@@ -55,24 +58,32 @@ echo '</div>';
     foreach ($counts as $n=>$value)
     {
      
-     echo '<label><input type="radio" name="level" value="'.$value['id'].'" ><span>'.strtoupper($value['shortcode']).'</span></label>';
+     //echo '<label><input type="radio" name="level" value="'.$value['id'].'" ><span>'.strtoupper($value['shortcode']).'</span></label>';
+     $items[$value['id']]=strtoupper($value['shortcode']);
     }
     foreach (\app\modules\users\models\DesignationType::otherTypes() as $code=>$name)
     {
-      echo '<label><input type="radio" name="level" value="'.$code.'" ><span>'.strtoupper($name).'</span></label>';
+     // echo '<label><input type="radio" name="level" value="'.$code.'" ><span>'.strtoupper($name).'</span></label>';
+      $items[$code]=strtoupper($name);
     }
        
-  
+  echo Html::radiolist('level','',$items,['label'=>'Select Level:']);
 
 ?>
 
  <p>
 <label for="source">Select Source:</label>
- <label><input type="radio" name="source" value="" checked><span>All</span></label>
- <?php foreach (\app\modules\complaint\models\Complaint::source() as $source=>$name) 
+ 
+ <?php 
+ //<label><input type="radio" name="source" value="" checked><span>All</span></label>
+ $items=[];
+ $items['']='All';
+ foreach (\app\modules\complaint\models\Complaint::source() as $source=>$name) 
   {
-   echo ' <label><input type="radio" name="source" value="'.$source.'" ' .'>'.$name.'</label>';
+  $items[$source]=$name;
+   //echo ' <label><input type="radio" name="source" value="'.$source.'" ' .'>'.$name.'</label>';
   }
+   echo Html::radiolist('source','',$items,['label'=>'Select Source:']);
   ?>
 </p>
 <?php \yii\widgets\Pjax::begin(['id'=>'report','enablePushState'=>false,'timeout'=>false]);?>

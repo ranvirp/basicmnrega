@@ -66,7 +66,7 @@ AppAsset::register($this);
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
-            <div class="col-md-8 col-lg-8">
+            <div class="col-md-8 col-lg-8 background-orange">
             <?= $this->render('../../modules/complaint/views/default/index')?>
             </div>
             <div class="col-md-4 col-lg-4">

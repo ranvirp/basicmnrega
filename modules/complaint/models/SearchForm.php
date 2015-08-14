@@ -1,5 +1,6 @@
 <?php
 namespace app\modules\complaint\models;
+use Yii;
 class SearchForm extends \yii\base\Model
 {
     public $type;
@@ -14,4 +15,11 @@ class SearchForm extends \yii\base\Model
             // define validation rules here
         ];
     }
+     public function attributeLabels()
+     {
+     return [
+       'type' => Yii::t('app', 'Type'),
+            'id' => Yii::t('app', 'Number'),
+            ];
+     }
 }

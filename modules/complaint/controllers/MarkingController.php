@@ -63,6 +63,8 @@ class MarkingController extends \yii\web\Controller {
               $actionbuttons.='<li>'. $this->renderPartial('actionmarkofficer', ['text' => Yii::t("app", "Mark an Officer for Enquiry"), 'id' => $marking->request_id, 'a' => 'e', 'change' => 1]) . '</li>';
 		    
 			foreach ($submarkings as $submarking) {
+			if ($submarking->status==Complaint::ENQUIRY_REPORT_RECEIVED)
+			continue;
 			  $actionbuttons.='<u>'.'Marked to '.$submarking->receiver_name.' for enquiry'.'</u>';
 				if ($submarking->status == Complaint::PENDING_FOR_ENQUIRY) {
 					$replytype = 'File Enquiry Report';
@@ -130,13 +132,13 @@ class MarkingController extends \yii\web\Controller {
 				$actionbuttons.='<li>'.$this->renderPartial('actionstatus', ['text' => "Mark as Pending for ATR", 'id' => $id, 'status' => Complaint::PENDING_FOR_ATR]) . '</li>';
 				$actionbuttons .= '<li>'.$this->renderPartial('actionmarkthis', ['text' => "Ask for fresh report with comment", 'id' => $id, 'markingid'=>$complaint->enqrofficer, 'a' => 'e']).'</li>';
 			}
-			if ($complaint->status == Complaint::PENDING_FOR_ENQUIRY) {
+			if ($complaint->status == Complaint::PENDING_FOR_ENQUIRY && is_numeric($complaint->enqrofficer)) {
 			if ($enqrofficermarking)
 			  {
 				$replytype = 'File Enquiry Report';
 				$actionbuttons.=$this->renderPartial('actionreply', ['text' => $replytype . ' for '.$enqrofficername, 'id' => $id, 'markingid' => $complaint->enqrofficer]);
 			  }
-			} else if ($complaint->status == Complaint::PENDING_FOR_ATR) {
+			} else if ($complaint->status == Complaint::PENDING_FOR_ATR && is_numeric($complaint->atrofficer)) {
 				$replytype = 'File ATR';
 				$actionbuttons.='<li>'.$this->renderPartial('actionreply', ['text' => $replytype . ' for '.$atrofficername, 'id' => $id, 'markingid' => $complaint->atrofficer]).'</li>';
 			}
