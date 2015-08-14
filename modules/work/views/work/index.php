@@ -11,7 +11,7 @@ $this->title = Yii::t('app', 'Works');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php if ($model!=null):?><div class="col-md-6">
-<?=$this->render('_form',['model'=>$model]) ?></div>
+<?=$this->render('_form',['model'=>$model,'attributeForm'=>$attributeForm,'attributeModel'=>$attributeModel]) ?></div>
 <div class="col-md-6">
 <?php else:?><div class="col-md-12">
 <?php endif;?><div class="work-index">
@@ -35,6 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('id');
+},],['header'=>'uniqueid',
+'attribute'=>'uniqueid',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('uniqueid');
 },],['header'=>'workid',
 'attribute'=>'workid',
 'value'=>function($model,$key,$index,$column)
@@ -50,27 +55,29 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('name_en');
-},],['header'=>'description',
-'attribute'=>'description',
-'value'=>function($model,$key,$index,$column)
-{
-                return $model->showValue('description');
-},],            // 'agency_id',
-            // 'work_type_id',
-            // 'totvalue',
-            // 'scheme_id',
-            // 'district_id',
+},],            // 'description:ntext',
+            // 'agency_code',
+            // 'work_type_code',
+            // 'estcost',
+            // 'scheme_code',
+            // 'district_code',
+            // 'block_code',
+            // 'panchayat_code',
+            // 'village_code',
+            // 'district',
+            // 'block',
+            // 'panchayat',
+            // 'village',
+            // 'division_code',
             // 'address',
             // 'gpslat',
             // 'gpslong',
             // 'work_admin',
-            // 'block_code',
-            // 'panchayat_code',
-            // 'village_code',
             // 'status',
             // 'remarks:ntext',
             // 'created_at',
             // 'updated_at',
+            // 'created_by',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

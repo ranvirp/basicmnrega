@@ -43,6 +43,7 @@ class m150506_185842_create_tables_work extends Migration
             'remarks'=>Schema::TYPE_TEXT,
             'created_at' => Schema::TYPE_INTEGER . ' NOT NULL',
             'updated_at' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'created_by' => Schema::TYPE_INTEGER . ' NOT NULL',
         ], $tableOptions);
         $this->createTable('{{%agency}}',[
         'code'=>Schema::TYPE_STRING.' PRIMARY KEY',

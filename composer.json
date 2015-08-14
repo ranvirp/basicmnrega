@@ -34,7 +34,8 @@
         "2amigos/yii2-multi-select-widget": "*",
         "kartik-v/yii2-export": "v1.2.3",
         "chiliec/yii2-vote": "~2.0",
-        "kartik-v/yii2-date-range": "*"
+        "kartik-v/yii2-date-range": "*",
+        "spanjeta/yii2-backup": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

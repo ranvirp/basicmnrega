@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use app\modules\work\models\WorkProgress;
 
 /**
- * WorkProgressSearch represents the model behind the search form about `app\models\WorkProgress`.
+ * WorkProgressSearch represents the model behind the search form about `app\modules\work\models\WorkProgress`.
  */
 class WorkProgressSearch extends WorkProgress
 {
@@ -18,9 +18,8 @@ class WorkProgressSearch extends WorkProgress
     public function rules()
     {
         return [
-            [['id', 'work_id', 'physical', 'financial'], 'integer'],
-            [['dateofprogress', 'remarks'], 'safe'],
-            [['expenditure'], 'number'],
+            [['id', 'work_id', 'phy', 'fin'], 'integer'],
+            [['exp'], 'number'],
         ];
     }
 
@@ -48,7 +47,8 @@ class WorkProgressSearch extends WorkProgress
             'query' => $query,
         ]);
 
-       $this->work_id=$params['work_id'];
+        $this->load($params);
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to any records when validation fails
             // $query->where('0=1');
@@ -58,12 +58,10 @@ class WorkProgressSearch extends WorkProgress
         $query->andFilterWhere([
             'id' => $this->id,
             'work_id' => $this->work_id,
-            'physical' => $this->physical,
-            'financial' => $this->financial,
-            'dateofprogress' => $this->dateofprogress,
-            'expenditure' => $this->expenditure,
+            'exp' => $this->exp,
+            'phy' => $this->phy,
+            'fin' => $this->fin,
         ]);
-        $query->andFilterWhere(['like', 'remarks', $this->remarks]);
 
         return $dataProvider;
     }

@@ -17,23 +17,41 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
+    <?= $form->field($model, 'uniqueid') ?>
+
     <?= $form->field($model, 'workid') ?>
 
     <?= $form->field($model, 'name_hi') ?>
 
     <?= $form->field($model, 'name_en') ?>
 
-    <?= $form->field($model, 'description') ?>
+    <?php // echo $form->field($model, 'description') ?>
 
-    <?php // echo $form->field($model, 'agency_id') ?>
+    <?php // echo $form->field($model, 'agency_code') ?>
 
-    <?php // echo $form->field($model, 'work_type_id') ?>
+    <?php // echo $form->field($model, 'work_type_code') ?>
 
-    <?php // echo $form->field($model, 'totvalue') ?>
+    <?php // echo $form->field($model, 'estcost') ?>
 
-    <?php // echo $form->field($model, 'scheme_id') ?>
+    <?php // echo $form->field($model, 'scheme_code') ?>
 
-    <?php // echo $form->field($model, 'district_id') ?>
+    <?php // echo $form->field($model, 'district_code') ?>
+
+    <?php // echo $form->field($model, 'block_code') ?>
+
+    <?php // echo $form->field($model, 'panchayat_code') ?>
+
+    <?php // echo $form->field($model, 'village_code') ?>
+
+    <?php // echo $form->field($model, 'district') ?>
+
+    <?php // echo $form->field($model, 'block') ?>
+
+    <?php // echo $form->field($model, 'panchayat') ?>
+
+    <?php // echo $form->field($model, 'village') ?>
+
+    <?php // echo $form->field($model, 'division_code') ?>
 
     <?php // echo $form->field($model, 'address') ?>
 
@@ -43,12 +61,6 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'work_admin') ?>
 
-    <?php // echo $form->field($model, 'block_code') ?>
-
-    <?php // echo $form->field($model, 'panchayat_code') ?>
-
-    <?php // echo $form->field($model, 'village_code') ?>
-
     <?php // echo $form->field($model, 'status') ?>
 
     <?php // echo $form->field($model, 'remarks') ?>
@@ -56,6 +68,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'created_at') ?>
 
     <?php // echo $form->field($model, 'updated_at') ?>
+
+    <?php // echo $form->field($model, 'created_by') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

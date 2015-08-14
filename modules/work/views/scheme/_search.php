@@ -15,8 +15,6 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
-
     <?= $form->field($model, 'code') ?>
 
     <?= $form->field($model, 'name_hi') ?>
@@ -25,7 +23,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description') ?>
 
-    <?php // echo $form->field($model, 'finyear') ?>
+    <?= $form->field($model, 'finyear') ?>
 
     <?php // echo $form->field($model, 'documents') ?>
 
