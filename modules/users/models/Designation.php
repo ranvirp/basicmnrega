@@ -233,10 +233,13 @@ class Designation extends \app\modules\users\MyActiveRecord
            // 'email' => $this->email,
               'username'=>$username,
         ]);
-        $existinguserexists=1;
+        if ($usermodel)  $existinguserexists=1;
         }
         else
+        {
          $usermodel=User::findOne($this->officer_userid);
+        
+         }
        // if ($usermodel && !$this->resetpasswd)
         //return;
         

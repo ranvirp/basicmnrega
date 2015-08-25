@@ -163,6 +163,7 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
     <table class="table table-striped" id="prevcomp">
     
     </table>
+   <?php if (!Yii::$app->user->isGuest) {?>
     <?php DynamicFormWidget::begin([
         'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
         'widgetBody' => '.container-items', // required: css class selector
@@ -236,6 +237,7 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
         </div>
     </div><!-- .panel -->
     <?php DynamicFormWidget::end(); ?>
+    <?php } ?>
     <?php if (Yii::$app->user->isGuest) {?>
    <div class="form-group">
    <?= $form->field($modelComplaint, 'captcha')->widget(\yii\captcha\Captcha::classname(),['captchaAction' => '/site/captcha'])?>
