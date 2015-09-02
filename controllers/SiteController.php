@@ -112,7 +112,8 @@ class SiteController extends Controller
     }
     public function actionMain()
     {
-       return $this->render('index1');
+    $this->layout="//print";
+       return $this->render('homepage');
     }
 
     

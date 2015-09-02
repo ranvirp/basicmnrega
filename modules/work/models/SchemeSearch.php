@@ -18,8 +18,8 @@ class SchemeSearch extends Scheme
     public function rules()
     {
         return [
-            [['id', 'noofworks'], 'integer'],
             [['code', 'name_hi', 'name_en', 'description', 'finyear', 'documents'], 'safe'],
+            [['noofworks'], 'integer'],
             [['totalcost'], 'number'],
         ];
     }
@@ -57,7 +57,6 @@ class SchemeSearch extends Scheme
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
             'noofworks' => $this->noofworks,
             'totalcost' => $this->totalcost,
         ]);

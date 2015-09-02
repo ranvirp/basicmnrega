@@ -6,7 +6,7 @@ use Yii;
 use app\common\Utility;
 use app\modules\work\models\Work;
 use app\modules\work\models\WorkSearch;
-use app\modules\work\Controller;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -26,7 +26,15 @@ class WorkController extends Controller
             ],
         ];
     }
-
+ public static function attributeDetails()
+ {
+   return [
+     'pond'=>['tableName'=>'pond_attributes','class'=>'app\modules\work\models\PondAttributes'],
+   
+   
+   ];
+  
+ }
     /**
      * Lists all Work models.
      * @return mixed
@@ -60,13 +68,19 @@ class WorkController extends Controller
      * @return mixed
      */
     
-    public function actionCreate()
+    public function actionCreate($type)
     {
        
-       
+       $attributeDetails=self::attributeDetails();
+       if (!array_key_exists($type,$attributeDetails))
+        {
+          throw new NotFoundHttpException("Not Found");
+        }
+    
         $model = new Work();
- 
-        if ($model->load(Yii::$app->request->post()))
+        $model->work_type_code=$type;
+        $attributeModel=new $attributeDetails[$type]['class'];
+        if ($model->load(Yii::$app->request->post()) && $attributeModel->load(Yii::$app->request->post()))
         {
            if (array_key_exists('app\modules\work\models\Work',Utility::rules()))
             foreach ($model->attributes as $attribute)
@@ -75,7 +89,13 @@ class WorkController extends Controller
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\work\models\Work'][$model->$attribute]['required'])
             );
             if ($model->save())
+            {
+            $attributeModel->workid=$work->id;
+            $attributeModel->save();
             $model = new Work();; //reset model
+              $attributeModel=new $attributeDetails[$type]['class'];
+      
+            }
         }
  
         $searchModel = new WorkSearch();
@@ -85,6 +105,8 @@ class WorkController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
+            'attributeForm'=>'../'.$attributeDetails[$type]['tableName'].'/_form',
+            'attributeModel'=>$attributeModel,
             
         ]);
 

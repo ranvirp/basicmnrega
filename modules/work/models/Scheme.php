@@ -6,7 +6,6 @@ use Yii;
 /**
  * This is the model class for table "scheme".
  *
- * @property integer $id
  * @property string $code
  * @property string $name_hi
  * @property string $name_en
@@ -15,8 +14,6 @@ use Yii;
  * @property string $documents
  * @property integer $noofworks
  * @property double $totalcost
- *
- * @property Work[] $works
  */
 class Scheme extends \yii\db\ActiveRecord
 {
@@ -34,10 +31,10 @@ class Scheme extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['code'], 'required'],
             [['noofworks'], 'integer'],
             [['totalcost'], 'string'],
-            [['code'], 'string', 'max' => 10],
-            [['name_hi', 'name_en', 'description', 'finyear', 'documents'], 'string', 'max' => 255]
+            [['code', 'name_hi', 'name_en', 'description', 'finyear', 'documents'], 'string', 'max' => 255]
         ];
     }
 
@@ -47,7 +44,6 @@ class Scheme extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'code' => 'Code',
             'name_hi' => 'Name Hi',
             'name_en' => 'Name En',
@@ -58,14 +54,6 @@ class Scheme extends \yii\db\ActiveRecord
             'totalcost' => 'Totalcost',
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWorks()
-    {
-        return $this->hasMany(Work::className(), ['scheme_id' => 'id']);
-    }
 	/*
 	*@return form of individual elements
 	*/
@@ -74,11 +62,6 @@ class Scheme extends \yii\db\ActiveRecord
 		switch ($attribute)
 		  {
 		   
-									
-			case 'id':
-			   return  $form->field($this,$attribute)->textInput();
-			    
-			    break;
 									
 			case 'code':
 			   return  $form->field($this,$attribute)->textInput();
@@ -133,9 +116,6 @@ class Scheme extends \yii\db\ActiveRecord
 		switch ($attribute)
 		  {
 		   
-									
-			case 'id':
-			   return $this->id;			    break;
 									
 			case 'code':
 			   return $this->code;			    break;

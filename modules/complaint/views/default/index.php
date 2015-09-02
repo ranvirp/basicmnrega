@@ -2,14 +2,8 @@
 .tile.tile-medium {
     height: 150px;
     width: 150px;
-    margin:10px;
-    #margin-left:10px;
-    }
-    .tile.tile-small {
-    height: 50px;
-    width: 150px;
-   # margin-top:50px;
-   # margin-left:30px;
+    margin-top:50px;
+    margin-left:30px;
     }
 .tile.tile-teal {
     background-color: #00aba9;
@@ -26,7 +20,6 @@
     opacity: 0.75;
     text-align: center;
     z-index: 1;
-    margin:5px;
 }
 .tile h1, .tile h2, .tile h3, .tile h4, .tile h5, .tile h6 {
     color: #fff;
@@ -48,20 +41,21 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 {
 margin-left:150px;
 }
-.background-orange
-{
-  background-image:url(<?=\Yii::getAlias('@web').'/images/orange.jpg' ?>);
-  background-size: cover;
-}
 </style>
+<div clas="row">
+<div class="col-md-1">
+</div>
+<div class="col-md-11">
 
-
-   
-  
-<div class="col-md-offset-3 col-md-9 hidden-print">
- <div class="col-md-12">
-  <h2><strong> अपनी शिकायत/मांग यहाँ दर्ज कराएं :</strong></h2>
-   </div>
+    <div class="row">
+    <?php
+   $searchform=new \app\modules\complaint\models\SearchForm;
+   echo $this->render('search',['model'=>$searchform]);
+    
+    ?>
+    </div>
+    
+<div class="row">
    <div class="tile tile-medium col-sm-3">
        <a href="<?=\yii\helpers\Url::to(['/complaint/workdemand/create'])?>">
        <h1>काम की मांग</h1>
@@ -78,16 +72,5 @@ margin-left:150px;
         </a>
       </div>
   </div>
-  <div class="col-md-12  hidden-print">
-
-   
-    <?php
-   $searchform=new \app\modules\complaint\models\SearchForm;
-   echo $this->render('search',['model'=>$searchform]);
-    
-    ?>
-  </div> 
-
-    <div class="col-md-12">
-    <?= $result ?>
-    </div>
+</div>
+</div>

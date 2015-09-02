@@ -30,12 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-['header'=>'id',
-'attribute'=>'id',
-'value'=>function($model,$key,$index,$column)
-{
-                return $model->showValue('id');
-},],['header'=>'code',
+['header'=>'code',
 'attribute'=>'code',
 'value'=>function($model,$key,$index,$column)
 {
@@ -55,8 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('description');
-},],            // 'finyear',
-            // 'documents',
+},],['header'=>'finyear',
+'attribute'=>'finyear',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('finyear');
+},],            // 'documents',
             // 'noofworks',
             // 'totalcost',
 
