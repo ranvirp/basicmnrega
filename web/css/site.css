@@ -284,6 +284,17 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   text-align:center;
   color:white;
 }
+.logo-text > h4,.logo-text >h1
+{
+ // text-align:center;
+  color:white;
+}
+.adjustable-height
+{
+  min-height:250px;
+  height:auto !important;
+  height:250px;
+}
 @media print
 
 {

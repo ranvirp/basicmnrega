@@ -58,7 +58,7 @@ if(Yii::$app->user->can('complaintviewall'))
     if ($s==Complaint::PENDING_FOR_ENQUIRY) continue;
    ?>
                  
-                       <li  class="">
+                       <li  class="btn-success">
                             <a href='<?=Url::to(['/complaint/complaint/my?ms='.$s.'&d='.$d.'&title='.'List of Complaints with status '.$sname])?>'>
                                 <span class="badge pull-right">
                            <?=$counts1[0]['complaint_count_'.$s]?>

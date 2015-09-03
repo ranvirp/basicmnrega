@@ -117,7 +117,7 @@ if ($cps) {?>
         $markurl=Url::to(['/complaint/complaint/setmarkingstatus']);
      else 
        $markurl=null;
-      echo '<div class="col-md-12">';
+      echo '<div class="col-md-12 table-responsive">';
          print $this->render('markingindex',['searchModel'=>$marking,'dataProvider'=>$dp,'markurl'=>$markurl]);
          
        echo '</div>';

@@ -51,12 +51,12 @@ class MarkingController extends \yii\web\Controller {
 			$complaintview.= $this->renderPartial('@app/modules/complaint/views/complaint/view', ['model' => $complaint]);
 
 			if ($marking->status == Complaint::PENDING_FOR_ENQUIRY) {
-				$replytype = 'File Enquiry Report';
-				$actionbuttons.='<li>'.$this->renderPartial('actionreply', ['text' => $replytype . ' for myself', 'id' => $marking->request_id, 'markingid' => $marking->id]).'</li>';
+				$replytype =Yii::t('app', 'File Enquiry Report');
+				$actionbuttons.='<li>'.$this->renderPartial('actionreply', ['text' => $replytype .Yii::t('app', ' for myself'), 'id' => $marking->request_id, 'markingid' => $marking->id]).'</li>';
 			} else if ($marking->status == Complaint::PENDING_FOR_ATR) {
 				$replytype = 'File ATR';
 				
-				$actionbuttons.=$this->renderPartial('actionreply', ['text' => $replytype . ' for myself', 'id' => $marking->request_id, 'markingid' => $marking->id]);
+				$actionbuttons.=$this->renderPartial('actionreply', ['text' => $replytype . Yii::t('app', ' for myself'), 'id' => $marking->request_id, 'markingid' => $marking->id]);
 			}
 			$submarkings = Marking::find()->where(['sender' => Designation::getDesignationByUser(Yii::$app->user->id), 'request_type' => 'complaint', 'request_id' => $marking->request_id])->andWhere('flag=0')->all();
             if (!$submarkings && ($marking->status==Complaint::PENDING_FOR_ATR) && (Yii::$app->user->can('canmark')))

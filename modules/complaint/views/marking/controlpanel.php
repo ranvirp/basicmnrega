@@ -2,7 +2,13 @@
   $(document).pjax('a#leftmenurefreshlink','#leftmenu',{'timeout':false,'push':false});
   $(document).pjax('a#maincontainerrefreshlink','#complaint-control-panel',{'timeout':false,'push':false});
   $(document).ready(function(){
+   $("#complaint-action-div").on("click", function() {
+  $("#complaint-view").animate({
+    height:$("#complaint-action-div").height()+250
+},600);
+});
   $("#complaint-action-div").on("pjax:end", function() {
+        
             $('a#refreshlink').trigger('click');  //Reload GridView
              <?php if ($id==0) 
     echo " $('a#".$markingid."-action').trigger('click');";
@@ -34,7 +40,7 @@
  </div>
  <?=$complaintview ?>
  </div>
-<div class="col-md-4">
+<div class="col-md-4 adjustable-height">
 <div class="bordered-form complaint-form">
   <div class="form-title">
     <div class="form-title-span">

@@ -86,11 +86,11 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
                 //'brandUrl' => Yii::$app->homeUrl,
                 'innerContainerOptions'=>['class'=>'no-padding no-margin'],
                 'options' => [
-                    'class' => 'navbar navbar-default no-margin',
+                    'class' => 'navbar navbar-default no-margin main-header',
                 ],
             ]);
            // echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
-           echo "<div class='pull-left'>".'<h1>मनरेगा शिकायत प्रबंधन</h1>'.'</div>'.'<div class="pull-right"><h4>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h4></div>';
+           echo "<div class='pull-left logo-text'>".'<h1>मनरेगा शिकायत प्रबंधन</h1>'.'</div>'.'<div class="pull-right logo-text"><h4>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h4></div>';
             NavBar::end();
       echo '<div class="menubar hidden-print">';
             echo Nav::widget([
