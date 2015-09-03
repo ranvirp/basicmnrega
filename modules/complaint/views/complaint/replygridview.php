@@ -17,7 +17,7 @@ echo \yii\grid\GridView::widget([
     {
       return $this->render('_complaintreply',['model'=>$model]);
     },
-    'format'=>'html',
+    'format'=>'raw',
     'filter'=>\app\modules\complaint\models\ComplaintReply::types(),
     ],
   ],
