@@ -28,7 +28,7 @@ $this->registerJs(
 </div>
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
-    'action'=>Url::to(['/Work/create']),
+    'action'=>Url::to(['/work/work/create?type='.$model->work_type_code]),
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [
@@ -40,9 +40,12 @@ $this->registerJs(
         ],
     ],
 ]); ?>
+<div class="col-md-6">
+ <p> Work Type : <?=$model->work_type_code ?> </p>
+ <?= $model->showForm($form,"scheme_code") ?>
 
-    <?= $model->showForm($form,"uniqueid") ?>
-
+  <?= $model->showForm($form,"agency_code") ?>
+ 
     <?= $model->showForm($form,"workid") ?>
 
     <?= $model->showForm($form,"name_hi") ?>
@@ -51,14 +54,11 @@ $this->registerJs(
 
     <?= $model->showForm($form,"description") ?>
 
-    <?= $model->showForm($form,"agency_code") ?>
-
-    <?= $model->showForm($form,"work_type_code") ?>
-
+    
+   
     <?= $model->showForm($form,"estcost") ?>
 
-    <?= $model->showForm($form,"scheme_code") ?>
-
+   
     <?= $model->showForm($form,"district_code") ?>
 
     <?= $model->showForm($form,"block_code") ?>
@@ -79,7 +79,8 @@ $this->registerJs(
 
     <?= $model->showForm($form,"address") ?>
 
-   
+   </div>
+   <div class="col-md-6">
 
     <?= $model->showForm($form,"work_admin") ?>
 
@@ -87,7 +88,7 @@ $this->registerJs(
 
     <?= $model->showForm($form,"remarks") ?>
     <?= $this->render($attributeForm,['model'=>$attributeModel,'form'=>$form]) ?>
-
+</div>
   
 <?php
 /*

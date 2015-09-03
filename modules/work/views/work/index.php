@@ -50,12 +50,8 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('name_hi');
-},],['header'=>'name_en',
-'attribute'=>'name_en',
-'value'=>function($model,$key,$index,$column)
-{
-                return $model->showValue('name_en');
-},],            // 'description:ntext',
+},],
+    // 'description:ntext',
             // 'agency_code',
             // 'work_type_code',
             // 'estcost',
@@ -64,16 +60,16 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'block_code',
             // 'panchayat_code',
             // 'village_code',
-            // 'district',
-            // 'block',
-            // 'panchayat',
+             'district',
+             'block',
+             'panchayat',
             // 'village',
             // 'division_code',
             // 'address',
             // 'gpslat',
             // 'gpslong',
             // 'work_admin',
-            // 'status',
+             'status',
             // 'remarks:ntext',
             // 'created_at',
             // 'updated_at',
@@ -81,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-        'tableOptions'=>['class'=>'small'],
+        'tableOptions'=>['class'=>'table table-bordered small'],
         ]); ?>
 
 </div>

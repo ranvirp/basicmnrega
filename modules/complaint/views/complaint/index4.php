@@ -190,5 +190,5 @@ use yii\widgets\PjaxAsset;
         ],
         'tableOptions'=>['class'=>'table table-bordered','id'=>'grid-table'],
         ]); ?>
-        Pjax::end();
+      <?php  Pjax::end();?>
      

@@ -90,6 +90,7 @@ public static function statusNames()
             [['panchayat_code'], 'string', 'max' => 12],
             [['panchayat'],'string','max'=>100],
              [['marking'], 'safe'],
+             ['status','default','value'=>0],
               [['captcha'],'captcha','on'=>'guestentry'],
         ];
     }
@@ -426,7 +427,7 @@ public static function statusNames()
         $counts= $db->createCommand($query)->queryAll();
          
     // print ($query);
-     //print_r($counts);
+    // print_r($counts);
       //exit;
         return $counts;
         }

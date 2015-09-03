@@ -46,15 +46,6 @@ margin-left:150px;
 <div class="col-md-1">
 </div>
 <div class="col-md-11">
-
-    <div class="row">
-    <?php
-   $searchform=new \app\modules\complaint\models\SearchForm;
-   echo $this->render('search',['model'=>$searchform]);
-    
-    ?>
-    </div>
-    
 <div class="row">
    <div class="tile tile-medium col-sm-3">
        <a href="<?=\yii\helpers\Url::to(['/complaint/workdemand/create'])?>">
@@ -72,5 +63,14 @@ margin-left:150px;
         </a>
       </div>
   </div>
+    <div class="row">
+    <?php
+   $searchform=new \app\modules\complaint\models\SearchForm;
+   echo $this->render('search',['model'=>$searchform]);
+    
+    ?>
+    </div>
+    
+
 </div>
 </div>

@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-        'tableOptions'=>['class'=>'small'],
+        'tableOptions'=>['class'=>'table table-bordered small'],
         ]); ?>
 
 </div>

@@ -31,6 +31,8 @@ if(Yii::$app->user->can('complaintviewall'))
    {
     if ($s==0) continue;
     if ($s==Complaint::DISPOSED) continue;
+    if ($s==Complaint::ATR_RECEIVED) continue;
+    if ($s==Complaint::ENQUIRY_REPORT_RECEIVED) continue;
    ?>
                  
                        <li  class="">
@@ -46,24 +48,30 @@ if(Yii::$app->user->can('complaintviewall'))
                  
 <?php   
    }?>
-   <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/index?s='.Complaint::DISPOSED.'&d='.$d])?>'>
+      <?php
+   
+   foreach (Complaint::statusNames() as $s=>$sname)
+   {
+    if ($s==0) continue;
+    if ($s==Complaint::DISPOSED) continue;
+    if ($s==Complaint::PENDING_FOR_ATR) continue;
+    if ($s==Complaint::PENDING_FOR_ENQUIRY) continue;
+   ?>
+                 
+                       <li  class="">
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms='.$s.'&d='.$d.'&title='.'List of Complaints with status '.$sname])?>'>
                                 <span class="badge pull-right">
-                                <?php
-                           $query="select count(*) as count1 from complaint inner join marking on marking.request_type='complaint' and marking.id=atrofficer where receiver=".$d .'';
-                            $db= Yii::$app->db;
-                            $counts2= $db->createCommand($query)->queryAll();
-                          //  print_r($counts);
-                            echo $counts2[0]['count1'];
-  
-                           
-                           
-                           ?> 
-                           
+                           <?=$counts1[0]['complaint_count_'.$s]?>
                             </span>
-                             <?=Yii::t('app','Disposed')?>
+                             <?=Yii::t('app',$sname)?>
                              </a>
-                      </li> 
+                      </li>
+                       
+                       
+                 
+<?php   
+   }?>
+
 
    </ul>
                 </div>

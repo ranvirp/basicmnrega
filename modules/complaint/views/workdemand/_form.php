@@ -96,9 +96,7 @@ $this->registerJs(
  <div class="col-md-3">
     <?= $model->showForm($form,"datefrom") ?>
 </div>
-<div class="col-md-3">
-    <?= $model->showForm($form,"dateto") ?>
-</div>
+
  <input type="hidden" name="maintype[]" value="po">
  <?=$form->field($model,'marking[deadline]')->hiddenInput(['id'=>'deadline'])->label(false)?>
 </div>

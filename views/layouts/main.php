@@ -39,6 +39,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
      background-size: 100%;
      display:table;
      width:100%;
+     color:#c41200;
     }
     .nav >li >a, .nav>li>a:hover, .nav >li >a:focus
     {
@@ -90,12 +91,12 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
                 //'brandUrl' => Yii::$app->homeUrl,
                 'innerContainerOptions'=>['class'=>'no-padding no-margin'],
                 'options' => [
-                    'class' => 'navbar navbar-default no-margin',
+                    'class' => 'navbar navbar-default no-margin main-header',
                 ],
             ]);
            // echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
-           echo '<div class="text-center"><h2>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h2></div>';
-            NavBar::end();
+           echo '<div class="logo-text"><h2>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h2></div>';
+           NavBar::end();
             /*
             NavBar::begin([
                 //'brandLabel' => 'KESCO',
@@ -128,6 +129,8 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
             
              ['label' => 'Designation', 'url' => ['/users/designation/create'],'options'=>['class'=>'dropdown']],
              ['label' => 'DesignationType', 'url' => ['/users/designation-type/create'],'options'=>['class'=>'dropdown']],
+               ['label' => 'Users', 'url' => ['/users/user'],'options'=>['class'=>'dropdown']],
+            
               ['label' => 'District', 'url' => ['/mnrega/district/index'],'options'=>['class'=>'dropdown']],
              ['label' => 'Block', 'url' => ['/mnrega/block/index'],'options'=>['class'=>'dropdown']],
              ['label' => 'Panchayat', 'url' => ['/mnrega/panchayat/index'],'options'=>['class'=>'dropdown']],
@@ -168,10 +171,10 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
             ],],'options'=>['class'=>'nav navbar-nav pull-right']
 ]);
 echo '</div>';
-           // NavBar::end();
+          //  NavBar::end();
         ?>
         
-        <div class="container-fluid">
+        <div id="main-container" class="container">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>

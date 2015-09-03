@@ -39,20 +39,20 @@ class WorkdemandController extends Controller
      * Lists all WorkDemand models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        if (!Yii::$app->user->can('complaintagent'))
-      throw new NotFoundHttpException("Not Allowed");
-   
-        $dataProvider = new ActiveDataProvider([
-            'query' => WorkDemand::find(),
-        ]);
-
-        return $this->render('index', [
+   public function actionIndex()
+{
+  //return $this->render('dashboard');
+   if (!Yii::$app->user->can('complaintagent'))
+        throw new NotFoundHttpException("You are not allowed!!");
+     
+   $searchModel = new WorkDemandSearch();
+   $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+   //leftJoin('marking',['marking.request_id'=>'complaint.id','marking.request_type'=>'complaint']);
+        return $this->render('index2', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model'=>null,
-        ]);
-    }
+            'model'=>new \app\modules\complaint\models\WorkDemand]);
+}
 
     /**
      * Displays a single WorkDemand model.
@@ -89,7 +89,8 @@ class WorkdemandController extends Controller
             $model->author=0;
             else
             $model->author=\app\modules\users\models\Designation::getDesignationByUser(Yii::$app->user->id);
-             if ($model->validate())
+            $model->dateto=date('Y-m-d',strtotime('+'.$model->noofdays.' day',strtotime($model->datefrom)));
+            if ($model->validate())
              
             {
                  $transaction = \Yii::$app->db->beginTransaction();

@@ -363,4 +363,12 @@ class Pond extends \yii\db\ActiveRecord
 	{
 	        return $this->hasMany(\app\modules\gpsphoto\models\Photo::className(), ['bwid' => 'workid'])	;
 	}
+	public static function getSummaryCount()
+	{
+	  $sql ="select district,count(*) as count from pond group by district order by district";
+	  $command=Yii::$app->db->createCommand($sql);
+	  return $command->queryAll();
+	  
+	
+	}
 }

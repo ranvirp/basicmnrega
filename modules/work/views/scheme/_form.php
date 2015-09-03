@@ -28,7 +28,7 @@ $this->registerJs(
 </div>
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
-    'action'=>Url::to(['/Scheme/create']),
+    'action'=>Url::to(['/work/scheme/create']),
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [

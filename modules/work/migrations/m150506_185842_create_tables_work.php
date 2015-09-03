@@ -23,7 +23,7 @@ class m150506_185842_create_tables_work extends Migration
             'agency_code'=>Schema::TYPE_STRING,
             'work_type_code'=>Schema::TYPE_STRING,
             'estcost'=>Schema::TYPE_DOUBLE,
-            'scheme_code'=>Schema::TYPE_STRING.'(5)',
+            'scheme_code'=>Schema::TYPE_STRING.'(50)',
              'district_code'=>Schema::TYPE_STRING,
              
              'block_code'=>Schema::TYPE_STRING,

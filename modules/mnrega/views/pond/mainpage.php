@@ -49,14 +49,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
         <div class="water-container">
          <h3>मुख्यमंत्री जल बचाओ अभियान</h3>
         </div>
-   
-<div class="col-md-offset-1 col-md-10 text-center">
-<div class="tile tile-medium col-sm-3">
+<div class="col-md-6">
+<div class="simple-box">
+ <?=$this->render('@app/modules/mnrega/views/pond/summary')?>
+</div>
+
+</div>
+<div class="col-md-6 text-center">
+<div class="tile tile-medium col-sm-12">
 <a href="<?=\yii\helpers\Url::to(['/mnrega/pond/create'])?>">
 <h1>Data Entry</h1>
 </a>
 </div>
-<div class="tile tile-medium col-sm-3">
+<div class="tile tile-medium col-sm-12">
 <a href="<?=\yii\helpers\Url::to(['/mnrega/pond/index'])?>">
 <h1>View data</h1>
 </a>

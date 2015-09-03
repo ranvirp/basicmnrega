@@ -105,6 +105,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
             ['label' => 'report', 'url' => ['/complaint/report/dwise?t=workdemand'],'options'=>['class'=>'dropdown']],
       
       ]],
+        Yii::$app->user->isGuest ?'':
        ['label' => 'Job Card Demand', 'url' => ['/complaint/jobcarddemand'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
              ['label' => 'create', 'url' => ['/complaint/jobcarddemand/create'],'options'=>['class'=>'dropdown']],
@@ -112,6 +113,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
                ['label' => 'report', 'url' => ['/complaint/report/dwise?t=jobcarddemand'],'options'=>['class'=>'dropdown']],
       
       ]],
+        Yii::$app->user->isGuest ?'':
        ['label' => 'Complaints', 'url' => ['/complaint/complaint'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
              ['label' => 'Create', 'url' => ['/complaint/complaint/create'],'options'=>['class'=>'dropdown']],
@@ -151,6 +153,7 @@ echo '</div>';
  //\yii\widgets\Pjax::begin(['id'=>"test-div",'enablePushState'=>false,'timeout'=>false]);
                    // \yii\widgets\Pjax::end();
                     ?>
+    <div class="container" id="main-container">
     <div class="row">
     <?php if (!Yii::$app->user->isGuest) {?>
     <div class="col-md-12 text-center">
@@ -162,7 +165,7 @@ echo '</div>';
   
    <?php   echo '<a class="hide" id="leftmenurefreshlink" href="'.Url::to(['/complaint/complaint/leftmenu']).'"></a>';?>
           
-    <div class="col-md-offest-1 col-md-2 hidden-print" id="leftmenu">
+    <div class="col-md-offest-1 col-md-3 hidden-print" id="leftmenu">
     <?php
    // include 'unmarked.php';
    if (Yii::$app->user->can('complaintadmin') || Yii::$app->user->can('complaintagent'))
@@ -204,7 +207,7 @@ echo '</div>';
             <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
-
+</div>
 <?php $this->endBody() ?>
 </body>
 </html>

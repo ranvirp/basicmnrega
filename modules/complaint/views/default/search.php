@@ -3,24 +3,22 @@
 {
 margin-top:12px;
 }
-.form-background
-{
-background-color:green;
-}
+
 </style>
+<div class="simple-box">
+
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
 $form = ActiveForm::begin([
     'id' => 'search-form',
-    'options' => ['class' => 'form-horizontal bg-info'],
+    'options' => ['class' => 'form-horizontal'],
     'action'=>\yii\helpers\Url::to(['/complaint/default']),
     
 ]) ?>
 <div class="row">
 <div class="col-md-12">
-<h2 class="centered top-offset"><strong>कृपया अपनी शिकायत/मांगों की अद्यतन स्थिति यहाँ से ज्ञात करें:</strong></h2>
+<h2 class="top-offset"><strong>कृपया अपनी शिकायत/मांगों की अद्यतन स्थिति यहाँ से ज्ञात करें:</strong></h2>
 </div>
 <div class="col-md-4 col-sm-4 centered">
 <?php 
@@ -53,3 +51,4 @@ $types=['complaint'=>Yii::t('app','Complaint'),
 </div>
     </div>
 <?php ActiveForm::end() ?>
+</div>

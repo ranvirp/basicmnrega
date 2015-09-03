@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Works'), 'url' => ['
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="work-create">
-<?=  $this->render('_form');
-	   ?>
+<?=  $this->render('_form',['model'=>$model,'attributeForm'=>$attributeForm,'attributeModel'=>$attributeModel]) ?>
+
+	   
 </div>

@@ -40,9 +40,9 @@ class PondAttributes extends \yii\db\ActiveRecord
     {
         return [
             'workid' => 'Workid',
-            'gatanumber' => 'Gatanumber',
-            'estpersondays' => 'Estpersondays',
-            'totalarea' => 'Totalarea',
+             'gatanumber' => 'गाटा संख्या',
+            'estpersondays' => 'Expected Person Days',
+            'totalarea' => 'Total Area',
         ];
     }
 	/*

@@ -66,7 +66,7 @@ if(Yii::$app->user->can('complaintviewall'))
    ?>
                  
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?ms='.$s.'&d='.$d])?>'>
+                            <a href='<?=Url::to(['/complaint/jobcarddemand/my?s='.$s.'&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$jobcarddemandcounts[0]['jobcarddemand_count_'.$s]?>
                             </span>
@@ -98,7 +98,7 @@ if(Yii::$app->user->can('complaintviewall'))
    ?>
                  
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/workdemand/my?ms='.$s.'&d='.$d])?>'>
+                            <a href='<?=Url::to(['/complaint/workdemand/my?s='.$s.'&d='.$d])?>'>
                                 <span class="badge pull-right">
                            <?=$workdemandcounts[0]['workdemand_count_'.$s]?>
                             </span>

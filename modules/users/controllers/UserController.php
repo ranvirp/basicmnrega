@@ -10,6 +10,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 
 /**
  * User controller
@@ -59,9 +60,17 @@ class UserController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionIndex($id=2)
     {
-        return $this->render('index');
+        $query=User::find();
+        $usersearch = new User;
+        $model=User::findOne($id);
+        if ($usersearch->load(Yii::$app->request->queryParams))
+        {
+          $query=$query->andFilterWhere(['like','username',$usersearch->username]);
+        }
+        $dp = new ActiveDataProvider(['query'=>$query]);
+        return $this->render('index',['dataProvider'=>$dp,'searchModel'=>$usersearch,'model'=>$model]);
     }
 
     public function actionLogin($returnurl='')
@@ -138,6 +147,22 @@ class UserController extends Controller
           return $this->render('passwordchanged');
         
         return $this->render('ChangePassword',['model'=>$user]);
+    }
+    public function actionChangeusername($id)
+    {
+      if (!Yii::$app->user->can('webadmin')) 
+        throw new BadRequestHttpException('Not Allowed!!!');
+      $user = new User;
+      if ( $user->load(Yii::$app->request->post()) )
+      {
+        $user1 = User::findOne($id);
+        if ($user1)
+         {
+          $user1->username=$user->username;
+          $user1->save();
+         }
+      }
+      return $this->redirect(['/users/user?id='.$id]);
     }
 
 }

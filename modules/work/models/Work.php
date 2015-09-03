@@ -5,7 +5,8 @@ use app\modules\mnrega\models\Panchayat;
 use app\modules\mnrega\models\District;
 
 use Yii;
-
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 /**
  * This is the model class for table "work".
  *
@@ -63,7 +64,7 @@ class Work extends \yii\db\ActiveRecord
             [['description', 'estcost', 'gpslat', 'gpslong', 'remarks'], 'string'],
             [['work_admin', 'status', 'created_at', 'updated_at', 'created_by'], 'integer'],
             [['uniqueid', 'workid', 'name_hi', 'name_en', 'agency_code', 'work_type_code', 'district_code', 'block_code', 'panchayat_code', 'village_code', 'district', 'block', 'panchayat', 'village', 'division_code', 'address'], 'string', 'max' => 255],
-            [['scheme_code'], 'string', 'max' => 5]
+            [['scheme_code'], 'string', 'max' => 50]
         ];
     }
 
@@ -74,20 +75,22 @@ class Work extends \yii\db\ActiveRecord
     {
         return [
             'workid' => 'Workid',
-            'name_hi' => 'Name in Hindi',
-            'name_en' => 'Name in English',
-            'district_code' => 'District Code',
+            'name_hi' =>Yii::t('app', 'Name in Hindi'),
+            'name_en' => Yii::t('app','Name in English'),
+            'district_code' => 'District',
             'block_code' => 'Block',
             'panchayat_code' => 'Panchayat',
             'village' => 'Village',
-            'gatasankhya' => 'गाटा संख्या',
+            
             'totarea' => 'Area',
             'estcost' => 'Estimated Cost',
-            'persondays' => 'Expected Person Days',
+           
             'gpslat' => 'Gpslat',
             'gpslong' => 'Gpslong',
             'status' => 'Status',
             'remarks' => 'Remarks',
+            'scheme_code'=>Yii::t('app','Scheme'),
+             'agency_code'=>Yii::t('app','Agency'),
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
@@ -129,15 +132,17 @@ class Work extends \yii\db\ActiveRecord
 			    
 			    break;
 			case 'agency_code':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  $form->field($this,$attribute)->dropDownList(ArrayHelper::map(Agency::find()->asArray()->all(),'code','name_en'));
+
 			    
 			    break;
 			case 'scheme_code':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  $form->field($this,$attribute)->dropDownList(ArrayHelper::map(Scheme::find()->asArray()->all(),'code','name_en'));
 			    
 			    break;						
 			case 'work_type_code':
 			   return  $form->field($this,$attribute)->textInput();
+			   //return $this->showValue('work_type_code');
 			    
 			    break;
 			case 'workid':

@@ -66,6 +66,7 @@ public function scenarios()
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
            [ ['oldpassword','newpassword','newpasswordrepeat'],'required','on'=>'passwordchange'],
            [['email'],'required','on'=>'email'],
+           [['username'],'string'],
         ];
     }
 
