@@ -8,6 +8,7 @@ class m150729_163603_alter_marking extends Migration
     public function safeUp()
     {
     //add five fields - name, mobileno, statustarget, purpose,canmark,
+    $this->addColumn('{{%marking}}','request_type',Schema::TYPE_TEXT);
     $this->addColumn('{{%marking}}','sender_name',Schema::TYPE_TEXT);
     $this->addColumn('{{%marking}}','sender_mobileno',Schema::TYPE_STRING);
     $this->addColumn('{{%marking}}','sender_designation_type_id',Schema::TYPE_INTEGER);
