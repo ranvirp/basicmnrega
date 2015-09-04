@@ -13,6 +13,7 @@ use app\modules\mnrega\models\Pond;
 class PondSearch extends Pond
 {
 public $noofphotos;
+
     /**
      * @inheritdoc
      */
@@ -68,6 +69,7 @@ public $noofphotos;
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
+           // 'photoCount'=>$this->photoCount,
         ]);
         /*
        $query->joinWith(['photosCount'=>function($q){

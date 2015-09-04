@@ -109,6 +109,13 @@ class Pond extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Panchayat::className(), ['code' => 'panchayat_code']);
     }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPhotoCount()
+    {
+        return $this->hasMany(\app\modules\gpsphoto\models\Photo::className(), ['bwid' => 'workid'])->count();
+    }
 	/*
 	*@return form of individual elements
 	*/

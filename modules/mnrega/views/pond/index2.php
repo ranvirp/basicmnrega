@@ -56,6 +56,7 @@ $(document).ready(function(){$("input[name='PondSearch[name_hi]']").addClass('hi
 'totarea',
 'estcost',
 'persondays',
+'photoCount',
 ['header'=>'#photos',
 'value'=>function($model,$key,$index,$column)
 {
