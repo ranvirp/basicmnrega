@@ -26,6 +26,8 @@ class m150520_022511_create_mnrega_tables extends Migration
                     ], $tableOptions);
                     $this->createTable('{{%marking}}', [
             'id' => Schema::TYPE_PK,
+            'request_type' => Schema::TYPE_STRING,
+            
             'request_id' => Schema::TYPE_INTEGER,
             'sender'=>Schema::TYPE_INTEGER,
             'receiver'=>Schema::TYPE_INTEGER,

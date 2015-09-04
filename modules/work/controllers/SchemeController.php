@@ -6,7 +6,7 @@ use Yii;
 use app\common\Utility;
 use app\modules\work\models\Scheme;
 use app\modules\work\models\SchemeSearch;
-use app\modules\work\Controller;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -44,7 +44,7 @@ class SchemeController extends Controller
 
     /**
      * Displays a single Scheme model.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
@@ -93,7 +93,7 @@ class SchemeController extends Controller
     /**
      * Updates an existing Scheme model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
         public function actionUpdate($id)
@@ -128,7 +128,7 @@ class SchemeController extends Controller
     /**
      * Deletes an existing Scheme model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -141,7 +141,7 @@ class SchemeController extends Controller
     /**
      * Finds the Scheme model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param string $id
      * @return Scheme the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

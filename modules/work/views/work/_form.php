@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 use app\common\Utility;
 
 /* @var $this yii\web\View */
@@ -27,6 +28,7 @@ $this->registerJs(
 </div>
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
+    'action'=>Url::to(['/work/work/create?type='.$model->work_type_code]),
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [
@@ -38,7 +40,12 @@ $this->registerJs(
         ],
     ],
 ]); ?>
+<div class="col-md-6">
+ <p> Work Type : <?=$model->work_type_code ?> </p>
+ <?= $model->showForm($form,"scheme_code") ?>
 
+  <?= $model->showForm($form,"agency_code") ?>
+ 
     <?= $model->showForm($form,"workid") ?>
 
     <?= $model->showForm($form,"name_hi") ?>
@@ -47,23 +54,12 @@ $this->registerJs(
 
     <?= $model->showForm($form,"description") ?>
 
-    <?= $model->showForm($form,"agency_id") ?>
+    
+   
+    <?= $model->showForm($form,"estcost") ?>
 
-    <?= $model->showForm($form,"work_type_id") ?>
-
-    <?= $model->showForm($form,"totvalue") ?>
-
-    <?= $model->showForm($form,"scheme_id") ?>
-
-    <?= $model->showForm($form,"district_id") ?>
-
-    <?= $model->showForm($form,"address") ?>
-
-    <?= $model->showForm($form,"gpslat") ?>
-
-    <?= $model->showForm($form,"gpslong") ?>
-
-    <?= $model->showForm($form,"work_admin") ?>
+   
+    <?= $model->showForm($form,"district_code") ?>
 
     <?= $model->showForm($form,"block_code") ?>
 
@@ -71,14 +67,29 @@ $this->registerJs(
 
     <?= $model->showForm($form,"village_code") ?>
 
+    <?= $model->showForm($form,"district") ?>
+
+    <?= $model->showForm($form,"block") ?>
+
+    <?= $model->showForm($form,"panchayat") ?>
+
+    <?= $model->showForm($form,"village") ?>
+
+    <?= $model->showForm($form,"division_code") ?>
+
+    <?= $model->showForm($form,"address") ?>
+
+   </div>
+   <div class="col-md-6">
+
+    <?= $model->showForm($form,"work_admin") ?>
+
     <?= $model->showForm($form,"status") ?>
 
     <?= $model->showForm($form,"remarks") ?>
-
-    <?= $model->showForm($form,"created_at") ?>
-
-    <?= $model->showForm($form,"updated_at") ?>
-
+    <?= $this->render($attributeForm,['model'=>$attributeModel,'form'=>$form]) ?>
+</div>
+  
 <?php
 /*
 try {

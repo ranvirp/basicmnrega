@@ -86,7 +86,7 @@ class Level extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'dept_id':
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Department::find()->asArray()->all(),"id","name_".Yii::$app->language),["prompt"=>"None.."]);
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Department::find()->asArray()->all(),"id","name_en"),["prompt"=>"None.."]);
 			    
 			    break;
 									
@@ -133,7 +133,7 @@ class Level extends \yii\db\ActiveRecord
 			   return $this->id;			    break;
 									
 			case 'dept_id':
-			   return Department::findOne($this->dept_id)->$name;			    break;
+			   return Department::findOne($this->dept_id)->name_en;			    break;
 									
 			case 'name_hi':
 			   return $this->name_hi;			    break;

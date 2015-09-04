@@ -192,7 +192,8 @@ class ParameterController extends \yii\web\Controller
         print $link;
         
         $data=file_get_contents($link);
-        
+        print $data;
+        //exit;
         if ($data=='')
         {
           print "Error fetching data...aborting\n";
@@ -323,6 +324,11 @@ else
   public function actionShow($t)
     {
      //if($id!=7) return;
+     $cache=Yii::$app->cache;
+     $key=$t.date('d-my');
+     $data = $cache->get($key);
+     if (!$data)
+     {
       $parameter=Parameter::find()->where(['shortcode'=>$t])->one();
       if (!$parameter)
       {
@@ -340,26 +346,42 @@ else
        switch($t)
        {
        case 'mandays':
-       return $this->render('_display',['model'=>$model,'result'=>
+       $data= $this->renderPartial('_display',['model'=>$model,'result'=>
         Json::decode($model->json_value,true)]);
         break;
          case 'empstatus':
-       return $this->render('_displayempstatus',['model'=>$model,'result'=>
+       $data= $this->renderPartial('_displayempstatus',['model'=>$model,'result'=>
         Json::decode($model->json_value,true)]);
         break;
           case 'musterroll':
-       return $this->render('_displaymusterroll',['model'=>$model,'result'=>
+       $data= $this->renderPartial('_displaymusterroll',['model'=>$model,'result'=>
         Json::decode($model->json_value,true)]);
         break;
+             case 'houses':
+       $data= $this->renderPartial('_displaywcategoriesdistrictwise',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+        break;
+        case 'overall':
+       $data= $this->renderPartial('_displayoverall',['model'=>$model,'result'=>
+        Json::decode($model->json_value,true)]);
+        break; 
         default:
-        return $this->render('_displaygeneral',['model'=>$model,'result'=>Json::decode($model->json_value,true)]);
+        $data= $this->renderPartial('_displaygeneral',['model'=>$model,'result'=>Json::decode($model->json_value,true)]);
         break;
        }
-        
+       $cache->set($key,$data);
+       }
          
       
       }
+      return $this->render('parameter',['data'=>$data,'t'=>$t]); 
+       
       
+    }
+    public function actionRanking()
+    {
+      return $this->render('_displayoverall');
+       
     }
     public function actionGetarray($id)
       {

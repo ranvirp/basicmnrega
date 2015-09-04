@@ -12,6 +12,15 @@ $config= [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'gii'],
     'controllerNamespace' => 'app\commands',
+   
+    'controllerMap' => [
+         'fixture' => [
+             'class' => 'yii\faker\FixtureController',
+             'providers' => [
+                 'app\tests\unit\faker\providers\Complaint',
+             ],
+         ],
+     ],
     'modules' => [
         'gii' => 'yii\gii\Module',
          'users'=>['class'=>'app\modules\users\Module'],
@@ -19,7 +28,28 @@ $config= [
     'work'=>['class'=>'app\modules\work\Module'],
     
     ],
-    'components' => [
+    'components' => [      
+    'i18n'=>[
+            'translations' => [
+                'app'=>[
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => "@app/messages",
+                    'sourceLanguage' => 'en',
+                    'fileMap' => [
+                        'app'=>'app.php',
+                       
+                    ]
+                ],
+                'hints'=>[
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => "@app/messages",
+                    'sourceLanguage' => 'en',
+                    'fileMap' => [
+                        'hints'=>'hints.php',
+                    ]
+                ]
+            ]
+        ],
     'authManager' => [
 		  'class' => '\yii\rbac\DbManager',
 		  'ruleTable' => 'authrule', // Optional

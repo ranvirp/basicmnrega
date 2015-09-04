@@ -6,7 +6,7 @@ use Yii;
 use app\common\Utility;
 use app\modules\work\models\Work;
 use app\modules\work\models\WorkSearch;
-use app\modules\work\Controller;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -26,7 +26,15 @@ class WorkController extends Controller
             ],
         ];
     }
-
+ public static function attributeDetails()
+ {
+   return [
+     'pond'=>['tableName'=>'pond_attributes','class'=>'app\modules\work\models\PondAttributes'],
+   
+   
+   ];
+  
+ }
     /**
      * Lists all Work models.
      * @return mixed
@@ -39,7 +47,7 @@ class WorkController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model'=>new \app\modules\work\models\Work        ]);
+            'model'=>null        ]);
     }
 
     /**
@@ -60,31 +68,64 @@ class WorkController extends Controller
      * @return mixed
      */
     
-    public function actionCreate()
+    public function actionCreate($type)
     {
        
-       
-        $model = new Work();
- 
-        if ($model->load(Yii::$app->request->post()))
+       $attributeDetails=self::attributeDetails();
+       if (!array_key_exists($type,$attributeDetails))
         {
+          throw new NotFoundHttpException("Not Found");
+        }
+    
+        $model = new Work();
+        $model->work_type_code=$type;
+        $attributeModel=new $attributeDetails[$type]['class'];
+        if ($model->load(Yii::$app->request->post()) && $attributeModel->load(Yii::$app->request->post()))
+        {
+          $transaction=Yii::$app->db->beginTransaction();
            if (array_key_exists('app\modules\work\models\Work',Utility::rules()))
             foreach ($model->attributes as $attribute)
             if (Utility::rules('app\modules\work\models\Work') && array_key_exists($attribute,Utility::rules()['app\modules\work\models\Work']))
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\work\models\Work'][$model->$attribute]['required'])
             );
-            if ($model->save())
+            $model->created_at=time();
+            $model->created_by=Yii::$app->user->id;
+            $model->updated_at=time();
+            if ($model->validate())
+            {
+            $model->save(false);
+            $attributeModel->workid=(string)$model->id;
+            if (!$attributeModel->save())
+            {
+            $transaction->rollBack();
+             print_r($attributeModel->errors);
+              exit;
+            }
             $model = new Work();; //reset model
+            $model->work_type_code=$type;
+              $attributeModel=new $attributeDetails[$type]['class'];
+      
+            }
+            else
+            {
+              $transaction->rollBack();
+              print_r($model->errors);
+              print_r($attributeModel->errors);
+              exit;
+            }
+          $transaction->commit();  
         }
  
-        $searchModel = new WorkSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+      //  $searchModel = new WorkSearch();
+       // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
  
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        return $this->render('create', [
+          //  'searchModel' => $searchModel,
+            //'dataProvider' => $dataProvider,
             'model' => $model,
+            'attributeForm'=>'../'.$attributeDetails[$type]['tableName'].'/_form',
+            'attributeModel'=>$attributeModel,
             
         ]);
 
@@ -98,7 +139,11 @@ class WorkController extends Controller
      */
         public function actionUpdate($id)
     {
+          $attributeDetails=self::attributeDetails();
+      
          $model = $this->findModel($id);
+         $attributeModelClass= $attributeDetails[$type]['class'];
+         $attributeModel=$attributeModelClass::findOne($model->id);
        
  
         if ($model->load(Yii::$app->request->post()))
@@ -110,18 +155,25 @@ class WorkController extends Controller
             $model->validators->append(
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\work\models\Work'][$model->$attribute]['required'])
             );
+            $model->created_at=time();
+            $model->created_by=Yii::$app->user->id;
+            $model->updated_at=time();
             if ($model->save())
+            {
             $model = new Work();; //reset model
+              $attributeModel=new $attributeDetails[$type]['class'];
+            }
         }
  
        $searchModel = new WorkSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
  
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        return $this->render('update', [
+           // 'searchModel' => $searchModel,
+            //'dataProvider' => $dataProvider,
             'model' => $model,
-            
+            'attributeForm'=>'../'.$attributeDetails[$type]['tableName'].'/_form',
+            'attributeModel'=>$attributeModel,
         ]);
 
     }

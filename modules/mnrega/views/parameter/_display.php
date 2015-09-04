@@ -1,7 +1,8 @@
 
+
 <?php
 $this->registerJs(
-   '$("document").ready(function(){ 
+   '
         $(document).ready(function() 
     { 
        // $("#myTable").tablesorter(); 
@@ -14,12 +15,14 @@ $this->registerJs(
     } 
 ); 
     
-    });'
+    '
 );
 if (!is_array($result))
    print "Invalid result array";
    
    else {
+     $blocks=json_decode(file_get_contents(__DIR__."/../../../../web/jsons/block.json"),true);
+ 
    $m=date('m');
          $y=date('Y');
           if ($y==2016) $m=$m+12;
@@ -83,12 +86,16 @@ if (!is_array($result))
                   $per=sprintf('%0.2f',$target!=0?$ach/$target*100:'0.0');
                   
                     
+                    if (array_key_exists($res1,$blocks))
                     
-                    print '<tr>'.'<td>'.$res.'</td>'.'<td>'.$res1.'</td>'.'<td>'.$ach.'</td>'.'<td>'.$per.'</td></tr>';
+                    print '<tr>'.'<td>'.$res.'</td>'.'<td>'.$blocks[$res1].'</td>'.'<td>'.$ach.'</td>'.'<td>'.$per.'</td></tr>';
+                  else
+                  print '<tr>'.'<td>'.$res.'</td>'.'<td>'.$res1.'</td>'.'<td>'.$ach.'</td>'.'<td>'.$per.'</td></tr>';
+                 
                   
                 }
                 else
-                  print '<tr>'.'<td>'.$res.'</td>'.'<td>'.$res1.'</td>'.'<td>'.$res1Arr.'</td></tr>';
+                  print '<tr>'.'<td>'.$res.'</td>'.'<td>'.$blocks[$res1].'</td>'.'<td>'.$res1Arr.'</td></tr>';
                   
              }
            }  
@@ -99,3 +106,4 @@ if (!is_array($result))
        print '</tbody></table>'; 
      
    }
+ 

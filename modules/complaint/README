@@ -1,0 +1,59 @@
+Following functionality is available for different roles:
+
+ complaintagent
+------------------
+1. Register new complaint and mark to concerned PO or district official
+
+   function : complaintcontroller/create 
+   form : views/default/complaintnew 
+   introduce condition about marking in form as well as while saving 
+   (modify behavior to introduce functions also)
+   introduce transactional 
+----------Done----------------
+2. Mark unmarked complaints to officers (po and bdos)
+   function :in behaviour MarkingBehaviour/assign 
+ ----complaint/update -------check  
+
+3. Get history of all complaints and their status for a particular complainer 
+   or for particular category etc. 
+   function: complaintcontroller/advancedsearch
+   todo: a good index file for display of complaints
+
+complaintadmin
+---------------
+
+1. All functions of complaintagent but also marking to statequalitymonitors
+   and lokpal
+
+2. Get drill down reports for districts and blocks-
+    total, pending, atr received
+
+3. Filing complaint enquiry reports and updating enquiry reports
+
+4. filing  atr and updating ATR
+
+5. add lokpals and state quality monitors
+4. when report is submitted by an officer- he can assign that comlpaint to 
+   himself to verify and add 
+
+
+POs
+-----------
+
+1. See list of unsolved, marked complaints to them
+
+2. Add reply to the complaints
+
+3. Add report to workdemand and jobcarddemand
+    - workdemandstatus changed as
+
+cycle of status of workdemand,jobcarddemand
+--------------------------------------------------------
+1. Pendingforatr, pending for agent verification, closed
+cycle of status of complaint
+--------------------------------------------------------
+1. Pendingforreport, pending for agent verification, pending for filing atr,closed
+------------
+     0                     1                            2
+------------------------------------------
+filereport->add a reply-change status of complaint->

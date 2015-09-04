@@ -9,7 +9,7 @@ use app\common\Utility;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?php
- 
+ \app\assets\AppAssetGoogle::register($this);
  $changeattribute='';
 $this->registerJs(
    '$("document").ready(function(){ 

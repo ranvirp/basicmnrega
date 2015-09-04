@@ -1,0 +1,395 @@
+<?php
+namespace app\modules\complaint\controllers;
+use app\modules\mnrega\models\Marking;
+use app\modules\complaint\models\Complaint;
+use app\modules\complaint\models\EnquiryReportSummary;
+use app\modules\complaint\models\EnquiryReportPoint;
+
+
+use app\modules\users\models\Designation;
+use Yii;
+class MarkingController extends \yii\web\Controller
+{
+
+   public function actionIndex($markingid)
+    {
+      $complaintview='';
+      $actionbuttons='';
+      $marking=$this->findMarking($markingid);
+      if ($this->_ismarkedtocurrentuser($marking->request_id,$markingid)) 
+       {
+       
+         $complaint=Complaint::findOne($marking->request_id);
+         if ($marking->status==$marking->statustarget)
+          {
+            //Nothing to do for the current user only view options
+            $complaintview= $this->renderPartial('@app/modules/complaint/views/complaint/view1',['model'=>$complaint]);
+          
+          }
+          else 
+           if ($marking->status<$marking->statustarget) {
+             switch($marking->status)
+             {
+               case Complaint::PENDING_FOR_ENQUIRY:
+                 //check if you have marked officers for enquiry
+                 $submarking=Marking::findOne(['sender'=>Designation::getDesignationByUser(Yii::$app->user->id),'request_type'=>'complaint','request_id'=>$marking->request_id,'statustarget'=>Complaint::ENQUIRY_REPORT_RECEIVED]);
+                 if ($submarking)
+                  {
+                    switch ($submarking->status)
+                     {
+                       case Complaint::PENDING_FOR_ENQUIRY:
+                         if ($submarking->receiver==0)
+                           {
+                              $complaintview= $this->renderPartial('@app/modules/complaint/views/complaint/view',['model'=>$complaint]);
+                      
+                             $actionbuttons.=$this->renderPartial('actionfilereport',['id'=>$submarking->request_id,'markingid'=>$submarking->id]);
+                           }
+                       break;
+                       case Complaint::ENQUIRY_REPORT_RECEIVED:
+                         //get enquiry report
+                             $enquiryreportsummary=EnquiryReportSummary::findOne(['complaint_id'=>$submarking->request_id,'marking_id'=>$submarking->id]);
+                             if (!$enquiryreportsummary)
+                               {
+                                 //inconsistent status 
+                                 $submarking->status=Complaint::PENDING_FOR_ENQUIRY;
+                                 $submarking->save();
+                                 
+                               }
+                               else 
+                               {
+                                 $atrpoint=null;
+                                 $atrsummary=null;
+                                 $enquiryreportspoint=[];
+                                 $flag=false;
+                                 foreach ($complaint->complaintPoints as $cp)
+                                   {
+                                    $flag=true;
+                                     $enquiryreportspoint[$cp->id]= EnquiryReportPoint::findOne(['marking_id'=>$submarking->id,'complaint_point_id'=>$cp->id]);
+                                   }
+                                   if (!$flag)
+                                   $enquiryreportspoint=null;
+                                 $complaintview=$this->renderPartial('@app/modules/complaint/views/complaint/view4',['model'=>$complaint,'enquiryreportsummary'=>$enquiryreportsummary,'enquiryreportspoint'=>$enquiryreportspoint,'atrsummary'=>null,'atrpoint'=>null]);
+                                 if ($enquiryreportsummary->accepted!=2)
+                                 {
+                                 $actionbuttons.=$this->renderPartial('actionforward',['id'=>$submarking->request_id,'markingid'=>$submarking->id,'newmarkingid'=>$markingid]);
+                                 $actionbuttons.=$this->renderPartial('actionreject',['markingid'=>$markingid]);
+                                 }
+                                 else if ($enquiryreportsummary->accepted==2)
+                                 {
+                                    $actionbuttons.=$this->renderPartial('actionacceptandforward',['id'=>$submarking->request_id,'markingid'=>$submarking->id,'newmarkingid'=>$markingid]);
+                                
+                                 
+                                 }
+                               }
+                           
+                       break;
+                       default:
+                       break;
+                     
+                     }
+                  
+                  
+                  }
+                  else 
+                  {
+                    $complaintview= $this->renderPartial('@app/modules/complaint/views/complaint/view',['model'=>$complaint]);
+                    $actionbuttons.=$this->renderPartial('actionfilereport',['id'=>$marking->request_id,'markingid'=>$marking->id]);
+                    if ($marking->canmark)
+                    $actionbuttons.=$this->renderPartial('actionmarkofficer',['id'=>$marking->request_id]);
+                       
+       
+                  }
+               
+               break;
+               case Complaint::ENQUIRY_REPORT_RECEIVED:
+                     $enquiryreportsummary=EnquiryReportSummary::findOne(['marking_id'=>$markingid]);
+                       $enquiryreportspoint=[];
+                                 $flag=false;
+                                 foreach ($complaint->complaintPoints as $cp)
+                                   {
+                                    $flag=true;
+                                     $enquiryreportspoint[$cp->id]= EnquiryReportPoint::findOne(['marking_id'=>$markingid,'complaint_point_id'=>$cp->id]);
+                                   }
+                                   if (!$flag)
+                                   $enquiryreportspoint=null;
+                     
+                     $complaintview=$this->renderPartial('@app/modules/complaint/views/complaint/view4',['model'=>$complaint,'enquiryreportsummary'=>$enquiryreportsummary,'enquiryreportspoint'=>$enquiryreportspoint,'atrsummary'=>null,'atrpoint'=>null]);
+                      $actionbuttons.='<b>Wait for Review of report filed by you !!</b><br>';        
+               break;
+               case Complaint::ENQUIRY_REPORT_REVIEWED:
+                //not possible..do not do anything
+               
+               break;
+               case Complaint::PENDING_FOR_ATR:
+                                  //check if you have marked officers for enquiry
+                 $submarking=Marking::findOne(['sender'=>Designation::getDesignationByUser(Yii::$app->user->id),'request_type'=>'complaint','request_id'=>$marking->request_id,'statustarget'=>Complaint::ATR_RECEIVED]);
+                 if ($submarking)
+                  {
+                    switch ($submarking->status)
+                     {
+                       case Complaint::PENDING_FOR_ATR:
+                         if ($submarking->receiver==0)
+                           {
+                              $complaintview= $this->renderPartial('@app/modules/complaint/views/complaint/view',['model'=>$complaint]);
+                      
+                             $actionbuttons.=$this->renderPartial('actionfileatr',['id'=>$submarking->request_id,'markingid'=>$submarking->id]);
+                           }
+                       break;
+                       case Complaint::ATR_RECEIVED:
+                         //get atr
+                             $atrsummary=AtrSummary::findOne(['complaint_id'=>$submarking->request_id,'marking_id'=>$submarking->id]);
+                             if (!$atrsummary)
+                               {
+                                 //inconsistent status 
+                                 $submarking->status=Complaint::PENDING_FOR_ATR;
+                                 $submarking->save();
+                                 
+                               }
+                               else 
+                               {
+                                 $enquiryreportspoint=[];
+                                 $flag=false;
+                                 $enquiryreportsummary=EnquiryReportSummary::findOne(['marking_id'=>$markingid]);
+                                 foreach ($complaint->complaintPoints as $cp)
+                                   {
+                                    $flag=true;
+                                     $enquiryreportspoint[$cp->id]= EnquiryReportPoint::findOne(['marking_id'=>$complaint->enqrofficer,'complaint_point_id'=>$cp->id]);
+                                   }
+                                   if (!$flag)
+                                   $enquiryreportspoint=null;
+                                 $complaintview=$this->renderPartial('@app/modules/complaint/views/complaint/view4',['model'=>$complaint,'enquiryreportsummary'=>$enquiryreportsummary,'enquiryreportspoint'=>$enquiryreportspoint,'atrsummary'=>null,'atrpoint'=>null]);
+                                 if ($atrsummary->accepted!=2)
+                                 {
+                                 $actionbuttons.=$this->renderPartial('actionforward',['id'=>$submarking->request_id,'markingid'=>$submarking->id,'newmarkingid'=>$markingid]);
+                                 $actionbuttons.=$this->renderPartial('actionreject',['markingid'=>$markingid]);
+                                 }
+                                 else if ($atrsummary->accepted==2)
+                                 {
+                                    $actionbuttons.=$this->renderPartial('actionacceptandforward',['id'=>$submarking->request_id,'markingid'=>$submarking->id,'newmarkingid'=>$markingid]);
+                                
+                                 
+                                 }
+                               }
+                           
+                       break;
+                       default:
+                       break;
+                     
+                     }
+                  
+                  
+                  }
+                  else 
+                  {
+                    $complaintview= $this->renderPartial('@app/modules/complaint/views/complaint/view',['model'=>$complaint]);
+                    $actionbuttons.=$this->renderPartial('actionfileatr',['id'=>$marking->request_id,'markingid'=>$marking->id]);
+                    if ($marking->canmark)
+                    $actionbuttons.=$this->renderPartial('actionmarkofficer',['id'=>$marking->request_id]);
+                       
+       
+                  }
+               break;
+               case Complaint::ATR_RECEIVED:
+                 //nothing to be done....
+               
+               break;
+               case Complaint::ATR_REVIEWED:
+                 //nothing to be done
+               break;
+               default:
+               break;
+             
+             
+             }
+           
+           
+           
+           }
+       
+       
+       }
+      return $this->render('controlpanel',['complaintview'=>$complaintview,'actionbuttons'=>$actionbuttons]);
+    
+    }
+    
+ protected function _ismarkedtocurrentuser($id,$markingid)
+  {
+    $marking1=Marking::find()->where(['id'=>$markingid,'request_id'=>$id,'receiver'=>Designation::getDesignationByUser(Yii::$app->user->id)])->one();
+    $marking2=Marking::find()->where(['id'=>$markingid,'request_id'=>$id,'sender'=>Designation::getDesignationByUser(Yii::$app->user->id)])->one();
+    return $marking1 or $marking2;
+  }
+  
+  protected function findMarking($markingid)
+   {
+     if (($model=Marking::findOne(['id'=>$markingid])) !=null)
+      {
+        if ($model->request_type=='complaint')
+        return $model;
+        else
+          throw new \yii\web\NotFoundHttpException("Not found");
+        
+      }
+     else
+       throw new \yii\web\NotFoundHttpException("Not found");
+   
+   }
+   public function actionReject($id,$markingid,$a='e')
+   {
+    $marking2=Marking::find()->where(['id'=>$markingid,'request_id'=>$id,'sender'=>Designation::getDesignationByUser(Yii::$app->user->id)])->one();
+    if ($marking2 ||Yii::$app->user->can('complaintadmin'))
+     {
+      //set flag of all reports related to this marking as rejected
+      if ($a=='e')
+      {
+        $eq=EnquiryReportSummary::findOne(['marking_id'=>$markingid]);
+        if ($eq)
+        {
+          $eq->accepted=2;
+          $eq->save();
+        }
+         $erp=EnquiryReportPoint::find()->where(['marking_id'=>$markingid])->all();
+        if ($erp)
+        {
+        foreach ($erp as $eqpoint)
+        {
+          $eqpoint->accepted=2;
+          $eqpoint->save();
+        }
+        }
+       $marking->status=Complaint::ENQUIRY_REPORT_REVIEWED;
+       $marking->purpose='Report Rejected';
+       $marking->save();
+       $cpreply=new ComplaintReply;
+       $cpreply->complaint_id=$id;
+       $cpreply->marking_id=$markingid;
+       $cpreply->reply=Yii::$app->request->post('reject-reason');
+       $cpreply->created_by=Yii::$app->user->id;
+       $cpreply->created_at=time();
+       $cpreply->save();
+      
+      }
+      else if ($a=='o')
+      {
+        $atr=AtrSummary::findOne(['marking_id'=>$markingid]);
+        if ($atr)
+        {
+          $atr->accepted=2;
+          $atr->save();
+        }
+         $atrp=AtrPoint::find()->where(['marking_id'=>$markingid])->all();
+        if ($atrp)
+        {
+        foreach ($atrp as $atrpoint)
+        {
+          $atrpoint->accepted=2;
+          $atrpoint->save();
+        }
+        }
+       $marking->status=Complaint::ATR_REPORT_REVIEWED;
+       $marking->purpose='ATR Rejected';
+       $marking->save();
+       $cpreply=new ComplaintReply;
+       $cpreply->complaint_id=$id;
+       $cpreply->marking_id=$markingid;
+       $cpreply->reply=Yii::$app->request->post('reject-reason');
+       $cpreply->created_by=Yii::$app->user->id;
+       $cpreply->created_at=time();
+       $cpreply->save();
+      
+      }
+    
+    
+    }
+    else
+      throw new NotFoundHttpException("You are Not allowed");
+   
+   }
+   public function actionForward($id,$markingid,$newmarkingid)
+   {
+     
+     $marking2=Marking::find()->where(['id'=>$markingid,'request_id'=>$id,'sender'=>Designation::getDesignationByUser(Yii::$app->user->id)])->one();
+     
+     if ($marking2 ||Yii::$app->user->can('complaintadmin'))
+     {
+      $transaction=Yii::$app->db->beginTransaction();
+      $flag=true;
+       $marking=Marking::findOne($newmarkingid);
+       if (!$marking)
+        throw new NotFoundHttpException('Wrong request');
+        $eq=EnquiryReportSummary::findOne(['marking_id'=>$markingid]);
+        if ($eq)
+        {
+          $eq->accepted=1;
+          $eq->save();
+        }
+        $eqclone=EnquiryReportSummary::findOne(['marking_id'=>$newmarkingid]);
+        if (!$eqclone) $eqclone= new EnquiryReportSummary;
+        $eqclone->attributes=$eq->attributes;
+       // unset($eqclone->id);
+        
+        $eqclone->reportby="Recommended by :".$marking->receiver_name."\n".$eqclone->reportby;
+        $eqclone->marking_id=$newmarkingid;
+        $eqclone->accepted=0;
+        if (!$eqclone->save())
+        {
+         print_r($eqclone->errors);
+         //exit;
+         $flag=false;
+        
+         
+        }
+        else 
+        {
+          //print_r($eqclone);
+         // exit;
+        }
+        
+       // print_r($eqclone->reportby);
+        //exit;
+        
+         $erp=EnquiryReportPoint::find()->where(['marking_id'=>$markingid])->all();
+        if ($erp)
+        {
+        foreach ($erp as $eqpoint)
+        {
+          $eqpoint->accepted=1;
+          $eqpoint->save();
+           $eqpointclone=EnquiryReportPoint::findOne(['marking_id'=>$newmarkingid,'complaint_point_id'=>$eqpoint->complaint_point_id]);
+        if (!$eqpointclone) $eqpointclone=new EnquiryReportPoint;
+          $eqpointclone->attributes=$eqpoint->attributes;
+          unset($eqpointclone->id);
+        
+        $eqpointclone->marking_id=$newmarkingid;
+        $eqpointclone->accepted=0;
+       if (! $eqpointclone->save())
+         {
+          print_r($eqpointclone->errors);
+         // exit;
+          $flag=false;
+         }
+        }
+        }
+       if ($flag)
+       {
+        $transaction->commit();
+        return $this->redirect(\yii\helpers\Url::to(['/complaint/complaint/filereport?id='.$id.'&markingid='.$newmarkingid]));
+     
+        }
+        else
+        {
+         $transaction->rollBack();
+         return "some error";
+         }
+       //$marking->status=Complaint::ENQUIRY_REPORT_RECEIVED;
+       //$marking->purpose='Report Forwarded';
+       //$marking->save();
+       
+     }
+
+  
+   
+   }
+
+
+
+}

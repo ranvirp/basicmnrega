@@ -4,6 +4,7 @@
 /uploads
 /config/db.php
 /config/params.php
+/config/mailer.php
 # phpstorm project files
 .idea
 

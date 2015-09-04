@@ -22,8 +22,10 @@ class Reply extends \yii\db\ActiveRecord
 	/*
 	 * Shortcuts for classes to which reply shall be attached
 	 */
-	public static $classmap=['w'=>'app\models\Work','d'=>'\app\modules\users\models\Designation'
-	,'marking'=>'\app\modules\mnrega\models\Marking'];
+	public static $classmap=[
+	'w'=>'app\models\Work','d'=>'app\modules\users\models\Designation'
+	,'marking'=>'app\modules\mnrega\models\Marking',
+	'complaint'=>'app\modules\complaint\models\Complaint'];
 	
 	/**
      * @inheritdoc
@@ -61,5 +63,10 @@ class Reply extends \yii\db\ActiveRecord
             'author_id' => 'Author ID',
             'update_time' => 'Update Time',
         ];
+    }
+    public static function lastReply($ct,$ctid)
+    {
+       return self::find()->where(['content_type'=>$ct,'content_type_id'=>$ctid])->orderBy('create_time desc')->limit(1)->one();
+       
     }
 }

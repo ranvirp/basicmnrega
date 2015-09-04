@@ -21,6 +21,9 @@ use Yii;
 class Designation extends \app\modules\users\MyActiveRecord
 {
  public $resetpasswd=0;
+ public $createuser=1;
+ public $randpasswd=0;
+ public $inactiveuser=0;
     /**
      * @inheritdoc
      */
@@ -43,10 +46,14 @@ class Designation extends \app\modules\users\MyActiveRecord
     public function rules()
     {
         return [
-            [['designation_type_id', 'level_id','officer_userid'], 'integer'],
+            [['designation_type_id','officer_userid'], 'integer'],
             [['officer_name_hi', 'officer_name_en'], 'string', 'max' => 100],
             [['officer_mobile', 'officer_mobile1'], 'string', 'max' => 12],
-            [['officer_email'], 'string', 'max' => 50],
+            [['officer_email'], 'email'],
+            [['name_hi','name_en'],'required'],
+            [['level_id'],'required'],
+            [['officer_email'],'required' ,'on'=>'randpasswd'],
+            [['resetpasswd','randpasswd','createuser','inactiveuser'],'safe'],
            // [['officer_userid'], 'string', 'max' => 10]
         ];
     }
@@ -77,7 +84,14 @@ class Designation extends \app\modules\users\MyActiveRecord
         return $this->hasOne(DesignationType::className(), ['id' => 'designation_type_id']);
     }
 
-   
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'officer_userid']);
+    }
+
 	/*
 	*@return form of individual elements
 	*/
@@ -193,6 +207,8 @@ class Designation extends \app\modules\users\MyActiveRecord
     }
     public function createUserAndRole()
      {
+           
+            
         $role=$this->designationType->shortcode;
         $username=$role.'_'.strtolower($this->level->name_en);
         $auth = Yii::$app->authManager;
@@ -209,26 +225,59 @@ class Designation extends \app\modules\users\MyActiveRecord
 		//$userclass=Yii::$app->getModule('user')->modelClasses['User'];
 		//$usermodel=$userclass::find()->where('username=:username',[':username'=>$username])->one();
 		//$usermodel=null;
+		$existinguserexists=0;
+		if (!$this->officer_userid)
+		{
 		 $usermodel = User::findOne([
            // 'status' => User::STATUS_ACTIVE,
            // 'email' => $this->email,
               'username'=>$username,
         ]);
+        if ($usermodel)  $existinguserexists=1;
+        }
+        else
+        {
+         $usermodel=User::findOne($this->officer_userid);
+        
+         }
        // if ($usermodel && !$this->resetpasswd)
         //return;
+        
+          
+        $password=$username."$$$";
+        if ($this->randpasswd)
+           $password=Yii::$app->security->generateRandomString();
+           
 		if (!$usermodel) 
 		  {
 		  //$usermodel->delete();
 		     $usermodel=new \app\modules\users\models\User;
+		     
 		     $usermodel->username=$username;
-		  }
-		     //$usermodel->newPassword=$username;
-		     $usermodel->setPassword($username."$$$");
+		     if ($existinguserexists)
+		        $usermodel->username=$username.'_'.($this->level->code);
+		      $usermodel->setPassword($password);
 		    // $usermodel->email=$username.'@test.com';
 		     //$usermodel->role_id=2;
-		     $usermodel->email=$this->officer_email;
-		     $usermodel->status=User::STATUS_ACTIVE;
-		     $usermodel->scenario='login';
+		    
+		  }
+		   $usermodel->email=$this->officer_email;
+		     //$usermodel->newPassword=$username;
+		     if ($this->resetpasswd)
+		        $usermodel->setPassword($password);
+		    if ($this->inactiveuser)
+		      $usermodel->status=User::STATUS_DISABLED;
+		    else
+		      $usermodel->status=User::STATUS_ACTIVE;
+		      $usermodel->scenario='login';
+		      if ($this->randpasswd)
+		       {
+		          $passwordresetform=new PasswordResetRequestForm;
+		          $passwordresetform->email=$this->officer_email;
+		          $passwordresetform->sendEmail();
+		          $usermodel->scenario='email';
+		       }
+		     
 		     if (!$usermodel->save())
 		      {
 		        print_r($usermodel->errors);
@@ -247,18 +296,16 @@ class Designation extends \app\modules\users\MyActiveRecord
 		        print_r($this->errors);exit;
 		      }
 		      
-		      }
+		    } 
 		   
      }
-     public function beforeSave($insert)
-     {
-     if ($insert)
-     {
-      // $this->name_en=$this->designationType?$this->designationType->name_en:''.','.$this->level?$this->level->name_en:'';
-       //$this->name_hi=$this->designationType?$this->designationType->name_hi:''.','.$this->level?$this->level->name_hi:'';
-      }
-      return parent::beforeSave($insert);
-       
-     }
+ public static function getDesignationByUser($userid,$returnobj=false)
+ {
+ if ($returnobj)
+     return Designation::find()->where(['officer_userid'=>$userid])->one();
+ else
+   return Designation::find()->where(['officer_userid'=>$userid])->one()->id;
+ }
+     
 	
 }

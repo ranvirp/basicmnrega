@@ -58,6 +58,8 @@ class MarkingSearch extends Marking
         $query->andFilterWhere([
             'id' => $this->id,
             'request_id' => $this->request_id,
+            'request_type' => $this->request_type,
+            'status'=>$this->status,
             'sender' => $this->sender,
             'receiver' => $this->receiver,
             'dateofmarking' => $this->dateofmarking,

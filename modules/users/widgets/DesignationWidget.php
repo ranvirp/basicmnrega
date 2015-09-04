@@ -25,21 +25,21 @@ class DesignationWidget  extends \yii\base\Widget{
 		// Normal parent select
 		$lang=Yii::$app->language;
 		$url=\yii\helpers\Url::to(['/users/utility/getdesignation?dt=']);
-		$id=$attribute.'-id';
-		echo '<div class="row"><div class="col-md-6">';
+		$id=Html::getInputId($model,$attribute).'-id';
+		echo '<div class="row">';
 		
-echo Html::dropDownList($this->attribute.'-designation-type-id','',
-\yii\helpers\ArrayHelper::map(\app\modules\users\models\DesignationType::find()->asArray()->all(),'id','name_'.$lang), ['prompt'=>'Select Designation Type','class'=>'form-control','label'=>'Circle','id'=>$attribute.'-designation-type-id',
+echo Html::dropDownList(Html::getInputId($this->model,$this->attribute).'-designation-type-id','',
+\yii\helpers\ArrayHelper::map(\app\modules\users\models\DesignationType::find()->asArray()->all(),'id','name_'.$lang), ['prompt'=>'Select Designation Type','class'=>'form-control','label'=>'Circle','id'=>Html::getInputId($this->model,$this->attribute).'-designation-type-id',
 'onChange'=>"js:populateDropdown('".$url."'+$(this).val(),'".$id."')"]);
 
 // Dependent Dropdown
 //echo $form->field($model, $attribute)->widget(
-echo '</div><div class="col-md-6">';
+echo '</div><div class="row">';
 echo	Html::activeDropDownList( 
 		$model,
 		$attribute,[],
-      ['id'=>$attribute.'-id','class'=>'form-control','prompt'=>'None']
+      ['id'=>Html::getInputId($model,$attribute).'-id','class'=>'form-control','prompt'=>'None']
      );
-echo '</div></div>';
+echo '</div>';
 	}
 }

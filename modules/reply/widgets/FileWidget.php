@@ -8,6 +8,7 @@
 
 namespace app\modules\reply\widgets;
 use Yii;
+use yii\helpers\Html;
 
 /**
  * Description of FileWidget
@@ -29,24 +30,32 @@ class FileWidget  extends \yii\base\Widget{
 	//echo '<style> .file-drop-zone{height:0%}</style>';
 	$y=[];
 	$z1='';	
+	//$attribute=Html::getAttributeName($attribute);
+	//echo $model->$attribute;
 	
-	if ($model->$attribute !='')
+	if (! is_array(Html::getAttributeValue($model, $attribute)))
 	{
-		foreach (explode(",",$model->$attribute) as $id)
+		foreach (explode(",",Html::getAttributeValue($model, $attribute)) as $id)
+		{
+		if (is_numeric($id))
 		{
 			$file = \app\modules\reply\models\File::findOne($id);
 			if ($file)
 			{
 				$z1 .= "<input type=hidden name='".
-			 $modelName.'['.''.$attribute.'][]'."' value=\"".$file->id.'">'."\n";
+			Html::getInputName($model,$attribute).'[]'."' value=\"".$file->id.'">'."\n";
 				//echo '<div>'.$z1.'</div>';
 				
 			if ($file->mime=='img/jpeg')
 				$y[]=Html::img($file->url,['class'=>'file-preview-image','title'=>$file->title]);
 			else $y[]='<a href="'.$file->url.'">'.$file->title.'</a>';
 			}
+			}
 		}
 	}
+	echo '<style>';
+	echo ".file-preview-frame{height:5px;}";
+	echo '</style>';
 	echo '<div class="col-lg-12">';
 	
  echo \kartik\file\FileInput::widget( [
@@ -56,6 +65,7 @@ class FileWidget  extends \yii\base\Widget{
 	'pluginOptions'=>
 	[
 		'uploadUrl'=>  yii\helpers\Url::to(['/reply/file/upload']),
+		
 		'uploadExtraData'=>['model'=>get_class($model),'attribute'=>$attribute],
 		'browseLabel'=>'Select files',
 		'dropZoneEnabled'=>false,
@@ -66,15 +76,15 @@ class FileWidget  extends \yii\base\Widget{
         //'browseClass' => 'btn btn-primary btn-block',
         //'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
         //'browseLabel' =>  'Select Photo',
-		'previewSettings'=>['image'=>['width'=>"150px",'height'=>'150px']],
+		'previewSettings'=>['image'=>['width'=>"15px",'height'=>'15px']],
 		 'initialPreview'=>$y,
         'overwriteInitial'=>false,
-		'previewTemplates'=>[],
+		//'previewTemplates'=>[],
 		'layoutTemplates'=>[
 		  'footer'=>'<div class="file-thumbnail-footer">' .
         '    <div class="file-caption-name">{caption}</div>' .
         '    {actions}' .
-        '<div>Title:<input class="activeInput" name="title[{fileindex}]" id="title-{fileindex}" /></div>'
+        '<div>Title:<input class="activeInput hindiinput" name="title[{fileindex}]" id="title-{fileindex}" onClick="js:hindiEnable()" /></div>'
        	.'</div>'
 		  ],
 	],
@@ -109,8 +119,8 @@ class FileWidget  extends \yii\base\Widget{
                 for (ind=0;ind<data.response.length;ind++)
                  {
                   //alert(data.response[ind]);
-                  $('#".$modelName.'_'.$attribute.'_hi'."').append('<input type=hidden name=".
-			      $modelName.'['.''.$attribute.'][]'." value=\"'+data.response[ind]+'\">');
+                  $('#".Html::getInputId($model,$attribute).'_hi'."').append('<input type=hidden name=".
+			      Html::getInputName($model,$attribute).'[]'." value=\"'+data.response[ind]+'\">');
                  }
 
                  }",
@@ -120,8 +130,10 @@ class FileWidget  extends \yii\base\Widget{
 	  
 ]); 
  //echo $z1;
- echo '<div id="'.$modelName.'_'.$attribute.'_hi" >'.$z1.'</div>';
+ echo '<div id="'.Html::getInputId($model,$attribute).'_hi" >'.$z1.'</div>';
  echo '</div>';
  
+ 
 	}
+	
 }

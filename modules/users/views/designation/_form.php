@@ -18,7 +18,7 @@ if ($model->designation_type_id && $model->level_id)
   {
    $classname=$model->designationType->level->class_name;
    if (class_exists($classname))
-   $dd=\yii\helpers\ArrayHelper::map($classname::find()->asArray()->all(),'id','name_en');
+   $dd=\yii\helpers\ArrayHelper::map($classname::find()->asArray()->all(),'code','name_en');
    else
      $dd=[];
   /*
@@ -69,7 +69,13 @@ $this->registerJs($js);
 				<div class='col-md-4'>
     <?= $form->field($model, 'officer_email')->textInput(['maxlength' => 50]) ?>
     <?=$form->field($model,'resetpasswd')->checkBox()?>
+    <?=$form->field($model,'createuser')->checkBox(['checked'=>true])?>
+    <?=$form->field($model,'randpasswd')->checkBox(['checked'=>false])?>
 	</div>
+				<div class='col-md-12'>
+    <b>User Name:</b><?=$model->officer_userid?\app\modules\users\models\User::findOne($model->officer_userid)->username:'undefined' ?>
+  	</div>
+	
 		</div>
 		
     <?php

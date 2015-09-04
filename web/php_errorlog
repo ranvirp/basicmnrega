@@ -1,5 +1,0 @@
-[22-May-2015 03:53:05 CST6CDT] PHP Parse error:  syntax error, unexpected T_OBJECT_OPERATOR in /home/nregaup0/basicmnrega/web/index.php on line 12
-[22-May-2015 03:59:19 CST6CDT] PHP Parse error:  syntax error, unexpected '[', expecting ')' in /home/nregaup0/basicmnrega/vendor/yiisoft/yii2/Yii.php on line 25
-[22-May-2015 06:32:11 America/Chicago] PHP Fatal error:  Class 'kartik\grid\GridView' not found in /home/nregaup0/basicmnrega/modules/users/views/department/index.php on line 27
-[22-May-2015 21:46:55 America/Chicago] PHP Fatal error:  Cannot use object of type DOMNodeList as array in /home/nregaup0/basicmnrega/modules/mnrega/Utility.php on line 44
-[24-May-2015 12:54:34 America/Chicago] PHP Fatal error:  Cannot use object of type DOMNodeList as array in /home/nregaup0/basicmnrega/modules/mnrega/Utility.php on line 44

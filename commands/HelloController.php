@@ -9,6 +9,8 @@ namespace app\commands;
 
 use yii\console\Controller;
 use app\modules\gpsphoto\models\Photo;
+use yii\db\Migration;
+use Yii;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -20,6 +22,42 @@ use app\modules\gpsphoto\models\Photo;
  */
 class HelloController extends Controller
 {
+public function actionLoadMarking()
+{
+ $complaints=\app\modules\complaint\models\Complaint::find()->where('id<1000')->all();
+ $i=1;
+  foreach ($complaints as $complaint)
+  {
+   if ($i==1) {$maintype='po';$actiontype='a';}
+   if ($i==2) {$maintype='cdo';$actiontype='a';}
+   if ($i==3) {$maintype='sqm';$actiontype='e';}
+   $complaint->_createSingleMarking1($actiontype,0,0,$maintype);
+   $complaint->save();
+    if ($i==3) $i=1; else $i++;
+  
+  }
+
+}
+public function actionLoadOnce()
+{
+  $rows=require Yii::getAlias('@app').'/tests/unit/fixtures/data/complaint.php';
+  $migrate=new Migration;
+  $insertrows=[];
+  $columns=[];
+  $row=$rows[0];
+  $columns=array_keys($row);
+  foreach ($rows as $row)
+  {
+    
+    $insertrows[]=array_values($row);
+    }
+  
+ // print_r($insertrows);
+  //print_r($columns);
+  
+  $migrate->batchInsert('{{%complaint}}',$columns,$insertrows);
+}
+
 public function actionCad($designationtype)//Create All Designations
 {
   $dt=\app\modules\users\models\DesignationType::find()->where(['shortcode'=>$designationtype])->one();
@@ -34,7 +72,9 @@ public function actionCad($designationtype)//Create All Designations
    $designation->level_id=$code;
    $designation->name_en=$dt->name_en.",".$name;
     $designation->name_hi=$dt->name_hi.",".$name;
- print_r($designation); 
+
+  print "creating ".$dt->name_en.",".$name."\n"; 
+
    $designation->createUserAndRole();
   }
 
@@ -93,6 +133,16 @@ public function actionCad($designationtype)//Create All Designations
       $x=$panchayats;
       file_put_contents('/Users/mac/jsons/'.$code.'.json',json_encode($x));
       }
+     
+     
+     }
+     public function actionBlock()
+     {
+      $blocks=\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\Block::find()->orderBy('name_en asc')->asArray()->all(),'code','name_en');
+      //file_put_contents('/Users/mac/jsons/district.json',json_encode($districts));
+      
+      file_put_contents('/Users/mac/htdocs/basicmnrega/web/jsons/'.'block'.'.json',json_encode($blocks));
+      
      
      
      }

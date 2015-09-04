@@ -6,6 +6,7 @@ use Yii;
 use app\common\Utility;
 use app\modules\users\models\Designation;
 use app\modules\users\models\DesignationSearch;
+use app\modules\users\models\DesignationType;
 use app\modules\users\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -69,31 +70,31 @@ class DesignationController extends Controller
  
         if ($model->load(Yii::$app->request->post()))
         {
+          $model->name_hi=$model->designationType->name_hi.','.$model->level->name_hi;
+         $model->name_en=$model->designationType->name_en.','.$model->level->name_en; 
           if (!($searchmodel=Designation::findOne(['designation_type_id'=>$model->designation_type_id,'level_id'=>$model->level_id])))
            {
-             
-           if (array_key_exists('app\modules\users\models\Designation',Utility::rules()))
-            foreach ($model->attributes as $attribute)
-            if (Utility::rules('Designation') && array_key_exists($attribute,Utility::rules()['app\modules\users\models\Designation']))
-            $model->validators->append(
-               \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\users\models\Designation'][$model->$attribute]['required'])
-            );
-            if ($model->validate())
-            {
-            $model->createUserAndRole();
+             $designation_type=DesignationType::findOne($model->designation_type_id);
+            if ($model->createuser==1)
+             $model->createUserAndRole();
+            else
+             $model->save();
              $model = new Designation();; //reset model
            
       
-            }
+           
+           
             }
             else 
               {
                 \Yii::$app->getSession()->setFlash('error', 'Designation already Exists. Try Updating <a href="'.\yii\helpers\Url::to(['/users/designation/update?id='.$searchmodel->id]).'">Update</a>');
               }
         }
+        
  
         $searchModel = new DesignationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query=$dataProvider->query->with('user');
  
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -118,6 +119,9 @@ class DesignationController extends Controller
     	if ($x) $model->id=$x->id;
         if ($model->load(Yii::$app->request->post()))
         {
+         $model->name_hi=$model->designationType->name_hi.','.$model->level->name_hi;
+         $model->name_en=$model->designationType->name_en.','.$model->level->name_en; 
+         
         if (array_key_exists('app\modules\users\models\Designation',Utility::rules()))
            
             foreach ($model->attributes as $attribute)
@@ -126,13 +130,13 @@ class DesignationController extends Controller
                \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\masterdata\models\Designation'][$model->$attribute]['required'])
             );
             
-            if ($model->save())
-            {
+            if ($model->createuser==1)
              $model->createUserAndRole();
-      
+             else 
+              $model->save();
             $model = new Designation();; //reset model
             
-            }
+            
         }
  
        $searchModel = new DesignationSearch();
@@ -152,7 +156,7 @@ class DesignationController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete1($id)
     {
         $this->findModel($id)->delete();
 

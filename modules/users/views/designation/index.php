@@ -1,7 +1,9 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
+use app\assets\AppAssetGoogle;
 use app\modules\users\models\DesignationType;
 
 /* @var $this yii\web\View */
@@ -22,22 +24,24 @@ $(\"#toggleButton\").click(function () {
     var duration = 700;
  
     $('#designation-grid').toggle(effect, options, duration);
-    $('#designation-form').removeClass();
+  //  $('#designation-form').removeClass();
     
-    $('#designation-form').addClass('col-lg-12');
+    //$('#designation-form').addClass('col-lg-12');
     $(this).text('Show Grid');
 });
 ";
 $this->registerJs($js);
+AppAssetGoogle::register($this);
 
 $this->title = Yii::t('app', 'Designations');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <button class="btn btn-success" id="toggleButton">Hide Grid</button>
+<a href="<?=Url::to(['/users/designation/create'])?>"><button class="btn btn-success" >Create Designation</button></a>
 
-<?php if ($model!=null):?><div class="col-lg-6" id="designation-form">
+<?php if ($model!=null):?><div class="col-md-6" id="designation-form">
 <?=$this->render('_form',['model'=>$model]) ?></div>
-<div class="col-lg-6" id="designation-grid">
+<div class="col-md-6" id="designation-grid">
 <?php else:?><div class="col-lg-12" id="designation-grid">
 <?php endif;?><div class="designation-index">
 
@@ -47,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+        ['class' => 'yii\grid\ActionColumn'],
             ['class' => 'yii\grid\SerialColumn'],
 
 ['header'=>'id',
@@ -61,12 +66,12 @@ $this->params['breadcrumbs'][] = $this->title;
 },
 'filter'=>\yii\helpers\ArrayHelper::map(DesignationType::find()->asArray()->all(),'id','name_'.Yii::$app->language)
 ,],
-['header'=>'Level',
+['header'=>'Place',
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->designationType->level?$model->designationType->level->name_en:'Not Found'
                 //.print_r($model->level,true);
-                //.':'.($model->level)?$model->level->name_en:'Not Found';
+                .':'.($model->level)?$model->level->name_en:'Not Found';
                 ;
 },],['header'=>'Officer Name in Hindi',
 'value'=>function($model,$key,$index,$column)
@@ -76,14 +81,19 @@ $this->params['breadcrumbs'][] = $this->title;
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('officer_name_en');
-},],            // 'officer_mobile',
+},],             'officer_mobile',
             // 'officer_mobile1',
-            // 'officer_email:email',
-            // 'officer_userid',
+            'officer_email:email',
+            ['header'=>'Username',
+            'attribute'=>'officer_userid',
+'value'=>function($model,$key,$index,$column)
+{
+                return $model->showValue('officer_userid');
+},],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            
         ],
-       // 'tableOptions'=>['class'=>'small'],
+        'tableOptions'=>['class'=>'table table-striped small'],
     
     ]); ?>
 

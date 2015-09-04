@@ -71,7 +71,7 @@ class DefaultController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($ct,$ctid)
+    public function actionCreate($ct,$ctid,$returnurl='view')
     {
 		if (Yii::$app->user->isGuest)
 			$this->redirect(['/users/user/login']);
@@ -90,7 +90,7 @@ class DefaultController extends Controller
         $model = new Reply();
 		$model->content_type=$ct;
 		$model->content_type_id=$ctid;
-		$model->author_id=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one();
+		$model->author_id=\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->id;
 		$model->create_time=time();
        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 		   
@@ -98,7 +98,7 @@ class DefaultController extends Controller
 			{
 			$x=[];
 			foreach ($model->attachments as $attachment)
-			  if($attachment!='') $x[]=$attachment; //remove blank fields
+			  if(is_numeric($attachment)) $x[]=$attachment; //remove blank fields
 			$model->attachments=implode(",",$x);
 			}
 		    else
@@ -119,9 +119,15 @@ class DefaultController extends Controller
 					}
 				}
 			}
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect([$returnurl, 'id' => $model->id]);
         } else {
+        if (!Yii::$app->request->isAjax)
             return $this->render('create', [
+                'model' => $model,
+				'parentcontent'=>$parentcontent
+            ]);
+        else 
+          return $this->renderPartial('createajax', [
                 'model' => $model,
 				'parentcontent'=>$parentcontent
             ]);

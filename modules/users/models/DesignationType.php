@@ -32,7 +32,9 @@ class DesignationType extends \yii\db\ActiveRecord
         return [
             [['level_id'], 'integer'],
             [['name_hi', 'name_en'], 'string', 'max' => 50],
-            [['shortcode'], 'string', 'max' => 10]
+            [['shortcode'], 'string', 'max' => 10],
+            [['shortcode'], 'unique'],
+            
         ];
     }
 /**
@@ -56,6 +58,16 @@ class DesignationType extends \yii\db\ActiveRecord
             'name_en' => Yii::t('app', 'Name En'),
             'shortcode' => Yii::t('app', 'Shortcode'),
         ];
+    }
+    public static function otherTypes()
+    {
+      return ['-1'=>'TAC',
+              '-2'=>'Committee',
+              '-3'=>'District Level Officer',
+              '-4'=>'Mandal Level Officer',
+              '-5'=>'Others',
+              ];
+    
     }
 
     /**

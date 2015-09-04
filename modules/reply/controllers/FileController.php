@@ -4,6 +4,7 @@ namespace app\modules\reply\controllers;
 
 use Yii;
 use app\modules\reply\models\File;
+use app\modules\complaint\models\ComplaintReply;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -43,9 +44,9 @@ class FileController extends Controller
      * Lists all File models.
      * @return mixed
      */
-    public function actionIndex($id)
+    public function actionIndex($uniqid)
     {
-        $model = File::findOne($id);
+        $model = File::find()->where(['uniqid'=>$uniqid])->one();
         if (!$model)
           {
             throw new NotFoundHttpException('The requested file does not exist.');
@@ -163,9 +164,9 @@ class FileController extends Controller
 					$title=Yii::$app->request->post('title');
 					$file_id=Yii::$app->request->post('file_id');
 					//exit;
-					
+					$model=str_replace("\\Complaint\\","\\complaint\\",$model);
 					$model = new $model;
-            $files = \yii\web\UploadedFile::getInstances($model,$attribute);
+                $files = \yii\web\UploadedFile::getInstances($model,$attribute);
 
             if ($files) {  
 				foreach ($files as $index=>$file)
@@ -187,7 +188,7 @@ class FileController extends Controller
 					 $fileModel->title=$file->name;
 				$fileModel->uniqid=$uniqid;
 				$fileModel->save();
-			    $fileModel->url=\yii\helpers\Url::to(['/reply/file?id='.$fileModel->id]);
+			    $fileModel->url=\yii\helpers\Url::to(['/reply/file?uniqid='.$fileModel->uniqid]);
 				$fileModel->uploaded_by = Yii::$app->user->getId();
 				$fileModel->uploaded_at =time();
 				$fileModel->save();

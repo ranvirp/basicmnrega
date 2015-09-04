@@ -5,39 +5,89 @@
  */
 var map;
 var markers;
-function populateDropdown(url,id)
+function populateDropdown(url,id,clickableid)
 {
-     
-      $.get(url,
+     clickableid= typeof clickableid !== 'undefined' ? clickableid : null;
+      $.ajax({
+         'url':url,
+          'type':'GET',
+          'beforeSend':function() {
+             $('#'+id).html('<img src="'+imageloader+'" />');
+          },
+          'success':
           function(data)
           {
           if (typeof data !='object')
               data = $.parseJSON(data)
-               
+               $('#'+id).html('');
                 var htmlToAppend='<option>None</option>';
+                //$('#'+id).append(htmlToAppend);
               $.each(data,function(key,value)
          {
+       //  alert(key+'-'+value);
         htmlToAppend +="<option value='"+key+"'>" + value  + "</option>";
+       // $('#'+id).append("<option value='"+key+"'>" + value  + "</option>");
+       //$('#'+id).append( new Option(value,key) );
          });
 
                  
-                 $('#'+id).html(htmlToAppend);    
+                 $('#'+id).append(htmlToAppend); 
+                  if (clickableid !=null)
+             $('#'+clickableid).trigger('click');
 }
-);
+});
 }
-function populateHtml(url,id)
+function populateHtml(url,id,clickableid)
 {
-     $.get(url,
+    clickableid= typeof clickableid !== 'undefined' ? clickableid : null;
+     $.ajax({
+          'url':url,
+          'type':'GET',
+          
+          'beforeSend':function() {
+             $('#'+id).html('<img src="'+imageloader+'" />');
+          },
+          'success':
           function(data)
           {
+          
              $('#'+id).html(data); 
-          });
+             if (clickableid !=null)
+             $('#'+clickableid).trigger('click');
+          }});
 }
 function addMarker(gpslat,gpslong)
 {
 marker =new L.marker([gpslat,gpslong]);
 	  map.addLayer(marker);
       map.panTo(new L.latLng(gpslat,gpslong)); 
+
+}
+
+
+    function hindiEnable(elem){
+     if (elem==null)
+      elem =$('.hindiinput');
+             var options = {
+          sourceLanguage:
+              google.elements.transliteration.LanguageCode.ENGLISH,
+          destinationLanguage:
+              [google.elements.transliteration.LanguageCode.HINDI],
+          shortcutKey: 'ctrl+g',
+          transliterationEnabled: true
+      };
+            google_control =
+          new google.elements.transliteration.TransliterationControl(options);
+        google_control.makeTransliteratable(elem);
+    }
+function exportToPdf(selector,url)
+{
+  $.post(url,
+  {'html':$(selector)[0].outerHTML},
+  function(data){
+  document.write( data);
+  }
+  );
 
 }
 /*

@@ -37,23 +37,31 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-weight: 100;
     line-height: 1.1;
 }
+.water-container
+{
+ background:url('<?=Yii::getAlias('@web').'/images/water.jpg'?>');
+ background-size:100%;
+}
 </style>
-<div clas="row">
-<div class="col-md-1">
-</div>
-<div class="col-md-11">
-<div class="form-title">
-        <div class="form-title-span" style="text-align:center">
-         <h1>मुख्यमंत्री जल बचाओ अभियान</h1>
+<div class="row">
+
+<div class="col-md-12 text-center">
+        <div class="water-container">
+         <h3>मुख्यमंत्री जल बचाओ अभियान</h3>
         </div>
-    </div>
-<div class="row centered">
-<div class="tile tile-medium col-sm-3">
+<div class="col-md-6">
+<div class="simple-box">
+ <?=$this->render('@app/modules/mnrega/views/pond/summary')?>
+</div>
+
+</div>
+<div class="col-md-6 text-center">
+<div class="tile tile-medium col-sm-12">
 <a href="<?=\yii\helpers\Url::to(['/mnrega/pond/create'])?>">
 <h1>Data Entry</h1>
 </a>
 </div>
-<div class="tile tile-medium col-sm-3">
+<div class="tile tile-medium col-sm-12">
 <a href="<?=\yii\helpers\Url::to(['/mnrega/pond/index'])?>">
 <h1>View data</h1>
 </a>
