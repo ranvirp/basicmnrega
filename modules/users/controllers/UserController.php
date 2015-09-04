@@ -153,13 +153,19 @@ class UserController extends Controller
       if (!Yii::$app->user->can('webadmin')) 
         throw new BadRequestHttpException('Not Allowed!!!');
       $user = new User;
+      $user->scenario='usernamepasswordchange';
       if ( $user->load(Yii::$app->request->post()) )
       {
         $user1 = User::findOne($id);
         if ($user1)
          {
           $user1->username=$user->username;
+          if ($user->newpassword!='')
+          $user1->setPassword($user->newpassword);
+          if ($user1->validate())
           $user1->save();
+          else
+           print_r($user1->errors);
          }
       }
       return $this->redirect(['/users/user?id='.$id]);

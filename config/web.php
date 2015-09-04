@@ -7,7 +7,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
 
-    'homeUrl'=>'index.php/site/main',
+    'homeUrl'=>['site'],
    'language'=>'hi',
 
     'components' => [
