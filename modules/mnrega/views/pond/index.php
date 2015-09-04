@@ -51,7 +51,7 @@ $(document).ready(function(){$("input[name='PondSearch[name_hi]']").addClass('hi
 
 'value'=>function($model,$key,$index,$column)
 {
-                return $model->showValue('block_code');
+                return $model->block;
 },], 
 'panchayat',
 'totarea',
