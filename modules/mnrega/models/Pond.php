@@ -187,7 +187,7 @@ class Pond extends \yii\db\ActiveRecord
 			   $url="'"."/basicmnrega/web/jsons/'+$(this).val()+'.json'";
 			   $id='pond-panchayat';
 			   if ($district!=null)
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$district])->orderBy('name_en asc')->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$district])->orderBy('name_en asc')->all(),"code","name_en"),["prompt"=>"None..",
 			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
 			   else
 			     return  $form->field($this,$attribute)->dropDownList([],["prompt"=>"None..",
@@ -198,7 +198,7 @@ class Pond extends \yii\db\ActiveRecord
 									
 			case 'panchayat_code':
 			   return  
-			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'pond-panchayat',
+			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_en"),["prompt"=>"None..",'id'=>'pond-panchayat',
 			   'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());$('#workid').val($(this).val()+'/')",'class'=>'form-control']);
 			    
 			    break;
