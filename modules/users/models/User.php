@@ -50,6 +50,7 @@ public function scenarios()
     {
         return array_merge(parent::scenarios(),[
             'passwordchange' => ['oldpassword', 'newpassword','newpasswordrepeat'],
+            'usernamepasswordchange'=>['username','password_hash','auth_key','newpassword'],
             'api'=>['auth_key'],
             'login'=>['username','password_hash','auth_key'],
             'email'=>['email'],

@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin(['id' => 'changeusername-form','action'=>Url::to(['/users/user/changeusername?id='.$model->id])]); ?>
                 <p>Old Username:<?=$model->username?></p>
                 <?= $form->field($model,'username')->textInput()->label('New Username') ?>
+                <?= $form->field($model,'newpassword')->textInput()->label('New Password') ?>
                 
                 <div class="form-group">
                     <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'submit-button']) ?>
