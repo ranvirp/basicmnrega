@@ -123,9 +123,15 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
       
          !Yii::$app->user->can('complaintadmin') ?'':   
               ['label' => 'Complaint Type', 'url' => ['/complaint/complaint_type/create'],'options'=>['class'=>'dropdown']],
-              ['label' => 'Complaint Type', 'url' => ['/complaint/complaint_subtype/create'],'options'=>['class'=>'dropdown']],
-               ['label' => 'Hints', 'url' => ['/complaint/hint/hint?t=hints'],'options'=>['class'=>'dropdown']],
-              ['label' => 'Labels', 'url' => ['/complaint/hint/hint?t=app'],'options'=>['class'=>'dropdown']],
+          !Yii::$app->user->can('complaintadmin') ?'':   
+         
+          ['label' => 'Complaint Type', 'url' => ['/complaint/complaint_subtype/create'],'options'=>['class'=>'dropdown']],
+             !Yii::$app->user->can('complaintadmin') ?'':   
+         
+             ['label' => 'Hints', 'url' => ['/complaint/hint/hint?t=hints'],'options'=>['class'=>'dropdown']],
+            !Yii::$app->user->can('complaintadmin') ?'':   
+         
+            ['label' => 'Labels', 'url' => ['/complaint/hint/hint?t=app'],'options'=>['class'=>'dropdown']],
              
             
                 
