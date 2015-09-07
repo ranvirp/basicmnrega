@@ -1,6 +1,6 @@
 <table class="table table-bordered">
 <tr><th>District</th>
-<th>No of Ponds </th><th>Total Area</th>
+<th>No of Ponds </th>
 <th>No of Geotagged Photos</th>
 </tr>
 <?php $summary=\app\modules\mnrega\models\Pond::getSummaryCount();
@@ -21,14 +21,12 @@ $photos=0;
 $total=0;
  foreach ( $pondcount as $summary1)
  {
-  $area+=$summary1['totalarea'];
   $persondays+=$summary1['totalpersondays'];
   $photos+=$photoindex[$summary1['district']];
   $total+=$summary1['count'];
   
  ?>
  <tr><td><?=$summary1['district']?></td><td><?=$summary1['count']?></td>
- <td><?=$summary1['totalarea']?></td>
  <td><?=$summary1['totalpersondays']?></td>
  <td><?=$photoindex[$summary1['district']]?></td>
  </tr>
@@ -36,7 +34,6 @@ $total=0;
  }
  ?>
  <tr><td><strong>Total</strong></td><td><?=$total?></td>
- <td><?=$area?></td>
  <td><?=$persondays?></td>
  <td><?=$photos?></td>
 </table>
