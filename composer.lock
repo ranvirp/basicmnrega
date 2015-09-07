@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "hash": "cbaef18db4ed5c155f6a3d9a8a4b27c5",
-=======
     "hash": "27ea4f7f1ee6da52cd5d6a6bb576848e",
->>>>>>> develop
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -1462,11 +1458,7 @@
         },
         {
             "name": "symfony/css-selector",
-<<<<<<< HEAD
             "version": "v2.7.2",
-=======
-            "version": "v2.7.1",
->>>>>>> develop
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
@@ -1519,7 +1511,6 @@
         },
         {
             "name": "symfony/dom-crawler",
-<<<<<<< HEAD
             "version": "v2.7.2",
             "source": {
                 "type": "git",
@@ -1530,7 +1521,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/9dabece63182e95c42b06967a0d929a5df78bc35",
                 "reference": "9dabece63182e95c42b06967a0d929a5df78bc35",
-=======
             "version": "v2.7.1",
             "source": {
                 "type": "git",

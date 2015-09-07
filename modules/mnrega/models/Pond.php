@@ -373,9 +373,18 @@ class Pond extends \yii\db\ActiveRecord
 
 	public static function getSummaryCount()
 	{
-	  $sql ="select district,count(*) as count from pond group by district order by district";
+	  $sql ="select district,count(*) as count,sum(cast(totarea as double precision)) as totalarea,sum(persondays) as totalpersondays from pond group by district order by district";
 	  $command=Yii::$app->db->createCommand($sql);
-	  return $command->queryAll();
+	  $pondcount= $command->queryAll();
+	  $sql1 ="select district,count(*) as photocount  from photo group by district order by district";
+	  $command1=Yii::$app->db->createCommand($sql1);
+	  $photocount=$command1->queryAll();
+	 // $sql2="select district,count(*) as count,sum(cast(totarea as double precision)) as totalarea,sum(persondays) as totalpersondays from pond ";
+	 // $summarycount=Yii::$app->db->createCommand($sql2)->queryAll();
+	 // $sql3 ="select district,count(*) as photocount  from photo";
+	  // $photosummarycount=Yii::$app->db->createCommand($sql3)->queryAll();
+	 
+	  return [$pondcount,$photocount];
 	  
 	
 	}
