@@ -226,7 +226,7 @@ class Marking extends \yii\db\ActiveRecord
     {
       return $this->id;
     }
-     public static function count1($t,$status,$d=-1)
+     public static function count1($t,$status,$d=-1,$updated=-1)
      
       {
         if(count($t)==0) return;//nothing to do
@@ -339,6 +339,10 @@ class Marking extends \yii\db\ActiveRecord
          
        
     
+    }
+    public function beforeSave()
+    {
+      $this->update_time=time();
     }
     /*
     public function show($request_type,$request_id)
