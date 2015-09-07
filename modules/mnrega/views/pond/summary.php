@@ -1,6 +1,7 @@
 <table class="table table-bordered">
 <tr><th>District</th>
 <th>No of Ponds </th>
+<th>No of Persondays </th>
 <th>No of Geotagged Photos</th>
 </tr>
 <?php $summary=\app\modules\mnrega\models\Pond::getSummaryCount();
