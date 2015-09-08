@@ -57,7 +57,7 @@ class SiteController extends Controller
         return $this->render('../../modules/mnrega/views/pond/mainpage');
      } else 
      {
-       $this->layout="//nologin";
+       $this->layout="//complaint";
         $model = new \app\modules\users\models\LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
