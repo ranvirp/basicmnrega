@@ -91,6 +91,7 @@ class DefaultController extends Controller
             }
          
          }
+         else
        return $this->render('search',['model'=>$model]);
       
     }

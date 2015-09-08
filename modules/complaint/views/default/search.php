@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
 $form = ActiveForm::begin([
     'id' => 'search-form',
     'options' => ['class' => 'form-horizontal'],
-    'action'=>\yii\helpers\Url::to(['/complaint/default']),
+    'action'=>\yii\helpers\Url::to(['/complaint/default/search']),
     
 ]) ?>
 <div class="row">

@@ -62,7 +62,7 @@ div.required label:after {
      else 
        $markurl=null;
       echo '<div class="col-sm-12">';
-         print $this->render('@app/modules/mnrega/views/marking/index',['searchModel'=>$marking,'dataProvider'=>$dp,'markurl'=>$markurl]);
+         print $this->render('markingindex',['searchModel'=>$marking,'dataProvider'=>$dp,'markurl'=>$markurl]);
        echo '</div>';
      
 ?>
@@ -89,13 +89,15 @@ div.required label:after {
 			['attribute'=>'panchayat_code','value'=>$model->panchayat1->name_en],
 			
 			'panchayat',
+			  ['header'=>Yii::t('app','Status'),'attribute'=>'status','value'=>Complaint::statusNames()[$model->status]],
+
 		],
 	]) ?>
 	<?=\app\modules\reply\models\File::showAttachmentsInline($model,"attachments")?>
     </div>
     <?php 
-      $enquiryreportsummary=EnquiryReportSummary::find()->where(['complaint_id'=>$model->id])->one();
-      $atrsummary=$model->atrSummary;
+     // $enquiryreportsummary=EnquiryReportSummary::find()->where(['complaint_id'=>$model->id])->one();
+      //$atrsummary=$model->atrSummary;
       
     ?>
        
