@@ -79,10 +79,11 @@ public static function statusNames()
     {
       return 
       [
+        'phone'=>'Phone',
+      
        'cmoffice'=>'CM Office',
        'shashan'=>'Shashan',
        'ayukt'=>'Ayukt',
-       'phone'=>'Phone',
        'web'=>'Web',
        'email'=>'Email',
        'mis'=>'MIS',
@@ -125,6 +126,8 @@ public static function statusNames()
             [['panchayat_code'], 'string', 'max' => 12],
              [['panchayat'], 'string', 'max' => 100],
              [['flowtype'],'safe'],
+             [['status'],'integer'],
+             [['complaint_subtype'],'string'],
              [['enqrofficer','atrofficer'],'integer'],
            
              [['attachments','marking'], 'safe'],
@@ -416,6 +419,7 @@ public static function statusNames()
     }
   public function _createSingleMarking($actiontype='a',$canmark=0,$change=0)
     {
+     
           
           $designation=Designation::getDesignationByUser(Yii::$app->user->id,true);
 	      $sender=$designation->id;
@@ -423,11 +427,12 @@ public static function statusNames()
           $sender_name=$designation->name_en.','.$designation->officer_name_en;
           $sender_mobileno=$designation->officer_mobile;
           $maintype=Yii::$app->request->post('maintype');
-        
+          
 	      $this->load(Yii::$app->request->bodyParams);
 	      $marking=$this->marking;
 	      if (array_key_exists('actiontype',$marking))
 	      $actiontype=$marking['actiontype'];
+	      
 	      $flag=false;
         //   $transaction =Yii::$app->db->beginTransaction();                
 	      switch($actiontype)
@@ -446,7 +451,7 @@ public static function statusNames()
 	          default:
 	          $status=self::PENDING_FOR_ATR;
 	          $statustarget=self::ATR_RECEIVED;
-	          $purpose="For Enquiry";
+	          $purpose="For ATR";
 	          break;
 	          
 	      }
@@ -454,6 +459,7 @@ public static function statusNames()
 	      
           $deadline=$marking['deadline'];
           $rmarking=null;
+         
                 switch ($maintype)
                     {
                        case 'po':
@@ -512,7 +518,7 @@ public static function statusNames()
                            
                            $rmarking=$this->markToDesignation($this->id,$sender,$sender_name,$sender_mobileno,$sender_designation_type_id,$receiver_designation_type_id,$receiver,$receiver_name,$receiver_mobileno,$purpose,$canmark,$status,$statustarget,$deadline,$change);
                              $flag=true;
-                             
+                           
                          break;
                          case 'sqm':
                           if (!Yii::$app->user->can('marktosqm'))
@@ -584,10 +590,24 @@ public static function statusNames()
                          
                          break;
                         }
+                        
             if ($flag) 
             {
                if ($rmarking && (Yii::$app->user->can('complaintadmin') ||Yii::$app->user->can('complaintagent')))
                {
+              if (array_key_exists('comment',$marking) && $marking['comment']!='')
+              {
+	      
+                 $comment=$marking['comment'];
+                 $complaintreply=new ComplaintReply;
+                 $complaintreply->reply=$comment;
+                 $complaintreply->reply_type=ComplaintReply::INSTRUCTION;
+                 $complaintreply->author=Yii::$app->user->id;
+                 $complaintreply->marking_id=$rmarking->id;
+                 $complaintreply->complaint_id=$this->id;
+                 $complaintreply->created_at=time();
+                 $complaintreply->save();
+                }
                  if ($actiontype=='a')
                  {
                    $this->atrofficer=$rmarking->id;
@@ -627,10 +647,12 @@ public static function statusNames()
 	                'district',
 	                'complaint.district_code =district.code'
 	            ) 
-	             ->join(  'INNER JOIN',
+	            
+	             ->join(  'LEFT JOIN',
 	                'block',
 	                'complaint.block_code =block.code'
 	            )
+	            
 	          //  ->groupBy('complaint.id,complaint.name_hi,fname,mobileno,address,panchayat,complaint_type.name_hi,complaint_subtype.name_hi,complaint.description,dateofmarking,complaint.status,flowtype,marking.id,markingstatus,complaint.district_code,complaint.block_code,district.name_en,block.name_en,marking.flag,receiver')
 	            ;
 	            
@@ -649,8 +671,21 @@ public static function statusNames()
        $query->andWhere('marking.flag!=1');
        if ($sender!=-1)
        $query->andWhere('marking.sender='.$sender);
+       /*
+        test
+       
+       if ($enqrofficer)
+        {
+           $query->andWhere('!=','marking.flag',1)->andWhere(['marking.id'=>'complaint.enqrofficer','complaint.status'=>self::PENDING_FOR_ENQUIRY,'complaint.status'=>'marking.status']);
+        }
+         if ($atrofficer)
+        {
+           $query->andWhere('!=','marking.flag',1)->andWhere(['marking.id'=>'complaint.atrofficer','complaint.status'=>self::PENDING_FOR_ATR,'complaint.status'=>'marking.status']);
+        }
+        */
        if ($enqrofficer && $atrofficer)
-        $query->orWhere('complaint.atrofficer is null AND complaint.enqrofficer is null');
+       
+        $query->andWhere('(complaint.status='.self::PENDING_FOR_ATR.' AND complaint.atrofficer is null) OR (complaint.status='.self::PENDING_FOR_ENQUIRY.' AND complaint.enqrofficer is null)');
      
 	  if (!Yii::$app->user->can('complaintviewall') )
 	  {

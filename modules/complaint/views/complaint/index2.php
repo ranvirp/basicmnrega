@@ -86,10 +86,10 @@ use yii\widgets\Pjax;
               'header'=>Yii::t('app','Block'),
              'value'=>function ($model,$key,$index,$column)
                       {
-                        return Block::findOne($model->block_code)->name_en;
+                        return $model->block?$model->block->name_en:'';
                       },
              'attribute'=>'block_code',
-             'filter'=>ArrayHelper::map(District::find()->asArray()->all(),'code','name_en'),
+             'filter'=>ArrayHelper::map(Block::find()->asArray()->all(),'code','name_en'),
             ],
               [
               'header'=>Yii::t('app','Status'),

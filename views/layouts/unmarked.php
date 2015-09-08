@@ -25,7 +25,7 @@ use yii\helpers\Url;
                             </a>
                       </li>
                        <li  class="">
-                            <a href='<?=Url::to(['/complaint/complaint/my?ms=-1&enqrofficer=true&atrofficer=true'])?>'>
+                            <a href='<?=Url::to(['/complaint/complaint/my?ms=-1&allflags=tru&enqrofficer=true&atrofficer=true'])?>'>
                                 <span class="badge pull-right">
                            <?=$complaintcount_unmarked?>
                             </span>

@@ -15,7 +15,17 @@ class UtilityController extends Controller
     }
     public function actionGetdesignation($dt)
     {
-    return json_encode(\yii\helpers\ArrayHelper::map(\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dt])->asArray()->all(),'id','name_'.Yii::$app->language));
+    $query=\app\modules\users\models\Designation::find()->where(['designation_type_id'=>$dt]);
+    $user=Yii::$app->user->identity;
+    
+    if (($district_code=\app\modules\users\models\Designation::getDistrictCode($user))!=null)
+    {
+            
+      $blocksanddistrict=array_keys(\yii\helpers\ArrayHelper::map(\app\modules\mnrega\models\Block::find()->where(['district_code'=>$district_code])->asArray()->all(),'code','name_en'));
+      $blocksanddistrict[]=$district_code;
+      $query->andWhere(['level_id'=>$blocksanddistrict]);
+     }
+    return json_encode(\yii\helpers\ArrayHelper::map($query->asArray()->all(),'id','name_'.Yii::$app->language));
     }
 	public function actionIndex()
 	{

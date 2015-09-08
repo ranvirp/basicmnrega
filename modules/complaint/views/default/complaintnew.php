@@ -30,6 +30,16 @@ use app\assets\AppAssetGoogle;
 <script>
 <?php if ($canagent) {?>
 $(document).ready(function(){
+$('#search-result-display').click(function()
+{
+
+  $('#search-result').toggle();
+  if ($(this).attr('class').indexOf('glyphicon-chevron-right')>-1)
+     $(this).removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+  else
+       $(this).removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+  
+});
 $('#search').click(function()
 { 
       $('input[name="ComplaintSearch[mobileno]"]').val($('#mobileno').val());
@@ -38,6 +48,7 @@ $('#search').click(function()
      $('input[name="ComplaintSearch[mobileno]"]').trigger('change');
      //$('input[name="ComplaintSearch[name_hi]"]').trigger('change');
   // $('.grid-view').yiiGridView('applyFilter');
+  $('#search-result-display').trigger('click');
     return false;
 //$.pjax.reload({container:'#complaint-lists'});
 
@@ -52,11 +63,20 @@ $('#search').click(function()
 <?php
 if ($canagent) 
 {
+?>
+<div>
+<span id="search-result-display" class="glyphicon glyphicon-chevron-right"></span> 
+</div>
+<div id="search-result" style="display:none">
+
+<?php
 $searchModel=new ComplaintSearch;
 $dp=$searchModel->search(Yii::$app->request->get());
 $dp->pagination->pageSize=1;
 print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'=>$dp,'searchModel'=>$searchModel]);
-
+?>
+</div>
+<?php
 }
 
 ?>
@@ -69,11 +89,11 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
 <?php AppAssetGoogle::register($this);?>
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
     <div class="row">
-    <div class="col-md-5">    
+    <div class="col-md-12">    
      
      
      
-   <table class="table table-hover well">
+   <table class="table table-hover">
    <caption>शिकायतकर्ता का विवरण</caption>
     <tr>
         <td>
@@ -111,7 +131,7 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
         $url=Url::to(['/complaint/complaint_subtype/get?code=']);
      ?>
      </div>
-     <div class="col-md-6">
+     <div class="col-md-12">
     <div class="row well" style="margin-right:0;margin-left:0!important">
         <div class="col-sm-6">
                 <?= $form->field($modelComplaint, "complaint_type")->dropDownList(ArrayHelper::Map(Complaint_type::find()->asArray()->all(),'shortcode','name_hi'),['prompt'=>'None','onChange' => 'populateDropdown("'.$url.'"+$(this).val(),"complaint-complaint_subtype")']) ?>
@@ -119,11 +139,15 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
         <div class="col-sm-6">
             <?= $form->field($modelComplaint, "complaint_subtype")->dropDownList(ArrayHelper::Map(Complaint_subtype::find()->where(['complaint_type_code'=>$modelComplaint->complaint_type])->asArray()->all(),'shortcode','name_hi'),['prompt'=>'None']) ?>
         </div>
-        <?php if ($canagent) { ?>
+        <?php
+        /*
+        if (!Yii::$app->user->isGuest) { ?>
    <div class="col-sm-12">
-     <?=$form->field($modelComplaint,'flowtype')->dropDownList([0=>'Simple',1=>'Complex'])->label('Work Flow Type') ?>
+     <?=$form->field($modelComplaint,'status')->dropDownList([Complaint::PENDING_FOR_ENQUIRY=>Yii::t('app','For Enquiry'),Complaint::PENDING_FOR_ATR=>Yii::t('app','For Action Taken Report')])->label('Type of Action') ?>
    </div>
-   <?php } ?>
+   <?php } 
+   */
+   ?>
      <div class="col-sm-12">
       <?= $form->field($modelComplaint, "description")->textArea(['onclick' => 'hindiEnable($(this))']) ?>
 </div>
@@ -133,7 +157,7 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
  </div>
      </div>
      <div class="row well" style="margin-right:0;margin-left:0!important">
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <?= $modelComplaint->showForm($form,'district_code') ?>
         
             <?= $modelComplaint->showForm($form,'block_code') ?>
@@ -143,8 +167,8 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
         </div>
          
       
-
-        <div class="col-sm-4">
+<?php if (!Yii::$app->user->isGuest) {?>
+        <div class="col-sm-6">
        
 
 
@@ -152,6 +176,7 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
 
   
      </div>
+     <?php } ?>
         </div>
        
         

@@ -157,8 +157,8 @@ class MarkingBehavior extends Behavior
 	                 // exit;
                            if (!$rmarking)
                            {
-                          // print "here";
                                 $rmarking=new Marking;
+                               
                                 $rmarking->created_by=Yii::$app->user->id;
                               // $rmarking->created_by=1;
                                  $rmarking->create_time=time();
@@ -189,9 +189,10 @@ class MarkingBehavior extends Behavior
                            $rmarking->update_time=time();
                            $rmarking->canmark=$canmark;
                            $rmarking->purpose=$purpose;
-                          
+                      
                            if (!$rmarking->save())
                            {
+                            print_r($rmarking->toArray());
                              print_r($rmarking->errors);
                              exit;
                             }
