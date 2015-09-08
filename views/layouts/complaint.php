@@ -35,6 +35,22 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
      
     <?php $this->head() ?>
     <style>
+    .menubar
+    {
+     margin-bottom:15px;
+     margin-top:5px;
+   //  border:solid 1px;
+   //  background-color:#3c68b6;
+     background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+     background-size: 100%;
+     display:table;
+     width:100%;
+     color:#c41200;
+    }
+    .nav>li>a
+    {
+    color:grey;
+    }
     .bg-green
     {
       background-color:green;
@@ -47,16 +63,29 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
     {
      padding:0;
     }
-    <?php
-    /*
    .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;color:white;}
 .navbar {min-height:30px !important;font-size:8px;}
  .nav >li > a:hover, .nav >li > a:focus , .nav .open>a,.nav .open>a:hover,.nav .open>a:focus
 {
  background:blue;
 }
-*/
-?>
+
+ .menubar>ul>li > a , .menubar>.open>a
+{
+// background:#DC150C;
+// background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+//background-size:100%;
+ border-right:1px dotted;
+ width:220px;
+}
+ .menubar>.user-name>li > a , .menubar>.open>a
+{
+// background:#FF0D59;
+//background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+//background-size:100%;
+ border-right:1px dotted;
+ max-width:200px;
+}
     .navbar-green
     {
      background-color:#faf3e3
@@ -71,6 +100,10 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
      background-size: 100%;
      display:table;
      width:100%;
+    }
+    .user-name
+    {
+     margin-top:-60px;
     }
     </style>
  
@@ -90,15 +123,20 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
                 ],
             ]);
            // echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
-           echo "<div class='pull-left logo-text'>".'<h1>मनरेगा शिकायत प्रबंधन</h1>'.'</div>'.'<div class="pull-right logo-text"><h4>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h4></div>';
+           echo "<div class='pull-left logo-text'>".'<h1>मनरेगा शिकायत प्रबंधन</h1>'.'</div>'.'<div class="centered logo-text"><h2>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h2>';
+        //  echo '<div class="pull-right">';
+          
+            echo '</div>';
             NavBar::end();
       echo '<div class="menubar hidden-print">';
             echo Nav::widget([
-            
+         // 'encodeLabels'=>false,
+                  
     'items' => [
          ['label' => 'Home', 'url' => ['/complaint'],'linkOptions'=>[],'options'=>['class'=>'dropdown']],
               Yii::$app->user->isGuest ?'':
-       ['label' => 'Work Demand', 'url' => ['/complaint/workdemand'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
+       ['label' => 'Work Demand',
+        'encodeLabels'=>true,'url' => ['/complaint/workdemand'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
              ['label' => 'create', 'url' => ['/complaint/workdemand/create'],'options'=>['class'=>'dropdown']],
              ['label' => 'index', 'url' => ['/complaint/workdemand/index'],'options'=>['class'=>'dropdown']],
@@ -125,7 +163,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
               ['label' => 'Complaint Type', 'url' => ['/complaint/complaint_type/create'],'options'=>['class'=>'dropdown']],
           !Yii::$app->user->can('complaintadmin') ?'':   
          
-          ['label' => 'Complaint Type', 'url' => ['/complaint/complaint_subtype/create'],'options'=>['class'=>'dropdown']],
+          ['label' => 'Complaint Sub type', 'url' => ['/complaint/complaint_subtype/create'],'options'=>['class'=>'dropdown']],
              !Yii::$app->user->can('complaintadmin') ?'':   
          
              ['label' => 'Hints', 'url' => ['/complaint/hint/hint?t=hints'],'options'=>['class'=>'dropdown']],
@@ -136,7 +174,10 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
             
                 
             ]],
-        Yii::$app->user->isGuest ?
+     ],'options'=>['class'=>'nav navbar-nav centered']
+]);
+echo Nav::widget([
+           'items'=>[Yii::$app->user->isGuest ?
         ['label' => 'Login', 'url' => ['/users/user/login?returnurl='.Url::to(['/complaint'])] ]:
         ['label' => \app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()?\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->name_en:'missing'.' (' . Yii::$app->user->identity->username . ')',
             'url' => ['/users/user/logout'],
@@ -144,8 +185,8 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
             ['label'=>'Change Password','url'=>['/users/user/changepassword']],
             ['label'=>'Logout','url'=>['/users/user/logout'],'linkOptions' => ['data-method' => 'post']],
             ]
-            ],],'options'=>['class'=>'nav navbar-nav pull-right']
-]);
+            ],],'options'=>['class'=>'user-name nav navbar-nav pull-right']
+            ]);
 echo '</div>';
 ?>
 <div class="row hidden-print">

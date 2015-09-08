@@ -306,6 +306,15 @@ class Designation extends \app\modules\users\MyActiveRecord
  else
    return Designation::find()->where(['officer_userid'=>$userid])->one()->id;
  }
+  public static function getDistrictCode($user)
+ {
+   $designation=Designation::find()->where(['officer_userid'=>$user->id])->one();
+   if ($designation->designationType->level->name_en=='District')
+         return $designation->level->code;
+    else
+       if ($designation->designationType->level->name_en=='Block')
+         return $designation->level->district_code;
+ }
      
 	
 }

@@ -45,7 +45,8 @@ $this->params['breadcrumbs'][] = 'Complaint';
 [
  'model'=>$model,
  'attributes'=>[['attribute'=>'district_code','value'=>\app\modules\mnrega\models\District::findOne($model->district_code)->name_en],
-               ['attribute'=>'block_code','value'=>\app\modules\mnrega\models\Block::findOne($model->block_code)->name_en],
+               ['attribute'=>'block_code','value'=>$model->block?$model->block->name_en:''],
+               //\app\modules\mnrega\models\Block::findOne($model->block_code)->name_en],
  'panchayat',
  
 ]

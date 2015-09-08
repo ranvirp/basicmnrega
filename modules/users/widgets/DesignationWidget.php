@@ -26,7 +26,7 @@ class DesignationWidget  extends \yii\base\Widget{
 		$lang=Yii::$app->language;
 		$url=\yii\helpers\Url::to(['/users/utility/getdesignation?dt=']);
 		$id=Html::getInputId($model,$attribute).'-id';
-		echo '<div class="row">';
+		echo '<div class="col-md-12">';
 		
 echo Html::dropDownList(Html::getInputId($this->model,$this->attribute).'-designation-type-id','',
 \yii\helpers\ArrayHelper::map(\app\modules\users\models\DesignationType::find()->asArray()->all(),'id','name_'.$lang), ['prompt'=>'Select Designation Type','class'=>'form-control','label'=>'Circle','id'=>Html::getInputId($this->model,$this->attribute).'-designation-type-id',
@@ -34,7 +34,7 @@ echo Html::dropDownList(Html::getInputId($this->model,$this->attribute).'-design
 
 // Dependent Dropdown
 //echo $form->field($model, $attribute)->widget(
-echo '</div><div class="row">';
+echo '</div><div class="col-md-12">';
 echo	Html::activeDropDownList( 
 		$model,
 		$attribute,[],

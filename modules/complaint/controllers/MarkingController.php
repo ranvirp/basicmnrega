@@ -47,7 +47,8 @@ class MarkingController extends \yii\web\Controller {
 		else
 		if ($this->_ismarkedtocurrentuser($marking->request_id, $markingid)) {
 			$complaint = Complaint::findOne($marking->request_id);
-
+$this->_removeInconsistencies($complaint);
+		
 			$complaintview.= $this->renderPartial('@app/modules/complaint/views/complaint/view', ['model' => $complaint]);
 
 			if ($marking->status == Complaint::PENDING_FOR_ENQUIRY) {
@@ -150,8 +151,8 @@ class MarkingController extends \yii\web\Controller {
 	protected function _ismarkedtocurrentuser($id, $markingid) {
 		if ($markingid == 0)
 			return false;
-		$marking1 = Marking::find()->where(['id' => $markingid, 'request_id' => $id, 'receiver' => Designation::getDesignationByUser(Yii::$app->user->id)])->one();
-		$marking2 = Marking::find()->where(['id' => $markingid, 'request_id' => $id, 'sender' => Designation::getDesignationByUser(Yii::$app->user->id)])->one();
+		$marking1 = Marking::find()->where(['id' => $markingid, 'request_id' => $id, 'receiver' => Designation::getDesignationByUser(Yii::$app->user->id)])->andWhere(['!=','flag',1])->one();
+		$marking2 = Marking::find()->where(['id' => $markingid, 'request_id' => $id, 'sender' => Designation::getDesignationByUser(Yii::$app->user->id)])->andWhere(['!=','flag',1])->one();
 		return $marking1 or $marking2;
 	}
 
@@ -233,6 +234,26 @@ class MarkingController extends \yii\web\Controller {
 	}
 
 	protected function _removeInconsistencies($complaint) {
+	    foreach (Marking::find()->where(['request_type'=>'complaint','request_id'=>$complaint->id])->all() as $marking)
+	    {
+	     if ($marking->status!=$complaint->status)
+	     {
+	       $marking->flag=1;
+	       $marking->save();
+	    }
+	   else if (($complaint->status==Complaint::PENDING_FOR_ENQUIRY) && ($complaint->enqrofficer=$marking->id) && ($marking->flag==1))
+	    {
+	      $marking->flag=0;
+	      $marking->save();
+	    }
+	    else if (($complaint->status==Complaint::PENDING_FOR_ATR) && ($complaint->atrofficer=$marking->id) && ($marking->flag==1))
+	    {
+	      $marking->flag=0;
+	      $marking->save();
+	    }
+	    
+	    
+	    }
 	        if ($complaint->status==Complaint::ENQUIRY_REPORT_RECEIVED)
 	        {
 	          if ($complaint->enqrofficer == null)
@@ -249,8 +270,9 @@ class MarkingController extends \yii\web\Controller {
 	            $complaint->save();
 	          }
 	        }
+	        /*
 		//All markings which is more advanced than current status of complaint shall be deactivated
-		$markings = Marking::find()->where('status>' . $complaint->status)->all();
+		$markings = Marking::find()->where('status!=' . $complaint->status)->all();
 		foreach ($markings as $marking) {
 			if ((($marking->id === $complaint->enqrofficer) && ($complaint->status==Complaint::PENDING_FOR_ENQUIRY) )|| (($marking->id === $complaint->atrofficer) && ($complaint->status==Complaint::PENDING_FOR_ATR))) {
 				$marking->status = $complaint->status;
@@ -260,6 +282,7 @@ class MarkingController extends \yii\web\Controller {
 			}//deactivate marking
 			$marking->save();
 		}
+		*/
 	}
 
 }

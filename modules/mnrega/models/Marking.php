@@ -340,10 +340,7 @@ class Marking extends \yii\db\ActiveRecord
        
     
     }
-    public function beforeSave()
-    {
-      $this->update_time=time();
-    }
+   
     /*
     public function show($request_type,$request_id)
     {

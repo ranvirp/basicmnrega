@@ -94,6 +94,7 @@ class ComplaintController extends Controller {
 			if ($valid) {
 				$transaction = \Yii::$app->db->beginTransaction();
 				try {
+				   //if (Yii::$app->user->isGuest)
 					$modelComplaint->status = Complaint::REGISTERED;
 					
 					//Audit trail
@@ -103,7 +104,12 @@ class ComplaintController extends Controller {
 					if ($flag = $modelComplaint->save(false)) {
 
                         $modelComplaint->_createSingleMarking();
-                        $modelComplaint->save(false);
+                       if(! $modelComplaint->save()) 
+                       {
+                        //print_r($modelComplaint->errors);
+                        //$transaction->rollBack();
+                        //return $this->renderText('Error');
+                        }
 						foreach ($modelsComplaintPoint as $modelComplaintPoint) {
 							// print_r($modelComplaintPoint);
 							//exit;
@@ -249,6 +255,7 @@ class ComplaintController extends Controller {
 			$canmark = 0;
 		}
 		$model = $this->findModel($id);
+		$model->marking=['actiontype'=>$a];
 		if (Yii::$app->request->post()) {
 
 			if ($model) {

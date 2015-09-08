@@ -29,7 +29,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
     </head>
 <body class="">
     <style>
- .menubar
+.menubar
     {
      margin-bottom:15px;
      margin-top:5px;
