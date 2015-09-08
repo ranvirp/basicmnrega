@@ -42,6 +42,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 margin-left:150px;
 }
 </style>
+<div class="row well">
+<h3>कॉल करें या फिर नीचे क्लिक करें :</h3>
+<span class="glyphicons glyphicons-earphone"></span><h3><strong>24X7 Helpline No:</strong>18001805999,05224055999</h3>
+</div>
 <div clas="row">
 <div class="col-md-1">
 </div>
@@ -49,17 +53,17 @@ margin-left:150px;
 <div class="row">
    <div class="tile tile-medium col-sm-3">
        <a href="<?=\yii\helpers\Url::to(['/complaint/workdemand/create'])?>">
-       <h1>काम की मांग</h1>
+       <h3>काम की मांग दर्ज करने के लिए क्लिक करें </h3>
        </a>
    </div>
    <div class="tile tile-medium col-sm-3">
       <a href="<?=\yii\helpers\Url::to(['/complaint/jobcarddemand/create'])?>">
-      <h1>जॉबकार्ड की मांग</h1>
+      <h3>जॉबकार्ड की मांग दर्ज करने के लिए क्लिक करें </h3>
        </a>
     </div>
     <div class="tile tile-medium col-sm-3">
        <a href="<?=\yii\helpers\Url::to(['/complaint/complaint/create'])?>">
-       <h1>अन्य शिकायत</h1>
+       <h3>अन्य शिकायत दर्ज करने के लिए क्लिक करें ं</h3>
         </a>
       </div>
   </div>
