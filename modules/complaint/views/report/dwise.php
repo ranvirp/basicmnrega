@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Url;
 use yii\helpers\Html;
-
+use app\modules\complaint\models\Complaint;
 ?>
 <?php
 $this->registerJs(
