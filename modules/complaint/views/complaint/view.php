@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = 'Complaint';
     </div>
 <div class="col-sm-12">
 <p><?=Yii::t('app','Complainant')?></p>
-<div class="col-md-6 table-responsive">
+<div class="col-md-12 table-responsive">
 <?=DetailView::widget(
 [
  'model'=>$model,
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = 'Complaint';
 ]
 )?>
 </div>
-<div class="col-md-6">
+<div class="col-md-12">
 <?=DetailView::widget(
 [
  'model'=>$model,
