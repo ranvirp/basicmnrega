@@ -176,7 +176,8 @@ class FileController extends Controller
 				$fileModel->mime=\yii\helpers\FileHelper::getMimeType($file->tempName);
 				$uniqid=uniqid();
 			//	mkdir(Yii::getAlias("@app").'/uploads/' .$uniqid,0777,false);
-                $file->saveAs(Yii::getAlias("@app").'/uploads/' .$uniqid.'-'. $file->baseName . '.' . $file->extension);
+                $file->saveAs(Yii::getAlias("@app").'/uploads/' .$uniqid.'-'. $file->name);
+                //. '.' . $file->extension);
                 //print Yii::getAlias("@app").'/uploads/' . $file->baseName . '.' . $file->extension;
                 //exit;
 				$fileModel->filename=$file->name;
