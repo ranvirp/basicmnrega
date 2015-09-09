@@ -35,7 +35,7 @@ $this->registerJs(
   <th>District</th>
   <th>Total</th>
   <?php 
-  \Yii:$app->language='hi';
+  \Yii::$app->language='hi';
   foreach (Complaint::statusNames() as $s1=>$sname) {
   print "<th>$sname</th>";
         
