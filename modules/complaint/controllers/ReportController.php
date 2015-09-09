@@ -96,7 +96,7 @@ class ReportController extends Controller
           if ($source!='')
            $x.=" AND source='".$source."'";
          if ($desgn!='')
-         $x.=" AND (complaint.enqrofficer=marking.id OR complaint.atrofficer=marking.id)  AND marking.receiver_designation_type_id=".$desgn;
+         $x.=" AND ((complaint.status=Complaint::PENDING_FOR_ENQUIRY AND complaint.enqrofficer=marking.id) OR (complaint.status=Complaint::PENDING_FOR_ATR AND complaint.atrofficer=marking.id))  AND marking.receiver_designation_type_id=".$desgn;
           $x.=" THEN 1 ELSE 0 END) AS ".'status_'.$s1."_count";
           $q[]=$x;
           $q1[]='status_'.$s1."_count";
@@ -108,9 +108,9 @@ class ReportController extends Controller
           $q[]="SUM(case when source='".$source."' THEN 1 else 0 end) AS total";
          
           else if (($desgn!='') && ($source==''))
-          $q[]="SUM(case when  (complaint.enqrofficer=marking.id OR complaint.atrofficer=marking.id) AND marking.receiver_designation_type_id=".$desgn." THEN 1 else 0 end) AS total";
+          $q[]="SUM(case when  ((complaint.status=Complaint::PENDING_FOR_ENQUIRY AND complaint.enqrofficer=marking.id) OR (complaint.status=Complaint::PENDING_FOR_ATR AND complaint.atrofficer=marking.id)) AND marking.receiver_designation_type_id=".$desgn." THEN 1 else 0 end) AS total";
           else if (($desgn!='') && ($source!=''))
-           $q[]="SUM(case when source='".$source."' AND (complaint.enqrofficer=marking.id OR complaint.atrofficer=marking.id) AND marking.receiver_designation_type_id=".$desgn." THEN 1 else 0 end) AS total";
+           $q[]="SUM(case when source='".$source."' AND ((complaint.status=Complaint::PENDING_FOR_ENQUIRY AND complaint.enqrofficer=marking.id) OR (complaint.status=Complaint::PENDING_FOR_ATR AND complaint.atrofficer=marking.id)) AND marking.receiver_designation_type_id=".$desgn." THEN 1 else 0 end) AS total";
           $q1[]='total';
           $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM complaint ";
           
