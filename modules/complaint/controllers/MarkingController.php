@@ -178,6 +178,8 @@ $this->_removeInconsistencies($complaint);
 		$model->updated_at=time();
 		$model->author=Yii::$app->user->id;
 		$marking=Marking::findOne($markingid);
+		if (!$marking)
+		  return "Invalid marking";
 		if ($model->load(Yii::$app->request->post())) {
             
 			if (!$model->save())
@@ -232,7 +234,50 @@ $this->_removeInconsistencies($complaint);
 			}
 
 	}
+	public function actionMarkdisposed($id, $markingid) {
+		if (!Yii::$app->user->can('complaintadmin'))
+			return "Not Allowed";
+		$transaction = Yii::$app->db->beginTransaction();
+		$model = new ComplaintReply();
+		$model->complaint_id = $id;
+		$model->marking_id = $markingid;
+		$model->reply_type=ComplaintReply::INSTRUCTION;
+		$model->created_at=time();
+		$model->updated_at=time();
+		$model->author=Yii::$app->user->id;
+		if ($model->load(Yii::$app->request->post())) {
+            
+			if (!$model->save())
+			{
+				print_r($model->errors);
+		
+			}
+			
+		$complaint = Complaint::findOne($id);
+		if (!$complaint)
+		  return "Not valid complaint id";
+	        $complaint->status=Complaint::DISPOSED;
+			
+		$complaint->save();
+		
+		$transaction->commit();
+		return "done";
+		$model = new ComplaintReply;
+		} else
+		{
+		//$searchModel = new ComplaintReplySearch();
+		//$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+			return $this->renderAjax('markdisposed', [
+					// 'searchModel' => $searchModel,
+					//'dataProvider' => $dataProvider,
+					'model' => $model,
+				    'id'=>$id,
+				    'markingid'=>$markingid,
+				    
+			]);
+			}
 
+	}
 	protected function _removeInconsistencies($complaint) {
 	    foreach (Marking::find()->where(['request_type'=>'complaint','request_id'=>$complaint->id])->all() as $marking)
 	    {
