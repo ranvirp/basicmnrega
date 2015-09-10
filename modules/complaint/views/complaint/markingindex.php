@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\modules\mnrega\models\Marking;
+use app\modules\users\models\DesignationType;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\mnrega\models\MarkingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
