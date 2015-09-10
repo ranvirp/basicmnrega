@@ -126,7 +126,7 @@ $this->_removeInconsistencies($complaint);
 
 
 			if ($complaint->status == Complaint::ATR_RECEIVED) {
-				$actionbuttons.='<li class="active">'.$this->renderPartial('actionmarkdisposed', ['text' => "Mark as Disposed", 'id' => $id, 'status' => Complaint::DISPOSED]).'</li>';
+				$actionbuttons.='<li class="active">'.$this->renderPartial('actionmarkdisposed', ['text' => "Mark as Disposed", 'id' => $id, 'status' => Complaint::DISPOSED,'markingid'=>$complaint->atrofficer]).'</li>';
 				$actionbuttons .= '<li class="active">'.$this->renderPartial('actionmarkthis', ['text' => "Ask for fresh report with comment", 'id' => $id,'markingid'=>$complaint->atrofficer, 'a' => 'a']).'</li>';
 			} else if ($complaint->status == Complaint::ENQUIRY_REPORT_RECEIVED) {
 				$atrmarking = $complaint->atrofficer;
