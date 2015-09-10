@@ -247,7 +247,7 @@ $this->_removeInconsistencies($complaint);
 		$model->author=Yii::$app->user->id;
 		if ($model->load(Yii::$app->request->post())) {
             
-			if (!$model->save())
+			if (($model->reply!='') && !$model->save())
 			{
 				print_r($model->errors);
 		
