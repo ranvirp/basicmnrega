@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "27ea4f7f1ee6da52cd5d6a6bb576848e",
+    "hash": "f17c66d78a9c227bee700def12c1a3d0",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -932,7 +932,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-helpers/zipball/daafedf1ae6130d2287e417941b8c50ad59a50c0",
+                "url": "https://api.github.com/repos/kartik-v/yii2-helpers/zipball/cfbb7d20c629cbae980669d8b8294ccd2fa796e6",
                 "reference": "daafedf1ae6130d2287e417941b8c50ad59a50c0",
                 "shasum": ""
             },
@@ -1458,7 +1458,7 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v2.7.2",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
@@ -1511,16 +1511,6 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v2.7.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/DomCrawler.git",
-                "reference": "9dabece63182e95c42b06967a0d929a5df78bc35"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/9dabece63182e95c42b06967a0d929a5df78bc35",
-                "reference": "9dabece63182e95c42b06967a0d929a5df78bc35",
             "version": "v2.7.1",
             "source": {
                 "type": "git",
@@ -1531,7 +1521,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/11d8eb8ccc1533f4c2d89a025f674894fda520b3",
                 "reference": "11d8eb8ccc1533f4c2d89a025f674894fda520b3",
->>>>>>> develop
                 "shasum": ""
             },
             "require": {
@@ -1571,11 +1560,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "https://symfony.com",
-<<<<<<< HEAD
-            "time": "2015-07-09 16:07:40"
-=======
             "time": "2015-05-22 14:54:25"
->>>>>>> develop
         },
         {
             "name": "wbraganca/yii2-dynamicform",
@@ -1914,17 +1899,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendesk/zendesk_api_client_php.git",
-                "reference": "7177ef70f6b48a8ccd728b80575a9a36b8a608ed"
+                "reference": "3fddea8dd177f365b2b8fe0bfa89e75ffdd4615d"
             },
             "dist": {
                 "type": "zip",
-<<<<<<< HEAD
-                "url": "https://api.github.com/repos/zendesk/zendesk_api_client_php/zipball/7177ef70f6b48a8ccd728b80575a9a36b8a608ed",
-                "reference": "7177ef70f6b48a8ccd728b80575a9a36b8a608ed",
-=======
-                "url": "https://api.github.com/repos/zendesk/zendesk_api_client_php/zipball/52bdc2cf257febeab237edc7ce01d5fdecba6e2a",
+                "url": "https://api.github.com/repos/zendesk/zendesk_api_client_php/zipball/04e31fbaa121dd09f01a05cb26409386d800dce8",
                 "reference": "3fddea8dd177f365b2b8fe0bfa89e75ffdd4615d",
->>>>>>> develop
                 "shasum": ""
             },
             "require": {
@@ -1948,7 +1928,7 @@
             ],
             "description": "PHP Client for Zendesk REST API. See http://developer.zendesk.com/api-docs",
             "homepage": "https://github.com/zendesk/zendesk_api_client_php",
-            "time": "2015-07-10 03:19:20"
+            "time": "2015-07-01 00:35:32"
         }
     ],
     "packages-dev": [
