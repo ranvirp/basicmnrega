@@ -70,7 +70,7 @@ function hindi1Enable(elem)
     function hindiEnable(elem){
      if (elem==null)
       elem =$('.hindiinput');
-      
+      /*
              var options = {
           sourceLanguage:
               google.elements.transliteration.LanguageCode.ENGLISH,
@@ -81,6 +81,8 @@ function hindi1Enable(elem)
       };
             google_control =
           new google.elements.transliteration.TransliterationControl(options);
+     */
+     if (typeof google_control =='object')
        
        google_control.makeTransliteratable(elem);
     }
