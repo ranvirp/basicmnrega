@@ -34,6 +34,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
     <title><?= Html::encode($this->title) ?></title>
      
     <?php $this->head() ?>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web').'/js/krutiunicodekruti.js'?>"></script>
     <style>
     .menubar
     {
@@ -107,8 +108,59 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
     {
      margin-top:-60px;
     }
+    .kruti
+    {
+     font-family:"Kruti Dev 010";
+     border:1px solid orange;
+     
+    }
+    .kruti:after
+    {
+     content:'Kruti Dev';
+    }
     </style>
+ <script>
+ var google_control;
+
+ $(document).ready(function()
+ {
+ $('#hindiinput-type').change(function()
+ {
+ if ($(this).val()==='kruti')
+ {
+  $('.hindiinput').addClass('kruti');
+  $('.hindiinput').removeClass('hindiinput');
+  console.log(google_control);
+   if (typeof google_control =='object' && google_control.isTransliterationEnabled())
+    google_control.disableTransliteration();
+   console.log(google_control);
+   $('.kruti').focus(function()
+ {
+   $(this).val(Convert_to_Kritidev_010($(this).val()));
+   
+ });
+ $('.kruti').focusout(function()
+ {
+// alert($(this).val());
+   $(this).val(convert_to_unicode($(this).val()));
+  // alert($(this).val());
+   
+ });
+ } else
+ if ($(this).val()=='google')
+ {
+  $('.kruti').addClass('hindiinput');
+  
+   $('.kruti').removeClass('kruti');
+   $('.hindiinput').off('focus');
+    $('.hindiinput').off('focusout');
+  
+   $('.hindiinput').focus(function(){hindiEnable($(this))});
+ }
+ });
+ });
  
+ </script>
 </head>
 <body class="">
 
@@ -187,8 +239,10 @@ echo Nav::widget([
             ['label'=>'Change Password','url'=>['/users/user/changepassword']],
             ['label'=>'Logout','url'=>['/users/user/logout'],'linkOptions' => ['data-method' => 'post']],
             ]
-            ],],'options'=>['class'=>'user-name nav navbar-nav pull-right']
+            ],],'options'=>['class'=>'user-name nav navbar-nav pull-right'],
+            
             ]);
+echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);
 echo '</div>';
 ?>
 <div class="row hidden-print">
@@ -257,6 +311,7 @@ echo '</div>';
         </div>
     </footer>
 </div>
+<div id="errorDiv"></div>
 <?php $this->endBody() ?>
 </body>
 </html>

@@ -64,10 +64,13 @@ marker =new L.marker([gpslat,gpslong]);
 
 }
 
-
+function hindi1Enable(elem)
+{
+}
     function hindiEnable(elem){
      if (elem==null)
       elem =$('.hindiinput');
+      
              var options = {
           sourceLanguage:
               google.elements.transliteration.LanguageCode.ENGLISH,
@@ -78,7 +81,8 @@ marker =new L.marker([gpslat,gpslong]);
       };
             google_control =
           new google.elements.transliteration.TransliterationControl(options);
-        google_control.makeTransliteratable(elem);
+       
+       google_control.makeTransliteratable(elem);
     }
 function exportToPdf(selector,url)
 {
