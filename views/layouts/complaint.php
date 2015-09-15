@@ -126,12 +126,23 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
  {
  $('#hindiinput-type').change(function()
  {
+  if ($(this).val()==='')
+  {
+   $('.kruti').addClass('hindiinput');
+   $('.kruti').removeClass('kruti');
+    $('.hindiinput').off('focus');
+    $('.hindiinput').off('focusout');
+    $('.input-type').remove();
+     if (typeof google_control =='object' && google_control.isTransliterationEnabled())
+    google_control.toggleTransliteration();
   
- 
+  }
+ else
  if ($(this).val()==='kruti')
  {
   $('.hindiinput').addClass('kruti');
   $('.hindiinput').removeClass('hindiinput');
+  
   //console.log(google_control);
    if (typeof google_control =='object' && google_control.isTransliterationEnabled())
     google_control.toggleTransliteration();
