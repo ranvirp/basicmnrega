@@ -76,7 +76,7 @@ class FileWidget  extends \yii\base\Widget{
         //'browseClass' => 'btn btn-primary btn-block',
         //'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
         //'browseLabel' =>  'Select Photo',
-		'previewSettings'=>['image'=>['width'=>"15px",'height'=>'15px']],
+		'previewSettings'=>['image'=>['width'=>"75px",'height'=>'75px']],
 		 'initialPreview'=>$y,
         'overwriteInitial'=>false,
 		//'previewTemplates'=>[],

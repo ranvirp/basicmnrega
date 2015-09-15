@@ -175,13 +175,14 @@ class FileController extends Controller
 					
 				$fileModel->mime=\yii\helpers\FileHelper::getMimeType($file->tempName);
 				$uniqid=uniqid();
-				mkdir(Yii::getAlias("@app").'/uploads/' .$uniqid,0777,false);
-                $file->saveAs(Yii::getAlias("@app").'/uploads/' .$uniqid.'/'. $file->baseName . '.' . $file->extension);
+			//	mkdir(Yii::getAlias("@app").'/uploads/' .$uniqid,0777,false);
+                $file->saveAs(Yii::getAlias("@app").'/uploads/' .$uniqid.'-'. $file->name);
+                //. '.' . $file->extension);
                 //print Yii::getAlias("@app").'/uploads/' . $file->baseName . '.' . $file->extension;
                 //exit;
 				$fileModel->filename=$file->name;
 				$fileModel->size=$file->size;
-				$fileModel->path='/uploads/'.$uniqid.'/'.$file->name;
+				$fileModel->path='/uploads/'.$uniqid.'-'.$file->name;
 				if ($title[$file_id]!='')
 				$fileModel->title=$title[$file_id];
 				else

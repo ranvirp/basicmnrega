@@ -46,7 +46,7 @@ div.required label:after {
 <?php AppAssetGoogle::register($this);?>
  <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 <div class="col-sm-12 well">
-<div class="col-lg-5 text-heading" >जॉब कार्ड की मांग का विवरण</div>
+<div class="col-lg-6 text-heading" >जॉब कार्ड की मांग का विवरण</div>
 <div class="col-lg-5 text-heading">कार्यवाही का विवरण</div>
     <div class="col-lg-5"  style="margin:5px">
     
@@ -89,7 +89,7 @@ div.required label:after {
     <div class="col-lg-5"  style="margin:5px">
     
     
-    <div class="col-md-3">
+    <div class="col-md-12">
      <?= $form->field($jobcarddemandReport,"complainttrue")->radioList(['0'=>Yii::t('app','False'),'1'=>Yii::t('app','Partially'),'2'=>Yii::t('app','True')])?>
     </div>
      
