@@ -26,6 +26,10 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
     <title><?= Html::encode($this->title) ?></title>
      
     <?php $this->head() ?>
+    <script>
+    var google_control;
+
+    </script>
     </head>
 <body class="">
     <style>

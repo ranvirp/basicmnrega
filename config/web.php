@@ -139,6 +139,44 @@ $config = [
         ],
     ],
     'modules'=>[
+    	'articles' => [
+		'class' => 'cinghie\articles\Articles',
+		
+		// Select Languages allowed
+		'languages' => [ 
+			"it-IT" => "it-IT", 
+			"en-GB" => "en-GB" 
+		],			
+		// Select Editor: no-editor, ckeditor, imperavi, tinymce, markdown
+		'editor' => 'ckeditor',
+		// Select Path To Upload Category Image
+		'categoryImagePath' => 'img/articles/categories/',
+		// Select Path To Upload Category Thumb
+		'categoryThumbPath' => 'img/articles/categories/thumb/',
+		// Select Path To Upload Item Image
+		'itemImagePath' => 'img/articles/items/',
+		// Select Path To Upload Item Thumb
+		'itemThumbPath' => 'img/articles/items/thumb/',
+		// Select Image Name: categoryname, original, casual
+		'imageNameType' => 'categoryname',
+		// Select Image Types allowed
+		'imageType'     => 'jpg,jpeg,gif,png',
+		// Thumbnails Options
+		'thumbOptions'  => [ 
+			'small'  => ['quality' => 100, 'width' => 150, 'height' => 100],
+			'medium' => ['quality' => 100, 'width' => 200, 'height' => 150],
+			'large'  => ['quality' => 100, 'width' => 300, 'height' => 250],
+			'extra'  => ['quality' => 100, 'width' => 400, 'height' => 350],
+		],
+	],	
+	// Module Kartik-v Grid
+	'gridview' =>  [
+		'class' => '\kartik\grid\Module',
+	],	
+	// Module Kartik-v Markdown Editor
+	'markdown' => [
+		'class' => 'kartik\markdown\Module',
+	],
      'vote' => [
         'class' => 'chiliec\vote\Module',
         'allow_guests' => false, // if true will check IP, otherwise - UserID
