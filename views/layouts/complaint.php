@@ -126,6 +126,8 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
  {
  $('#hindiinput-type').change(function()
  {
+  
+ 
  if ($(this).val()==='kruti')
  {
   $('.hindiinput').addClass('kruti');
@@ -163,6 +165,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
 
    $('.hindiinput').after('<span class="input-type">Google Transliteration</span>');
  }
+ 
  });
  });
  

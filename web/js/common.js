@@ -72,7 +72,7 @@ function hindiEnable(elem)
   elem.removeClass('hindiinput');
   //console.log(google_control);
    if (typeof google_control =='object' && google_control.isTransliterationEnabled())
-    google_control.toggleTransliteration();
+    google_control.disableTransliteration();
   // console.log(google_control);
   elem.focus(function()
  {
@@ -94,18 +94,19 @@ function hindiEnable(elem)
   elem.addClass('hindiinput');
   
    elem.removeClass('kruti');
-   $('.hindiinput').off('focus');
-    $('.hindiinput').off('focusout');
+  elem.off('focus');
+    elem.off('focusout');
    if (typeof google_control =='object' && !google_control.isTransliterationEnabled())
-    google_control.toggleTransliteration();
-   $('.hindiinput').focus(function(){hindiEnable($(this))});
+    google_control.enableTransliteration();
+   elem.focus(function(){hindiEnable($(this))});
     $('.input-type').remove();
 
    $('.hindiinput').after('<span class="input-type">Google Transliteration</span>');
- }
- if (typeof google_control =='object')
+  if (typeof google_control =='object')
        
        google_control.makeTransliteratable(elem);
+ }
+
 }
     function hindi1Enable(elem){
   //   if (elem==null)
