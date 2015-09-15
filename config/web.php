@@ -11,7 +11,10 @@ $config = [
    'language'=>'hi',
 
     'components' => [
-   
+     'sms'=>
+     [
+     'class'=>'\app\components\SendSMSComponent',
+     ],
      'response'=>[
                 'formatters' => [
                 'pdf' => [
@@ -140,7 +143,7 @@ $config = [
     ],
     'modules'=>[
     	'articles' => [
-		'class' => 'cinghie\articles\Articles',
+		'class' => '\app\modules\articles\Articles',
 		
 		// Select Languages allowed
 		'languages' => [ 

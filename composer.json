@@ -35,8 +35,7 @@
         "chiliec/yii2-vote": "~2.0",
         "kartik-v/yii2-date-range": "*",
         "spanjeta/yii2-backup": "*",
-        "michelf/php-smartypants": "dev-lib",
-        "cinghie/yii2-articles": "dev-master"
+        "michelf/php-smartypants": "dev-lib"
 
     },
     "require-dev": {
