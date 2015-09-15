@@ -110,7 +110,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
     }
     .kruti
     {
-     font-family:"Kruti Dev 010";
+     font-family:"Kruti Dev 010"!important;
      border:1px solid orange;
      
     }
@@ -130,10 +130,10 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
  {
   $('.hindiinput').addClass('kruti');
   $('.hindiinput').removeClass('hindiinput');
-  console.log(google_control);
+  //console.log(google_control);
    if (typeof google_control =='object' && google_control.isTransliterationEnabled())
-    google_control.disableTransliteration();
-   console.log(google_control);
+    google_control.toggleTransliteration();
+  // console.log(google_control);
    $('.kruti').focus(function()
  {
    $(this).val(Convert_to_Kritidev_010($(this).val()));
@@ -146,6 +146,8 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
   // alert($(this).val());
    
  });
+ $('.input-type').remove();
+ $('.kruti').after('<span class="input-type">Kruti Dev Text</span>');
  } else
  if ($(this).val()=='google')
  {
@@ -154,8 +156,12 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
    $('.kruti').removeClass('kruti');
    $('.hindiinput').off('focus');
     $('.hindiinput').off('focusout');
-  
+   if (typeof google_control =='object' && !google_control.isTransliterationEnabled())
+    google_control.toggleTransliteration();
    $('.hindiinput').focus(function(){hindiEnable($(this))});
+    $('.input-type').remove();
+
+   $('.hindiinput').after('<span class="input-type">Google Transliteration</span>');
  }
  });
  });
@@ -242,7 +248,6 @@ echo Nav::widget([
             ],],'options'=>['class'=>'user-name nav navbar-nav pull-right'],
             
             ]);
-echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);
 echo '</div>';
 ?>
 <div class="row hidden-print">
@@ -260,7 +265,11 @@ echo '</div>';
     <div class="row">
     <?php if (!Yii::$app->user->isGuest) {?>
     <div class="col-md-12 text-center">
-     <?=\Yii::$app->getSession()->getFlash('message');?>
+    <div style="position:fixed;top:120px;right:0px;background:orange;z-index:1000">
+ <?php   echo Html::label('Hindi Input Type:');echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);?>
+<div class="help-tip"> Ctrl-g to disable google transliteration </div>
+ </div>
+ <?=\Yii::$app->getSession()->getFlash('message');?>
 
     </div>
       
