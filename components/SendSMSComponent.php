@@ -52,83 +52,22 @@ class SendSMSComponent extends Component{
     public function init()
     {
         parent::init();
-        $this->ID=Yii::$app->params['businesssmsid'];
-        $this->Pwd=Yii::$app->params['businesssmspwd'];
+        $this->ID=Yii::$app->params['muzztechsmsid'];
+        $this->Pwd=Yii::$app->params['muztechsmspwd'];
     } 
      public function sendSms($event)
     {
          $x=$event->sender->getSMSDetails();
          if (is_array($x))
          {
-            $this->postSms1($x['PhNo'], $x['text']);
-            // var_dump($x);
-             //exit;
+            $this->postSms($x['PhNo'], $x['text']);
+            
          }
          
          
          
      }
-      public function postSms1($PhNo,$text)
-      {
-          $ScheduleSMSDateTime = "";                          //Optional.
-        $RetryMinutes = 0;                                  //Optional. Required in case of Schedulling date time is provided.
-        $SenderID = "";                                     //Optional. Required in case of Open or Dynamic SenderID only.
-        $SenderNo = "";                                     //Optional. Required in case of Open or Dynamic SenderID only.
-$options=array('SoapAction'=>'http://www.businesssms.co.in/SubmitSMS','trace'=>1,'soap_version'   => SOAP_1_1
-        ,"exception" => 1,'use' => SOAP_LITERAL,'style'=>SOAP_DOCUMENT,'keep_alive'=>false);
-            $soapclient = new SoapClient('http://businesssms.co.in/WebService/BSWS.asmx?WSDL',$options);
-         
-           $soapheader = new SoapHeader("http://www.businesssms.co.in",'ihj');
-
-        $params=array('strID'=>'dmaza@nic.in','strPwd'=>'password','strPhNo'=>$PhNo,'strText'=>$text,'intRetryMin'=>$RetryMinutes,);
-        //    'strSchedule'=>$ScheduleSMSDateTime,'strSenderId'=>$SenderID,'strSenderNo'=>$SenderNo);
-        //$text="test";
-        $x = new \SoapVar(sprintf('
-    <SubmitSMS xmlns="http://www.businesssms.co.in/">
-      <strID>%s</strID>
-      <strPwd>%s</strPwd>
-      <strPhNo>%s</strPhNo>
-      <strText>%s</strText>
-      <strSchedule></strSchedule>
-      <intRetryMin>0</intRetryMin>
-      <strSenderID></strSenderID>
-      <strSenderNo></strSenderNo>
-    </SubmitSMS>
-  ',$this->ID,$this->Pwd,$PhNo,$text),XSD_ANYXML);
-        try{
-       // $result=$soapclient->__soapCall("SubmitSMS",array($params));
-            $result=$soapclient->submitSMS($x);
-            
-        //var_dump($result);
-        }
-        catch(Exception $ex)
-        {
-            
-            print $ex->getMessage();
-            return;
-           
-        }
-       try{
-		  Yii::app()->user->setFlash('notification',"Message $text sent succesfully  to $PhNo" );
-            return 1;
-			}catch(Exception $e)
-			{
-			print "Message $text sent succesfully  to $PhNo"."\n";
-			return 1;
-			}
-        /*
-        $respXML = $soapclient->__getLastResponse();
-$requXML = $soapclient->__getLastRequest();
-
-
-var_dump( $soapclient->__getLastRequestHeaders());
-var_dump( $requXML);
-var_dump($soapclient->__getLastResponseHeaders());
-var_dump( $respXML);
-         * */
-         
-      }
-    public function postSms($PhNo,$text)
+      public function postSms($PhNo,$text)
     {
         $ph_arr=explode(",",$PhNo);
         if (is_array($ph_arr))
@@ -148,56 +87,35 @@ var_dump( $respXML);
             else return;
         }
         $baseurl=$this->baseurl;
+        $sendsms=$this->sendsms;
         $ID=$this->ID;
         
-      $url= "$baseurl/sms.aspx?ID=$ID&Pwd=$this->Pwd&PhNo=$PhNo&text=".rawurlencode($text);
-	  //print $url;
-     // print $url;
-    // if (!$this->sendsms)
-      //return;
-    //$response=  file_get_contents($url);
-    
-     $ch = curl_init();
+      $url= "$baseurl/".$sendsms;
+      $parameters="username=$ID&password=$this->Pwd&mobileno=$PhNo&message=".rawurlencode($text).'&sendername=MNREGA%20Cell';
+	$ch = curl_init($url);
 
+	if(isset($_POST))
+	{
+	
+            curl_setopt($ch, CURLOPT_POST,1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS,$parameters);
+	}
+	else
+	{
+		$get_url=$url."?".$parameters;
 
-curl_setopt($ch, CURLOPT_URL, $url);
-//curl_setopt($ch, CURLOPT_HEADER, 1);
-curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch, CURLOPT_POST,0);
+		curl_setopt($ch, CURLOPT_URL, $get_url);
+	}
 
-// grab URL and pass it to the browser
-      $response=  curl_exec($ch);
-//$response=curl_getinfo($ch);
-// close cURL resource, and free up system resources
-curl_close($ch);
-
-//var_dump($url);
-//var_dump($response);
-//exit;
-     
-     
-      if (strstr($response, "Message Submitted")!=FALSE)
-        {
-          try{
-		  Yii::app()->user->setFlash('notification',"Message $text sent succesfully  to $PhNo" );
-            return 1;
-			}catch(Exception $e)
-			{
-			print "Message $text sent succesfully  to $PhNo"."\n";
-			return 1;
-			}
-        }
-        else {
-            Yii::trace($response, "sms");
-		try{
-            Yii::app()->user->setFlash('notification',"Could not send message $text  to $PhNo" );
-            return 0;
-			}
-			catch(Exception $e)
-			{
-			print "Could not send message $text  to $PhNo" ."\n";
-			return 0;
-			}
-        }
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1); 
+	curl_setopt($ch, CURLOPT_HEADER,0);  // DO NOT RETURN HTTP HEADERS 
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);  // RETURN THE CONTENTS OF THE CALL
+	$return_val = curl_exec($ch);
+   	if($return_val=="")
+	return "Process Failed, Please check domain, username and password.";
+	else
+	return "$return_val";
     }
     
   public function addSMSRecords() 
