@@ -111,12 +111,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
  
         if ($model->load(Yii::$app->request->post()))
         {
-           if (array_key_exists('<?=$generator->modelClass?>',Utility::rules()))
-            foreach ($model->attributes as $attribute)
-            if (Utility::rules('<?= $generator->modelClass?>') && array_key_exists($attribute,Utility::rules()['<?= $generator->modelClass?>']))
-            $model->validators->append(
-               \yii\validators\Validator::createValidator('required', $model, Utility::rules()['<?= $generator->modelClass?>'][$model->$attribute]['required'])
-            );
+          
             if ($model->save())
             $model = new <?= $modelClass ?>();; //reset model
         }

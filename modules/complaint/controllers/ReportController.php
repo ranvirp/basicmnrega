@@ -143,15 +143,21 @@ class ReportController extends Controller
          foreach ($status as $s1=>$sname)
           {
           $x="SUM(CASE WHEN status=".$s1
-          ." THEN 1 ELSE 0 END) AS ".strtolower(str_replace(" ","_",$sname))."_count";
+          ." THEN 1 ELSE 0 END) AS ".'status_'.$s1."_count";
           $q[]=$x;
+           $q1[]='status_'.$s1."_count";
+         
           }
           $q[]="SUM( 1) AS total";
-          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM workdemand inner join district on district.code=workdemand.district_code group by dname,dcode order by dname asc";
+          $q1[]='total';
+          $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM workdemand inner join district on district.code=workdemand.district_code group by dname,dcode order by dname asc ";
+          $queryhead="SELECT dname,dcode,".implode(",",$q1)." FROM (".$query.") x"." UNION ALL ".
+        
+                "SELECT 'TOTAL' as dname, '-1' as dcode,".implode(",",$q)." FROM workdemand";
        //print $query;
        //exit;
        $db=Yii::$app->db;
-        $counts= $db->createCommand($query)->queryAll();
+        $counts= $db->createCommand($queryhead)->queryAll();
         } else 
         if ($t=='jobcarddemand')
          {
@@ -160,15 +166,23 @@ class ReportController extends Controller
          foreach ($status as $s1=>$sname)
           {
           $x="SUM(CASE WHEN status=".$s1
-          ." THEN 1 ELSE 0 END) AS ".strtolower(str_replace(" ","_",$sname))."_count";
+          ." THEN 1 ELSE 0 END) AS ".'status_'.$s1."_count";
           $q[]=$x;
+              $q1[]='status_'.$s1."_count";
+       
           }
           $q[]="SUM( 1) AS total";
+          $q1[]='total';
+          
           $query="SELECT district.name_en as dname,".$t.".district_code as dcode,".implode(",",$q)." FROM jobcarddemand inner join district on district.code=jobcarddemand.district_code group by dname,dcode order by dname asc";
-       //print $query;
+        $queryhead="SELECT dname,dcode,".implode(",",$q1)." FROM (".$query.") x"." UNION ALL ".
+        
+                "SELECT 'TOTAL' as dname, '-1' as dcode,".implode(",",$q)." FROM jobcarddemand";
+       
+      //print $query;
        //exit;
        $db=Yii::$app->db;
-        $counts= $db->createCommand($query)->queryAll();
+        $counts= $db->createCommand($queryhead)->queryAll();
         }
     if (Yii::$app->request->isAjax)
      return $this->renderPartial('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source,'desgn'=>$desgn]);

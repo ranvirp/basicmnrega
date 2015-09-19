@@ -84,7 +84,7 @@ class FileWidget  extends \yii\base\Widget{
 		  'footer'=>'<div class="file-thumbnail-footer">' .
         '    <div class="file-caption-name">{caption}</div>' .
         '    {actions}' .
-        '<div>Title:<input class="activeInput hindiinput" name="title[{fileindex}]" id="title-{fileindex}" onClick="js:hindiEnable()" /></div>'
+        '<div>Title:<input class="activeInput hindiinput" name="title[{fileindex}]" id="title-{fileindex}" onClick="js:hindiEnable($(this))" /></div>'
        	.'</div>'
 		  ],
 	],

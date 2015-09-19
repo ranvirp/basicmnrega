@@ -50,7 +50,14 @@ class SiteController extends Controller
             ],
         ];
     }
-
+public function actionIndex1()
+    {
+    
+     $x=$this->renderPartial('frontrow',['title'=>'मुख्यमंत्री जल बचाओ अभियान','photourl'=>'https://farm1.staticflickr.com/315/18927793683_b69917d910_s.jpg']);
+      Yii::$app->view->params['rows']=[$x];
+   // return $this->render('../../modules/mnrega/views/pond/mainpage');
+   return $this->renderContent("");
+    }
     public function actionIndex()
     {
      if (!\Yii::$app->user->isGuest) {

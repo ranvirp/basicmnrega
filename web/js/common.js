@@ -66,6 +66,8 @@ marker =new L.marker([gpslat,gpslong]);
 
 function hindiEnable(elem)
 {
+ if (typeof elem !='object')
+   elem=$('.hindiinput')
    if ($('#hindiinput-type').val()==='kruti')
  {
   elem.addClass('kruti');

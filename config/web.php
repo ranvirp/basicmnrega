@@ -6,7 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-
+   // 'layout'=>'main-2columns',
     'homeUrl'=>['site'],
    'language'=>'hi',
 
@@ -142,6 +142,10 @@ $config = [
         ],
     ],
     'modules'=>[
+    'docs'=>[
+    	'class' => '\app\modules\documents\Module',
+	
+    ],
     	'articles' => [
 		'class' => '\app\modules\articles\Articles',
 		

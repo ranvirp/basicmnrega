@@ -37,6 +37,35 @@ app\assets\AppAssetGoogle::register($this);
     </head>
 <body class="">
     <style>
+    .contentrow>ul
+    {
+    list-style:outside none none;
+    }
+    .contentrow h1
+    {
+    font-size: 16px;
+    line-height: 1.5em;
+    color:blue;
+    }
+    .block
+    {
+     border-radius:4px 4px 0 0;
+     border-top:1px solid #ccccc7;
+     min-height:120px;
+     padding:0px;
+     border:1px solid #ccccc6;
+     margin-bottom:15px;
+    }
+    .block-title
+    {
+      background: #ea050b linear-gradient(#ff2000 2%, #ea050b 10%, #d40d04 100%) repeat scroll 0 0;
+      border-radius:4px 4px 0 0;
+      padding:9px 3px 6px;
+    }
+    .leftblocks
+    {
+      padding:0px;
+    }
 .menubar
     {
      margin-bottom:15px;
@@ -274,7 +303,29 @@ echo '</div>';
  <?php   echo Html::label('Hindi Input Type:');echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);?>
 <div class="help-tip"> Ctrl-g to disable google transliteration </div>
  </div>
-            <?= $content ?>
+ <div class="row-fluid">
+ <div class="col-md-3 leftblocks">
+   <div class="col-md-12 block leftblock1">
+    <div class="block-title">
+    <div class="block-title-span">
+        <span>Documents</span>
+    </div>
+</div>
+   </div>
+    <div class="col-md-12 block leftblock2">
+   </div>
+ </div>
+ <div class="col-md-9 centercontainer">
+<?php  if (array_key_exists('rows',$this->params)) foreach ($this->params['rows'] as $row) { ?>
+ <div class="col-md-12 centerrows">
+ <?=$row?>
+ </div>
+ <?php } ?>
+ <?= $content ?>
+ </div>
+
+ </div>
+            
         </div>
     
 <div class="clearfix"></div>

@@ -1,4 +1,5 @@
-model=('work' 'work_type' 'work_rating' 'work_progress' 'agency' 'scheme' 'pond_attributes')
+model=('document' 'document_type' 'document_subtype')
+module='documents'
 for i in  "${!model[@]}"; do
    echo "generating for "${model[$i]}
    table=${model[$i]}
@@ -8,6 +9,6 @@ for i in  "${!model[@]}"; do
 #printf -v utable %s "${arr[@]^}"
 utable=`echo $table | perl -pe 's/(^|_)./uc($&)/ge;s/_//g'`
 echo $utable
-   ./yii gii/model --tableName=$table --interactive=0 --overwrite=1 --modelClass=$utable --ns=app\\modules\\work\\models --template='myModel'
-   ./yii gii/crud  --interactive=0 --overwrite=1 --baseControllerClass=yii\\web\\Controller --controllerClass=app\\modules\\work\\controllers\\${utable}Controller --enableI18N=1 --modelClass=app\\modules\\work\\models\\$utable --searchModelClass=app\\modules\\work\\models\\${utable}Search --template='myCrud' --viewPath=@app/modules/work/views/$table
+   ./yii gii/model --tableName=$table --interactive=0 --overwrite=1 --modelClass=$utable --ns=app\\modules\\$module\\models --template='myModel'
+   ./yii gii/crud  --interactive=0 --overwrite=1 --baseControllerClass=yii\\web\\Controller --controllerClass=app\\modules\\$module\\controllers\\${utable}Controller --enableI18N=1 --modelClass=app\\modules\\$module\\models\\$utable --searchModelClass=app\\modules\\$module\\models\\${utable}Search --template='myCrud' --viewPath=@app/modules/$module/views/$table
 done
