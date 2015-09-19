@@ -200,6 +200,8 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
  
  });
  $('#hindiinput-type').val('google');
+ $('#hindiinput-type').trigger('change');
+ 
  });
  
  </script>
@@ -274,7 +276,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
 ]);
 echo Nav::widget([
            'items'=>[Yii::$app->user->isGuest ?
-        ['label' => 'Login', 'url' => ['/users/user/login?returnurl='.Url::to(['/complaint'])] ]:
+        ['label' => 'Login', 'url' => ['/site/index?returnurl='.Url::to(['/complaint'])] ]:
         ['label' => \app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()?\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->name_en:'missing'.' (' . Yii::$app->user->identity->username . ')',
             'url' => ['/users/user/logout'],
             'items'=>[

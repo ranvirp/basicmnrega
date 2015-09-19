@@ -315,6 +315,10 @@ class Designation extends \app\modules\users\MyActiveRecord
        if ($designation->designationType->level->name_en=='Block')
          return $designation->level->district_code;
  }
-     
+  public function profileEmpty()
+  {
+    return ($this->officer_name_hi=='')||($this->officer_name_en=='')||
+    ($this->officer_mobile=='') ||($this->officer_email=='');
+  }
 	
 }

@@ -12,6 +12,8 @@ use app\modules\users\models\PasswordResetRequestForm;
 use app\modules\users\models\ResetPasswordForm;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
+use app\modules\users\models\Designation;
+
 
 class SiteController extends Controller
 {
@@ -61,7 +63,11 @@ public function actionIndex1()
     public function actionIndex()
     {
      if (!\Yii::$app->user->isGuest) {
-        return $this->render('../../modules/mnrega/views/pond/mainpage');
+        $designation=Designation::getDesignationByUser(Yii::$app->user->id,true);
+        if ($designation->profileEmpty())
+          return $this->redirect(['/users/designation/updateprofile?id='.$designation->id]);
+       else
+       return $this->render('../../modules/mnrega/views/pond/mainpage');
      } else 
      {
        $this->layout="//complaint";

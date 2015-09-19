@@ -149,8 +149,8 @@ app\assets\AppAssetGoogle::register($this);
  } else
  if ($(this).val()=='google')
  {
-  $('input:text,textarea').addClass('hindiinput');
-  $('input:text,textarea').removeClass('kruti');
+ // $('input:text,textarea').addClass('hindiinput');
+  //$('input:text,textarea').removeClass('kruti');
  
   $('.kruti').addClass('hindiinput');
   
@@ -166,6 +166,10 @@ app\assets\AppAssetGoogle::register($this);
  }
  
  });
+  $('#hindiinput-type').val('google');
+  $('#hindiinput-type').trigger('change');
+ 
+
  });
  
  </script>
