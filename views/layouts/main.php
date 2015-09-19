@@ -14,7 +14,9 @@ AppAsset::register($this);
 $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif'."';",\yii\web\View::POS_READY);
 
 
-//AppAsset_1::register($this);
+AppAsset_1::register($this);
+app\assets\AppAssetGoogle::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -26,6 +28,8 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
     <title><?= Html::encode($this->title) ?></title>
      
     <?php $this->head() ?>
+      <script type="text/javascript" src="<?=Yii::getAlias('@web').'/js/krutiunicodekruti.js'?>"></script>
+  
     <script>
     var google_control;
 
@@ -83,9 +87,92 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
     {
      background-color:#faf3e3
     }
+    .kruti
+    {
+     font-family:"Kruti Dev 010"!important;
+     border:1px solid orange;
+     
+    }
+    .kruti:after
+    {
+     content:'Kruti Dev';
+    }
     </style>
    
+<script>
 
+ $(document).ready(function()
+ {
+ $('#hindiinput-type').change(function()
+ {
+  if ($(this).val()==='')
+  {
+  $('input:text,textarea').removeClass('hindiinput');
+    $('input:text,textarea').removeClass('kruti');
+ $('input:text,textarea').off('focus');
+    $('input:text,textarea').off('focusout');
+   $('.kruti').addClass('hindiinput');
+   $('.kruti').removeClass('kruti');
+    $('.hindiinput').off('focus');
+    $('.hindiinput').off('focusout');
+    $('.input-type').remove();
+     if (typeof google_control =='object' && google_control.isTransliterationEnabled())
+    google_control.toggleTransliteration();
+  
+  }
+ else
+ if ($(this).val()==='kruti')
+ {
+  //$('input:text,textarea').addClass('kruti');
+  //$('input:text,textarea').removeClass('hindiinput');
+  $('.hindiinput').addClass('kruti');
+  $('.hindiinput').removeClass('hindiinput');
+  
+  //console.log(google_control);
+   if (typeof google_control =='object' && google_control.isTransliterationEnabled())
+    google_control.toggleTransliteration();
+  // console.log(google_control);
+   $('.kruti').focus(function()
+ {
+   $(this).val(Convert_to_Kritidev_010($(this).val()));
+   
+ });
+ $('.kruti').focusout(function()
+ {
+// alert($(this).val());
+   $(this).val(convert_to_unicode($(this).val()));
+  // alert($(this).val());
+   
+ });
+ $('.input-type').remove();
+ $('.kruti').after('<span class="input-type">Kruti Dev Text</span>');
+ } else
+ if ($(this).val()=='google')
+ {
+ // $('input:text,textarea').addClass('hindiinput');
+  //$('input:text,textarea').removeClass('kruti');
+ 
+  $('.kruti').addClass('hindiinput');
+  
+   $('.kruti').removeClass('kruti');
+   $('.hindiinput').off('focus');
+    $('.hindiinput').off('focusout');
+   if (typeof google_control =='object' && !google_control.isTransliterationEnabled())
+    google_control.toggleTransliteration();
+   $('.hindiinput').focus(function(){hindiEnable($(this))});
+    $('.input-type').remove();
+
+   $('.hindiinput').after('<span class="input-type">Google Transliteration</span>');
+ }
+ 
+ });
+  $('#hindiinput-type').val('google');
+  $('#hindiinput-type').trigger('change');
+ 
+
+ });
+ 
+ </script>
 
 <?php $this->beginBody() ?>
 <div class="wrap">
@@ -186,6 +273,11 @@ echo '</div>';
             <?= Yii::$app->session->getFlash('success')?>
             <?= Yii::$app->session->getFlash('error')?>
             </div>
+                <div class="col-md-12 text-center">
+    <div style="position:fixed;top:120px;right:0px;background:orange;z-index:1000">
+ <?php   echo Html::label('Hindi Input Type:');echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);?>
+<div class="help-tip"> Ctrl-g to disable google transliteration </div>
+ </div>
             <?= $content ?>
         </div>
     

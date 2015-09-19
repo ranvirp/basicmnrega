@@ -1105,6 +1105,15 @@ public function _createSingleMarking1($actiontype='a',$canmark=0,$change=0,$main
            
         
     }
+    public function getSMSDetails()
+    {
+      $text=" शिकायत # ".$this->id." दर्ज. nregaup.in/complaint पर स्थिति ज्ञात करें";
+      $phno=[];
+      $phno[]='9454465222';
+      $phno[]='9454464999';
+      $phno[]=$this->mobileno;
+      return ['text'=>$text,'PhNo'=>implode(",",$phno)];
+    }
 
 
 }

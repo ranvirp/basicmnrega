@@ -6,12 +6,15 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-
+   // 'layout'=>'main-2columns',
     'homeUrl'=>['site'],
    'language'=>'hi',
 
     'components' => [
-   
+     'sms'=>
+     [
+     'class'=>'\app\components\SendSMSComponent',
+     ],
      'response'=>[
                 'formatters' => [
                 'pdf' => [
@@ -139,8 +142,12 @@ $config = [
         ],
     ],
     'modules'=>[
+    'docs'=>[
+    	'class' => '\app\modules\documents\Module',
+	
+    ],
     	'articles' => [
-		'class' => 'cinghie\articles\Articles',
+		'class' => '\app\modules\articles\Articles',
 		
 		// Select Languages allowed
 		'languages' => [ 

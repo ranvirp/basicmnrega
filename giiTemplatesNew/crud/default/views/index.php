@@ -76,7 +76,7 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-        'tableOptions'=>['class'=>'small'],
+        'tableOptions'=>['class'=>'table table-hover small'],
         ]); ?>
 <?php else: ?>
     <?= "<?= " ?>ListView::widget([

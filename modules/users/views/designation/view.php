@@ -14,23 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
+   
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            'designation_type_id',
-            'level_id',
             'name_en',
             'name_hi',
             'officer_name_hi',
@@ -38,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'officer_mobile',
             'officer_mobile1',
             'officer_email:email',
-            'officer_userid',
+            ['attribute'=>'officer_userid','value'=>\app\modules\users\models\User::findOne($model->officer_userid)->username]
         ],
     ]) ?>
 

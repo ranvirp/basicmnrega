@@ -36,12 +36,12 @@ $ret = file($url);
  */
 class SendSMSComponent extends Component{
     public $sendsms=true;
-    public $ID="";
-    public $Pwd="";
+    public $ID="upregs";
+    public $Pwd="sms@upregs";
     public $baseurl ="http://priority.muzztech.in";
-    public $sendsms="/sms_api/sendsms.php";
-    public $unicodesms="/sms_api/smsUnicode.php";
-    public $balanceapi="/sms_api/balanceinfo.php";
+    public $sendsmsurl="/sms_api/sendsms.php";
+    public $unicodesmsurl="/sms_api/smsUnicode.php";
+    public $balanceapiurl="/sms_api/balanceinfo.php";
     public $PhNo="";
     public $Text="";
    public function __construct()
@@ -52,8 +52,8 @@ class SendSMSComponent extends Component{
     public function init()
     {
         parent::init();
-        $this->ID=Yii::$app->params['muzztechsmsid'];
-        $this->Pwd=Yii::$app->params['muztechsmspwd'];
+        $this->ID=Yii::$app->params['muzztechusername'];
+        $this->Pwd=Yii::$app->params['muzztechpassword'];
     } 
      public function sendSms($event)
     {
@@ -74,7 +74,7 @@ class SendSMSComponent extends Component{
         {
             foreach($ph_arr as $i=>$ph)
             {
-                if (strlen($ph)!=12)
+                if (strlen($ph)!=10)
                 {
                     unset($ph_arr[$i]);
                 }
@@ -86,12 +86,20 @@ class SendSMSComponent extends Component{
             }
             else return;
         }
+        
         $baseurl=$this->baseurl;
-        $sendsms=$this->sendsms;
+        $sendsmsurl=$this->sendsmsurl;
+        $unicodesmsurl=$this->unicodesmsurl;
         $ID=$this->ID;
         
-      $url= "$baseurl/".$sendsms;
-      $parameters="username=$ID&password=$this->Pwd&mobileno=$PhNo&message=".rawurlencode($text).'&sendername=MNREGA%20Cell';
+      $url= "$baseurl/".$sendsmsurl;
+      $parameters="username=".$this->ID."&password=".$this->Pwd."&mobile=".$PhNo."&message=".rawurlencode($text).'&sendername=WEBSMS';
+	 if (mb_detect_encoding($text,['ASCII'])==false)
+	 {
+	  $url="$baseurl/".$unicodesmsurl;
+	  $parameters=$parameters."&MType=U";
+	}
+	print $parameters;
 	$ch = curl_init($url);
 
 	if(isset($_POST))
@@ -113,9 +121,9 @@ class SendSMSComponent extends Component{
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);  // RETURN THE CONTENTS OF THE CALL
 	$return_val = curl_exec($ch);
    	if($return_val=="")
-	return "Process Failed, Please check domain, username and password.";
+	print "Process Failed, Please check domain, username and password.";
 	else
-	return "$return_val";
+	print $return_val;
     }
     
   public function addSMSRecords() 

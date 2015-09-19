@@ -45,7 +45,7 @@ $this->params['markurl']=$markurl;
 'value'=>function($model,$key,$index,$column)
 {
               //  return $model->showValue('sender');
-              if (DesignationType::findOne($model->sender_designation_type_id)->shortcode==hlagent)
+              if (DesignationType::findOne($model->sender_designation_type_id)->shortcode=='hlagent')
                 return "राज्य मनरेगा प्रकोष्ठ, उत्तरप्रदेश";
                 else 
                   return $model->showValue('sender');

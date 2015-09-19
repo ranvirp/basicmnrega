@@ -22,6 +22,11 @@ use Yii;
  */
 class HelloController extends Controller
 {
+public function actionSms($ph,$sms)
+{
+ echo  Yii::$app->sms->postSms($ph,$sms);
+
+}
 public function actionLoadMarking()
 {
  $complaints=\app\modules\complaint\models\Complaint::find()->where('id<1000')->all();

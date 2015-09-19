@@ -28,7 +28,11 @@ $config= [
     'work'=>['class'=>'app\modules\work\Module'],
     
     ],
-    'components' => [      
+    'components' => [  
+    'sms'=>
+     [
+     'class'=>'\app\components\SendSMSComponent',
+     ],
     'i18n'=>[
             'translations' => [
                 'app'=>[

@@ -128,6 +128,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
  {
   if ($(this).val()==='')
   {
+   $('#textbox').remove();
    $('.kruti').addClass('hindiinput');
    $('.kruti').removeClass('kruti');
     $('.hindiinput').off('focus');
@@ -140,6 +141,13 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
  else
  if ($(this).val()==='kruti')
  {
+  $('#textbox').remove();
+  /*
+ $('#hindiinput-type').after('<div id="textbox"><p><textarea class="js-copytextarea kruti">Hello Im some text</textarea></p><p>\
+ <p>Type in Kruti Dev, select and copy text in unicode and paste anywhere \
+</p></div>');
+ */
+
   $('.hindiinput').addClass('kruti');
   $('.hindiinput').removeClass('hindiinput');
   
@@ -159,11 +167,24 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
   // alert($(this).val());
    
  });
+  $('.kruti').select(function()
+ {
+// alert($(this).val());
+   $(this).val(convert_to_unicode($(this).val()));
+  // alert($(this).val());
+   
+ });
  $('.input-type').remove();
  $('.kruti').after('<span class="input-type">Kruti Dev Text</span>');
  } else
  if ($(this).val()=='google')
  {
+ $('#textbox').remove();
+/*
+  $('#hindiinput-type').after('<div id="textbox"><p><textarea class="js-copytextarea kruti">Hello Im some text</textarea></p><p>\
+ <p>Type in Roman and , select and copy text in unicode and paste anywhere \
+</p></div>');
+*/
   $('.kruti').addClass('hindiinput');
   
    $('.kruti').removeClass('kruti');
@@ -178,6 +199,9 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
  }
  
  });
+ $('#hindiinput-type').val('google');
+ $('#hindiinput-type').trigger('change');
+ 
  });
  
  </script>
@@ -252,7 +276,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
 ]);
 echo Nav::widget([
            'items'=>[Yii::$app->user->isGuest ?
-        ['label' => 'Login', 'url' => ['/users/user/login?returnurl='.Url::to(['/complaint'])] ]:
+        ['label' => 'Login', 'url' => ['/site/index?returnurl='.Url::to(['/complaint'])] ]:
         ['label' => \app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()?\app\modules\users\models\Designation::find()->where(['officer_userid'=>Yii::$app->user->id])->one()->name_en:'missing'.' (' . Yii::$app->user->identity->username . ')',
             'url' => ['/users/user/logout'],
             'items'=>[
@@ -279,9 +303,9 @@ echo '</div>';
     <div class="row">
     <?php if (!Yii::$app->user->isGuest) {?>
     <div class="col-md-12 text-center">
-    <div style="position:fixed;top:120px;right:0px;background:orange;z-index:1000">
- <?php   echo Html::label('Hindi Input Type:');echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);?>
-<div class="help-tip"> Ctrl-g to disable google transliteration </div>
+    <div class="small" style="position:fixed;top:150px;right:0px;background:orange;z-index:1000">
+ <?php   echo Html::label('Hindi Input Type:');echo '<br>';echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select','class'=>'small','id'=>'hindiinput-type']);?>
+<div class="help-tip small"> Ctrl-g to toggle google transliteration </div>
  </div>
  <?=\Yii::$app->getSession()->getFlash('message');?>
 
