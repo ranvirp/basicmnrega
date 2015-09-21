@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use app\assets\AppAssetGoogle;
 use app\modules\users\models\DesignationType;
+use app\modules\mnrega\models\District;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\masterdata\models\DesignationSearch */
@@ -67,13 +68,16 @@ $this->params['breadcrumbs'][] = $this->title;
 'filter'=>\yii\helpers\ArrayHelper::map(DesignationType::find()->asArray()->all(),'id','name_'.Yii::$app->language)
 ,],
 ['header'=>'Place',
+'attribute'=>'level_id',
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->designationType->level?$model->designationType->level->name_en:'Not Found'
                 //.print_r($model->level,true);
                 .':'.($model->level)?$model->level->name_en:'Not Found';
                 ;
-},],['header'=>'Officer Name in Hindi',
+},
+'filter'=>\yii\helpers\ArrayHelper::map(District::find()->orderBy('name_en asc')->asArray()->all(),'id','name_en'),
+],['header'=>'Officer Name in Hindi',
 'value'=>function($model,$key,$index,$column)
 {
                 return $model->showValue('officer_name_hi');
