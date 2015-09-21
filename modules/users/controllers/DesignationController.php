@@ -150,13 +150,47 @@ class DesignationController extends Controller
         ]);
 
     }
+         public function actionUpdateprofile($id,$returnurl='')
+    {
+         $model = $this->findModel($id);
+         /*
+        $x=\app\modules\users\models\Designation::find()->where(['level_id'=>$model->level_id,
+		'designation_type_id'=>$model->designation_type_id])->one();
+    	if ($x) $model->id=$x->id;
+    	*/
+        if ($model->load(Yii::$app->request->post()))
+        {
+         //$model->name_hi=$model->designationType->name_hi.','.$model->level->name_hi;
+        // $model->name_en=$model->designationType->name_en.','.$model->level->name_en; 
+         
+       
+            
+            if (  $model->save())
+            {
+              $this->redirect(['view','id'=>$model->id]);
+            }
+           // $model = new Designation();; //reset model
+            
+            
+        }
+ 
+       $searchModel = new DesignationSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+ 
+        return $this->render('updateprofile', [
+           
+            'model' => $model,
+            
+        ]);
+
+    }
     /**
      * Deletes an existing Designation model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete1($id)
+    public function action1Delete1($id)
     {
         $this->findModel($id)->delete();
 

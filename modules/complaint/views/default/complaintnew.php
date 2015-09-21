@@ -149,7 +149,7 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
    */
    ?>
      <div class="col-sm-12">
-      <?= $form->field($modelComplaint, "description")->textArea(['onclick' => 'hindiEnable($(this))']) ?>
+      <?= $form->field($modelComplaint, "description")->textArea(['class'=>'hindiinput form-control']) ?>
 </div>
  <div class="col-sm-12">
 

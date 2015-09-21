@@ -12,6 +12,8 @@ use app\modules\users\models\PasswordResetRequestForm;
 use app\modules\users\models\ResetPasswordForm;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
+use app\modules\users\models\Designation;
+
 
 class SiteController extends Controller
 {
@@ -50,11 +52,22 @@ class SiteController extends Controller
             ],
         ];
     }
-
+public function actionIndex1()
+    {
+    
+     $x=$this->renderPartial('frontrow',['title'=>'मुख्यमंत्री जल बचाओ अभियान','photourl'=>'https://farm1.staticflickr.com/315/18927793683_b69917d910_s.jpg']);
+      Yii::$app->view->params['rows']=[$x];
+   // return $this->render('../../modules/mnrega/views/pond/mainpage');
+   return $this->renderContent("");
+    }
     public function actionIndex()
     {
      if (!\Yii::$app->user->isGuest) {
-        return $this->render('../../modules/mnrega/views/pond/mainpage');
+        $designation=Designation::getDesignationByUser(Yii::$app->user->id,true);
+        if ($designation->profileEmpty())
+          return $this->redirect(['/users/designation/updateprofile?id='.$designation->id]);
+       else
+       return $this->render('../../modules/mnrega/views/pond/mainpage');
      } else 
      {
        $this->layout="//complaint";

@@ -277,7 +277,7 @@ class Pond extends \yii\db\ActiveRecord
 	*/
 	public function showValue($attribute)
 	{
-	    $name='name_'.Yii::$app->language;
+	    $name='name_en';
 		switch ($attribute)
 		  {
 		   
