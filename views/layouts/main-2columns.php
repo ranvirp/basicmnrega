@@ -53,18 +53,31 @@ app\assets\AppAssetGoogle::register($this);
      border-top:1px solid #ccccc7;
      min-height:120px;
      padding:0px;
-     border:1px solid #ccccc6;
+     border-bottom:1px solid #ccccc6;
      margin-bottom:15px;
-    }
+      }
     .block-title
     {
       background: #ea050b linear-gradient(#ff2000 2%, #ea050b 10%, #d40d04 100%) repeat scroll 0 0;
-      border-radius:4px 4px 0 0;
-      padding:9px 3px 6px;
+      padding:9px 3px 6px 10px;
+      font-size:105%;
+      font-weight:bold;
     }
     .leftblocks
     {
       padding:0px;
+      width:16.6667%;
+      background:#ccc;
+      margin-left:-15px;
+      margin-top:-30px;
+      float:left;
+      min-height:1000px;
+   
+    }
+    .centercontainer
+    {
+     width:67%;
+     float:left;
     }
 .menubar
     {
@@ -303,19 +316,20 @@ echo '</div>';
  <?php   echo Html::label('Hindi Input Type:');echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);?>
 <div class="help-tip"> Ctrl-g to disable google transliteration </div>
  </div>
+ </div>
  <div class="row-fluid">
- <div class="col-md-3 leftblocks">
-   <div class="col-md-12 block leftblock1">
+ <div class="leftblocks">
+   <div class="block leftblock1">
     <div class="block-title">
     <div class="block-title-span">
         <span>Documents</span>
     </div>
 </div>
    </div>
-    <div class="col-md-12 block leftblock2">
+    <div class="block leftblock2">
    </div>
  </div>
- <div class="col-md-9 centercontainer">
+ <div class="centercontainer">
 <?php  if (array_key_exists('rows',$this->params)) foreach ($this->params['rows'] as $row) { ?>
  <div class="col-md-12 centerrows">
  <?=$row?>

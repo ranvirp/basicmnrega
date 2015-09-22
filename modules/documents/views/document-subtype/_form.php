@@ -6,7 +6,7 @@ use yii\helpers\Url;
 use app\common\Utility;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\documents\models\Document */
+/* @var $model app\modules\documents\models\DocumentSubtype */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?php
@@ -14,29 +14,21 @@ use app\common\Utility;
  $changeattribute='';
 $this->registerJs(
    '$("document").ready(function(){ 
-        $("#new_document").on("pjax:end", function() {
-            $.pjax.reload({container:"#documents"});  //Reload GridView
+        $("#new_document-subtype").on("pjax:end", function() {
+            $.pjax.reload({container:"#document-subtypes"});  //Reload GridView
         });
     });'
 );
 ?>
-<div class="bordered-form document-form">
+<div class="bordered-form document-subtype-form">
   <div class="form-title">
     <div class="form-title-span">
-        <span>Form for creating Document</span>
+        <span>Form for creating DocumentSubtype</span>
     </div>
 </div>
-<ul class="nav nav-tabs">
- <li><a data-toggle="tab" href="#category">Category</a></li>
-  <li><a data-toggle="tab" href="#introtext">Intro text</a></li>
- <li><a data-toggle="tab" href="#fulltext">Full Text</a></li>
- <li><a data-toggle="tab" href="#attachments">Attachments</a></li>
- <li><a data-toggle="tab" href="#gallery">Gallery</a></li>
- 
-</ul> 
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
-    'action'=>Url::to(['/docs/document/create']),
+    'action'=>Url::to(['/docs/document-subtype/create']),
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [
@@ -48,39 +40,23 @@ $this->registerJs(
         ],
     ],
 ]); ?>
-<div class="tab-content">
- <div id="category" class="tab-pane fade">
+
+    <?= $model->showForm($form,"shortcode") ?>
+
+    <?= $model->showForm($form,"document_type_code") ?>
+
     <?= $model->showForm($form,"name_hi") ?>
 
-    <?= $model->showForm($form,"document_type") ?>
-
-    <?= $model->showForm($form,"document_subtype") ?>
+    <?= $model->showForm($form,"name_en") ?>
 
     <?= $model->showForm($form,"description") ?>
-</div>
- <div id="introtext" class="tab-pane fade">
-    <?= $model->showForm($form,"shorttext") ?>
-</div>
- <div id="fulltext" class="tab-pane fade">
-    <?= $model->showForm($form,"fulltext") ?>
-</div>
- <div id="attachments" class="tab-pane fade">
-    <?= $model->showForm($form,"attachments") ?>
-</div>
- <div id="gallery" class="tab-pane fade">
-    <?= $model->showForm($form,"gallery") ?>
 
-   
-    <?= $model->showForm($form,"status") ?>
-    </div>
-</div>
-   
 <?php
 /*
 try {
-$x= Utility::rules()["app\modules\documents\models\Document"][$changeattribute];
+$x= Utility::rules()["app\modules\documents\models\DocumentSubtype"][$changeattribute];
 } catch (Exception $e) {$x=null;}
-$modelArray=Yii::$app->request->post("Document");
+$modelArray=Yii::$app->request->post("DocumentSubtype");
 		if ($x && $model && array_key_exists($changeattribute,$modelArray) && array_key_exists($modelArray[$changeattribute],$x))
 		{
 			$attribute_value=$modelArray[$changeattribute];
