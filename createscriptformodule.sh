@@ -1,4 +1,4 @@
-module=('complaint')
+module=('correspondence')
 for i in  "${!module[@]}"; do
    echo "generating for "${module[$i]}
    table=${module[$i]}
