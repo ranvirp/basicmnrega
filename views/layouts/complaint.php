@@ -222,8 +222,11 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
             ]);
            // echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
            echo "<div class='pull-left logo-text'>".'<h1>मनरेगा शिकायत प्रबंधन</h1>'.'</div>'.'<div class="centered logo-text"><h2>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h2>';
-        //  echo '<div class="pull-right">';
-          
+           ?>
+           
+       
+         <?php 
+          //  echo '<div class="pull-right">';
             echo '</div>';
             NavBar::end();
       echo '<div class="menubar hidden-print">';
@@ -281,6 +284,7 @@ echo Nav::widget([
             'url' => ['/users/user/logout'],
             'items'=>[
             ['label'=>'Change Password','url'=>['/users/user/changepassword']],
+            
             ['label'=>'Logout','url'=>['/users/user/logout'],'linkOptions' => ['data-method' => 'post']],
             ]
             ],],'options'=>['class'=>'user-name nav navbar-nav pull-right'],
@@ -303,7 +307,7 @@ echo '</div>';
     <div class="row">
     <?php if (!Yii::$app->user->isGuest) {?>
     <div class="col-md-12 text-center">
-    <div class="small" style="position:fixed;top:150px;right:0px;background:orange;z-index:1000">
+    <div class="small" style="top:150px;right:0px;background:orange;z-index:1000">
  <?php   echo Html::label('Hindi Input Type:');echo '<br>';echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select','class'=>'small','id'=>'hindiinput-type']);?>
 <div class="help-tip small"> Ctrl-g to toggle google transliteration </div>
  </div>

@@ -69,7 +69,7 @@ class ComplaintController extends Controller {
 	public function actionCreate() {
 
 		$modelComplaint = new Complaint;
-		$modelComplaint->on(\yii\db\ActiveRecord::EVENT_AFTER_INSERT,function($event){Yii::$app->sms->sendSMS($event);});
+		//$modelComplaint->on(\yii\db\ActiveRecord::EVENT_AFTER_INSERT,function($event){Yii::$app->sms->sendSMS($event);});
 		if (Yii::$app->user->isGuest)
 			$modelComplaint->scenario = 'guestentry'; //captcha validation
 		$flagcomplex = 0;
