@@ -72,6 +72,23 @@ app\assets\AppAssetGoogle::register($this);
       margin-top:-30px;
       float:left;
       min-height:1000px;
+        background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+     background-size: 100%;
+   
+   
+    }
+     .rightblocks
+    {
+      padding:0px;
+      width:16.6667%;
+      background:#ccc;
+      margin-right:-15px;
+      margin-top:-30px;
+      float:left;
+      min-height:1000px;
+        background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+     background-size: 100%;
+   
    
     }
     .centercontainer
@@ -90,6 +107,10 @@ app\assets\AppAssetGoogle::register($this);
      display:table;
      width:100%;
      color:#c41200;
+    }
+    .document-form>ul>li>a
+    {
+     color:blue;
     }
     .nav >li >a, .nav>li>a:hover, .nav >li >a:focus
     {
@@ -225,7 +246,15 @@ app\assets\AppAssetGoogle::register($this);
             ]);
            // echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
            echo '<div class="logo-text"><h2>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h2></div>';
-           NavBar::end();
+          ?>
+                       <div class="pull-right col-md-2">
+    <div style="margin-top:-50px;color:white;">
+ <?php   echo Html::label('Hindi Input Type:');echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type','style'=>'color:black']);?>
+<div class="help-tip"> Ctrl-g to disable google transliteration </div>
+ </div>
+ </div>
+          <?php
+          NavBar::end();
             /*
             NavBar::begin([
                 //'brandLabel' => 'KESCO',
@@ -311,12 +340,7 @@ echo '</div>';
             <?= Yii::$app->session->getFlash('success')?>
             <?= Yii::$app->session->getFlash('error')?>
             </div>
-                <div class="col-md-12 text-center">
-    <div style="position:fixed;top:120px;right:0px;background:orange;z-index:1000">
- <?php   echo Html::label('Hindi Input Type:');echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);?>
-<div class="help-tip"> Ctrl-g to disable google transliteration </div>
- </div>
- </div>
+   
  <div class="row-fluid">
  <div class="leftblocks">
    <div class="block leftblock1">
@@ -337,7 +361,8 @@ echo '</div>';
  <?php } ?>
  <?= $content ?>
  </div>
-
+<div class="rightblocks">
+</div>
  </div>
             
         </div>

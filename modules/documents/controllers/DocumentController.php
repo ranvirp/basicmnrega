@@ -68,9 +68,16 @@ class DocumentController extends Controller
  
         if ($model->load(Yii::$app->request->post()))
         {
-          
-            if ($model->save())
-            $model = new Document();; //reset model
+          if ($model->validate())
+            {
+            $model->save();
+            $model = new Document(); //reset model
+            }
+            else
+             {
+              print_r($model->errors);
+              exit;
+             }
         }
  
         $searchModel = new DocumentSearch();
