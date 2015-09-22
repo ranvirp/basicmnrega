@@ -41,6 +41,21 @@ class PhotoController extends Controller
         ]);
     }
 
+ /**
+     * Lists all Photo models.
+     * @return mixed
+     */
+    public function actionIndex1()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Photo::find(),
+        ]);
+
+        return $this->render('photolist', [
+            'dataProvider' => $dataProvider,
+            'title'=>'List of Photos',
+        ]);
+    }
     /**
      * Displays a single Photo model.
      * @param integer $id
