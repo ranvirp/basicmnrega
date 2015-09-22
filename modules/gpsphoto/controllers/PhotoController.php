@@ -59,6 +59,8 @@ class PhotoController extends Controller
         return $this->render('photolist1', [
             'dataProvider' => $dataProvider,
             'title'=>'List of Photos',
+            'block'=>$block,
+            'district'=>$district,
         ]);
     }
     /**
