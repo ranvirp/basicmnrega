@@ -15,7 +15,9 @@ echo '<div id="portfoliowrap">';
 				   
 				<div class="col-md-6" style="margin-bottom:15px">
  <img height="250px" width="100%" alt="'.$photo->id.'" title="'.$photo->title.'" src="'.$photo->url.'"></img>
- <p class="text-center">'.$photo->id.'.'.$photo->title.'<br>'.$photo->panchayat.'</p>
+ <p class="text-center">'.$photo->id.'.'.$photo->title.'<p class="text-center"><strong>Panchayat -</strong>'.$photo->panchayat.'
+ <strong>Block -</strong>'.$photo->block.' <strong>District -</strong>'.$photo->district.'</p>
+ <p class="text-center"> <strong>Work Id -</strong>'.$photo->bwid.'
 </div>'
 						
 				;
