@@ -47,11 +47,11 @@ class PhotoController extends Controller
      */
     public function actionIndex1($district=null,$block=null)
     {
-     if ($district)
+     if ($district && $district!='None')
        $query=Photo::find()->where(['district'=>\app\modules\mnrega\models\District::findOne($district)->name_en]);
        else
          $query=Photo::find();
-       if ($block) $query=$query->andWhere(['block'=>\app\modules\mnrega\models\Block::findOne($block)->name_en]);
+       if ($block && $block!='None') $query=$query->andWhere(['block'=>\app\modules\mnrega\models\Block::findOne($block)->name_en]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
