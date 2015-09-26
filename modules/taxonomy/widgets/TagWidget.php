@@ -18,6 +18,7 @@ class TagWidget extends Widget
  {
 
    parent::run();
+   $this->getView()->registerJsFile(\Yii::getAlias('@web').'/js/tag.js');
   // print "<div class='pull-right col-md-3'>\n";
    print $this->vocabDropdown($this->vocabs);
    
@@ -25,7 +26,8 @@ class TagWidget extends Widget
  public function vocabDropdown($vocabs)
  {
  //print a table
-
+$x='<script> '.$this->jscontainer.'=new Array(); </script>';
+$x.='<div id="taxonomy_div"></div>';
 $x.='<div id="'.$this->prefix.'_div"></div>';//container to contain form elements
   $x.='<table  class="table table-striped">';
   foreach ($vocabs as $vocab)
@@ -42,7 +44,7 @@ $x.='<div id="'.$this->prefix.'_div"></div>';//container to contain form element
   'termcode','termname'),['id'=>$this->prefix.'_'.$vocabmodel->vocabcode]);
   $x.=$termdropdown;
   $x.='</td>';
-  $x.='<td>'.Html::button('Add',['onclick'=>'addTag('.$this->jscontainer.',$("#'.$this->prefix.'_'.$vocabmodel->vocabcode.'").val(),'.$this->prefix.')']).'</td>';
+  $x.='<td>'.Html::button('Add',['onclick'=>'addTag($("#'.$this->prefix.'_'.$vocabmodel->vocabcode.'").val(),"'.$this->prefix.'")']).'</td>';
   $x.='</tr>';
   
   

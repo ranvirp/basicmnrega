@@ -22,13 +22,15 @@ use yii\widgets\DetailView;
 </p>
 <?=\app\modules\reply\models\File::showAttachmentsInline($model,'attachments')?>
 <?php foreach (explode(",",$model->gallery) as $photos) {
+	if (is_numeric($photos))
+	{
  $photo=\app\modules\reply\models\File::findOne($photos);
 ?>
 <div class="col-md-6" style="margin-bottom:15px">
  <img height="250px" width="100%" title="<?=$photo->title?>" src="<?=$photo->url?>"></img>
  <p class="text-center"><?=$photo->title?></p>
 </div>
-<?php }?>
+<?php }}?>
 </article>
    
 </div>

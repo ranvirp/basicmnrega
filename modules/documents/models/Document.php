@@ -73,6 +73,11 @@ class Document extends \yii\db\ActiveRecord
                 'class' => \app\modules\reply\behaviors\FileAttachmentBehavior::className(),
                 'attribute' => 'gallery',
           ],
+             [
+                'class' => \app\modules\taxonomy\behaviors\TaggingBehavior::className(),
+                'term_prefix' => 'documents',
+          ],
+        
           ];
           }
     /**
@@ -230,6 +235,10 @@ class Document extends \yii\db\ActiveRecord
 			default:
 			break;
 		  }
+    }
+    public function printTitle()
+    {
+        return $this->name_hi;
     }
 	
 }

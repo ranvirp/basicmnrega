@@ -56,7 +56,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 </div>
 <div class="col-md-6">
 <div class="simple-box" style="margin-top:10px;">
- <?=$this->render('@app/modules/documents/views/document/view',['model'=>\app\modules\documents\models\Document::findOne(2)])?>
+ <?=$this->render('@app/modules/documents/views/document/view',['model'=>\app\modules\documents\models\Document::findOne(1)])?>
 </div>
 
 </div>

@@ -1,4 +1,4 @@
-model=('document' 'document_type' 'document_subtype')
+model=('link')
 module='documents'
 for i in  "${!model[@]}"; do
    echo "generating for "${model[$i]}

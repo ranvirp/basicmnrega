@@ -24,8 +24,8 @@ class AppAssetGoogle extends AssetBundle
     ];
     public $js = [
    
-  'https://www.google.com/jsapi',
-      'js/googletransliterate.js',
+  //'https://www.google.com/jsapi',
+    //  'js/googletransliterate.js',
        
     ];
     public $depends = [

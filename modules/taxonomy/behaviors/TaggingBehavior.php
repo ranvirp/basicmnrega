@@ -21,11 +21,14 @@ class TaggingBehavior extends Behavior
     {
         $terms =Yii::$app->request->post("Terms");
         $terms=$terms[$this->term_prefix];
-        //print_r(get_class($event->sender));
+       // print_r(get_class($event->sender));
         //exit;
+        //print_r($terms);
+
         if (!$terms)
          return;
         $taggedtype=Taggable::find()->where(['classname'=>get_class($event->sender)])->one();
+       // print_r($taggedtype);
         if ($taggedtype)
           {
            //check if term exists
@@ -41,6 +44,7 @@ class TaggingBehavior extends Behavior
               //exit;
               $tagging->taggedtypepk="$x";
               $tagging->termcode=$term;
+            //  print_r($tagging);
               if (!$tagging->save())
                 {
                 print_r($tagging->errors);

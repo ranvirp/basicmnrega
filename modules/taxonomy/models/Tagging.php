@@ -112,5 +112,15 @@ class Tagging extends \yii\db\ActiveRecord
 			break;
 		  }
     }
+    public function taggedList($termcode,$type=null)
+    {
+      
+      	$query=Tagging::find()->where(['termcode'=>$termcode]);
+      	if ($type)
+      		$query=$query->andWhere(['taggedtype'=>$type]);
+      	$dataProvider=new \yii\data\ActiveDataProvider(['query'=>$query]);
+      	return $dataProvider;
+
+    }
 	
 }
