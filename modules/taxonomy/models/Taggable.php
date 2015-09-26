@@ -29,7 +29,7 @@ class Taggable extends \yii\db\ActiveRecord
         return [
             [['shortname'], 'required'],
             [['shortname'], 'string', 'max' => 20],
-            [['classname'], 'string', 'max' => 255]
+            [['classname'], 'string']
         ];
     }
 

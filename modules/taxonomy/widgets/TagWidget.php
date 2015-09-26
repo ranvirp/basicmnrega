@@ -16,6 +16,7 @@ class TagWidget extends Widget
  }
  public function run()
  {
+
    parent::run();
   // print "<div class='pull-right col-md-3'>\n";
    print $this->vocabDropdown($this->vocabs);
@@ -24,19 +25,7 @@ class TagWidget extends Widget
  public function vocabDropdown($vocabs)
  {
  //print a table
- $x='';
- $x.='<script>';
- $x.=$this->jscontainer.'=[];';
- $x.='function addTag(tagcontainer,tag)
-{
-  if (tagcontainer.indexOf(tag)==-1)
-   {
-     tagcontainer.push(tag);
-     $("#'.$this->prefix.'_div'.'").append("<span onclick=\"alert(\'Do you want to remove this tag?\');'.$this->jscontainer.'.pop("+tag+");$(this).remove();\">"+tag+"<input type=\"hidden\" name=\"Terms['.$this->prefix.'][]\" value=\""+tag+"\"/>x")
-   
-   }
-}';
-$x.='</script>';
+
 $x.='<div id="'.$this->prefix.'_div"></div>';//container to contain form elements
   $x.='<table  class="table table-striped">';
   foreach ($vocabs as $vocab)
@@ -53,7 +42,7 @@ $x.='<div id="'.$this->prefix.'_div"></div>';//container to contain form element
   'termcode','termname'),['id'=>$this->prefix.'_'.$vocabmodel->vocabcode]);
   $x.=$termdropdown;
   $x.='</td>';
-  $x.='<td>'.Html::button('Add',['onclick'=>'addTag('.$this->jscontainer.',$("#'.$this->prefix.'_'.$vocabmodel->vocabcode.'").val())']).'</td>';
+  $x.='<td>'.Html::button('Add',['onclick'=>'addTag('.$this->jscontainer.',$("#'.$this->prefix.'_'.$vocabmodel->vocabcode.'").val(),'.$this->prefix.')']).'</td>';
   $x.='</tr>';
   
   
