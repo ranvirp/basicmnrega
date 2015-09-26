@@ -9,6 +9,7 @@ use app\modules\documents\models\DocumentSubtypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * DocumentSubtypeController implements the CRUD actions for DocumentSubtype model.

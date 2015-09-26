@@ -187,7 +187,14 @@ app\assets\AppAssetGoogle::register($this);
             ]);
            // echo Html::a(Html::img('@web/images/final.jpg'),'',['class'=>'col-md-8']);
            echo '<div class="logo-text"><h2>'.'मनरेगा प्रकोष्ठ, ग्राम्य विकास विभाग, उत्तर प्रदेश'.'</h2></div>';
-           NavBar::end();
+         ?>
+                    <div class="col-md-2 text-center pull-right">
+    <div style="top:120px;right:0px;background:orange;z-index:1000">
+ <?php   echo Html::label('Hindi Input Type:');echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);?>
+<div class="help-tip"> Ctrl-g to disable google transliteration </div>
+ </div>
+ <?php
+ NavBar::end();
             /*
             NavBar::begin([
                 //'brandLabel' => 'KESCO',
@@ -273,11 +280,7 @@ echo '</div>';
             <?= Yii::$app->session->getFlash('success')?>
             <?= Yii::$app->session->getFlash('error')?>
             </div>
-                <div class="col-md-12 text-center">
-    <div style="position:fixed;top:120px;right:0px;background:orange;z-index:1000">
- <?php   echo Html::label('Hindi Input Type:');echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select Hindi Input type','id'=>'hindiinput-type']);?>
-<div class="help-tip"> Ctrl-g to disable google transliteration </div>
- </div>
+     
             <?= $content ?>
         </div>
     

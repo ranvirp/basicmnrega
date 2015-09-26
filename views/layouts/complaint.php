@@ -199,7 +199,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
  }
  
  });
- $('#hindiinput-type').val('google');
+ $('#hindiinput-type').val('kruti');
  $('#hindiinput-type').trigger('change');
  
  });

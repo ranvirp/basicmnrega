@@ -41,6 +41,28 @@ class PhotoController extends Controller
         ]);
     }
 
+ /**
+     * Lists all Photo models.
+     * @return mixed
+     */
+    public function actionIndex1($district=null,$block=null)
+    {
+     if ($district && ($district!='None'))
+       $query=Photo::find()->where(['district'=>\app\modules\mnrega\models\District::findOne($district)->name_en]);
+       else
+         $query=Photo::find();
+       if ($block && ($block!='None')) $query=$query->andWhere(['block'=>\app\modules\mnrega\models\Block::findOne($block)->name_en]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $this->render('photolist1', [
+            'dataProvider' => $dataProvider,
+            'title'=>'List of Photos',
+            'block'=>$block,
+            'district'=>$district,
+        ]);
+    }
     /**
      * Displays a single Photo model.
      * @param integer $id

@@ -78,7 +78,7 @@ class DocumentSubtype extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'name_hi':
-			   return  $form->field($this,$attribute)->textInput();
+			   return  $form->field($this,$attribute)->textInput(['class'=>'hindiinput']);
 			    
 			    break;
 									

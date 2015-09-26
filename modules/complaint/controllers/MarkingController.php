@@ -26,7 +26,7 @@ class MarkingController extends \yii\web\Controller {
 		$marking = $this->findMarking($markingid);
 		$complaintview.='<a class="hide" id="maincontainerrefreshlink" href="'.Url::to(['/complaint/marking/?markingid='.$markingid]).'"></a>';
 
-		$complaintview.='<div class="col-md-12">Marking Id #' . $marking->id . ' marked to ' . $marking->receiver_name . '</div>';
+		//$complaintview.='<div class="col-md-12">Marking Id #' . $marking->id . ' marked to ' . $marking->receiver_name . '</div>';
 		if (Yii::$app->user->can('complaintadmin')) {
 			$complaint = Complaint::findOne($marking->request_id);
 

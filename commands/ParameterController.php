@@ -57,7 +57,7 @@ class ParameterController extends Controller
         switch($model->shortcode)
         {
         case 'mandays':
-         $tableid=4;
+         $tableid='t1';
          $rowstoskip=4;
          $m=date('m');
          $y=date('Y');
