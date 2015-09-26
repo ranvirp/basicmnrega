@@ -1,10 +1,10 @@
 <?php
 
-namespace app\modules\complaint\controllers;
+namespace app\modules\correspondece\controllers;
 
-use app\modules\mnrega\models\Marking;
-use app\modules\complaint\models\Complaint;
-use app\modules\complaint\models\ComplaintReply;
+use app\modules\correspondence\models\RequestMarking;
+use app\modules\correspondence\models\Request;
+
 use yii\web\NotFoundHttpException;
 use app\modules\users\models\Designation;
 use yii\helpers\Url;
@@ -13,41 +13,24 @@ use Yii;
 class MarkingController extends \yii\web\Controller {
     public function actionClosemarking($markingid)
     {
-      $marking=Marking::findOne($markingid);
+      $marking=RequestMarking::findOne($markingid);
       if ($marking->sender==Designation::getDesignationByUser(Yii::$app->user->id))
         {$marking->flag=1;$marking->save();print 'done';}
         else
          print 'not allowed';
     }
 	public function actionIndex($markingid) {
-		$complaintview = '';
+		$requestview = '';
 		$actionbuttons = '<ul class="nav nav-pills">';
 		
 		$marking = $this->findMarking($markingid);
-		$complaintview.='<a class="hide" id="maincontainerrefreshlink" href="'.Url::to(['/complaint/marking/?markingid='.$markingid]).'"></a>';
+		$complaintview.='<a class="hide" id="maincontainerrefreshlink" href="'.Url::to(['/correspondence/marking/?markingid='.$markingid]).'"></a>';
 
-		//$complaintview.='<div class="col-md-12">Marking Id #' . $marking->id . ' marked to ' . $marking->receiver_name . '</div>';
-		if (Yii::$app->user->can('complaintadmin')) {
-			$complaint = Complaint::findOne($marking->request_id);
 
-			$complaintview.= $this->renderPartial('@app/modules/complaint/views/complaint/view', ['model' => $complaint]);
-
-			$replytype = 'Review';
-			if (($complaint->status == Complaint::ATR_RECEIVED) || ($complaint->status == Complaint::ENQUIRY_REPORT_RECEIVED))
-				$actionbuttons.='<li>'.$this->renderPartial('actionreview', ['text' => $replytype, 'id' => $marking->request_id, 'marking' => $marking]).'</li>';
-			if ($markingid != $complaint->enqrofficer)
-				$actionbuttons.=$this->renderPartial('actionmarkthis', ['text' => "Mark this marking for Enquiry", 'id' => $marking->request_id, 'markingid' => $marking->id, 'a' => 'e']);
-			else
-				$actionbuttons.='<p>' . 'Assigned for Enquiry' . '</p>';
-			if ($markingid != $complaint->atrofficer)
-				$actionbuttons.=$this->renderPartial('actionmarkthis', ['text' => "Mark this marking for ATR", 'id' => $marking->request_id, 'markingid' => $marking->id, 'a' => 'a']);
-			else
-				$actionbuttons.='<p>' . 'Assigned for ATR' . '</p>';
-		}
-		else
 		if ($this->_ismarkedtocurrentuser($marking->request_id, $markingid)) {
-			$complaint = Complaint::findOne($marking->request_id);
-$this->_removeInconsistencies($complaint);
+			
+			$request = Complaint::findOne($marking->request_id);
+            $this->_removeInconsistencies($complaint);
 		
 			$complaintview.= $this->renderPartial('@app/modules/complaint/views/complaint/view', ['model' => $complaint]);
 
@@ -90,12 +73,15 @@ $this->_removeInconsistencies($complaint);
 		return $this->renderAjax('controlpanel', ['complaintview' => $complaintview, 'actionbuttons' => $actionbuttons,'id'=>0,'markingid'=>$markingid]);
 	}
 
-	public function actionComplaint($id, $markingid = 0) {
+	public function actionAdmin($id,$rt, $markingid=0) {
 
-
-		$complaintview = '';
+        
+		$requestview = '';
+		if ($marking!=0)
+		$marking=RequestMarking::fineOne($markingid);
+		
 		$actionbuttons = '<ul class="nav nav-pills nav-stacked">';
-		$complaint = Complaint::findOne($id);
+		$request = Complaint::findOne($id);
 		$this->_removeInconsistencies($complaint);
 		$complaintview.='<a class="hide" id="maincontainerrefreshlink" href="'.Url::to(['/complaint/marking/complaint?id='.$id.'&markingid='.$markingid]).'"></a>';
 
@@ -126,7 +112,7 @@ $this->_removeInconsistencies($complaint);
 
 
 			if ($complaint->status == Complaint::ATR_RECEIVED) {
-				$actionbuttons.='<li class="active">'.$this->renderPartial('actionmarkdisposed', ['text' => "Mark as Disposed", 'id' => $id, 'status' => Complaint::DISPOSED,'markingid'=>$complaint->atrofficer]).'</li>';
+				$actionbuttons.='<li class="active">'.$this->renderPartial('actionstatus', ['text' => "Mark as Disposed", 'id' => $id, 'status' => Complaint::DISPOSED]).'</li>';
 				$actionbuttons .= '<li class="active">'.$this->renderPartial('actionmarkthis', ['text' => "Ask for fresh report with comment", 'id' => $id,'markingid'=>$complaint->atrofficer, 'a' => 'a']).'</li>';
 			} else if ($complaint->status == Complaint::ENQUIRY_REPORT_RECEIVED) {
 				$atrmarking = $complaint->atrofficer;
@@ -148,17 +134,17 @@ $this->_removeInconsistencies($complaint);
 		return $this->renderAjax('controlpanel', ['complaintview' => $complaintview, 'actionbuttons' => $actionbuttons,'id'=>$id,'markingid'=>0]);
 	}
 
-	protected function _ismarkedtocurrentuser($id, $markingid) {
+	protected function _ismarkedtocurrentuser($rt,$id, $markingid) {
 		if ($markingid == 0)
 			return false;
-		$marking1 = Marking::find()->where(['id' => $markingid, 'request_id' => $id, 'receiver' => Designation::getDesignationByUser(Yii::$app->user->id)])->andWhere(['!=','flag',1])->one();
-		$marking2 = Marking::find()->where(['id' => $markingid, 'request_id' => $id, 'sender' => Designation::getDesignationByUser(Yii::$app->user->id)])->andWhere(['!=','flag',1])->one();
+		$marking1 = RequestMarking::find()->where(['id' => $markingid, 'request_id' => $id,'request_type'=>$rt, 'receiver' => Designation::getDesignationByUser(Yii::$app->user->id)])->andWhere(['!=','flag',1])->one();
+		$marking2 = RequestMarking::find()->where(['id' => $markingid, 'request_id' => $id,'request_type'=>$rt, 'sender' => Designation::getDesignationByUser(Yii::$app->user->id)])->andWhere(['!=','flag',1])->one();
 		return $marking1 or $marking2;
 	}
 
-	protected function findMarking($markingid) {
-		if (($model = Marking::findOne(['id' => $markingid])) != null) {
-			if ($model->request_type == 'complaint')
+	protected function findMarking($rt,$markingid) {
+		if (($model = RequestMarking::findOne(['id' => $markingid])) != null) {
+			if ($model->request_type == $rt)
 				return $model;
 			else
 				throw new \yii\web\NotFoundHttpException("Not found");
@@ -166,52 +152,25 @@ $this->_removeInconsistencies($complaint);
 			throw new \yii\web\NotFoundHttpException("Not found");
 	}
 
-	public function actionMarkthis($id, $markingid, $a = 'e',$c=0) {
-		if (!Yii::$app->user->can('complaintadmin'))
+	public function actionMarkthis($rt,$id, $markingid) {
+		if (!Yii::$app->user->can('requestadmin'))
 			return "Not Allowed";
 		$transaction = Yii::$app->db->beginTransaction();
-		$model = new ComplaintReply();
-		$model->complaint_id = $id;
+		$model = new RequestReply();
+		$model->request_type = $rt;
+		$model->request_id = $id;
 		$model->marking_id = $markingid;
 		$model->reply_type=ComplaintReply::INSTRUCTION;
 		$model->created_at=time();
 		$model->updated_at=time();
 		$model->author=Yii::$app->user->id;
-		$marking=Marking::findOne($markingid);
-		if (!$marking)
-		  return "Invalid marking";
+		$marking=RequestMarking::findOne($markingid);
 		if ($model->load(Yii::$app->request->post())) {
             
 			if (!$model->save())
 			{
 				print_r($model->errors);
 		
-			}
-			
-		$complaint = Complaint::findOne($id);
-		if ($a == 'e')
-		{
-			if ($c==0)
-			{
-			  $complaint->enqrofficer = $markingid;
-			  $marking->status=Complaint::PENDING_FOR_ENQUIRY;
-			  $complaint->status=Complaint::PENDING_FOR_ENQUIRY;
-			}
-			else
-			{
-				unset($complaint->enqrofficer);
-			}
-		}
-		else if ($a == 'a')
-			if ($c==0)
-			{
-			$complaint->atrofficer = $markingid;
-			$marking->status=Complaint::PENDING_FOR_ATR;
-			$complaint->status=Complaint::PENDING_FOR_ATR;
-			}
-			else
-			{
-				unset($complaint->enqrofficer);
 			}
 			
 		$complaint->save();
@@ -234,50 +193,7 @@ $this->_removeInconsistencies($complaint);
 			}
 
 	}
-	public function actionMarkdisposed($id, $markingid) {
-		if (!Yii::$app->user->can('complaintadmin'))
-			return "Not Allowed";
-		$transaction = Yii::$app->db->beginTransaction();
-		$model = new ComplaintReply();
-		$model->complaint_id = $id;
-		$model->marking_id = $markingid;
-		$model->reply_type=ComplaintReply::INSTRUCTION;
-		$model->created_at=time();
-		$model->updated_at=time();
-		$model->author=Yii::$app->user->id;
-		if ($model->load(Yii::$app->request->post())) {
-            
-			if (!$model->save())
-			{
-				print_r($model->errors);
-		
-			}
-			
-		$complaint = Complaint::findOne($id);
-		if (!$complaint)
-		  return "Not valid complaint id";
-	        $complaint->status=Complaint::DISPOSED;
-			
-		$complaint->save();
-		
-		$transaction->commit();
-		return "done";
-		$model = new ComplaintReply;
-		} else
-		{
-		//$searchModel = new ComplaintReplySearch();
-		//$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-			return $this->renderAjax('markdisposed', [
-					// 'searchModel' => $searchModel,
-					//'dataProvider' => $dataProvider,
-					'model' => $model,
-				    'id'=>$id,
-				    'markingid'=>$markingid,
-				    
-			]);
-			}
 
-	}
 	protected function _removeInconsistencies($complaint) {
 	    foreach (Marking::find()->where(['request_type'=>'complaint','request_id'=>$complaint->id])->all() as $marking)
 	    {

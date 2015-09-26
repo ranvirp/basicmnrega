@@ -128,6 +128,12 @@ class ComplaintController extends Controller {
 						// $modelComplaint->flag=1;//requires Admin Attention
 						//
                         $transaction->commit();
+                        if (Yii::$app->user->can('complaintagent'))
+                        {
+                          
+                           \Yii::$app->getSession()->setFlash('success', 'Complaint with id '.$modelComplaint->id.' created');
+                            $modelComplaint=new Complaint;//reset
+                           } else
 						return $this->redirect(['view', 'id' => $modelComplaint->id]);
 					}
 				} catch (Exception $e) {

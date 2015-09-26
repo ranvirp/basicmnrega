@@ -153,4 +153,26 @@ class WorkRatingController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    public function actionRating($wtype,$wid,$photoid)
+    {
+      if (Yii::$app->user->can('complaintadmin'))
+      {
+        $model=WorkRating::find()->where(['work_type'=>$wtype,'workid'=>$wid])->one();
+        if (!$model)
+         $model=new WorkRating;
+         $model->load(Yii::$app->request->post());
+         $model->work_type=$wtype;
+         $model->workid=$wid;
+         $model->photo_id=$photoid;
+         //$model->rating=$rating;
+        // $model->comment=$comment;
+         $model->rating_by=Yii::$app->user->id;
+         $model->rating_at=time();
+         if ($model->save())
+         return $model->rating;
+      
+      }
+      return -1;
+    
+    }
 }

@@ -6,7 +6,8 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-   // 'layout'=>'main-2columns',
+  // 'layout'=>'main-2columns',
+ // 'layout'=>'cmsadminpanel',
     'homeUrl'=>['site'],
    'language'=>'hi',
 
