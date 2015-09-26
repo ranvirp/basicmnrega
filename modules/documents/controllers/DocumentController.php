@@ -63,7 +63,7 @@ class DocumentController extends Controller
     public function actionCreate()
     {
        
-       
+       Yii::$app->language='en';
         $model = new Document();
  
         if ($model->load(Yii::$app->request->post()))

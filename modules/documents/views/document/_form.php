@@ -9,6 +9,12 @@ use app\common\Utility;
 /* @var $model app\modules\documents\models\Document */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<style>
+.document-form>.nav>li>a
+{
+    color:violet;
+}
+</style>
 <?php
  
  $changeattribute='';
@@ -36,7 +42,7 @@ $this->registerJs(
 </ul> 
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
-    'action'=>Url::to(['/Document/create']),
+    'action'=>Url::to(['/docs/document/create']),
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [
@@ -72,10 +78,13 @@ $this->registerJs(
 
    
     <?= $model->showForm($form,"status") ?>
+     <?php
+  echo \app\modules\taxonomy\widgets\TagWidget::widget(['vocabs'=>['projects']]);
+  ?> 
+
     </div>
 </div>
-   
-<?php
+ <?php
 /*
 try {
 $x= Utility::rules()["app\modules\documents\models\Document"][$changeattribute];

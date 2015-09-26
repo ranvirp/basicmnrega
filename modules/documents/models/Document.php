@@ -99,7 +99,7 @@ class Document extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'document_type':
-			       $url=Url::to(['/documents/document-subtype/get?code=']);
+			       $url=Url::to(['/docs/document-subtype/get?code=']);
   
 			       return $form->field($this, $attribute)->dropDownList(ArrayHelper::Map(DocumentType::find()->asArray()->all(),'shortcode','name_hi'),['prompt'=>'None','onChange' => 'populateDropdown("'.$url.'"+$(this).val(),"document_subtype")']);
         	    

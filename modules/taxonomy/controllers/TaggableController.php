@@ -68,15 +68,17 @@ class TaggableController extends Controller
  
         if ($model->load(Yii::$app->request->post()))
         {
-           if (array_key_exists('app\modules\taxonomy\models\Taggable',Utility::rules()))
-            foreach ($model->attributes as $attribute)
-            if (Utility::rules('app\modules\taxonomy\models\Taggable') && array_key_exists($attribute,Utility::rules()['app\modules\taxonomy\models\Taggable']))
-            $model->validators->append(
-               \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\taxonomy\models\Taggable'][$model->$attribute]['required'])
-            );
+           
             if ($model->save())
-            $model = new Taggable();; //reset model
+            //$model = new Taggable();//reset model
+           ;
+         else
+         {
+             print_r($model->errors);
+             exit;
+            }
         }
+        
  
         $searchModel = new TaggableSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
