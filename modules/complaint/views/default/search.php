@@ -18,7 +18,7 @@ $form = ActiveForm::begin([
 ]) ?>
 <div class="row">
 <div class="col-md-12">
-<h2 class="top-offset"><strong>कृपया अपनी शिकायत/मांगों की अद्यतन स्थिति यहाँ से ज्ञात करें:</strong></h2>
+<h2 class="top-offset"><strong>कृपया शिकायत/मांगों की अद्यतन स्थिति यहाँ से ज्ञात करें:</strong></h2>
 </div>
 <div class="col-md-4 col-sm-4 centered">
 <?php 

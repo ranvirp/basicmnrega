@@ -5,7 +5,7 @@ namespace app\modules\complaint\controllers;
 use Yii;
 use app\common\Utility;
 use app\modules\complaint\models\WorkDemand;
-use app\modules\complaint\models\WorkdemandSearch;
+use app\modules\complaint\models\WorkDemandSearch;
 use app\modules\complaint\models\WorkdemandReport;
 use app\modules\mnrega\models\Marking;
 use app\modules\users\models\Designation;

@@ -64,10 +64,56 @@ marker =new L.marker([gpslat,gpslong]);
 
 }
 
+function hindiEnable(elem)
+{
+ if (typeof elem !='object')
+   elem=$('.hindiinput')
+   if ($('#hindiinput-type').val()==='kruti')
+ {
+  elem.addClass('kruti');
+  elem.removeClass('hindiinput');
+  //console.log(google_control);
+   if (typeof google_control =='object' && google_control.isTransliterationEnabled())
+    google_control.disableTransliteration();
+  // console.log(google_control);
+  elem.focus(function()
+ {
+   $(this).val(Convert_to_Kritidev_010($(this).val()));
+   
+ });
+ elem.focusout(function()
+ {
+// alert($(this).val());
+   $(this).val(convert_to_unicode($(this).val()));
+  // alert($(this).val());
+   
+ });
+ $('.input-type').remove();
+ $('.kruti').after('<span class="input-type">Kruti Dev Text</span>');
+ } else
+ if ($('#hindiinput-type').val()=='google')
+ {
+  elem.addClass('hindiinput');
+  
+   elem.removeClass('kruti');
+  elem.off('focus');
+    elem.off('focusout');
+   if (typeof google_control =='object' && !google_control.isTransliterationEnabled())
+    google_control.enableTransliteration();
+   elem.focus(function(){hindiEnable($(this))});
+    $('.input-type').remove();
 
-    function hindiEnable(elem){
-     if (elem==null)
+   $('.hindiinput').after('<span class="input-type">Google Transliteration</span>');
+  if (typeof google_control =='object')
+       
+       google_control.makeTransliteratable(elem);
+ }
+
+}
+    function hindi1Enable(elem){
+  //   if (elem==null)
       elem =$('.hindiinput');
+      /*
              var options = {
           sourceLanguage:
               google.elements.transliteration.LanguageCode.ENGLISH,
@@ -78,7 +124,10 @@ marker =new L.marker([gpslat,gpslong]);
       };
             google_control =
           new google.elements.transliteration.TransliterationControl(options);
-        google_control.makeTransliteratable(elem);
+     */
+     if (typeof google_control =='object')
+       
+       google_control.makeTransliteratable(elem);
     }
 function exportToPdf(selector,url)
 {

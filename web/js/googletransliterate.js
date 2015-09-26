@@ -1,8 +1,10 @@
       // Load the Google Transliterate API
+      if (typeof google =='object')
+      {
       google.load("elements", "1", {
             packages: "transliteration"
           });
-
+          }
       function onLoad() {
         var options = {
             sourceLanguage:
@@ -15,13 +17,25 @@
 
         // Create an instance on TransliterationControl with the required
         // options.
-        var control =
+         google_control =
             new google.elements.transliteration.TransliterationControl(options);
 
         // Enable transliteration in the textbox with id
         // 'transliterateTextarea'.
-        control.makeTransliteratable($('.hindiinput'));
+       // google_control.makeTransliteratable($('.hindiinput'));
+       google_control.addEventListener(
+  google.elements.transliteration.TransliterationControl.EventType.SERVER_UNREACHABLE,
+            serverUnreachableHandler);
+
+function serverUnreachableHandler(e) {
+  document.getElementById("errorDiv").innerHTML =
+  "Transliteration Server unreachable";
+} 
       }
+      if (typeof google=='object')
+      {
       google.setOnLoadCallback(onLoad);
+      }
+      
    
 
