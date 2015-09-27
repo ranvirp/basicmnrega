@@ -72,7 +72,7 @@ app\assets\AppAssetGoogle::register($this);
       margin-top:-30px;
       float:left;
       min-height:1000px;
-        background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+      //  background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
      background-size: 100%;
    
    
@@ -93,8 +93,10 @@ app\assets\AppAssetGoogle::register($this);
     }
     .centercontainer
     {
-     width:67%;
+     width:83%;
      float:left;
+     padding-left:25px;
+     padding-top:0;
     }
 .menubar
     {
@@ -348,10 +350,34 @@ echo '</div>';
     <div class="block-title-span">
         <span>Documents</span>
     </div>
-</div>
+  </div>
+  
+    <?php
+      echo '<ul>';
+     foreach (\app\modules\taxonomy\models\Term::find()->all() as $term) {
+       echo '<li>'.Html::a($term->termname,Url::to(['/taxonomy?t='.$term->termcode.'&ty=link'])).'</li>';
+    }
+     echo '</ul>';
+    ?>
+   
+
    </div>
     <div class="block leftblock2">
-   </div>
+       <div class="block-title">
+    <div class="block-title-span">
+        <span>Articles</span>
+    </div>
+  </div>
+  
+    <?php
+      echo '<ul>';
+     foreach (\app\modules\taxonomy\models\Term::find()->all() as $term) {
+       echo '<li>'.Html::a($term->termname,Url::to(['/taxonomy?t='.$term->termcode.'&ty=doc'])).'</li>';
+    }
+     echo '</ul>';
+    ?>
+   
+</div>
  </div>
  <div class="centercontainer">
 <?php  if (array_key_exists('rows',$this->params)) foreach ($this->params['rows'] as $row) { ?>
@@ -361,8 +387,7 @@ echo '</div>';
  <?php } ?>
  <?= $content ?>
  </div>
-<div class="rightblocks">
-</div>
+
  </div>
             
         </div>

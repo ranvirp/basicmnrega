@@ -21,10 +21,11 @@ class TaggingBehavior extends Behavior
     {
         $terms =Yii::$app->request->post("Terms");
         $terms=$terms[$this->term_prefix];
-       // print_r(get_class($event->sender));
-        //exit;
+         $x=$event->sender->getPrimaryKey();
+            
+        //print_r(get_class($event->sender));
         //print_r($terms);
-
+        //exit;
         if (!$terms)
          return;
         $taggedtype=Taggable::find()->where(['classname'=>get_class($event->sender)])->one();
@@ -34,12 +35,12 @@ class TaggingBehavior extends Behavior
            //check if term exists
            foreach ($terms as $term)
            {
-           $tagging=Tagging::find()->where(['taggedtype'=>$taggedtype->shortname,'termcode'=>$term])->one();
+             
+           $tagging=Tagging::find()->where(['taggedtypepk'=>$x,'taggedtype'=>$taggedtype->shortname,'termcode'=>$term])->one();
            if (!$tagging)
             {
               $tagging=new Tagging;
               $tagging->taggedtype=$taggedtype->shortname;
-              $x=$event->sender->getPrimaryKey();
               //print_r($x);
               //exit;
               $tagging->taggedtypepk="$x";

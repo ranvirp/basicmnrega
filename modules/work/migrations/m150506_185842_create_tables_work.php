@@ -13,11 +13,13 @@ class m150506_185842_create_tables_work extends Migration
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
                $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
             }
-       // $this->dropTable('{{%work}}');
+       $this->dropTable('{{%work}}');
         $this->dropTable('{{%agency}}');
           $this->dropTable('{{%work_progress}}');
       $this->dropTable('{{%work_type}}');
       $this->dropTable('{{%scheme}}');
+          $this->dropTable('{{%work_rating}}');
+      
     
          $this->createTable('{{%work}}', [
             'id' => Schema::TYPE_PK,

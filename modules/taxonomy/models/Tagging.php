@@ -117,7 +117,11 @@ class Tagging extends \yii\db\ActiveRecord
       
       	$query=Tagging::find()->where(['termcode'=>$termcode]);
       	if ($type)
-      		$query=$query->andWhere(['taggedtype'=>$type]);
+      	{
+      		$query->andWhere(['taggedtype'=>$type]);
+      		//$class=Taggable::find()->where(['shortcode'=>$type])->one()->classname;
+      		//$query=$class::find()
+      	}
       	$dataProvider=new \yii\data\ActiveDataProvider(['query'=>$query]);
       	return $dataProvider;
 

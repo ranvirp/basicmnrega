@@ -145,7 +145,7 @@ class Document extends \yii\db\ActiveRecord
 									
 			case 'fulltext':
 			  // return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput']);
-			    return  $form->field($this,$attribute)->widget(\yii\imperavi\Widget::classname(),['options'=>['lang'=> 'en']]);
+			    return  $form->field($this,$attribute)->widget(\yii\imperavi\Widget::classname(),['settings'=>['lang'=>'en'],'options'=>['lang'=> 'it']]);
 			    break;
 									
 			case 'attachments':

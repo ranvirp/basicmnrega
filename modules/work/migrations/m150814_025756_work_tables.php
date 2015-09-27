@@ -5,15 +5,17 @@ use yii\db\Migration;
 
 class m150814_025756_work_tables extends Migration
 {
-   public function up()
+   public function safeUp()
     {
     //var_dump($this->db);
     //exit;
+      /*
            $tableOptions=null;
              if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
                $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
             }
+            
          $this->createTable('{{%work}}', [
             'id' => Schema::TYPE_PK,
             'uniqueid'=>Schema::TYPE_STRING,
@@ -46,11 +48,13 @@ class m150814_025756_work_tables extends Migration
             'updated_at' => Schema::TYPE_INTEGER . ' NOT NULL',
             'created_by' => Schema::TYPE_INTEGER . ' NOT NULL',
         ], $tableOptions);
+
         $this->createTable('{{%agency}}',[
         'code'=>Schema::TYPE_STRING.' PRIMARY KEY',
          'name_hi'=>Schema::TYPE_STRING,
          'name_en'=>Schema::TYPE_STRING,
          ],$tableOptions);
+
          $this->createTable('{{%work_progress}}', [
             'id' => Schema::TYPE_PK,
             'work_id'=>Schema::TYPE_INTEGER,
@@ -58,6 +62,7 @@ class m150814_025756_work_tables extends Migration
             'phy'=>Schema::TYPE_INTEGER,
             'fin'=>Schema::TYPE_INTEGER,
             ],$tableOptions);
+            
           $this->createTable('{{%work_rating}}', [
             'id' => Schema::TYPE_PK,
             'work_id'=>Schema::TYPE_INTEGER,
@@ -66,6 +71,7 @@ class m150814_025756_work_tables extends Migration
             'rating_at'=>Schema::TYPE_INTEGER,
             'rating_comment'=>Schema::TYPE_TEXT,
             ],$tableOptions);
+          
          $this->createTable('{{%work_type}}', [
             'code'=>Schema::TYPE_STRING.' PRIMARY KEY',
           
@@ -130,7 +136,7 @@ class m150814_025756_work_tables extends Migration
       //$this->addForeignKey('work_village_fkey','{{%work}}','village_code','{{%village}}','code');
       //$this->addForeignKey('block_district_fkey','{{%block}}','district_code','{{%district}}','code');
       
-     
+     */
       
     }
 
