@@ -8,11 +8,10 @@ class DefaultController extends Controller
 {
     public function actionIndex($t,$ty=null)//termcode, type
     {
-        $dp=Tagging::taggedList($t,$ty);
+        $dplink=Tagging::taggedList($t,'link');
+        $dpdoc=Tagging::taggedList($t,'doc');
         $terms=Tagging::terms($t);
-        if ($ty=='link')
-        return $this->render('link-index',['dataProvider'=>$dp,'terms'=>$terms]);	
-    else
-        return $this->render('index',['dataProvider'=>$dp]);
+    //    if ($ty=='link')
+       return $this->render('out',['dplink'=>$dplink,'dpdoc'=>$dpdoc,'terms'=>$terms]);
     }
 }

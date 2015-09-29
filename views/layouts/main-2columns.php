@@ -181,6 +181,10 @@ app\assets\AppAssetGoogle::register($this);
     {
      content:'Kruti Dev';
     }
+    .taxonomy-default-index>h2
+    {
+      font-size:20px;
+    }
     </style>
    
 <script>
@@ -367,47 +371,26 @@ echo '</div>';
    
  <div class="row-fluid">
  <div class="leftblocks">
+  <?php foreach (\app\modules\taxonomy\models\Vocabulary::find()->all() as $vocabmodel) { ?>
    <div class="block leftblock1">
     <div class="block-title">
     <div class="block-title-span">
-        <span>Documents <?php
-    if (Yii::$app->user->can('webadmin'))
-    {
-      echo Html::a('Add', Url::to(['/docs/link/create']));
-    }?></span>
+        <span><?=$vocabmodel->vocabname?> </span>
     </div>
   </div>
   
     <?php
    
       echo '<ul>';
-     foreach (\app\modules\taxonomy\models\Term::find()->all() as $term) {
-       echo '<li>'.Html::a($term->termname,Url::to(['/taxonomy?t='.$term->termcode.'&ty=link'])).'</li>';
+     foreach (\app\modules\taxonomy\models\Term::find()->where(['vocabcode'=>$vocabmodel->vocabcode])->all() as $term) {
+       echo '<li>'.Html::a($term->termname,Url::to(['/taxonomy?t='.$term->termcode])).'</li>';
     }
      echo '</ul>';
     ?>
    
 
    </div>
-    <div class="block leftblock2">
-       <div class="block-title">
-    <div class="block-title-span">
-        <span>Articles <?php if (Yii::$app->user->can('webadmin'))
-    {
-      echo Html::a('Add', Url::to(['/docs/document/create']));
-    }?></span>
-    </div>
-  </div>
-  
-    <?php
-      echo '<ul>';
-     foreach (\app\modules\taxonomy\models\Term::find()->all() as $term) {
-       echo '<li>'.Html::a($term->termname,Url::to(['/taxonomy?t='.$term->termcode.'&ty=doc'])).'</li>';
-    }
-     echo '</ul>';
-    ?>
-   
-</div>
+   <?php } ?>
 <?php if (Yii::$app->user->can('webadmin')) { ?>
 <div class="block">
    <div class="block-title">

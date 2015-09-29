@@ -2,6 +2,7 @@
    <?php
   // $mapping=['app\modules\documents\models\Document'=>['module'=>'docs','model'=>'document','pk'=>'id'],
    //];
+    echo '<h2><strong> Articles related to '.$terms.'</strong></h2>';
     echo yii\widgets\ListView::widget([
 'dataProvider'=>$dataProvider,
 'itemView'=>function($model,$key,$index,$widget)

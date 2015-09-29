@@ -1,3 +1,6 @@
+<div class="link">
 <?php
-\yii\helpers\Html::a($model->name_hi,\yii\helpers\Url::to([$model->url]));
+
+echo \yii\helpers\Html::a($model->name_hi,\yii\helpers\Url::to([$model->url]));
 ?>
+</div>

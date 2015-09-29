@@ -33,7 +33,7 @@ use yii\widgets\DetailView;
  $photo=\app\modules\reply\models\File::findOne($photos);
 ?>
 <div class="col-md-6" style="margin-bottom:15px">
- <img height="250px" width="100%" title="<?=$photo->title?>" src="<?=$photo->url?>"></img>
+ <img height="100%" width="100%" title="<?=$photo->title?>" src="<?=$photo->url?>"></img>
  <p class="text-center"><?=$photo->title?></p>
 </div>
 <?php }}?>
