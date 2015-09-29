@@ -325,7 +325,7 @@ $('#hindiinput-type').trigger('change');
                 ['label' => 'Data Entry', 'url' => ['/mnrega/pond/create'],'options'=>['class'=>'dropdown']],
                 
 ['label' => 'View List', 'url' => ['/mnrega/pond/index'],'options'=>['class'=>'dropdown']],
-['label' => 'View Entire List', 'url' => ['/mnrega/pond/index1'],'options'=>['class'=>'dropdown']],
+['label' => 'View Entire List', 'url' => ['/mnrega/pond/index2'],'options'=>['class'=>'dropdown']],
                
             ],
     ],
