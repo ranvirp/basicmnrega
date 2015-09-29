@@ -201,9 +201,9 @@ return [
 
 'Work Demands'=>'',
 
-'Work Given'=>'',
+'Work Given'=>'काम दिया गया ',
 
-'Work Not Given'=>'',
+'Work Not Given'=>'काम नहीं दिया गया',
 
 'Workchoice'=>'',
 
@@ -400,5 +400,9 @@ return [
 'Ayukt'=>'आयुक्त ',
 
 'Shashan'=>'शासन ',
+
+'Job card Demand True'=>'जॉब कार्ड की मांग सही है या नहीं ?',
+
+'Jobcard Demand True'=>'जॉब कार्ड की मांग सही है या नहीं ?',
 
 ];

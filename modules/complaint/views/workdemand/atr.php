@@ -126,7 +126,7 @@ div.required label:after {
    </div>
    <div class="col-md-12">
     
-      <?= $form->field($workdemandReport,"workname")->textInput()?>
+      <?= $form->field($workdemandReport,"workname")->textInput(['class'=>'hindiinput form-control'])?>
    </div>
    </div>
    <div class="form-group col-md-12">

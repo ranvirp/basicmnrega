@@ -131,7 +131,7 @@ class ComplaintController extends Controller {
                         if (Yii::$app->user->can('complaintagent'))
                         {
                           
-                           \Yii::$app->getSession()->setFlash('success', 'Complaint with id '.$modelComplaint->id.' created');
+                           \Yii::$app->getSession()->setFlash('message', 'Complaint with id '.$modelComplaint->id.' created');
                             $modelComplaint=new Complaint;//reset
                            } else
 						return $this->redirect(['view', 'id' => $modelComplaint->id]);

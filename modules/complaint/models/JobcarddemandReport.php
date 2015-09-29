@@ -55,7 +55,7 @@ class JobcarddemandReport extends \yii\db\ActiveRecord
             'create_time' => Yii::t('app', 'Create Time'),
             'update_time' => Yii::t('app', 'Update Time'),
             'description' => Yii::t('app', 'Description'),
-            'complainttrue' => Yii::t('app', 'Complainttrue'),
+            'complainttrue' => Yii::t('app', 'Jobcard Demand True'),
         ];
     }
 	/*

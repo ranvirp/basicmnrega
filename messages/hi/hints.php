@@ -79,4 +79,28 @@ return [
 
 'enquiryreport_point_daproposeddetails_hint'=>'',
 
+'workdemand_report_complainttrue_hint'=>'अगर काम की मांग नहीं की गयी है अथवा किसी  कारण से काम नहीं दिया गया गया है तो विकल्प ष्काम नहीं दिया गया ष् चुनें ए एवं कारण का विवरण नीचे अंकित करें ',
+
+'workdemand_report_description_hint'=>'काम नहीं देने का कारण अंकित करें ',
+
+'workdemand_report_work_id_hint'=>'कार्य की वर्क ID- ',
+
+''=>'',
+
+'workdemand_report_workname_hint'=>'काम का नाम ',
+
+'jobcarddemand_district_code_hint'=>'जनपद का नाम अंकित करें ',
+
+'jobcarddemand_block_code_hint'=>'विकास खंड का नाम अंकित करें ',
+
+'jobcarddemand_panchayat_code_hint'=>'पंचायत  का नाम अंकित करें ',
+
+'jobcarddemand_report_complainttrue_hint'=>'यदि जॉबकार्ड की मांग नहीं की गई है अथवा किसी कारण से जॉब कार्ड नहीं दिया गया है तो विकल्प "गलत"  चुने, एवं कारण का विवरण नीचे अंकित करें ',
+
+'jobcarddemand_report_jobcardno_hint'=>'यदि जॉबकार्ड दिया गया है तो जॉबकार्ड संख्या   अंकित करें ',
+
+'jobcarddemand_report_description_hint'=>'जॉबकार्ड  नहीं देने का कारण अंकित करें ',
+
+'obcarddemand_village_hint'=>'गावं टोला  मज़रा का नाम अंकित करें ',
+
 ];
