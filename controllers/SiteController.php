@@ -67,7 +67,7 @@ public function actionIndex1()
         if ($designation->profileEmpty())
           return $this->redirect(['/users/designation/updateprofile?id='.$designation->id]);
        else
-       return $this->render('../../modules/mnrega/views/pond/mainpage');
+       return $this->redirect(['/docs/document/view?id=2']);
      } else 
      {
        $this->layout="//complaint";
