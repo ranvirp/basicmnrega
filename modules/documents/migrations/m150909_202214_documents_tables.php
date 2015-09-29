@@ -7,6 +7,7 @@ class m150909_202214_documents_tables extends Migration
 {
     public function safeUp()
     {
+        /*
        $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
@@ -58,6 +59,7 @@ class m150909_202214_documents_tables extends Migration
             'public_access'=>Schema::TYPE_INTEGER.' default 1'
             
               ], $tableOptions);
+              */
     }
 
     public function down()
