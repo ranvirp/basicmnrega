@@ -71,7 +71,8 @@ class DocumentController extends Controller
           if ($model->validate())
             {
                 $model->create_time=time();
-                $model->created_by=Yii::$app->user->id;
+                 $model->update_time=time();
+                $model->author=Yii::$app->user->id;
             $model->save();
             $model = new Document(); //reset model
             }
@@ -107,8 +108,10 @@ class DocumentController extends Controller
  
         if ($model->load(Yii::$app->request->post()))
         {
+             if (!is_numeric($model->create_time))
          $model->create_time=time();
-                $model->created_by=Yii::$app->user->id;
+      $model->update_time=time();
+                $model->author=Yii::$app->user->id;
             if ($model->save())
             $model = new Document();; //reset model
         }
