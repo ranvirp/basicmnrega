@@ -39,7 +39,8 @@
         "vova07/yii2-imperavi-widget": "*",
         "asofter/yii2-imperavi-redactor": "*",
         "dropbox/dropbox-sdk": "1.1.*",
-        "kartik-v/bootstrap-fileinput": "4.2.3"
+        "kartik-v/bootstrap-fileinput": "4.2.3",
+        "yiisoft/yii2-imagine": "^2.0"
 
     },
     "require-dev": {
