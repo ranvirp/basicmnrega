@@ -17,6 +17,10 @@ $this->params['breadcrumbs'][] = 'Complaint';
 <?php 
 //AppAssetGoogle::register($this);
 ?>
+<?php if ($model && Yii::$app->user->can('complaintadmin'))
+{
+  echo Html::a('Update',Url::to(['/complaint/complaint/update?id='.$model->id]));
+} ?>
 <button onclick="javascript:window.print()">Print</button>
 
 <div class="reply-view row" id="complaint-view">
