@@ -1,4 +1,11 @@
+<?php
+use yii\helpers\Html;
+use yii\helpers\Url;
+?>
 <div class="correspondence-default-index">
+    <ul>
+        <li><?= Html::a('Mark Correspondence',Url::to(['/corr/marking']))?></li>
+    </ul>
     <h1><?= $this->context->action->uniqueId ?></h1>
     <p>
         This is the view content for action "<?= $this->context->action->id ?>".

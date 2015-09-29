@@ -23,7 +23,7 @@ class TaggingBehavior extends Behavior
         $terms=$terms[$this->term_prefix];
          $x=$event->sender->getPrimaryKey();
             
-        //print_r(get_class($event->sender));
+        print_r(get_class($event->sender));
         //print_r($terms);
         //exit;
         if (!$terms)

@@ -115,7 +115,9 @@ class Tagging extends \yii\db\ActiveRecord
     public function taggedList($termcode,$type=null)
     {
       
-      	$query=Tagging::find()->where(['termcode'=>$termcode]);
+      	$query=Tagging::find()
+        //->with('taggedtype0','termcode0')
+        ->where(['termcode'=>$termcode]);
       	if ($type)
       	{
       		$query->andWhere(['taggedtype'=>$type]);
@@ -125,6 +127,23 @@ class Tagging extends \yii\db\ActiveRecord
       	$dataProvider=new \yii\data\ActiveDataProvider(['query'=>$query]);
       	return $dataProvider;
 
+    }
+    public static function terms($terms)
+    {
+      $x=[];
+      if (is_array($terms))
+      {
+        foreach ($terms as $term)
+        {
+           $model=Term::findOne($term);
+           $x[]=$model->termname;
+        }
+      }
+      else {
+        $model=Term::findOne($terms);
+           $x[]=$model->termname;
+      }
+      return implode(",",$x);
     }
 	
 }

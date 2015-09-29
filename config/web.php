@@ -123,9 +123,16 @@ $config = [
         ],
     ],
     'modules'=>[
+    'backup' => [
+            'class' => 'spanjeta\modules\backup\Module',
+        ],
     'docs'=>[
     	'class' => '\app\modules\documents\Module',
 	
+    ],
+    'corr'=>[
+        'class' => '\app\modules\correspondence\Module',
+    
     ],
     	'articles' => [
 		'class' => '\app\modules\articles\Articles',

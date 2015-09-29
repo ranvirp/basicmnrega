@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -11,12 +13,16 @@ use yii\widgets\DetailView;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="document-view">
-
-    
-
+<?php if ($model && Yii::$app->user->can('webadmin'))
+{?>
+ <?=Html::a('Update',Url::to(['/docs/document/update?id='.$model->id]))?>   
+<?php } ?>
 <article>
 <h1><?=$model->name_hi?></h1>
 <hl>
+	<p><?=date('day month year time',$model->create_time)?></p>
+<hl>
+	<p><strong><?=$model->shorttext?></strong></p>
 <p>
 <?=$model->fulltext?>
 </p>

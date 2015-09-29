@@ -6,6 +6,8 @@
 'dataProvider'=>$dataProvider,
 'itemView'=>function($model,$key,$index,$widget)
 {
+  
+  
      $mapping=['app\modules\documents\models\Document'=>'/docs/document/view?id=',
       'app\modules\documents\models\Link'=>'/docs/link/view?id='
      ];
@@ -16,7 +18,9 @@
      $url=$mapping[$taggedClass].$model->taggedtypepk;
      $taggedModel=$taggedClass::findOne($model->taggedtypepk);
         $title=$taggedModel->printTitle();
-     return \yii\helpers\Html::a($title,\yii\helpers\Url::to([$url]));
+        return $taggedModel->shortview($this);
+    // return \yii\helpers\Html::a($title,\yii\helpers\Url::to([$url]));
+     
 },]);
     ?>
 </div>

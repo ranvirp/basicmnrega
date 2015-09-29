@@ -190,5 +190,9 @@ class Link extends \yii\db\ActiveRecord
     {
         return $this->name_hi;
     }
+     public function shortview($view)
+    {
+    	return $view->render('@app/modules/documents/views/link/shortview',['model'=>$this]);
+    }
 	
 }

@@ -134,18 +134,18 @@ class Document extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'description':
-			   return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput']);
+			   return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput form-control']);
 			    
 			    break;
 									
 			case 'shorttext':
-			   return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput']);
+			   return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput form-control']);
 			    
 			    break;
 									
 			case 'fulltext':
 			  // return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput']);
-			    return  $form->field($this,$attribute)->widget(\yii\imperavi\Widget::classname(),['settings'=>['lang'=>'en'],'options'=>['lang'=> 'it']]);
+			    return  $form->field($this,$attribute)->widget(\vova07\imperavi\Widget::classname(),['settings'=>['lang'=>'en'],'options'=>['lang'=> 'it']]);
 			    break;
 									
 			case 'attachments':
@@ -239,6 +239,10 @@ class Document extends \yii\db\ActiveRecord
     public function printTitle()
     {
         return $this->name_hi;
+    }
+    public function shortview($view)
+    {
+    	return $view->render('@app/modules/documents/views/document/shortview',['model'=>$this]);
     }
 	
 }

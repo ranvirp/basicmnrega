@@ -4,6 +4,7 @@
    use yii\helpers\Html;
   // $mapping=['app\modules\documents\models\Document'=>['module'=>'docs','model'=>'document','pk'=>'id'],
    //];
+   echo '<h2> List of Documents related to '.$terms.'</h2>';
     echo yii\grid\GridView::widget([
 'dataProvider'=>$dataProvider,
 'columns'=>[

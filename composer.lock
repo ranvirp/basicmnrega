@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8430fa43a679b8d9fed1624fc9389de4",
-    "content-hash": "783d3bed4b3fc5d5482b47853e1a26ee",
+    "hash": "385fc6fca6075801ea024cc307955ca6",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -780,16 +779,16 @@
         },
         {
             "name": "kartik-v/bootstrap-fileinput",
-            "version": "v4.2.7",
+            "version": "v4.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "0468bbba9c28c1250aca83eba9b33e32ec135f78"
+                "reference": "1b30f372977efdb5aa1cc8b706d9e40be90ff904"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/0468bbba9c28c1250aca83eba9b33e32ec135f78",
-                "reference": "0468bbba9c28c1250aca83eba9b33e32ec135f78",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/1b30f372977efdb5aa1cc8b706d9e40be90ff904",
+                "reference": "1b30f372977efdb5aa1cc8b706d9e40be90ff904",
                 "shasum": ""
             },
             "type": "library",
@@ -824,7 +823,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2015-09-13 17:39:44"
+            "time": "2015-06-21 13:36:43"
         },
         {
             "name": "kartik-v/mpdf",

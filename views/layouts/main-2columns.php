@@ -16,6 +16,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
 
 AppAsset_1::register($this);
 app\assets\AppAssetGoogle::register($this);
+//app\assets\KartikFileInputAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
@@ -91,12 +92,30 @@ app\assets\AppAssetGoogle::register($this);
    
    
     }
+    .block>ul
+    {
+      list-style: outside none;
+    }
+    .block>ul>li
+    {
+      display: block;
+      margin-left: -10px;
+      width:50%;
+      overflow: wrap-text;
+      padding: 10px;
+
+    }
+    .block>ul>li:hover
+    {
+      background:#ddc;
+    }
     .centercontainer
     {
      width:83%;
      float:left;
      padding-left:25px;
      padding-top:0;
+     max-width: 1200px;
     }
 .menubar
     {
@@ -168,6 +187,7 @@ app\assets\AppAssetGoogle::register($this);
 
  $(document).ready(function()
  {
+
  $('#hindiinput-type').change(function()
  {
   if ($(this).val()==='')
@@ -231,6 +251,8 @@ app\assets\AppAssetGoogle::register($this);
  }
  
  });
+$('#hindiinput-type').val('google');
+$('#hindiinput-type').trigger('change');
  });
  
  </script>
@@ -348,11 +370,16 @@ echo '</div>';
    <div class="block leftblock1">
     <div class="block-title">
     <div class="block-title-span">
-        <span>Documents</span>
+        <span>Documents <?php
+    if (Yii::$app->user->can('webadmin'))
+    {
+      echo Html::a('Add', Url::to(['/docs/link/create']));
+    }?></span>
     </div>
   </div>
   
     <?php
+   
       echo '<ul>';
      foreach (\app\modules\taxonomy\models\Term::find()->all() as $term) {
        echo '<li>'.Html::a($term->termname,Url::to(['/taxonomy?t='.$term->termcode.'&ty=link'])).'</li>';
@@ -365,7 +392,10 @@ echo '</div>';
     <div class="block leftblock2">
        <div class="block-title">
     <div class="block-title-span">
-        <span>Articles</span>
+        <span>Articles <?php if (Yii::$app->user->can('webadmin'))
+    {
+      echo Html::a('Add', Url::to(['/docs/document/create']));
+    }?></span>
     </div>
   </div>
   
@@ -378,6 +408,26 @@ echo '</div>';
     ?>
    
 </div>
+<?php if (Yii::$app->user->can('webadmin')) { ?>
+<div class="block">
+   <div class="block-title">
+    <div class="block-title-span">
+        <span>For Administrators Only</span>
+      </div>
+    </div>
+   <ul>
+     <li> <?=Html::a('Add Vocabulary', Url::to(['/taxonomy/vocabulary/create']))?></li>
+       <li> <?=Html::a('Add Term', Url::to(['/taxonomy/term/create']))?></li>
+         <li> <?=Html::a('Add Taggable', Url::to(['/taxonomy/taggable/create']))?></li>
+   <li> <?=Html::a('Articles', Url::to(['/docs/document']))?></li>
+ <li> <?=Html::a('Links', Url::to(['/docs/link']))?></li>
+ <li> <?=Html::a('Document Types', Url::to(['/docs/document-type']))?></li>
+ <li> <?=Html::a('Document Sub Types', Url::to(['/docs/document-subtype']))?></li>
+ 
+ 
+  </ul>
+  </div>
+<?php } ?>
  </div>
  <div class="centercontainer">
 <?php  if (array_key_exists('rows',$this->params)) foreach ($this->params['rows'] as $row) { ?>

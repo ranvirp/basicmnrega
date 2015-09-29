@@ -30,9 +30,11 @@ $x='<script> '.$this->jscontainer.'=new Array(); </script>';
 $x.='<div id="taxonomy_div"></div>';
 $x.='<div id="'.$this->prefix.'_div"></div>';//container to contain form elements
   $x.='<table  class="table table-striped">';
-  foreach ($vocabs as $vocab)
+  $vocabmodels=Vocabulary::find()->all();
+ // foreach ($vocabs as $vocab)
+  foreach ($vocabmodels as $vocabmodel)
   {
-   $vocabmodel=Vocabulary::findOne($vocab);
+   //$vocabmodel=Vocabulary::findOne($vocab);
    if (!$vocabmodel) continue;
    
   //we shall create a row with three columns--first being Label of vocab, second beign dropdown
@@ -40,7 +42,9 @@ $x.='<div id="'.$this->prefix.'_div"></div>';//container to contain form element
   $x.='<tr>';
   $x.='<td>'.$vocabmodel->vocabname.'</td>';
   $x.='<td>';
-  $termdropdown=Html::dropDownList($this->prefix.'_'.$vocabmodel->vocabcode,'',ArrayHelper::map(Term::find()->where(['vocabcode'=>$vocab])->asArray()->all(),
+  $termdropdown=Html::dropDownList($this->prefix.'_'.$vocabmodel->vocabcode,'',ArrayHelper::map(Term::find()
+    //->where(['vocabcode'=>$vocab])
+    ->asArray()->all(),
   'termcode','termname'),['id'=>$this->prefix.'_'.$vocabmodel->vocabcode]);
   $x.=$termdropdown;
   $x.='</td>';

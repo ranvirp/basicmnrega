@@ -38,7 +38,8 @@
         "michelf/php-smartypants": "dev-lib",
         "vova07/yii2-imperavi-widget": "*",
         "asofter/yii2-imperavi-redactor": "*",
-        "dropbox/dropbox-sdk": "1.1.*"
+        "dropbox/dropbox-sdk": "1.1.*",
+        "kartik-v/bootstrap-fileinput": "4.2.3"
 
     },
     "require-dev": {
