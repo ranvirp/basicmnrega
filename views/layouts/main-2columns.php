@@ -64,6 +64,10 @@ app\assets\AppAssetGoogle::register($this);
       font-size:105%;
       font-weight:bold;
     }
+     .block-title-span>span
+     {
+      color:white;
+     }
     .leftblocks
     {
       padding:0px;
