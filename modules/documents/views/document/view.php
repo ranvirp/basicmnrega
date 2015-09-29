@@ -20,7 +20,7 @@ use yii\widgets\DetailView;
 <article>
 <h1><?=$model->name_hi?></h1>
 <hl>
-	<p><?=date('day month year time',$model->create_time)?></p>
+	<p><?=date('l, j F, Y',$model->create_time)?></p>
 <hl>
 	<p><strong><?=$model->shorttext?></strong></p>
 <p>

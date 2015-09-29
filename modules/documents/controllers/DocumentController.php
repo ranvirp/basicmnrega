@@ -70,6 +70,8 @@ class DocumentController extends Controller
         {
           if ($model->validate())
             {
+                $model->created_at=time();
+                $model->created_by=Yii::$app->user->id;
             $model->save();
             $model = new Document(); //reset model
             }
@@ -105,13 +107,8 @@ class DocumentController extends Controller
  
         if ($model->load(Yii::$app->request->post()))
         {
-        if (array_key_exists('app\modules\documents\models\Document',Utility::rules()))
-           
-            foreach ($model->attributes as $attribute)
-            if (array_key_exists($attribute,Utility::rules()['app\modules\documents\models\Document']))
-            $model->validators->append(
-               \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\documents\models\Document'][$model->$attribute]['required'])
-            );
+         $model->created_at=time();
+                $model->created_by=Yii::$app->user->id;
             if ($model->save())
             $model = new Document();; //reset model
         }
