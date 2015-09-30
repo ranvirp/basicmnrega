@@ -39,7 +39,7 @@ $types=['complaint'=>Yii::t('app','Complaint'),
 </div>
 <div class="col-md-offset-5 col-md-2">
    <?php
-   //echo $form->field($model, 'captcha')->widget(\yii\captcha\Captcha::classname(),['captchaAction' => '/site/captcha']);
+   echo $form->field($model, 'captcha')->widget(\yii\captcha\Captcha::classname(),['captchaAction' => '/site/captcha']);
    ?>
 </div>
 <div class="col-md-12">

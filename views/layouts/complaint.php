@@ -234,7 +234,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
       echo '<div class="menubar hidden-print">';
       echo Nav::widget([
            'items'=>[
-           !Yii::$app->user->isGuest ?['label' => 'Main Page', 'url' => ['/'],'linkOptions'=>[],'options'=>['class'=>'dropdown']]:''
+           ['label' => 'Main Page', 'url' => ['/'],'linkOptions'=>[],'options'=>['class'=>'dropdown']]
            ],
             'options'=>['class'=>'nav navbar-nav centered']
             ]);
