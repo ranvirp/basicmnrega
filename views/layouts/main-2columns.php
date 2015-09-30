@@ -200,10 +200,10 @@ app\assets\AppAssetGoogle::register($this);
  {
   if ($(this).val()==='')
   {
-  $('input:text,textarea').removeClass('hindiinput');
-    $('input:text,textarea').removeClass('kruti');
- $('input:text,textarea').off('focus');
-    $('input:text,textarea').off('focusout');
+  //$('input:text,textarea').removeClass('hindiinput');
+  //  $('input:text,textarea').removeClass('kruti');
+ //$('input:text,textarea').off('focus');
+  //  $('input:text,textarea').off('focusout');
    $('.kruti').addClass('hindiinput');
    $('.kruti').removeClass('kruti');
     $('.hindiinput').off('focus');
@@ -242,8 +242,8 @@ app\assets\AppAssetGoogle::register($this);
  } else
  if ($(this).val()=='google')
  {
-  $('input:text,textarea').addClass('hindiinput');
-  $('input:text,textarea').removeClass('kruti');
+  //$('input:text,textarea').addClass('hindiinput');
+ // $('input:text,textarea').removeClass('kruti');
  
   $('.kruti').addClass('hindiinput');
   
@@ -255,7 +255,7 @@ app\assets\AppAssetGoogle::register($this);
    $('.hindiinput').focus(function(){hindiEnable($(this))});
     $('.input-type').remove();
 
-   $('.hindiinput').after('<span class="input-type">Google Transliteration</span>');
+   $('.hindiinput').after('<span class="input-type">Google Transliteration-Press Ctrl-g to toggle</span>');
  }
  
  });
@@ -406,10 +406,10 @@ echo '</div>';
      <li> <?=Html::a('Add Vocabulary', Url::to(['/taxonomy/vocabulary/create']))?></li>
        <li> <?=Html::a('Add Term', Url::to(['/taxonomy/term/create']))?></li>
          <li> <?=Html::a('Add Taggable', Url::to(['/taxonomy/taggable/create']))?></li>
-   <li> <?=Html::a('Articles', Url::to(['/docs/document']))?></li>
- <li> <?=Html::a('Links', Url::to(['/docs/link']))?></li>
- <li> <?=Html::a('Document Types', Url::to(['/docs/document-type']))?></li>
- <li> <?=Html::a('Document Sub Types', Url::to(['/docs/document-subtype']))?></li>
+   <li> <?=Html::a('Articles', Url::to(['/docs/document/create']))?></li>
+ <li> <?=Html::a('Links', Url::to(['/docs/link/create']))?></li>
+ <li> <?=Html::a('Document Types', Url::to(['/docs/document-type/create']))?></li>
+ <li> <?=Html::a('Document Sub Types', Url::to(['/docs/document-subtype/create']))?></li>
  
  
   </ul>
@@ -433,7 +433,7 @@ echo '</div>';
     <div class="footer">
        <div>
             <p class="pull-left">MNREGA Cell, Uttar Pradesh <?= date('Y') ?></p>
-            <p class="pull-right"><?= Yii::powered() ?></p>
+         
      </div>
     </div>
 </div>

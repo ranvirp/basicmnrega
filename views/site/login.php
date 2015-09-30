@@ -6,13 +6,12 @@ use yii\bootstrap\ActiveForm;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+//$this->title = 'Login';
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login  col-lg-offset-3 ">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
+<div class="site-login  bordered-form col-lg-offset-3 col-lg-3">
+    
+    <p><strong>Please fill out the following fields to login:</strong></p>
 
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',

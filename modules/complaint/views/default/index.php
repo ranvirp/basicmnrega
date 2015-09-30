@@ -41,15 +41,31 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 {
 margin-left:150px;
 }
+.no-padding
+{
+  padding:0px;
+}
+.title
+{
+  background:#a40;
+  padding:10px;
+  color:white;
+  text-align: center;
+}
 </style>
-<div class="row well">
+<div class="col-md-8 no-padding">
+  <div class="title">
+ <h1>मनरेगा शिकायत प्रबंधन</h1>
+</div>
+</div>
+<div class="col-md-8 well">
+
 <h3>कॉल करें या फिर नीचे क्लिक करें :</h3>
 <span class="glyphicons glyphicons-earphone"></span><h3><strong>24X7 Helpline No:</strong>18001805999,05224055999</h3>
 </div>
 <div clas="row">
-<div class="col-md-1">
-</div>
-<div class="col-md-11">
+
+<div class="col-md-8 bordered-form">
 <div class="row">
    <div class="tile tile-medium col-sm-3">
        <a href="<?=\yii\helpers\Url::to(['/complaint/workdemand/create'])?>">
@@ -78,5 +94,12 @@ margin-left:150px;
     
 
 </div>
+<div class="col-md-offset-1 col-md-3 bordered-form">
+   <?php
+  
+   echo $this->render('../../../../modules/users/views/user/login',['model'=>new \app\modules\users\models\LoginForm]);
+    
+    ?>
+  </div>
 </div>
 

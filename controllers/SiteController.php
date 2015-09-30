@@ -70,6 +70,8 @@ public function actionIndex1()
        return $this->redirect(['/taxonomy?t=mjba']);
      } else 
      {
+        $this->redirect(['/complaint']);
+        /*
        $this->layout="//complaint";
         $model = new \app\modules\users\models\LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
@@ -79,6 +81,7 @@ public function actionIndex1()
                 'model' => $model,
             ]);
         }
+        */
      }
     }
 

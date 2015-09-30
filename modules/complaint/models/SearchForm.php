@@ -5,13 +5,13 @@ class SearchForm extends \yii\base\Model
 {
     public $type;
     public $id;
-    public $captcha;
+   // public $captcha;
 
     public function rules()
     {
         return [
         [['type','id'],'required'],
-        [['captcha'],'captcha'],
+       // [['captcha'],'captcha'],
             // define validation rules here
         ];
     }
