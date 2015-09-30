@@ -75,6 +75,7 @@ $this->registerJs(
     <?= $model->showForm($form,"status") ?>
     </div>
      <div id="taxonomy" class="tab-pane fade">
+         <?=\app\modules\taxonomy\widgets\ExistingTermsWidget::widget(['model'=>$model]) ?>
     <?=\app\modules\taxonomy\widgets\TagWidget::widget(['vocabs'=>['projects'],'prefix'=>'documents']) ?>
     </div>
 </div>

@@ -112,7 +112,7 @@ class Tagging extends \yii\db\ActiveRecord
 			break;
 		  }
     }
-    public function taggedList($termcode,$type=null)
+    public static function taggedList($termcode,$type=null)
     {
       
       	$query=Tagging::find()
@@ -144,6 +144,25 @@ class Tagging extends \yii\db\ActiveRecord
            $x[]=$model->termname;
       }
       return implode(",",$x);
+    }
+    public static function taggedterms($dtype,$did)
+    {
+      $taggable=Taggable::findOne($dtype);
+        if ($taggable)
+        {
+          $tagging=Tagging::find()->where(['taggedtypepk'=>$did,'taggedtype'=>$dtype])->all();
+          if ($tagging)
+          {
+            $out=[];
+             foreach ($tagging as $tags)
+             {
+                $out[]=$tags->termcode;
+             }
+             return $out;
+            
+          }
+        }
+        return null;
     }
 	
 }
