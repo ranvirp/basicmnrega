@@ -94,6 +94,7 @@ margin-left:150px;
     
 
 </div>
+<?php if (Yii::$app->user->isGuest){?>
 <div class="col-md-offset-1 col-md-3 bordered-form">
    <?php
   
@@ -101,5 +102,6 @@ margin-left:150px;
     
     ?>
   </div>
+  <?php } ?>
 </div>
 
