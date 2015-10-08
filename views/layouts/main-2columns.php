@@ -16,6 +16,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
 
 AppAsset_1::register($this);
 app\assets\AppAssetGoogle::register($this);
+//app\assets\KartikFileInputAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
@@ -63,6 +64,10 @@ app\assets\AppAssetGoogle::register($this);
       font-size:105%;
       font-weight:bold;
     }
+     .block-title-span>span
+     {
+      color:white;
+     }
     .leftblocks
     {
       padding:0px;
@@ -72,7 +77,11 @@ app\assets\AppAssetGoogle::register($this);
       margin-top:-30px;
       float:left;
       min-height:1000px;
+<<<<<<< HEAD
         background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+=======
+      //  background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+>>>>>>> 0906dfc5894e1b8a1c48a310d89ac90f5c3ca735
      background-size: 100%;
    
    
@@ -91,10 +100,30 @@ app\assets\AppAssetGoogle::register($this);
    
    
     }
+    .block>ul
+    {
+      list-style: outside none;
+    }
+    .block>ul>li
+    {
+      display: block;
+      margin-left: -10px;
+      width:50%;
+      overflow: wrap-text;
+      padding: 10px;
+
+    }
+    .block>ul>li:hover
+    {
+      background:#ddc;
+    }
     .centercontainer
     {
-     width:67%;
+     width:83%;
      float:left;
+     padding-left:25px;
+     padding-top:0;
+     max-width: 1200px;
     }
 .menubar
     {
@@ -160,20 +189,25 @@ app\assets\AppAssetGoogle::register($this);
     {
      content:'Kruti Dev';
     }
+    .taxonomy-default-index>h2
+    {
+      font-size:20px;
+    }
     </style>
    
 <script>
 
  $(document).ready(function()
  {
+
  $('#hindiinput-type').change(function()
  {
   if ($(this).val()==='')
   {
-  $('input:text,textarea').removeClass('hindiinput');
-    $('input:text,textarea').removeClass('kruti');
- $('input:text,textarea').off('focus');
-    $('input:text,textarea').off('focusout');
+  //$('input:text,textarea').removeClass('hindiinput');
+  //  $('input:text,textarea').removeClass('kruti');
+ //$('input:text,textarea').off('focus');
+  //  $('input:text,textarea').off('focusout');
    $('.kruti').addClass('hindiinput');
    $('.kruti').removeClass('kruti');
     $('.hindiinput').off('focus');
@@ -212,8 +246,8 @@ app\assets\AppAssetGoogle::register($this);
  } else
  if ($(this).val()=='google')
  {
-  $('input:text,textarea').addClass('hindiinput');
-  $('input:text,textarea').removeClass('kruti');
+  //$('input:text,textarea').addClass('hindiinput');
+ // $('input:text,textarea').removeClass('kruti');
  
   $('.kruti').addClass('hindiinput');
   
@@ -225,10 +259,12 @@ app\assets\AppAssetGoogle::register($this);
    $('.hindiinput').focus(function(){hindiEnable($(this))});
     $('.input-type').remove();
 
-   $('.hindiinput').after('<span class="input-type">Google Transliteration</span>');
+   $('.hindiinput').after('<span class="input-type">Google Transliteration-Press Ctrl-g to toggle</span>');
  }
  
  });
+$('#hindiinput-type').val('google');
+$('#hindiinput-type').trigger('change');
  });
  
  </script>
@@ -301,7 +337,7 @@ app\assets\AppAssetGoogle::register($this);
                 ['label' => 'Data Entry', 'url' => ['/mnrega/pond/create'],'options'=>['class'=>'dropdown']],
                 
 ['label' => 'View List', 'url' => ['/mnrega/pond/index'],'options'=>['class'=>'dropdown']],
-['label' => 'View Entire List', 'url' => ['/mnrega/pond/index1'],'options'=>['class'=>'dropdown']],
+['label' => 'View Entire List', 'url' => ['/mnrega/pond/index2'],'options'=>['class'=>'dropdown']],
                
             ],
     ],
@@ -343,15 +379,46 @@ echo '</div>';
    
  <div class="row-fluid">
  <div class="leftblocks">
+  <?php foreach (\app\modules\taxonomy\models\Vocabulary::find()->all() as $vocabmodel) { ?>
    <div class="block leftblock1">
     <div class="block-title">
     <div class="block-title-span">
-        <span>Documents</span>
+        <span><?=$vocabmodel->vocabname?> </span>
     </div>
-</div>
+  </div>
+  
+    <?php
+   
+      echo '<ul>';
+     foreach (\app\modules\taxonomy\models\Term::find()->where(['vocabcode'=>$vocabmodel->vocabcode])->all() as $term) {
+       echo '<li>'.Html::a($term->termname,Url::to(['/taxonomy?t='.$term->termcode])).'</li>';
+    }
+     echo '</ul>';
+    ?>
+   
+
    </div>
-    <div class="block leftblock2">
-   </div>
+   <?php } ?>
+<?php if (Yii::$app->user->can('webadmin')) { ?>
+<div class="block">
+   <div class="block-title">
+    <div class="block-title-span">
+        <span>For Administrators Only</span>
+      </div>
+    </div>
+   <ul>
+     <li> <?=Html::a('Add Vocabulary', Url::to(['/taxonomy/vocabulary/create']))?></li>
+       <li> <?=Html::a('Add Term', Url::to(['/taxonomy/term/create']))?></li>
+         <li> <?=Html::a('Add Taggable', Url::to(['/taxonomy/taggable/create']))?></li>
+   <li> <?=Html::a('Articles', Url::to(['/docs/document/create']))?></li>
+ <li> <?=Html::a('Links', Url::to(['/docs/link/create']))?></li>
+ <li> <?=Html::a('Document Types', Url::to(['/docs/document-type/create']))?></li>
+ <li> <?=Html::a('Document Sub Types', Url::to(['/docs/document-subtype/create']))?></li>
+ 
+ 
+  </ul>
+  </div>
+<?php } ?>
  </div>
  <div class="centercontainer">
 <?php  if (array_key_exists('rows',$this->params)) foreach ($this->params['rows'] as $row) { ?>
@@ -371,7 +438,7 @@ echo '</div>';
     <div class="footer">
        <div>
             <p class="pull-left">MNREGA Cell, Uttar Pradesh <?= date('Y') ?></p>
-            <p class="pull-right"><?= Yii::powered() ?></p>
+         
      </div>
     </div>
 </div>
