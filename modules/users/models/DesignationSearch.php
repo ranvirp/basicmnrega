@@ -41,7 +41,7 @@ class DesignationSearch extends Designation
      */
     public function search($params)
     {
-        $query = Designation::find();
+        $query = Designation::find()->with('user')->with('designationType');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
