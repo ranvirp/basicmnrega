@@ -112,5 +112,57 @@ class Tagging extends \yii\db\ActiveRecord
 			break;
 		  }
     }
+    public static function taggedList($termcode,$type=null)
+    {
+      
+      	$query=Tagging::find()
+        //->with('taggedtype0','termcode0')
+        ->where(['termcode'=>$termcode]);
+      	if ($type)
+      	{
+      		$query->andWhere(['taggedtype'=>$type]);
+      		//$class=Taggable::find()->where(['shortcode'=>$type])->one()->classname;
+      		//$query=$class::find()
+      	}
+      	$dataProvider=new \yii\data\ActiveDataProvider(['query'=>$query]);
+      	return $dataProvider;
+
+    }
+    public static function terms($terms)
+    {
+      $x=[];
+      if (is_array($terms))
+      {
+        foreach ($terms as $term)
+        {
+           $model=Term::findOne($term);
+           $x[]=$model->termname;
+        }
+      }
+      else {
+        $model=Term::findOne($terms);
+           $x[]=$model->termname;
+      }
+      return implode(",",$x);
+    }
+    public static function taggedterms($dtype,$did)
+    {
+      $taggable=Taggable::findOne($dtype);
+        if ($taggable)
+        {
+          $tagging=Tagging::find()->where(['taggedtypepk'=>$did,'taggedtype'=>$dtype])->all();
+          if ($tagging)
+          {
+            $out=[];
+             foreach ($tagging as $tags)
+             {
+                $out[]=$tags->termcode;
+             }
+             return $out;
+            
+          }
+        }
+        return null;
+    }
 	
 }

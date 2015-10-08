@@ -45,15 +45,26 @@ class PhotoController extends Controller
      * Lists all Photo models.
      * @return mixed
      */
-    public function actionIndex1()
+    public function actionIndex1($district=null,$block=null,$rating=null)
     {
+     if ($district && ($district!='None'))
+       $query=Photo::find()->where(['district'=>\app\modules\mnrega\models\District::findOne($district)->name_en]);
+       else
+         $query=Photo::find();
+       if ($block && ($block!='None')) $query=$query->andWhere(['block'=>\app\modules\mnrega\models\Block::findOne($block)->name_en]);
         $dataProvider = new ActiveDataProvider([
-            'query' => Photo::find(),
+            'query' => $query,
         ]);
+        if ($rating and is_numeric($rating))
+        {
+            $query=$query->joinWith('workRating')->where(['work_rating.work_type'=>'pond','work_rating.rating'=>$rating]);
+        }
 
-        return $this->render('photolist', [
+        return $this->render('photolist1', [
             'dataProvider' => $dataProvider,
             'title'=>'List of Photos',
+            'block'=>$block,
+            'district'=>$district,
         ]);
     }
     /**

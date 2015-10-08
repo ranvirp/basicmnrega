@@ -67,9 +67,11 @@ public function actionIndex1()
         if ($designation->profileEmpty())
           return $this->redirect(['/users/designation/updateprofile?id='.$designation->id]);
        else
-       return $this->render('../../modules/mnrega/views/pond/mainpage');
+       return $this->redirect(['/taxonomy?t=mjba']);
      } else 
      {
+        $this->redirect(['/complaint']);
+        /*
        $this->layout="//complaint";
         $model = new \app\modules\users\models\LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
@@ -79,6 +81,7 @@ public function actionIndex1()
                 'model' => $model,
             ]);
         }
+        */
      }
     }
 

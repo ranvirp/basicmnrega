@@ -68,9 +68,19 @@ class DocumentController extends Controller
  
         if ($model->load(Yii::$app->request->post()))
         {
-          
-            if ($model->save())
-            $model = new Document();; //reset model
+          if ($model->validate())
+            {
+                $model->create_time=time();
+                 $model->update_time=time();
+                $model->author=Yii::$app->user->id;
+            $model->save();
+            $model = new Document(); //reset model
+            }
+            else
+             {
+              print_r($model->errors);
+              exit;
+             }
         }
  
         $searchModel = new DocumentSearch();
@@ -98,13 +108,10 @@ class DocumentController extends Controller
  
         if ($model->load(Yii::$app->request->post()))
         {
-        if (array_key_exists('app\modules\documents\models\Document',Utility::rules()))
-           
-            foreach ($model->attributes as $attribute)
-            if (array_key_exists($attribute,Utility::rules()['app\modules\documents\models\Document']))
-            $model->validators->append(
-               \yii\validators\Validator::createValidator('required', $model, Utility::rules()['app\modules\documents\models\Document'][$model->$attribute]['required'])
-            );
+             if (!is_numeric($model->create_time))
+         $model->create_time=time();
+      $model->update_time=time();
+                $model->author=Yii::$app->user->id;
             if ($model->save())
             $model = new Document();; //reset model
         }

@@ -6,8 +6,8 @@ class Data
    {
     return [
      'formatParameter'=>[
-          'ponds-target'=>  [
-              'name'=>'Number of Ponds-Target',
+          'ponds'=>  [
+              'name'=>'Number of Ponds',
               'type'=>'numeric',
               
             ],
@@ -29,9 +29,10 @@ class Data
         
         ],
          'formatParameterBinding'=>[
-          'ponds-target'=>  [
+          'ponds-t'=>  [
              'mandatory'=> ['district','finyear','scheme'],
              'optional'=>[],
+             'target'=>true,
               
             ],
         
@@ -42,7 +43,7 @@ class Data
               'bindings'=>['district'=>['all'=>true ],'scheme'=>['all'=>false,'values'=>['mjba']],
                 'finyear'=>['all'=>false,'values'=>['2015-16']]
                ],
-               'parameters'=>['ponds-target']
+               'parameters'=>['ponds-t']
               
             ],
         

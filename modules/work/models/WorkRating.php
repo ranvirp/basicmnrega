@@ -15,6 +15,12 @@ use Yii;
  */
 class WorkRating extends \yii\db\ActiveRecord
 {
+   const UNSATISFACTORY=1;
+   const SATISFACTORY=2;
+   const GOOD=3;
+   const VERY_GOOD=4;
+   const EXCELLENT=5;
+   
     /**
      * @inheritdoc
      */
@@ -29,11 +35,27 @@ class WorkRating extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['work_id', 'rating', 'rating_by', 'rating_at'], 'integer'],
-            [['rating_comment'], 'string']
+            [['work_id', 'rating', 'rating_by', 'rating_at','photo_id'], 'integer'],
+            [['rating_comment','workid','work_type'], 'string'],
+            
         ];
     }
-
+    public static function ratingOptions()
+    {
+    
+    return [
+    null=>Yii::t('app','Unrated'),
+    self::UNSATISFACTORY=>Yii::t('app','Unsatisfactory'),
+    self::SATISFACTORY=>Yii::t('app','Satisfactory'),
+    self::GOOD=>Yii::t('app','Good'),
+    self::VERY_GOOD=>Yii::t('app','Very Good'),
+    self::EXCELLENT=>Yii::t('app','Excellent'),
+    ];
+    
+    
+    
+    
+    }
     /**
      * @inheritdoc
      */
@@ -122,6 +144,27 @@ class WorkRating extends \yii\db\ActiveRecord
 			default:
 			break;
 		  }
+    }
+     public function addRating($wtype,$wid,$rating,$photoid,$comment='')
+    {
+      if (Yii::$app->user->can('complaintadmin'))
+      {
+        $model=self::find()->where(['work_type'=>$wtype,'workid'=>$wid])->one();
+        if (!$model)
+         $model=new WorkRating;
+         $model->work_type=$wtype;
+         $model->workid=$wid;
+          $model->photo_id=$photoid;
+         $model->rating=$rating;
+         $model->rating_comment=$comment;
+         $model->rating_by=Yii::$app->user->id;
+         $model->rating_at=time();
+         if ($model->save())
+         return $model->rating;
+      
+      }
+      return -1;
+    
     }
 	
 }

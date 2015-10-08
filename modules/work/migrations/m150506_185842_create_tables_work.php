@@ -13,9 +13,14 @@ class m150506_185842_create_tables_work extends Migration
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
                $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
             }
-        $this->dropTable('{{%work}}');
+       $this->dropTable('{{%work}}');
         $this->dropTable('{{%agency}}');
-        
+          $this->dropTable('{{%work_progress}}');
+      $this->dropTable('{{%work_type}}');
+      $this->dropTable('{{%scheme}}');
+          $this->dropTable('{{%work_rating}}');
+      
+    
          $this->createTable('{{%work}}', [
             'id' => Schema::TYPE_PK,
             'uniqueid'=>Schema::TYPE_STRING,
@@ -62,7 +67,10 @@ class m150506_185842_create_tables_work extends Migration
             ],$tableOptions);
           $this->createTable('{{%work_rating}}', [
             'id' => Schema::TYPE_PK,
-            'work_id'=>Schema::TYPE_INTEGER,
+            'work_id'=>Schema::TYPE_INTEGER.' default 0',
+            'work_type'=>Schema::TYPE_STRING,
+            'workid'=>Schema::TYPE_STRING,
+            'photo_id'=>Schema::TYPE_INTEGER,
             'rating'=>Schema::TYPE_INTEGER,
             'rating_by'=>Schema::TYPE_INTEGER,
             'rating_at'=>Schema::TYPE_INTEGER,
@@ -89,6 +97,7 @@ class m150506_185842_create_tables_work extends Migration
             'totalcost'=>Schema::TYPE_DOUBLE,
             
             ],$tableOptions);
+            
              $this->createTable('{{%pond_attributes}}', [
             'workid'=>Schema::TYPE_STRING.' PRIMARY KEY',
             
@@ -98,6 +107,7 @@ class m150506_185842_create_tables_work extends Migration
            
             
             ],$tableOptions);
+            /*
                     $authManager=Yii::$app->authManager;
          if ($authManager)
           {
@@ -120,12 +130,13 @@ class m150506_185842_create_tables_work extends Migration
                 }
             }
         }
+        
       $this->addForeignKey('work_agency_fkey','{{%work}}','agency_id','{{%agency}}','id');
       $this->addForeignKey('work_work_type_fkey','{{%work}}','work_type_id','{{%work_type}}','id');
       $this->addForeignKey('work_scheme_fkey','{{%work}}','scheme_id','{{%scheme}}','id');
       $this->addForeignKey('work_village_fkey','{{%work}}','village_code','{{%village}}','code');
       $this->addForeignKey('block_district_fkey','{{%block}}','district_code','{{%district}}','code');
-      
+      */
      
       
     }

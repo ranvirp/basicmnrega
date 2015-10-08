@@ -13,8 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>Please fill out the following fields to login:</p>
 
     <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+        <div class="col-lg-12">
+            <?php $form = ActiveForm::begin(['id' => 'login-form','action'=>['/users/user/login?returnUrl=/complaint'],]); ?>
                 <?= $form->field($model, 'username') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>

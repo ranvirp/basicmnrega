@@ -235,11 +235,23 @@ class Designation extends \app\modules\users\MyActiveRecord
         ]);
         if ($usermodel)  $existinguserexists=1;
         }
-        else
+        else 
         {
+         $designations=self::find()->andWhere(['officer_userid'=>$this->officer_userid])->asArray()->all();
+         print_r($designations);
+         exit;
+         if (count($designations)>1) {//duplicate userid assigned
+         //we shall create a new user 
+         print_r($designations);
+         
+         $username=$username.'_'.($this->level->code);
+         $usermodel=null;
+         }
+         
+         else
          $usermodel=User::findOne($this->officer_userid);
         
-         }
+        } 
        // if ($usermodel && !$this->resetpasswd)
         //return;
         
@@ -254,8 +266,8 @@ class Designation extends \app\modules\users\MyActiveRecord
 		     $usermodel=new \app\modules\users\models\User;
 		     
 		     $usermodel->username=$username;
-		     if ($existinguserexists)
-		        $usermodel->username=$username.'_'.($this->level->code);
+		    // if ($existinguserexists)
+		      //  $usermodel->username=$username.'_'.($this->level->code);
 		      $usermodel->setPassword($password);
 		    // $usermodel->email=$username.'@test.com';
 		     //$usermodel->role_id=2;

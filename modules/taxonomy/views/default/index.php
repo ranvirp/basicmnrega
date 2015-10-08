@@ -1,12 +1,27 @@
 <div class="taxonomy-default-index">
-    <h1><?= $this->context->action->uniqueId ?></h1>
-    <p>
-        This is the view content for action "<?= $this->context->action->id ?>".
-        The action belongs to the controller "<?= get_class($this->context) ?>"
-        in the "<?= $this->context->module->id ?>" module.
-    </p>
-    <p>
-        You may customize this page by editing the following file:<br>
-        <code><?= __FILE__ ?></code>
-    </p>
+   <?php
+  // $mapping=['app\modules\documents\models\Document'=>['module'=>'docs','model'=>'document','pk'=>'id'],
+   //];
+    echo '<h2><strong> Articles related to '.$terms.'</strong></h2>';
+    echo yii\widgets\ListView::widget([
+'dataProvider'=>$dataProvider,
+'itemView'=>function($model,$key,$index,$widget)
+{
+  
+  
+     $mapping=['app\modules\documents\models\Document'=>'/docs/document/view?id=',
+      'app\modules\documents\models\Link'=>'/docs/link/view?id='
+     ];
+  
+     $taggedClass=$model->taggedtype0->classname;
+     //print_r($taggedClass);
+
+     $url=$mapping[$taggedClass].$model->taggedtypepk;
+     $taggedModel=$taggedClass::findOne($model->taggedtypepk);
+        $title=$taggedModel->printTitle();
+        return $taggedModel->shortview($this);
+    // return \yii\helpers\Html::a($title,\yii\helpers\Url::to([$url]));
+     
+},]);
+    ?>
 </div>

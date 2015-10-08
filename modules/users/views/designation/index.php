@@ -37,20 +37,20 @@ AppAssetGoogle::register($this);
 $this->title = Yii::t('app', 'Designations');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<button class="btn btn-success" id="toggleButton">Hide Grid</button>
-<a href="<?=Url::to(['/users/designation/create'])?>"><button class="btn btn-success" >Create Designation</button></a>
 
-<?php if ($model!=null):?><div class="col-md-6" id="designation-form">
-<?=$this->render('_form',['model'=>$model]) ?></div>
-<div class="col-md-6" id="designation-grid">
-<?php else:?><div class="col-lg-12" id="designation-grid">
-<?php endif;?><div class="designation-index">
+<div class="col-md-12" id="designation-form">
+<?php
+//$this->render('_form',['model'=>$model]) 
+?>
+</div>
+<div class="col-md-12" id="designation-grid">
+<div class="designation-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+       'filterModel' => $searchModel,
         'columns' => [
         ['class' => 'yii\grid\ActionColumn'],
             ['class' => 'yii\grid\SerialColumn'],
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 .':'.($model->level)?$model->level->name_en:'Not Found';
                 ;
 },
-'filter'=>\yii\helpers\ArrayHelper::map(District::find()->orderBy('name_en asc')->asArray()->all(),'id','name_en'),
+'filter'=>\yii\helpers\ArrayHelper::map(District::find()->orderBy('name_en asc')->asArray()->all(),'code','name_en'),
 ],['header'=>'Officer Name in Hindi',
 'value'=>function($model,$key,$index,$column)
 {
@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute'=>'officer_userid',
 'value'=>function($model,$key,$index,$column)
 {
-                return $model->showValue('officer_userid');
+                return $model->officer_userid.' '.$model->user->username;
 },],
 
             

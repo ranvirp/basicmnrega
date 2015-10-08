@@ -52,6 +52,7 @@ $options = array(
 
 
 $context = stream_context_create($options);
+$link=str_replace(' ','+',$link);
 $data = file_get_contents($link,false,$context);
 //print_r($data);
 //if (!($data contains 'Total')) return;
@@ -69,8 +70,13 @@ $data = file_get_contents($link,false,$context);
        $table=$tables->item($tableid);
        else
        $table = $dom->getElementById($tableid);
-print_r($tables);
+       print($tableid);
+       //print_r($table);
+      // exit;
+      if ($table)
        $rows = $table->getElementsByTagName('tr');
+       else 
+        return;
       $i=0;
        $m=date('m');
        $y=date('Y');
