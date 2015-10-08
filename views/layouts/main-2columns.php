@@ -77,8 +77,8 @@ app\assets\AppAssetGoogle::register($this);
       margin-top:-30px;
       float:left;
       min-height:1000px;
-     background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
-     background-size: 100%;
+    // background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
+     //background-size: 100%;
    
    
     }
