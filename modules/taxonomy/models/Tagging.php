@@ -141,7 +141,7 @@ class Tagging extends \yii\db\ActiveRecord
       }
       else {
         $model=Term::findOne($terms);
-           $x[]=$model->termname;
+           if ($model) $x[]=$model->termname;
       }
       return implode(",",$x);
     }
