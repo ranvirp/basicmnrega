@@ -77,11 +77,7 @@ app\assets\AppAssetGoogle::register($this);
       margin-top:-30px;
       float:left;
       min-height:1000px;
-<<<<<<< HEAD
-        background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
-=======
-      //  background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
->>>>>>> 0906dfc5894e1b8a1c48a310d89ac90f5c3ca735
+     background:url('<?=Yii::getAlias('@web').'/images/middle_s.gif'?>');
      background-size: 100%;
    
    
@@ -428,8 +424,6 @@ echo '</div>';
  <?php } ?>
  <?= $content ?>
  </div>
-<div class="rightblocks">
-</div>
  </div>
             
         </div>
