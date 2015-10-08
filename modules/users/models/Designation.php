@@ -238,8 +238,6 @@ class Designation extends \app\modules\users\MyActiveRecord
         else 
         {
          $designations=self::find()->andWhere(['officer_userid'=>$this->officer_userid])->asArray()->all();
-         print_r($designations);
-         exit;
          if (count($designations)>1) {//duplicate userid assigned
          //we shall create a new user 
          print_r($designations);
