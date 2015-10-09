@@ -12,16 +12,21 @@ use app\modules\mnrega\models\Block;
 use yii\widgets\Pjax;
 
  ?>
-  <?php $source=Yii::$app->request->get('source');
+  <?php 
+     $source=Yii::$app->request->get('source');
+     $ctype=Yii::$app->request->get('ComplaintSearch')['complaint_type'];
         $queryString=Yii::$app->request->queryString; ?>
 
  <script>
  $(document).ready(function(){
 $('#source').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url::to(['/complaint/complaint/index']) ?>?<?=$queryString ?>","filterSelector":"#w0-search input, #w0-search select"});});
-  });
+ $('#ctype').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url::to(['/complaint/complaint/index']) ?>?<?=$queryString ?>","filterSelector":"#w0-search input, #w0-search select"});});
+
+ });
  </script>
  <div id="w0-search" class="">
   Filter by Source: <?=Html::dropDownList('source',$source,Complaint::source(),['id'=>'source','prompt'=>'None'])?>
+  Type: <?=Html::dropDownList('ComplaintSearch[complaint_type]',$ctype,ArrayHelper::map(Complaint_type::find()->asArray()->all(),'shortcode','name_hi'),['id'=>'ctype','prompt'=>'None'])?>
  </div>
  <div class="form-title">
         <div class="form-title-span">
@@ -89,7 +94,7 @@ $('#source').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url:
               'header'=>Yii::t('app','District'),
              'value'=>function ($model,$key,$index,$column)
                       {
-                         return District::findOne($model->district_code)->name_en;
+                         return $model->district->name_en;
                       },
              'attribute'=>'district_code',
              'filter'=>ArrayHelper::map(District::find()->asArray()->orderBy('name_en asc')->all(),'code','name_en'),

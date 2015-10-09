@@ -128,10 +128,10 @@ public static function statusNames()
              [['panchayat'], 'string', 'max' => 100],
              [['flowtype'],'safe'],
              [['status'],'integer'],
-             [['complaint_subtype'],'string'],
+             [['complaint_type','complaint_subtype'],'string'],
              [['enqrofficer','atrofficer'],'integer'],
            
-             [['attachments','marking'], 'safe'],
+             [['attachments','marking','complaint_type'], 'safe'],
              [['source','manualno'],'string'],
              [['flag','created_by','created_at','updated_by','updated_at'],'integer'],
              [['captcha'],'captcha','on'=>'guestentry'],

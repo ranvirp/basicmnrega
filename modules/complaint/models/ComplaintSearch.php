@@ -19,7 +19,7 @@ class ComplaintSearch extends Complaint
     {
         return [
             [['id'], 'integer'],
-            [['name_hi', 'fname', 'mobileno', 'district_code', 'address', 'jobcardno', 'description', 'block_code', 'panchayat_code', 'attachments'], 'safe'],
+            [['name_hi', 'fname', 'mobileno', 'district_code', 'address', 'jobcardno', 'description', 'block_code', 'panchayat_code', 'attachments','complaint_type'], 'safe'],
         ];
     }
 
@@ -41,8 +41,8 @@ class ComplaintSearch extends Complaint
      */
     public function search($params)
     {
-        $query = Complaint::find()->joinWith('actions');
-        $query=$query->addSelect('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype,max(complaint_reply.created_at) as lastactiontime')->groupBy('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype');
+        $query = Complaint::find()->joinWith('actions')->joinWith('block')->joinWith('district');
+        $query->addSelect('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype,max(complaint_reply.created_at) as lastactiontime')->groupBy('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -50,11 +50,11 @@ class ComplaintSearch extends Complaint
         ]);
 //var_dump($query->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);
 //exit;
-        $this->load($params);
-
+$this->load($params);
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
+           
             return $dataProvider;
         }
 
@@ -62,8 +62,9 @@ class ComplaintSearch extends Complaint
             'id' => $this->id,
 			'status'=>$this->status,
 			'source'=>$this->source,
+			
         ]);
-
+       $query->andFilterWhere([ 'complaint_type'=>$this->complaint_type]);
         $query->andFilterWhere(['like', 'name_hi', $this->name_hi])
             ->andFilterWhere(['like', 'fname', $this->fname])
             ->andFilterWhere(['like', 'mobileno', $this->mobileno])
@@ -75,7 +76,8 @@ class ComplaintSearch extends Complaint
             ->andFilterWhere(['like', 'panchayat_code', $this->panchayat_code])
             ->andFilterWhere(['like', 'attachments', $this->attachments]);
 		$query->orderBy('lastactiontime desc');
-
+		//var_dump($dataProvider);
+		//exit;
         return $dataProvider;
     }
 }
