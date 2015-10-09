@@ -62,17 +62,17 @@ $this->load($params);
             'complaint.id' => $this->id,
 			'complaint.status'=>$this->status,
 			'source'=>$this->source,
+			'complaint.district_code'=>$this->district_code,
+			'complaint.block_code'=>$this->block_code,
 			
         ]);
        $query->andFilterWhere([ 'complaint_type'=>$this->complaint_type]);
         $query->andFilterWhere(['like', 'name_hi', $this->name_hi])
             ->andFilterWhere(['like', 'fname', $this->fname])
             ->andFilterWhere(['like', 'mobileno', $this->mobileno])
-            ->andFilterWhere(['like', 'district_code', $this->district_code])
             ->andFilterWhere(['like', 'address', $this->address])
             ->andFilterWhere(['like', 'jobcardno', $this->jobcardno])
             ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'block_code', $this->block_code])
             ->andFilterWhere(['like', 'panchayat_code', $this->panchayat_code])
             ->andFilterWhere(['like', 'attachments', $this->attachments]);
 		$query->orderBy('lastactiontime desc');
