@@ -51,13 +51,35 @@ class Document extends \yii\db\ActiveRecord
     {
         return [
             [['name_hi', 'document_type', 'document_subtype'], 'required'],
-            [['description', 'shorttext', 'fulltext', 'attachments', 'gallery'], 'string'],
+            [['description', 'shorttext', 'fulltext'], 'string'],
             [['author', 'status', 'create_time', 'update_time'], 'integer'],
             [['name_hi'], 'string', 'max' => 255],
+            [['attachments','gallery'],'safe'],
             [['document_type', 'document_subtype'], 'string', 'max' => 10]
         ];
     }
-
+/**
+     * @inheritdoc
+     */
+    public  function behaviors()
+    {
+        return 
+        [
+          [
+                'class' => \app\modules\reply\behaviors\FileAttachmentBehavior::className(),
+                'attribute' => 'attachments',
+          ],
+           [
+                'class' => \app\modules\reply\behaviors\FileAttachmentBehavior::className(),
+                'attribute' => 'gallery',
+          ],
+             [
+                'class' => \app\modules\taxonomy\behaviors\TaggingBehavior::className(),
+                'term_prefix' => 'documents',
+          ],
+        
+          ];
+          }
     /**
      * @inheritdoc
      */
@@ -99,7 +121,7 @@ class Document extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'document_type':
-			       $url=Url::to(['/documents/document-subtype/get?code=']);
+			       $url=Url::to(['/docs/document-subtype/get?code=']);
   
 			       return $form->field($this, $attribute)->dropDownList(ArrayHelper::Map(DocumentType::find()->asArray()->all(),'shortcode','name_hi'),['prompt'=>'None','onChange' => 'populateDropdown("'.$url.'"+$(this).val(),"document_subtype")']);
         	    
@@ -112,18 +134,18 @@ class Document extends \yii\db\ActiveRecord
 			    break;
 									
 			case 'description':
-			   return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput']);
+			   return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput form-control']);
 			    
 			    break;
 									
 			case 'shorttext':
-			   return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput']);
+			   return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput form-control']);
 			    
 			    break;
 									
 			case 'fulltext':
 			  // return  $form->field($this,$attribute)->textArea(['class'=>'hindiinput']);
-			    return  $form->field($this,$attribute)->widget(\yii\imperavi\Widget::classname(),['options'=>['lang'=> 'en']]);
+			    return  $form->field($this,$attribute)->widget(\vova07\imperavi\Widget::classname(),['settings'=>['lang'=>'en'],'options'=>['lang'=> 'it']]);
 			    break;
 									
 			case 'attachments':
@@ -213,6 +235,14 @@ class Document extends \yii\db\ActiveRecord
 			default:
 			break;
 		  }
+    }
+    public function printTitle()
+    {
+        return $this->name_hi;
+    }
+    public function shortview($view)
+    {
+    	return $view->render('@app/modules/documents/views/document/shortview',['model'=>$this]);
     }
 	
 }

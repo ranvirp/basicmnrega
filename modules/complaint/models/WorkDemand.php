@@ -217,14 +217,14 @@ public static function statusNames()
 			case 'block_code':
 			   $url="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
 			   $id='workdemand-panchayat';
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->orderBy('name_en asc')->all(),"code","name_en"),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->orderBy('name_en asc')->asArray()->where(['district_code'=>$this->district_code])->orderBy('name_en asc')->all(),"code","name_en"),["prompt"=>"None..",
 			   'onChange'=>'populateDropdown('.$url.",'".$id."')",'class'=>'form-control']);
 			    
 			    break;
 									
 			case 'panchayat_code':
 			   return  
-			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'workdemand-panchayat',
+			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->orderBy('name_en asc')->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'workdemand-panchayat',
 			   'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());$('#workid').val($(this).val()+'/')",'class'=>'form-control']);
 			    
 			    break;

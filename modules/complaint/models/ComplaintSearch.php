@@ -41,12 +41,15 @@ class ComplaintSearch extends Complaint
      */
     public function search($params)
     {
-        $query = Complaint::find();
+        $query = Complaint::find()->joinWith('actions');
+        $query=$query->addSelect('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype,max(complaint_reply.created_at) as lastactiontime')->groupBy('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+             'sort' => ['attributes' => ['id','lastactiontime']]
         ]);
-
+//var_dump($query->prepare(Yii::$app->db->queryBuilder)->createCommand()->rawSql);
+//exit;
         $this->load($params);
 
         if (!$this->validate()) {
@@ -71,7 +74,7 @@ class ComplaintSearch extends Complaint
             ->andFilterWhere(['like', 'block_code', $this->block_code])
             ->andFilterWhere(['like', 'panchayat_code', $this->panchayat_code])
             ->andFilterWhere(['like', 'attachments', $this->attachments]);
-		
+		$query->orderBy('lastactiontime desc');
 
         return $dataProvider;
     }

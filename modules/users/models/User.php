@@ -68,6 +68,7 @@ public function scenarios()
            [ ['oldpassword','newpassword','newpasswordrepeat'],'required','on'=>'passwordchange'],
            [['email'],'required','on'=>'email'],
            [['username'],'string'],
+            [['username'],'unique'],
         ];
     }
 

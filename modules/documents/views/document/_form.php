@@ -32,11 +32,12 @@ $this->registerJs(
  <li><a data-toggle="tab" href="#fulltext">Full Text</a></li>
  <li><a data-toggle="tab" href="#attachments">Attachments</a></li>
  <li><a data-toggle="tab" href="#gallery">Gallery</a></li>
+  <li><a data-toggle="tab" href="#taxonomy">Taxonomy</a></li>
  
 </ul> 
     <?php $form = ActiveForm::begin([
     'layout' => 'horizontal',
-    'action'=>Url::to(['/docs/document/create']),
+    //'action'=>Url::to(['/docs/document/create']),
     'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [
@@ -72,6 +73,10 @@ $this->registerJs(
 
    
     <?= $model->showForm($form,"status") ?>
+    </div>
+     <div id="taxonomy" class="tab-pane fade">
+         <?=\app\modules\taxonomy\widgets\ExistingTermsWidget::widget(['model'=>$model]) ?>
+    <?=\app\modules\taxonomy\widgets\TagWidget::widget(['vocabs'=>['projects'],'prefix'=>'documents']) ?>
     </div>
 </div>
    

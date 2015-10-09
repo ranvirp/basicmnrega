@@ -4,7 +4,7 @@ body {
 }
 
 .wrap {
-    min-height: 100%;
+    min-height: 1000px;
     height: auto;
     margin: 0 auto -60px;
     padding: 0 0 60px;
@@ -167,7 +167,7 @@ div.required label:after {
 }
 .tile.tile-medium {
     height: 150px;
-    margin-left: 200px;
+ //   margin-left: 200px;
     margin-top: 50px;
     width: 150px;
 }
@@ -243,6 +243,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     width: 150px;
     height: 150px;
     overflow: scroll;
+    display:block;
 
 }
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
@@ -267,6 +268,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
  background: #f5f5f1 none repeat scroll 0 0;
     border: 1px solid #ccccc8;
     border-radius: 4px;
+    margin:15px;
+    //height:182px;
 }
 
 .main-header {

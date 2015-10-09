@@ -34,6 +34,7 @@ class Complaint extends \yii\db\ActiveRecord
 {
 public $marking;
 public $captcha;
+public $lastactiontime;
 const REGISTERED=0;
 const PENDING_FOR_ENQUIRY=1;
 const ENQUIRY_REPORT_RECEIVED=2;
@@ -210,6 +211,20 @@ public static function statusNames()
      /**
      * @return \yii\db\ActiveQuery
      */
+    public function getLastAction()
+    {
+        return $this->hasMany(ComplaintReply::className(), ['complaint_id' => 'id'])->orderBy('created_at desc')->limit(1);
+    }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getActions()
+    {
+        return $this->hasMany(ComplaintReply::className(), ['complaint_id' => 'id']);
+    }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getMarkings()
     {
         return $this->hasMany(Marking::className(), ['request_id' => 'id'])->where(['request_type'=>'complaint'])->with('receiver1');
@@ -319,14 +334,14 @@ public static function statusNames()
 			case 'block_code':
 			   $url="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
 			   $id='complaint-panchayat';
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->all(),"code","name_en"),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->orderBy('name_en asc')->all(),"code","name_en"),["prompt"=>"None..",
 			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control','id'=>'complaint-block']);
 			    
 			    break;
 									
 			case 'panchayat_code':
 			   return  
-			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'complaint-panchayat',
+			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->orderBy('name_en asc')->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'complaint-panchayat',
 			   'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());",'class'=>'form-control']);
 			    
 			    break;

@@ -71,7 +71,9 @@ class ComplaintController extends Controller {
 		$modelComplaint = new Complaint;
 		//$modelComplaint->on(\yii\db\ActiveRecord::EVENT_AFTER_INSERT,function($event){Yii::$app->sms->sendSMS($event);});
 		if (Yii::$app->user->isGuest)
+		{
 			$modelComplaint->scenario = 'guestentry'; //captcha validation
+		}
 		$flagcomplex = 0;
 		$modelsComplaintPoint = [new ComplaintPoint];
 		if ($modelComplaint->load(Yii::$app->request->post())) {
@@ -97,7 +99,8 @@ class ComplaintController extends Controller {
 				try {
 				   //if (Yii::$app->user->isGuest)
 					$modelComplaint->status = Complaint::REGISTERED;
-					
+					if (Yii::$app->user->isGuest)
+						$modelComplaint->source='web';
 					//Audit trail
 					$modelComplaint->created_by = Yii::$app->user->id;
 					$modelComplaint->created_at = time();
@@ -128,6 +131,12 @@ class ComplaintController extends Controller {
 						// $modelComplaint->flag=1;//requires Admin Attention
 						//
                         $transaction->commit();
+                        if (Yii::$app->user->can('complaintagent'))
+                        {
+                          
+                           \Yii::$app->getSession()->setFlash('success', 'Complaint with id '.$modelComplaint->id.' created');
+                            $modelComplaint=new Complaint;//reset
+                           } else
 						return $this->redirect(['view', 'id' => $modelComplaint->id]);
 					}
 				} catch (Exception $e) {

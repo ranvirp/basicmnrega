@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\correspondece\controllers;
+namespace app\modules\correspondence\controllers;
 
 use app\modules\correspondence\models\RequestMarking;
 use app\modules\correspondence\models\Request;

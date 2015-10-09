@@ -41,24 +41,40 @@ class DesignationSearch extends Designation
      */
     public function search($params)
     {
-        $query = Designation::find();
+        $query = Designation::find()->with('user')->with('designationType');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         $this->load($params);
-
+        $level=$this->level_id;
+        if ($this->designationType)
+        {
+        if ($this->designationType->shortcode=='po')
+            {
+              $blocks=\app\modules\mnrega\models\Block::find()->where(['district_code'=>$this->level_id])->all();
+              $t=[];
+              foreach ($blocks as $block)
+              {
+                $t[]=$block->code;
+              }
+              $level=$t;
+            
+            }
+            }
         if (!$this->validate()) {
             // uncomment the following line if you do not want to any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
-
+     
+//print_r( $level);
+//exit;
         $query->andFilterWhere([
            // 'id' => $this->id,
             'designation_type_id' => $this->designation_type_id,
-            'level_id' => $this->level_id,
+            'level_id' => $level,
         ]);
 
         $query->andFilterWhere(['like', 'officer_name_hi', $this->officer_name_hi])
