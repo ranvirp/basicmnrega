@@ -26,11 +26,26 @@ class PondController extends Controller
             ],
         ];
     }
+    /**
+     * Lists all Pond models with unsatisfactory rating.
+     * @return mixed
+     */
+    public function actionIndex1($rating=WorkRating::UNSATISFACTORY)
+    {
+        $searchModel = new PondSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+       
+        
+        return $this->render('index2', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model'=>new \app\modules\mnrega\models\Pond        ]);
+    }
 /**
      * Lists all Pond models.
      * @return mixed
      */
-    public function actionIndex1()
+    public function actionIndex2()
     {
         $searchModel = new PondSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
