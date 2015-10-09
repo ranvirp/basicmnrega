@@ -59,8 +59,8 @@ $this->load($params);
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
-			'status'=>$this->status,
+            'complaint.id' => $this->id,
+			'complaint.status'=>$this->status,
 			'source'=>$this->source,
 			
         ]);
