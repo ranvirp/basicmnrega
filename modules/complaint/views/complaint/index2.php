@@ -12,13 +12,16 @@ use app\modules\mnrega\models\Block;
 use yii\widgets\Pjax;
 
  ?>
+  <?php $source=Yii::$app->request->get('source');
+        $queryString=Yii::$app->request->queryString; ?>
+
  <script>
  $(document).ready(function(){
-$('#source').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url::to(['/complaint/complaint/index']) ?>?s=4&d=-1","filterSelector":"#w0-search input, #w0-search select"});});
+$('#source').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url::to(['/complaint/complaint/index']) ?>?<?=$queryString ?>","filterSelector":"#w0-search input, #w0-search select"});});
   });
  </script>
  <div id="w0-search" class="">
-  Filter by Source: <?=Html::dropDownList('source','phone',Complaint::source(),['id'=>'source','prompt'=>'None'])?>
+  Filter by Source: <?=Html::dropDownList('source',$source,Complaint::source(),['id'=>'source','prompt'=>'None'])?>
  </div>
  <div class="form-title">
         <div class="form-title-span">
