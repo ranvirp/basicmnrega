@@ -42,7 +42,7 @@ class ComplaintSearch extends Complaint
     public function search($params)
     {
         $query = Complaint::find()->joinWith('actions');
-        $query=$query->addSelect('complaint.*,max(complaint_reply.created_at) as lastactiontime')->  groupBy('complaint.id');
+        $query=$query->addSelect('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,max(complaint_reply.created_at) as lastactiontime')->  groupBy('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
