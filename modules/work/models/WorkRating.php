@@ -44,6 +44,7 @@ class WorkRating extends \yii\db\ActiveRecord
     {
     
     return [
+    null=>Yii::t('app','Unrated'),
     self::UNSATISFACTORY=>Yii::t('app','Unsatisfactory'),
     self::SATISFACTORY=>Yii::t('app','Satisfactory'),
     self::GOOD=>Yii::t('app','Good'),

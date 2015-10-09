@@ -62,7 +62,7 @@ class DesignationController extends Controller
      * @return mixed
      */
     
-    public function actionCreate()
+    public function action1Create()
     {
        
        
@@ -92,13 +92,13 @@ class DesignationController extends Controller
         }
         
  
-        $searchModel = new DesignationSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query=$dataProvider->query->with('user');
+     //   $searchModel = new DesignationSearch();
+       // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //$dataProvider->query=$dataProvider->query->with('user');
  
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        return $this->render('create', [
+          //  'searchModel' => $searchModel,
+           // 'dataProvider' => $dataProvider,
             'model' => $model,
             
         ]);
@@ -142,7 +142,7 @@ class DesignationController extends Controller
        $searchModel = new DesignationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
  
-        return $this->render('index', [
+        return $this->render('create', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,

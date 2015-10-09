@@ -131,7 +131,7 @@ class TermController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function action1Delete($id)
     {
         $this->findModel($id)->delete();
 
@@ -153,4 +153,5 @@ class TermController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
 }

@@ -6,7 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-  // 'layout'=>'main-2columns',
+  'layout'=>'main-2columns',
  // 'layout'=>'cmsadminpanel',
     'homeUrl'=>['site'],
    'language'=>'hi',
@@ -18,28 +18,8 @@ $config = [
      ],
      'response'=>[
                 'formatters' => [
-                'pdf' => [
-                    'class' => 'robregonm\pdf\PdfResponseFormatter',
-                    'mode' => '', // Optional
-                    'format' => 'A4',  // Optional but recommended. http://mpdf1.com/manual/index.php?tid=184
-                    'defaultFontSize' => 0, // Optional
-                    'defaultFont' => '', // Optional
-                    'marginLeft' => 15, // Optional
-                    'marginRight' => 15, // Optional
-                    'marginTop' => 16, // Optional
-                    'marginBottom' => 16, // Optional
-                    'marginHeader' => 9, // Optional
-                    'marginFooter' => 9, // Optional
-                    'orientation' => 'Landscape', // optional. This value will be ignored if format is a string value.
-                    'options' => [
-                         'autoLangToFont'=>true,
-                        // mPDF Variables
-                        // 'fontdata' => [
-                            // ... some fonts. http://mpdf1.com/manual/index.php?tid=454
-                        // ]
                     ]
                 ],
-            ],],
     'assetManager'=>['linkAssets'=>true],
     'authManager' => [
 		  'class' => '\yii\rbac\DbManager',
@@ -143,9 +123,16 @@ $config = [
         ],
     ],
     'modules'=>[
+    'backup' => [
+            'class' => 'spanjeta\modules\backup\Module',
+        ],
     'docs'=>[
     	'class' => '\app\modules\documents\Module',
 	
+    ],
+    'corr'=>[
+        'class' => '\app\modules\correspondence\Module',
+    
     ],
     	'articles' => [
 		'class' => '\app\modules\articles\Articles',

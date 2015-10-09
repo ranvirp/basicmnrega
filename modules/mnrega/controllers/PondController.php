@@ -45,7 +45,7 @@ class PondController extends Controller
      * Lists all Pond models.
      * @return mixed
      */
-    public function actionIndex1()
+    public function actionIndex2()
     {
         $searchModel = new PondSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

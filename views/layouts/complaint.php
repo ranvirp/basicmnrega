@@ -65,7 +65,9 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
      padding:0;
     }
    .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;color:red;}
-.navbar {min-height:30px !important;font-size:8px;}
+.navbar {min-height:30px !important;
+//  font-size:8px;
+}
  .nav >li > a:hover, .nav >li > a:focus , .nav .open>a,.nav .open>a:hover,.nav .open>a:focus
 {
  background:red;
@@ -195,7 +197,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
    $('.hindiinput').focus(function(){hindiEnable($(this))});
     $('.input-type').remove();
 
-   $('.hindiinput').after('<span class="input-type">Google Transliteration</span>');
+   $('.hindiinput').after('<span class="input-type">Google Transliteration-Press Ctrl-g to toggle</span>');
  }
  
  });
@@ -230,11 +232,17 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
             echo '</div>';
             NavBar::end();
       echo '<div class="menubar hidden-print">';
+      echo Nav::widget([
+           'items'=>[
+           ['label' => 'Main Page', 'url' => ['/'],'linkOptions'=>[],'options'=>['class'=>'dropdown']]
+           ],
+            'options'=>['class'=>'nav navbar-nav centered']
+            ]);
             echo Nav::widget([
          // 'encodeLabels'=>false,
                   
     'items' => [
-         ['label' => 'Home', 'url' => ['/complaint'],'linkOptions'=>[],'options'=>['class'=>'dropdown']],
+         ['label' => 'Complaint Home', 'url' => ['/complaint'],'linkOptions'=>[],'options'=>['class'=>'dropdown']],
               Yii::$app->user->isGuest ?'':
        ['label' => 'Work Demand',
         'encodeLabels'=>true,'url' => ['/complaint/workdemand'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
@@ -277,6 +285,7 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
             ]],
      ],'options'=>['class'=>'nav navbar-nav centered']
 ]);
+
 echo Nav::widget([
            'items'=>[Yii::$app->user->isGuest ?
         ['label' => 'Login', 'url' => ['/site/index?returnurl='.Url::to(['/complaint'])] ]:
@@ -346,7 +355,7 @@ echo '</div>';
                    
                     ?>
               <?php  }   else { ?>
-        <div class="col-md-12 small">
+        <div class="col-md-offset-1 col-md-10 small">
         <?php } ?>
           
             <?= $content ?>

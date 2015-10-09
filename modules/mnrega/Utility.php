@@ -52,6 +52,7 @@ $options = array(
 
 
 $context = stream_context_create($options);
+$link=str_replace(' ','+',$link);
 $data = file_get_contents($link,false,$context);
 //print_r($data);
 //if (!($data contains 'Total')) return;

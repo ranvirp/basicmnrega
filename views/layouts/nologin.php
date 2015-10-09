@@ -37,7 +37,9 @@ AppAsset::register($this);
      padding:0;
     }
    .navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;}
-.navbar {min-height:30px !important;font-size:8px;}
+.navbar {min-height:30px !important;
+//    font-size:8px;
+}
     .navbar-green
     {
      background-color:#faf3e3
@@ -70,7 +72,7 @@ AppAsset::register($this);
             <?= $this->render('../../modules/complaint/views/default/index')?>
             </div>
             <div class="col-md-4 col-lg-4">
-            <?= $content ?>
+            <?= $this->render('../../modules/users/views/user/login')?>
             </div>
         </div>
     
@@ -78,7 +80,7 @@ AppAsset::register($this);
     <footer class="footer">
         <div class="container">
             <p class="pull-left">MNREGA Cell, Uttar Pradesh <?= date('Y') ?></p>
-            <p class="pull-right"><?= Yii::powered() ?></p>
+           
         </div>
     </footer>
 

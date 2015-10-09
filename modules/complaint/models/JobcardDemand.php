@@ -171,7 +171,7 @@ case 'name_hi':
 			  $url1="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
 			   $id1='complaint-block';
 			   
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->asArray()->all(),"code","name_en"),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(District::find()->orderBy('name_en asc')->asArray()->all(),"code","name_en"),["prompt"=>"None..",
 			   'onChange'=>'populateDropdown('.$url1.",'".$id1."')",'class'=>'form-control']);
 			    
 			    break;
@@ -186,14 +186,14 @@ case 'name_hi':
 			case 'block_code':
 			   $url="'".Yii::getAlias('@web')."/jsons/'+$(this).val()+'.json'";
 			   $id='complaint-panchayat';
-			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->asArray()->where(['district_code'=>$this->district_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
+			   return  $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Block::find()->orderBy('name_en asc')->asArray()->where(['district_code'=>$this->district_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",
 			   'onChange'=>'$(\'#block-name\').val($(\'option:selected\',this).text());populateDropdown('.$url.",'".$id."')",'class'=>'form-control','id'=>'complaint-block']);
 			    
 			    break;
 									
 			case 'panchayat_code':
 			   return  
-			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'complaint-panchayat',
+			   $form->field($this,$attribute)->dropDownList(\yii\helpers\ArrayHelper::map(Panchayat::find()->orderBy('name_en asc')->asArray()->where(['block_code'=>$this->block_code])->all(),"code","name_".Yii::$app->language),["prompt"=>"None..",'id'=>'complaint-panchayat',
 			  'onChange'=>"$('#panchayat-name').val($('option:selected',this).text());",'class'=>'form-control']);
 			    
 			    break;

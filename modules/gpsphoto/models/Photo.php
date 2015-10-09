@@ -73,7 +73,10 @@ class Photo extends \yii\db\ActiveRecord
             'loc' => 'Loc',
         ];
     }
-
+    public function getWorkRating()
+    {
+      return $this->hasOne(\app\modules\work\models\WorkRating::className(), ['workid' => 'bwid']);
+     }
    
     /*
     */

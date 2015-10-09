@@ -32,8 +32,8 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $formatParameter=[
-          'ponds-target'=>  [
-              'name'=>'Number of Ponds-Target',
+          'ponds'=>  [
+              'name'=>'Number of Ponds',
               'type'=>'numeric',
               
             ],
@@ -55,9 +55,11 @@ class DefaultController extends Controller
         
         ];
          $formatParameterBinding=[
-          'ponds-target'=>  [
+          'ponds'=>  [
              'mandatory'=> ['district','finyear','scheme'],
              'optional'=>[],
+             'target'=>true,
+
               
             ],
         
