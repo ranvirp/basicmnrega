@@ -12,6 +12,14 @@ use app\modules\mnrega\models\Block;
 use yii\widgets\Pjax;
 
  ?>
+ <script>
+ $(document).ready(function(){
+$('#source').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url::to(['/complaint/complaint/index']) ?>?s=4&d=-1","filterSelector":"#w0-search input, #w0-search select"});});
+  });
+ </script>
+ <div id="w0-search" class="">
+  Filter by Source: <?=Html::dropDownList('source','phone',Complaint::source(),['id'=>'source','prompt'=>'None'])?>
+ </div>
  <div class="form-title">
         <div class="form-title-span">
          <span>List of Complaints</span>
@@ -19,6 +27,7 @@ use yii\widgets\Pjax;
     </div>
     <?php $dataProvider->query=$dataProvider->query->with('enquiryOfficer')->with('atrOfficer');?>
     <?php Pjax::begin(['enablePushState'=>false, 'id'=>'complaint-lists']);?>
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -31,7 +40,7 @@ use yii\widgets\Pjax;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
              [
-              'header'=>Yii::t('app','Id'),
+              'label'=>Yii::t('app','Id'),
              'value'=>function ($model,$key,$index,$column)
                       {
                        $sources=Complaint::source();
@@ -41,7 +50,7 @@ use yii\widgets\Pjax;
              'attribute'=>'id',
              'format'=>'html'
             ],
-            ['header'=>Yii::t('app','Complainant'),
+            ['label'=>Yii::t('app','Complainant'),
              'attribute'=>'name_hi',
              'value'=>function ($model,$key,$index,$column)
                       {
@@ -92,13 +101,13 @@ use yii\widgets\Pjax;
              'filter'=>ArrayHelper::map(Block::find()->asArray()->all(),'code','name_en'),
             ],
               [
-              'header'=>Yii::t('app','Status'),
+              'label'=>Yii::t('app','Status').'/last action time',
              'value'=>function ($model,$key,$index,$column)
                       {
                         $status=Complaint::statusNames();
-                        return $status[$model->status];
+                        return $status[$model->status].($model->lastactiontime?date('d/m/Y',$model->lastactiontime):'');
                       },
-             'attribute'=>'status',
+             'attribute'=>'lastactiontime',
              'filter'=>Complaint::statusNames(),
             ],
                ['class' => 'yii\grid\ActionColumn',

@@ -34,6 +34,7 @@ class Complaint extends \yii\db\ActiveRecord
 {
 public $marking;
 public $captcha;
+public $lastactiontime;
 const REGISTERED=0;
 const PENDING_FOR_ENQUIRY=1;
 const ENQUIRY_REPORT_RECEIVED=2;
@@ -206,6 +207,20 @@ public static function statusNames()
     {
         return ComplaintReply::find()->where(['marking_id'=>$markingid]);
          
+    }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLastAction()
+    {
+        return $this->hasMany(ComplaintReply::className(), ['complaint_id' => 'id'])->orderBy('created_at desc')->limit(1);
+    }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getActions()
+    {
+        return $this->hasMany(ComplaintReply::className(), ['complaint_id' => 'id']);
     }
      /**
      * @return \yii\db\ActiveQuery
