@@ -201,7 +201,12 @@ $this->registerJs("imageloader='".Yii::getAlias('@web').'/images/ajax-loader.gif
  }
  
  });
+   <?php if (!Yii::$app->user->isGuest) {?>
+ 
  $('#hindiinput-type').val('kruti');
+ <?php } else {?>
+ $('#hindiinput-type').val('google');
+ <?php } ?>
  $('#hindiinput-type').trigger('change');
  
  });
@@ -314,12 +319,13 @@ echo '</div>';
                     ?>
     <div class="container" id="main-container">
     <div class="row">
-    <?php if (!Yii::$app->user->isGuest) {?>
+  
     <div class="col-md-12 text-center">
     <div class="small" style="top:150px;right:0px;background:orange;z-index:1000">
  <?php   echo Html::label('Hindi Input Type:');echo '<br>';echo Html::DropDownList('hindiinput-type',null,['kruti'=>'Kruti Dev 010','google'=>'Google Transliteration'],['prompt'=>'Select','class'=>'small','id'=>'hindiinput-type']);?>
 <div class="help-tip small"> Ctrl-g to toggle google transliteration </div>
  </div>
+   <?php if (!Yii::$app->user->isGuest) {?>
  <?=\Yii::$app->getSession()->getFlash('message');?>
 
     </div>
