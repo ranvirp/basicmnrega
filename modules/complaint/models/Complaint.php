@@ -138,6 +138,7 @@ public static function statusNames()
              [['source','manualno'],'string'],
              [['flag','created_by','created_at','updated_by','updated_at'],'integer'],
              [['captcha'],'captcha','on'=>'guestentry'],
+             
         ];
     }
 

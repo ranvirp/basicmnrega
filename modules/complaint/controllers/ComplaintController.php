@@ -43,6 +43,16 @@ class ComplaintController extends Controller {
 		$source = Yii::$app->request->get('source');
 		if ($source!='')
 			$searchModel->source = $source;
+		$start_date = Yii::$app->request->get('start_date');
+		if ($start_date!='')
+		  $searchModel->start_time=strtotime($start_date);
+		$end_date = Yii::$app->request->get('end_date');
+		if ($end_date!='')
+		  $searchModel->end_time=strtotime($end_date);
+		
+		if ($source!='')
+			$searchModel->source = $source;
+		
 		$dcode = Yii::$app->request->get('dcode');
 		if ($dcode!=null && $dcode!=-1 )
 			$searchModel->district_code = $dcode;
