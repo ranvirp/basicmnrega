@@ -14,6 +14,13 @@ use yii\widgets\Pjax;
  ?>
   <?php 
      $source=Yii::$app->request->get('source');
+     $s=Yii::$app->request->get('s');
+     
+     $dcode=Yii::$app->request->get('dcode');
+     
+     $start_date=Yii::$app->request->get('start_date');
+     $end_date=Yii::$app->request->get('end_date');
+     
      $ctype=Yii::$app->request->get('ComplaintSearch')['complaint_type'];
         $queryString=Yii::$app->request->queryString; ?>
 
@@ -30,7 +37,8 @@ $('#source').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url:
  </div>
  <div class="form-title">
         <div class="form-title-span">
-         <span>List of Complaints</span>
+         <span>List of Complaints -<?php if ($dcode) { echo " District Code: $dcode";}?> <?php if ($start_date && $end_date) {?> between dates <?=$start_date?> and <?=$end_date?> <?php } ?> 
+         <?php if ($s) { $allstatus=Complaint::statusNames();echo " Status: ". $allstatus[$s];}?> </span>
         </div>
     </div>
     <?php $dataProvider->query=$dataProvider->query->with('enquiryOfficer')->with('atrOfficer');?>
