@@ -185,9 +185,9 @@ class ReportController extends Controller
         $counts= $db->createCommand($queryhead)->queryAll();
         }
     if (Yii::$app->request->isAjax)
-     return $this->renderPartial('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source,'desgn'=>$desgn]);
+     return $this->renderPartial('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source,'desgn'=>$desgn,'start_date'=>$date1,'end_date'=>$date2]);
     else
-     return $this->render('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source,'desgn'=>$desgn]);
+     return $this->render('dwise',['counts'=> $counts,'status'=>$status,'t'=>$t,'sourceselected'=>$source,'desgn'=>$desgn,'start_date'=>$date1,'end_date'=>$date2]);
        
      
    }

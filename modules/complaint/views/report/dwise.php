@@ -60,7 +60,7 @@ foreach ($counts as $count)
 foreach ($status as $s1=>$sname) {
 $key=$q1[]='status_'.$s1."_count";;
 if (array_key_exists($key,$count))
-  print "<td>".Html::a($count[$key],Url::to(['/complaint/'.$t.'/index?s='.$s1.'&dcode='.$count['dcode'].'&source='.$sourceselected.'&desgn='.$desgn]))."</td>";
+  print "<td>".Html::a($count[$key],Url::to(['/complaint/'.$t.'/index?s='.$s1.'&dcode='.$count['dcode'].'&source='.$sourceselected.'&desgn='.$desgn.'&start_date='.$start_date.'&end_date='.$end_date]))."</td>";
   else 
     print "<td>0</td>";
         
@@ -107,7 +107,7 @@ foreach ($counts as $count)
 foreach ($status as $s1=>$sname) {
 $key=$q1[]='status_'.$s1."_count";;
 if (array_key_exists($key,$count))
-  print "<td>".Html::a($count[$key],Url::to(['/complaint/'.$t.'/index?s='.$s1.'&dcode='.$count['dcode'].'&source='.$sourceselected.'&desgn='.$desgn]))."</td>";
+  print "<td>".Html::a($count[$key],Url::to(['/complaint/'.$t.'/index?s='.$s1.'&dcode='.$count['dcode'].'&source='.$sourceselected.'&desgn='.$desgn.'&start_date=&end_date=']))."</td>";
   else 
     print "<td>0</td>";
         

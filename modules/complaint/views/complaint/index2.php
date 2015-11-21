@@ -53,7 +53,8 @@ $('#source').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url:
                       {
                        $sources=Complaint::source();
                         return Html::a($model->id,Url::to(['/complaint/complaint/view?id='.$model->id]))."<br>".
-                               Yii::t('app','Source').':'.Yii::t('app',$sources[$model->source]);
+                               Yii::t('app','Source').':'.Yii::t('app',$sources[$model->source]).
+                               "<br>".date('d-m-Y',$model->created_at);
                       },
              'attribute'=>'id',
              'format'=>'html'

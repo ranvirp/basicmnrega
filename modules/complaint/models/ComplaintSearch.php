@@ -12,6 +12,8 @@ use app\modules\complaint\models\Complaint;
  */
 class ComplaintSearch extends Complaint
 {
+   public $start_time;
+   public $end_time;
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class ComplaintSearch extends Complaint
     {
         return [
             [['id'], 'integer'],
-            [['name_hi', 'fname', 'mobileno', 'district_code', 'address', 'jobcardno', 'description', 'block_code', 'panchayat_code', 'attachments','complaint_type'], 'safe'],
+            [['name_hi', 'fname', 'mobileno', 'district_code', 'address', 'jobcardno', 'description', 'block_code', 'panchayat_code', 'attachments','complaint_type','created_at'], 'safe'],
         ];
     }
 
@@ -42,7 +44,7 @@ class ComplaintSearch extends Complaint
     public function search($params)
     {
         $query = Complaint::find()->joinWith('actions')->joinWith('block')->joinWith('district');
-        $query->addSelect('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype,max(complaint_reply.created_at) as lastactiontime')->groupBy('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype');
+        $query->addSelect('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype,max(complaint_reply.created_at) as lastactiontime,complaint.created_at')->groupBy('complaint.id,complaint.name_hi,complaint.fname,complaint.mobileno,complaint.district_code,complaint.block_code,complaint.description,complaint.address,complaint.attachments,complaint.status,complaint.source,complaint.complaint_type,complaint.complaint_subtype,complaint.created_at');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -75,6 +77,8 @@ $this->load($params);
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'panchayat_code', $this->panchayat_code])
             ->andFilterWhere(['like', 'attachments', $this->attachments]);
+        $query->andFilterWhere(['between', 'complaint.created_at', $this->start_time, $this->end_time]);
+
 		$query->orderBy('lastactiontime desc');
 		//var_dump($dataProvider);
 		//exit;

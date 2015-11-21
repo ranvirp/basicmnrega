@@ -130,11 +130,15 @@ public static function statusNames()
              [['status'],'integer'],
              [['complaint_type','complaint_subtype'],'string'],
              [['enqrofficer','atrofficer'],'integer'],
-           
+             [['dateofcomplaint'],'date','format' => 'Y-m-d'],
+             [['dateofcomplaint'], 'default', 'value' => null],
+             [['create_time'],'integer'],
+             [['create_time'],'default','value'=>null],
              [['attachments','marking','complaint_type'], 'safe'],
              [['source','manualno'],'string'],
              [['flag','created_by','created_at','updated_by','updated_at'],'integer'],
              [['captcha'],'captcha','on'=>'guestentry'],
+             
         ];
     }
 
@@ -158,6 +162,7 @@ public static function statusNames()
             'gender'=>Yii::t('app','Gender'),
             
             'attachments' => Yii::t('app', 'संग्लग्नक'),
+            'dateofcomplaint' => Yii::t('app', 'Date of Complaint'),
             'complaint_type' => Yii::t('app', 'Complaint Type'),
             'complaint_subtype' => Yii::t('app', 'Complaint Subtype'),
             
@@ -327,6 +332,10 @@ public static function statusNames()
 			    break;
 									
 			case 'description':
+			   return  $form->field($this,$attribute)->textInput();
+			    
+			    break;
+			    case 'dateofcomplaint':
 			   return  $form->field($this,$attribute)->textInput();
 			    
 			    break;
