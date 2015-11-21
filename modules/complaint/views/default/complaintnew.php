@@ -125,6 +125,9 @@ print $this->render('../complaint/index2',['model'=>new Complaint,'dataProvider'
     <?php } ?>
   </tr>
     </table>
+     <?= $modelComplaint->showForm($form,"dateofcomplaint")->widget(\yii\jui\DatePicker::classname(), [
+    'dateFormat' => 'yyyy-MM-dd',
+])  ?>
      <?=$modelComplaint->showForm($form,'source')?> 
      <?=$modelComplaint->showForm($form,'manualno')?>
      <?php 

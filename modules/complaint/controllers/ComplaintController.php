@@ -89,7 +89,8 @@ class ComplaintController extends Controller {
 						ActiveForm::validateMultiple($modelsComplaintPoint), ActiveForm::validate($modelComplaint)
 				);
 			}
-
+	$modelComplaint->dateofcomplaint=date('Y-m-d',strtotime($modelComplaint->dateofcomplaint));
+				 	
 			// validate all models
 			$valid = $modelComplaint->validate();
 			$valid = Model::validateMultiple($modelsComplaintPoint) && $valid;
@@ -101,10 +102,16 @@ class ComplaintController extends Controller {
 					$modelComplaint->status = Complaint::REGISTERED;
 					if (Yii::$app->user->isGuest)
 						$modelComplaint->source='web';
+					
 					//Audit trail
 					$modelComplaint->created_by = Yii::$app->user->id;
-					$modelComplaint->created_at = time();
+					$modelComplaint->create_time = time();
 					
+					if ($modelComplaint->dateofcomplaint==null)
+					$modelComplaint->created_at = time();
+					else 
+					 $modelComplaint->created_at =strtotime($modelComplaint->dateofcomplaint);
+					 
 					if ($flag = $modelComplaint->save(false)) {
 
                         $modelComplaint->_createSingleMarking();
@@ -163,7 +170,11 @@ class ComplaintController extends Controller {
 
 		$modelComplaint = $this->findModel($id);
 		$modelsComplaintPoint = $modelComplaint->complaintPoints;
-
+		if ($modelComplaint->create_time==null)
+		 $modelComplaint->create_time=time();
+        if ($modelComplaint->dateofcomplaint==null)
+					 $modelComplaint->dateofcomplaint =date('Y-m-d',$modelComplaint->created_at);
+			
 		if ($modelComplaint->load(Yii::$app->request->post())) {
 
 			$oldIDs = ArrayHelper::map($modelsComplaintPoint, 'id', 'id');
@@ -178,7 +189,11 @@ class ComplaintController extends Controller {
 						ActiveForm::validateMultiple($modelsComplaintPoint), ActiveForm::validate($modelComplaint)
 				);
 			}
-
+			$modelComplaint->created_at=strtotime($modelComplaint->dateofcomplaint);
+	
+           // $modelComplaint->dateofcomplaint=date('Y-m-d',strtotime($modelComplaint->dateofcomplaint));
+			//print	$modelComplaint->dateofcomplaint;
+			//exit;
 			// validate all models
 			$valid = $modelComplaint->validate();
 			$valid = Model::validateMultiple($modelsComplaintPoint) && $valid;
@@ -191,6 +206,7 @@ class ComplaintController extends Controller {
 					$modelComplaint->updated_by = Yii::$app->user->id;
 					$modelComplaint->updated_at = time();
 					$modelComplaint->flag = 1; //requires Admin Attention
+					
 					if ($flag = $modelComplaint->save(false)) {
 					   $modelComplaint->_createSingleMarking();
                         $modelComplaint->save(false);
