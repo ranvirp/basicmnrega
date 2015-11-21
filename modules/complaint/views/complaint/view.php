@@ -52,6 +52,7 @@ $this->params['breadcrumbs'][] = 'Complaint';
                ['attribute'=>'block_code','value'=>$model->block?$model->block->name_en:''],
                //\app\modules\mnrega\models\Block::findOne($model->block_code)->name_en],
  'panchayat',
+ ['attribute'=>'created_at','label'=>'Date of Complaint','value'=>date('Y-m-d',$model->created_at)],
  
 ]
 ]
