@@ -33,6 +33,8 @@ class AppAsset_1 extends AssetBundle
         //'solid/js/retina-1.1.0.js',
         //'solid/js/jquery.hoverex.min.js',
         //'solid/js/jquery.isotope.min.js',
+        // 'bower/requirejs/require.js',
+        'bower/sprintf/dist/sprintf.min.js',
          'kartik-v/bootstrap-fileinput/js/fileinput.js',
 		//'bower/sbadmin2/metisMenu/dist/metisMenu.js'
 		

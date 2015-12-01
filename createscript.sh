@@ -1,5 +1,5 @@
-model=('link')
-module='documents'
+model=('format' 'format_values')
+module='formats'
 for i in  "${!model[@]}"; do
    echo "generating for "${model[$i]}
    table=${model[$i]}
