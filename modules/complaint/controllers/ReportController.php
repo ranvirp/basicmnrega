@@ -82,9 +82,14 @@ class ReportController extends Controller
           $date2=$dates[1];
           $time1=strtotime($date1);
           $time2=strtotime($date2);
-          print $date1.' '.$date2;
+          //print $date1.' '.$date2;
           //exit;
          }
+         else
+          {
+            $date1='';
+            $date2='';
+          }
          if ($t=='complaint')
          {
          $q=[];

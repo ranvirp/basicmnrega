@@ -46,6 +46,9 @@ class WorkdemandController extends Controller
         throw new NotFoundHttpException("You are not allowed!!");
      
    $searchModel = new WorkDemandSearch();
+   $dcode = Yii::$app->request->get('dcode');
+		if ($dcode!=null && $dcode!=-1 )
+			$searchModel->district_code = $dcode;
    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
    //leftJoin('marking',['marking.request_id'=>'complaint.id','marking.request_type'=>'complaint']);
         return $this->render('index2', [

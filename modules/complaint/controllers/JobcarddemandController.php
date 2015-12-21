@@ -36,12 +36,15 @@ class JobcarddemandController extends Controller
      * Lists all JobcardDemand models.
      * @return mixed
      */
-    public function actionIndex1()
+    public function actionIndex()
     {
         if (!Yii::$app->user->can('complaintagent'))
       throw new NotFoundHttpException("Not Allowed");
    
         $searchModel = new JobcardDemandSearch();
+        $dcode = Yii::$app->request->get('dcode');
+		if ($dcode!=null && $dcode!=-1 )
+			$searchModel->district_code = $dcode;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
