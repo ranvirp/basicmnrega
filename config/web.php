@@ -9,7 +9,7 @@ $config = [
   'layout'=>'main-2columns',
  // 'layout'=>'cmsadminpanel',
     'homeUrl'=>['site'],
-   'language'=>'hi',
+   'language'=>'en',
 
     'components' => [
      'sms'=>
@@ -129,6 +129,10 @@ $config = [
     'docs'=>[
     	'class' => '\app\modules\documents\Module',
 	
+    ],
+    'formats'=>[
+        'class' => '\app\modules\formats\Module',
+    
     ],
     'corr'=>[
         'class' => '\app\modules\correspondence\Module',
