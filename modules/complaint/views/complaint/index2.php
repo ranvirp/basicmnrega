@@ -75,7 +75,8 @@ $('#source').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url:
              'format'=>'raw'
             ],
             ['label'=>Yii::t('app','Complainant'),
-             'attribute'=>'name_hi',
+            // 'attribute'=>'name_hi',
+            'filter'=>Html::textInput('ComplaintSearch[name_hi]','',['class'=>'form-control hindiinput','onclick'=>'js:hindiEnable()']),
              'value'=>function ($model,$key,$index,$column)
                       {
                       return $model->showValue('name_hi')."<br>".$model->showValue('fname')
