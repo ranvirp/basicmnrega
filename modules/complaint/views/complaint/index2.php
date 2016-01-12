@@ -60,12 +60,19 @@ $('#source').change(function(){ jQuery('#w0').yiiGridView({"filterUrl":"<?= Url:
              'value'=>function ($model,$key,$index,$column)
                       {
                        $sources=Complaint::source();
+                       $str= Html::a($model->id,Url::to(['/complaint/complaint/view?id='.$model->id]));
+                       $str.='<br>'.Yii::t('app','Source').':'.Yii::t('app',$sources[$model->source]);
+                       $str.='<br>';
+                       $str.=($model->created_at>1000)?date('d-m-Y',$model->created_at):'';
+                       return $str;
+                       /*
                         return Html::a($model->id,Url::to(['/complaint/complaint/view?id='.$model->id]))."<br>".
                                Yii::t('app','Source').':'.Yii::t('app',$sources[$model->source]).
                                "<br>".($model->created_at>1000)?date('d-m-Y',$model->created_at):'';
+                               */
                       },
              'attribute'=>'id',
-             'format'=>'html'
+             'format'=>'raw'
             ],
             ['label'=>Yii::t('app','Complainant'),
              'attribute'=>'name_hi',
