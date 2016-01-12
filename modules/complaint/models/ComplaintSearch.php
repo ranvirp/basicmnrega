@@ -69,13 +69,13 @@ $this->load($params);
 			
         ]);
        $query->andFilterWhere([ 'complaint_type'=>$this->complaint_type]);
-        $query->andFilterWhere(['like', 'name_hi', $this->name_hi])
-            ->andFilterWhere(['like', 'fname', $this->fname])
-            ->andFilterWhere(['like', 'mobileno', $this->mobileno])
-            ->andFilterWhere(['like', 'address', $this->address])
+        $query->andFilterWhere(['like', 'complaint.name_hi', $this->name_hi])
+            ->andFilterWhere(['like', 'complaint.fname', $this->fname])
+            ->andFilterWhere(['like', 'complaint.mobileno', $this->mobileno])
+            ->andFilterWhere(['like', 'complaint.address', $this->address])
             ->andFilterWhere(['like', 'jobcardno', $this->jobcardno])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'panchayat_code', $this->panchayat_code])
+            ->andFilterWhere(['like', 'complaint.description', $this->description])
+            ->andFilterWhere(['like', 'complaint.panchayat_code', $this->panchayat_code])
             ->andFilterWhere(['like', 'attachments', $this->attachments]);
         $query->andFilterWhere(['between', 'complaint.created_at', $this->start_time, $this->end_time]);
 
