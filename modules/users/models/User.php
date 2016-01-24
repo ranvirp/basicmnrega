@@ -29,6 +29,8 @@ class User extends ActiveRecord implements IdentityInterface
     public $oldpassword='';
     public $newpassword;
     public $newpasswordrepeat;
+
+
     /**
      * @inheritdoc
      */
@@ -233,5 +235,27 @@ public function scenarios()
                   return false;
                }
           
+        }
+        public function loginHistory($event)
+        {
+          
+           $userlog=new LoginHistory();
+           
+           $userlog->username=Yii::$app->user->identity->username;
+           $userlog->logintime=time();
+           $userlog->sessionid=Yii::$app->session->getId();
+           
+           if (!$userlog->save()){ ;print_r( $userlog->errors);return false;};
+        
+        }
+          public function logoutHistory($event)
+        {
+          
+           $userlog=LoginHistory::find()->where(['sessionid'=>Yii::$app->session->getId()])->one();
+           
+           if ($userlog) $userlog->logouttime=time();
+           
+           if (!$userlog->save()){ ;print_r( $userlog->errors);return false;};
+        
         }
 }

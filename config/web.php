@@ -76,6 +76,9 @@ $config = [
             'identityClass' => 'app\modules\users\models\User',
             'enableAutoLogin' => true,
             'loginUrl'=>null,
+            'on '.\yii\web\User::EVENT_AFTER_LOGIN => ['app\modules\users\models\User', 'loginHistory'],
+               'on '.\yii\web\User::EVENT_BEFORE_LOGOUT => ['app\modules\users\models\User', 'logoutHistory'],
+
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

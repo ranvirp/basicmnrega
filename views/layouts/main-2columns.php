@@ -298,19 +298,19 @@ $('#hindiinput-type').trigger('change');
             */
             echo '<div class="menubar">';
             echo Nav::widget([
-            
+         'encodeLabels' => false,   
     'items' => [
       ['label'=>'Home','url'=>['/site/index']],
        ['label'=>'Complaint','url'=>['/complaint']],
-        Yii::$app->user->isGuest ?'':
-       
-     
-       
-         ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/android.apk','linkOptions'=>['data-toggle'=>'tooltip','data-placement'=>"left" ,'title'=>file_get_contents(Yii::getAlias('@app').'/modules/gpsphoto/apkhelp.txt')]],
-      !Yii::$app->user->can('webadmin') ?'':
+     !Yii::$app->user->can('webadmin') ?'':
        ['label'=>'Permissions','url'=>['/admin'],'linkOptions'=>[]
 
         ],
+             !Yii::$app->user->can('webadmin') ?'':
+       ['label'=>'Login History'.'<img src="http://www.indiaculture.nic.in/sites/all/themes/moc/images/new-gif.gif">','url'=>['/users/login-history'],'linkOptions'=>[]
+
+        ],
+      
         !Yii::$app->user->can('webadmin') ?'':
        ['label' => 'Master Data', 'url' => ['/site/index'],'linkOptions'=>[],'options'=>['class'=>'dropdown']
             ,'items'=>[
@@ -330,6 +330,8 @@ $('#hindiinput-type').trigger('change');
             ]],
           ['label' => 'Ponds', 'url' => ['#'],'options'=>['class'=>'dropdown']
             ,'items'=>[ 
+                 ['label' => 'Android APK', 'url' => Yii::getAlias('@web').'/android.apk','linkOptions'=>['data-toggle'=>'tooltip','data-placement'=>"left" ,'title'=>file_get_contents(Yii::getAlias('@app').'/modules/gpsphoto/apkhelp.txt')]],
+    
                 ['label' => 'Data Entry', 'url' => ['/mnrega/pond/create'],'options'=>['class'=>'dropdown']],
                 
 ['label' => 'View List', 'url' => ['/mnrega/pond/index'],'options'=>['class'=>'dropdown']],
