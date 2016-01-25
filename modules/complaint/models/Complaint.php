@@ -42,6 +42,11 @@ const ENQUIRY_REPORT_RECEIVED=2;
 const PENDING_FOR_ATR=3;
 const ATR_RECEIVED=4;
 const DISPOSED=5;//ATR_ACCEPTED
+public function init()
+{
+  $sendsms=new \app\components\SendSMSComponent;
+  $this->on(self::EVENT_AFTER_INSERT,[$sendsms,'sendSMS']);
+  }
 public static function statusNames()
 {
  return 
@@ -1131,10 +1136,11 @@ public function _createSingleMarking1($actiontype='a',$canmark=0,$change=0,$main
     }
     public function getSMSDetails()
     {
-      $text=" शिकायत # ".$this->id." दर्ज. nregaup.in/complaint पर स्थिति ज्ञात करें";
+      $text=" शिकायत # ".$this->id." दर्ज. http://nregaup.in पर स्थिति ज्ञात करें";
+      $text.="-".'राज्य मनरेगा प्रकोष्ठ'; 
+      $text=" Complaint # ".$this->id." registered. Check http://nregaup.in for status or call 18001805999/05224055999- MNREGA Cell,  Uttar Pradesh";
       $phno=[];
-      $phno[]='9454465222';
-      $phno[]='9454464999';
+      //$phno[]='9454464999';
       $phno[]=$this->mobileno;
       return ['text'=>$text,'PhNo'=>implode(",",$phno)];
     }

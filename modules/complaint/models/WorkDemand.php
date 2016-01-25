@@ -36,6 +36,11 @@ class WorkDemand extends \yii\db\ActiveRecord
  public $captcha;
 const PENDING=0;
 const DISPOSED=1;
+public function init()
+{
+  $sendsms=new \app\components\SendSMSComponent;
+  $this->on(self::EVENT_AFTER_INSERT,[$sendsms,'sendSMS']);
+  }
 public static function statusNames()
 {
  return 
@@ -431,4 +436,16 @@ public static function statusNames()
       //exit;
         return $counts;
         }
+         public function getSMSDetails()
+    {
+      $text=" शिकायत # ".$this->id." दर्ज. http://nregaup.in पर स्थिति ज्ञात करें";
+      $text.="-".'राज्य मनरेगा प्रकोष्ठ'; 
+      $text=" Work Demand # ".$this->id." registered. Check http://nregaup.in for status or call 18001805999/05224055999- MNREGA Cell,  Uttar Pradesh";
+      $phno=[];
+      //$phno[]='9760757867';
+     // $phno[]='9454464999';
+     $phno[]=$this->mobileno;
+      return ['text'=>$text,'PhNo'=>implode(",",$phno)];
+    }
+
 }

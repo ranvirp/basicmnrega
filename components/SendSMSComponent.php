@@ -58,6 +58,8 @@ class SendSMSComponent extends Component{
      public function sendSms($event)
     {
          $x=$event->sender->getSMSDetails();
+        // print_r($x);
+        // exit;
          if (is_array($x))
          {
             $this->postSms($x['PhNo'], $x['text']);
@@ -90,16 +92,16 @@ class SendSMSComponent extends Component{
         $baseurl=$this->baseurl;
         $sendsmsurl=$this->sendsmsurl;
         $unicodesmsurl=$this->unicodesmsurl;
-        $ID=$this->ID;
+       $ID=Yii::$app->params['muzztechusername'];
+        $Pwd=Yii::$app->params['muzztechpassword'];
         
       $url= "$baseurl/".$sendsmsurl;
-      $parameters="username=".$this->ID."&password=".$this->Pwd."&mobile=".$PhNo."&message=".rawurlencode($text).'&sendername=WEBSMS';
+      $parameters="username=".$ID."&password=".$Pwd."&mobile=".$PhNo."&message=".rawurlencode($text).'&sendername=WEBSMS';
 	 if (mb_detect_encoding($text,['ASCII'])==false)
 	 {
 	  $url="$baseurl/".$unicodesmsurl;
 	  $parameters=$parameters."&MType=U";
 	}
-	print $parameters;
 	$ch = curl_init($url);
 
 	if(isset($_POST))
