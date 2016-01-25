@@ -36,8 +36,6 @@ $ret = file($url);
  */
 class SendSMSComponent extends Component{
     public $sendsms=true;
-    public $ID="upregs";
-    public $Pwd="sms@upregs";
     public $baseurl ="http://priority.muzztech.in";
     public $sendsmsurl="/sms_api/sendsms.php";
     public $unicodesmsurl="/sms_api/smsUnicode.php";
@@ -52,8 +50,8 @@ class SendSMSComponent extends Component{
     public function init()
     {
         parent::init();
-        $this->ID=Yii::$app->params['muzztechusername'];
-        $this->Pwd=Yii::$app->params['muzztechpassword'];
+      //  $this->ID=Yii::$app->params['muzztechusername'];
+        //$this->Pwd=Yii::$app->params['muzztechpassword'];
     } 
      public function sendSms($event)
     {
@@ -94,9 +92,10 @@ class SendSMSComponent extends Component{
         $unicodesmsurl=$this->unicodesmsurl;
        $ID=Yii::$app->params['muzztechusername'];
         $Pwd=Yii::$app->params['muzztechpassword'];
+        $senderid=Yii::$app->params['senderid'];
         
       $url= "$baseurl/".$sendsmsurl;
-      $parameters="username=".$ID."&password=".$Pwd."&mobile=".$PhNo."&message=".rawurlencode($text).'&sendername=WEBSMS';
+      $parameters="username=".$ID."&password=".$Pwd."&mobile=".$PhNo."&message=".rawurlencode($text).'&sendername='.$senderid;
 	 if (mb_detect_encoding($text,['ASCII'])==false)
 	 {
 	  $url="$baseurl/".$unicodesmsurl;

@@ -3,9 +3,9 @@ namespace app\commands;
 use app\modules\users\models\Designation;
 use app\modules\users\models\DesignationType;
 
-use app\modules\Complaint\models\Complaint;
-use app\modules\Complaint\models\WorkDemand;
-use app\modules\Complaint\models\JobcardDemand;
+use app\modules\complaint\models\Complaint;
+use app\modules\complaint\models\WorkDemand;
+use app\modules\complaint\models\JobcardDemand;
 
 use app\modules\mnrega\models\Marking;
 use Yii;
@@ -26,14 +26,14 @@ class SmsController extends \yii\console\Controller
         $c_atr=$complaintcounts[0]['complaint_count_'.$s];
         $jcd=$jobcarddemandcounts[0]['jobcarddemand_count_0'];
         $wd=$workdemandcounts[0]['workdemand_count_0'];
-        $mobile='9454465222';
+        $mobile=Yii::$app->params['adminmobile'];;
 				$userm=$mobile;
 		
         $text='Pending '.Yii::t('app','Complaints')."-".$c_atr."\n".'Pending '.Yii::t('app','WorkDemand')."-".$wd."\n".Yii::t('app','JobCardDemand')."-".$jcd;
 				$text.=" Login to http://nregaup.in	";
-				print $userm."\n".$text."\n";
+			//	print $userm."\n".$text."\n";
 				
-				//$smsc->postSms($userm,$text);
+				$smsc->postSms($userm,$text);
 				
         $po=DesignationType::find()->where(['shortcode'=>'po'])->one()->id;
 	  	/*
