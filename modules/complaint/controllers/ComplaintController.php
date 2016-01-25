@@ -385,6 +385,8 @@ class ComplaintController extends Controller {
 				$model->author = Yii::$app->user->id;
 				if (!$model->save())
 					print_r($model->errors);
+				else 
+				{
 				switch ($model->reply_type) {
 					case ComplaintReply::ENQUIRY_REPORT:
 						Marking::setStatus($markingid, Complaint::ENQUIRY_REPORT_RECEIVED);
@@ -427,6 +429,7 @@ class ComplaintController extends Controller {
 				$transaction->commit();
 				print "Saved";
 				$model = new ComplaintReply;
+				}
 			} catch (Exception $e) {
 				$transaction->rollBack();
 				print_r($model->errors);
